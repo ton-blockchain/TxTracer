@@ -1,0 +1,19 @@
+.themeToggleButton {
+  position: fixed;
+  bottom: var(--spacing-md);
+  right: var(--spacing-md);
+  z-index: var(--z-index-tooltip);
+  border: var(--color-change-theme-border);
+  background-color: var(--color-change-theme-background);
+  color: var(--color-change-theme-color);
+}
+
+.toggleButtonText {
+  margin-left: var(--spacing-sm);
+}
+
+@media (max-width: 768px) {
+  .toggleButtonText {
+    display: none;
+  }
+}

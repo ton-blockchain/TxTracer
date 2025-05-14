@@ -1,0 +1,170 @@
+import {retrace} from "txtracer-core-dev"
+import type {TraceResult} from "txtracer-core-dev/dist/types"
+import {decompileCell, compileCellWithMapping} from "tact-asm/dist/runtime/instr"
+import {
+  createMappingInfo,
+  type MappingInfo,
+  type InstructionInfo,
+} from "tact-asm/dist/trace/mapping"
+import {type Step} from "tact-asm/dist/trace"
+import {createTraceInfoPerTransaction, findInstructionInfo} from "tact-asm/dist/trace/trace"
+import {print, parse} from "tact-asm/dist/text"
+import * as l from "tact-asm/dist/logs"
+
+import type {RetraceResultAndCode, NetworkType} from "@features/txTrace/ui"
+
+import {
+  TxNotFoundError,
+  NetworkError,
+  TxTraceError,
+  TooManyRequests,
+  TxHashInvalidError,
+} from "./errors"
+
+export type ExitCode = {
+  num: number
+  description: string
+  info: undefined | InstructionInfo
+}
+
+async function maybeTestnet(txHash: string): Promise<{result: TraceResult; network: NetworkType}> {
+  try {
+    await wait(500) // rate limit
+    const result = await retrace(false, txHash)
+    return {result, network: "mainnet"}
+  } catch (error: unknown) {
+    if (error instanceof Error && error.message.includes("Cannot find transaction info")) {
+      console.log("Cannot find in mainnet, trying to find in testnet")
+      await wait(500) // rate limit
+      const result = await retrace(true, txHash)
+      return {result, network: "testnet"}
+    }
+    throw error
+  }
+}
+
+async function doTrace(txHash: string) {
+  try {
+    return await maybeTestnet(txHash)
+  } catch (e: unknown) {
+    let message = "An unknown error occurred."
+    if (e instanceof Error) {
+      message = e.message
+    } else if (e !== null && e !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-base-to-string
+      message = String(e)
+    }
+
+    if (/status code 429/i.test(message)) {
+      throw new TooManyRequests(undefined, e)
+    }
+
+    if (/status code 422/i.test(message)) {
+      throw new TxHashInvalidError(undefined, e)
+    }
+
+    if (/not found/i.test(message)) {
+      throw new TxNotFoundError(undefined, e)
+    }
+
+    if (/network|fetch|timeout/i.test(message)) {
+      throw new NetworkError(undefined, e)
+    }
+
+    throw new TxTraceError(message, e)
+  }
+}
+
+function findException(reversedEntries: l.VmLine[]) {
+  const mapped = reversedEntries.map(it => {
+    if (it.$ === "VmExceptionHandler") {
+      return {
+        text: ``, // default case, no further explanations
+        num: it.errno,
+      }
+    }
+    if (it.$ === "VmUnknown") {
+      if (it.text.includes("unhandled out-of-gas exception")) {
+        return {text: it.text, num: -14}
+      }
+    }
+    return undefined
+  })
+  return mapped.find(it => it !== undefined)
+}
+
+function findExitCode(vmLogs: string, mappingInfo: MappingInfo) {
+  const res = l.parse(vmLogs)
+  const reversedEntries = [...res].reverse()
+  const description = findException(reversedEntries)
+  if (description === undefined) {
+    return undefined // no exception found
+  }
+
+  // find last position before exception
+  const loc = reversedEntries.find(it => it.$ === "VmLoc")
+  const info = findInstructionInfo(mappingInfo, {
+    hash: loc?.hash?.toLowerCase() ?? "",
+    offset: loc?.offset ?? 0,
+    stack: [],
+    gas: 0,
+    gasCost: 0,
+  })
+
+  if (info === undefined) {
+    return undefined
+  }
+
+  const [instructionsInfo, index] = info
+
+  const exitCode: ExitCode = {
+    info: instructionsInfo[index],
+    description: description.text,
+    num: description.num,
+  }
+
+  return exitCode
+}
+
+function extractCodeAndTrace(result: TraceResult) {
+  if (!result.codeCell) {
+    return {code: "// No executable code found", traceInfo: {steps: []}}
+  }
+
+  const instructions = decompileCell(result.codeCell)
+  const code = print(instructions)
+
+  const instructionsWithPositions = parse("out.tasm", code)
+  if (instructionsWithPositions.$ === "ParseFailure") {
+    return {code: code, traceInfo: {steps: []}, exitCode: undefined}
+  }
+
+  const vmLogs = result.emulatedTx.vmLogs
+  const [, mapping] = compileCellWithMapping(instructionsWithPositions.instructions)
+  const mappingInfo = createMappingInfo(mapping)
+  const traceInfo = createTraceInfoPerTransaction(vmLogs, mappingInfo, undefined)[0]
+
+  const exitCode = findExitCode(vmLogs, mappingInfo)
+  if (exitCode === undefined) {
+    return {code, exitCode: undefined, traceInfo}
+  }
+
+  return {code, exitCode, traceInfo}
+}
+
+export async function traceTx(txHash: string): Promise<RetraceResultAndCode> {
+  const {result, network} = await doTrace(txHash)
+  const {code, traceInfo, exitCode} = extractCodeAndTrace(result)
+  return {result, code, trace: traceInfo, exitCode, network}
+}
+
+export function normalizeGas(step: Step) {
+  if (step.gasCost > 5000) {
+    return 26
+  }
+  return step.gasCost
+}
+
+async function wait(delay: number): Promise<unknown> {
+  return new Promise(resolve => setTimeout(resolve, delay))
+}

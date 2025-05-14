@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "tests-examples/**/*.ts",
+    "tests-examples/**/*.tsx",
+    "e2e-tests/**/*.ts",
+    "*.config.ts",
+    "*.config.js",
+    ".*.js",
+    "vite.config.ts",
+    "playwright.config.ts",
+    "eslint.config.js"
+  ],
+  "compilerOptions": {
+    "noEmit": true
+  }
+}

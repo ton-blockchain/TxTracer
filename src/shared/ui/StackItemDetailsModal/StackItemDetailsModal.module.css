@@ -1,0 +1,167 @@
+.detailsLayout {
+  position: relative;
+  padding: var(--spacing-lg);
+  padding-bottom: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  flex-shrink: 0;
+}
+
+.modalTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton:hover {
+  color: var(--color-text-primary);
+}
+
+.closeButton svg {
+  width: 20px;
+  height: 20px;
+}
+
+.contentContainer {
+  display: flex;
+  flex-grow: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.leftColumn {
+  flex: 1 1 65%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-right: 1px solid var(--color-divider);
+  overflow: hidden;
+}
+
+.rightColumn {
+  flex: 1 1 35%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow-y: auto;
+  padding-left: var(--spacing-lg);
+  padding-right: var(--spacing-sm);
+}
+
+.treeViewContainer {
+  overflow: auto;
+  width: 100%;
+  flex-grow: 1;
+  min-height: 0;
+}
+
+.detailsModalBoxWide {
+  width: 90vw;
+  max-width: 1400px;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.dataSection {
+  margin-bottom: var(--spacing-md);
+}
+
+.dataSection:last-child {
+  margin-bottom: 0;
+}
+
+.dataSection strong {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.cellDataString {
+  font-family: var(--font-family-mono), "monospace";
+  font-size: var(--font-size-xs);
+  color: var(--color-text-primary);
+  background-color: var(--color-background-input);
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  max-height: 100px;
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+}
+
+@media (max-width: 768px) {
+  .detailsModalBoxWide {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    max-width: 100vw;
+    max-height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .detailsLayout {
+    padding: var(--spacing-md);
+    height: 100%;
+  }
+
+  .modalHeader {
+    padding-bottom: var(--spacing-sm);
+  }
+
+  .contentContainer {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .leftColumn {
+    flex: 0 0 60%;
+    border-right: none;
+    padding-right: 0;
+    padding-top: 0;
+    width: 100%;
+    overflow: hidden;
+    border-bottom: 1px solid var(--color-divider);
+  }
+
+  .rightColumn {
+    flex: 1 1 auto;
+    border-bottom: none;
+    padding-right: 0;
+    padding-top: var(--spacing-sm);
+    width: 100%;
+    overflow-y: auto;
+  }
+
+  .treeViewContainer {
+    height: 100%;
+  }
+}

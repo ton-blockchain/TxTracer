@@ -1,0 +1,87 @@
+import React, {useState} from "react"
+
+import Button from "@shared/ui/Button"
+
+import styles from "./SearchInput.module.css"
+
+interface SearchInputProps {
+  readonly value: string
+  readonly onChange: (v: string) => void
+  readonly onSubmit: () => void
+  readonly placeholder?: string
+  readonly loading?: boolean
+  readonly autoFocus?: boolean
+  readonly compact?: boolean
+}
+
+const SearchInput: React.FC<SearchInputProps> = ({
+  value,
+  onChange,
+  onSubmit,
+  placeholder,
+  loading,
+  autoFocus = false,
+  compact = false,
+}) => {
+  const [focused, setFocused] = useState(false)
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") onSubmit()
+  }
+
+  const wrapperClass = `${styles.inputWrapper} ${focused ? styles.focused : ""} ${compact ? styles.compactWrapper : ""}`
+  const inputClass = `${styles.txInput} ${compact ? styles.compactInput : ""}`
+  const buttonClass = `${styles.submitButton} ${compact ? styles.compactButton : ""}`
+
+  return (
+    <div className={wrapperClass}>
+      <div className={`${styles.searchIcon} ${compact ? styles.compactSearchIcon : ""}`}>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M21 21L16.65 16.65"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </div>
+      <input
+        type="text"
+        spellCheck="false"
+        autoFocus={autoFocus}
+        placeholder={placeholder}
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        onKeyDown={handleKeyPress}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        className={inputClass}
+      />
+      <Button
+        variant="primary"
+        size={compact ? "sm" : "md"}
+        className={buttonClass}
+        onClick={onSubmit}
+        disabled={loading}
+      >
+        Trace
+      </Button>
+    </div>
+  )
+}
+
+export default SearchInput
