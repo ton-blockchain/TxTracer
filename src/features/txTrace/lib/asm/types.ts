@@ -40,7 +40,7 @@ async function fetchAsmData(): Promise<AsmData | null> {
 
   isLoading = true
   try {
-    const response = await fetch("/txtracer-dev/assets/asm/asm.json")
+    const response = await fetch("/assets/asm/asm.json")
     if (!response.ok) {
       console.error("Failed to fetch asm.json:", response.statusText)
       return null

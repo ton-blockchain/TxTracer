@@ -15,7 +15,7 @@ export default defineConfig({
       "@app": resolve(__dirname, "src"),
     },
   },
-  base: process.env.GH_PAGES ? "/txtracer-dev/" : "./",
+  base: "./",
   plugins: [react(), viteCompression(), viteCompression({algorithm: "brotliCompress", ext: ".br"})],
   build: {
     target: ["es2020"],

@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "type": "module",
+  "homepage": "https://txtracer.ton.org/",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

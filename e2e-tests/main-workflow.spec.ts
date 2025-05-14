@@ -37,7 +37,7 @@ test.describe("TxTracer Main Workflow", () => {
   }: {
     page: Page
   }) => {
-    await page.goto(`/txtracer-dev?tx=${VALID_TEST_HASH_PLACEHOLDER}`)
+    await page.goto(`/?tx=${VALID_TEST_HASH_PLACEHOLDER}`)
 
     const searchInput = page.getByPlaceholder("Search by transaction hash")
     await expect(searchInput).toHaveValue(VALID_TEST_HASH_PLACEHOLDER)

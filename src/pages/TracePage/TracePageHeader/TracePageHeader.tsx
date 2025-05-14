@@ -37,7 +37,7 @@ const TracePageHeaderFc: React.FC<TracePageHeaderProps> = ({
   return (
     <header className={styles.header}>
       <div className={styles.logoContainer}>
-        <a href="/txtracer-dev" className={styles.logo}>
+        <a href="/" className={styles.logo}>
           <div className={styles.logoDiamond}></div>
           <span className={styles.logoText}>TxTracer</span>
         </a>

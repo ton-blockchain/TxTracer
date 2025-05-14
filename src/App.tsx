@@ -32,14 +32,14 @@ function AppShell() {
         >
           <Routes>
             <Route
-              path="/txtracer-dev"
+              path="/"
               element={
                 <Suspense fallback={<FullScreenLoader baseMessage="Loading TxTracer..." />}>
                   <TracePage />
                 </Suspense>
               }
             />
-            <Route path="*" element={<Navigate to="/txtracer-dev" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </ErrorBoundary>
       </BrowserRouter>
