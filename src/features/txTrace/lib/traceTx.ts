@@ -1,5 +1,5 @@
-import {retrace} from "txtracer-core-dev"
-import type {TraceResult} from "txtracer-core-dev/dist/types"
+import {retrace} from "@tonstudio/txtracer-core"
+import type {TraceResult} from "@tonstudio/txtracer-core/dist/types"
 import {decompileCell, compileCellWithMapping} from "tact-asm/dist/runtime/instr"
 import {
   createMappingInfo,

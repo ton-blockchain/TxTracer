@@ -2,7 +2,7 @@ import React, {useState} from "react"
 
 import {type TraceInfo} from "tact-asm/dist/trace"
 
-import type {TraceResult} from "txtracer-core-dev/dist/types"
+import type {TraceResult} from "@tonstudio/txtracer-core/dist/types"
 
 import type {OutAction} from "@entities/transaction"
 

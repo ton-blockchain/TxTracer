@@ -1,4 +1,4 @@
-export type {TraceResult} from "txtracer-core-dev"
+export type {TraceResult} from "@tonstudio/txtracer-core"
 export type {
   OutAction,
   OutActionSendMsg,
