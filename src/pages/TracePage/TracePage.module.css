@@ -306,6 +306,26 @@
   font-weight: var(--font-weight-medium);
 }
 
+.externalLinksContainer {
+  position: absolute;
+  top: var(--spacing-xl);
+  right: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+}
+
+.iconLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  transition: color var(--transition-duration-fast) ease;
+}
+
+.iconLink:hover {
+  color: var(--color-text-primary);
+}
+
 @media (max-width: 768px) {
   .appContainer {
     position: relative;

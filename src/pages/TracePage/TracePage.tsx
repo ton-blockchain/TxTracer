@@ -1,4 +1,5 @@
 import React, {useState, useEffect, Suspense, useCallback} from "react"
+import {FiGithub} from "react-icons/fi"
 
 import {RetraceResultView} from "@features/txTrace/ui"
 import type {RetraceResultAndCode} from "@features/txTrace/ui"
@@ -127,6 +128,18 @@ function TracePage() {
     <>
       {!result && (
         <div className={styles.inputPage}>
+          <div className={styles.externalLinksContainer}>
+            <a
+              href="https://github.com/tact-lang/txtracer"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="GitHub Repository"
+              className={styles.iconLink}
+            >
+              <FiGithub size={24} />
+            </a>
+          </div>
+
           <div className={styles.centeredInputContainer}>
             <div className={styles.txtracerLogo}>
               <div className={styles.logoDiamond}></div>
