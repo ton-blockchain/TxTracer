@@ -26,6 +26,10 @@ Based on [TxTracer-core](https://github.com/tact-lang/txtracer-core).
 - **Network Support:** Mainnet and testnet support (with a badge if the transaction is from testnet).
 - **Light/Dark Theme:** Switch between light and dark modes for user comfort.
 
+## Inspiration
+
+This project is heavily inspired by [retracer](https://retracer.ton.org/).
+
 ## License
 
 MIT © TON Studio
