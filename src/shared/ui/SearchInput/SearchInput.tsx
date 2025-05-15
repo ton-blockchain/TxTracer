@@ -8,20 +8,26 @@ interface SearchInputProps {
   readonly value: string
   readonly onChange: (v: string) => void
   readonly onSubmit: () => void
+  readonly onFocus?: () => void
+  readonly onBlur?: () => void
   readonly placeholder?: string
   readonly loading?: boolean
   readonly autoFocus?: boolean
   readonly compact?: boolean
+  readonly onInputClick?: (event: React.MouseEvent<HTMLInputElement>) => void
 }
 
 const SearchInput: React.FC<SearchInputProps> = ({
   value,
   onChange,
   onSubmit,
+  onFocus,
+  onBlur,
   placeholder,
   loading,
   autoFocus = false,
   compact = false,
+  onInputClick,
 }) => {
   const [focused, setFocused] = useState(false)
 
@@ -67,8 +73,15 @@ const SearchInput: React.FC<SearchInputProps> = ({
         value={value}
         onChange={e => onChange(e.target.value)}
         onKeyDown={handleKeyPress}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
+        onFocus={() => {
+          onFocus?.()
+          setFocused(true)
+        }}
+        onBlur={() => {
+          onBlur?.()
+          setFocused(false)
+        }}
+        onClick={onInputClick}
         className={inputClass}
       />
       <Button

@@ -197,6 +197,79 @@
 .inputCard {
   width: 100%;
   max-width: 720px;
+  position: relative;
+}
+
+.historyDropdown {
+  list-style: none;
+  padding: 0;
+  margin: var(--spacing-xs) 0 0 0;
+  position: absolute;
+  width: 100%;
+  background-color: var(--color-background-input);
+  border-radius: var(--border-radius-lg) var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.historyDropdown li {
+}
+
+.historyDropdown li:hover {
+  background-color: var(--color-background-tertiary);
+}
+
+.historyItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-md);
+  cursor: pointer;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  border-bottom: 1px solid var(--color-divider);
+  text-overflow: ellipsis;
+}
+
+.historyItem:last-child {
+  border-bottom: none;
+}
+
+.historyItem:hover {
+  background-color: var(--color-background-tertiary);
+}
+
+.historyItemIcon {
+  margin-right: var(--spacing-md);
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.historyItemText {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.historyItemDeleteButton {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  margin-left: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-sm);
+  flex-shrink: 0;
+}
+
+.historyItemDeleteButton:hover {
+  color: var(--color-text-primary);
 }
 
 .createBy {
@@ -333,6 +406,10 @@
 
   .detailsSection {
     transition: height 0.5s ease-in-out;
+  }
+
+  .historyItem > span[class*="status"] {
+    display: none;
   }
 
   .mainContent {

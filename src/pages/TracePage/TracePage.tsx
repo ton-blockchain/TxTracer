@@ -1,5 +1,5 @@
 import React, {useState, useEffect, Suspense, useCallback} from "react"
-import {FiGithub} from "react-icons/fi"
+import {FiGithub, FiClock, FiX} from "react-icons/fi"
 
 import {RetraceResultView} from "@features/txTrace/ui"
 import type {RetraceResultAndCode} from "@features/txTrace/ui"
@@ -13,6 +13,9 @@ import {useGlobalError} from "@shared/lib/errorContext"
 import StepInstructionBlock, {
   type InstructionDetail,
 } from "@features/txTrace/ui/StepInstructionBlock"
+import {useTxHistory, type TxHistoryEntry} from "@shared/lib/useTxHistory"
+import {shortenHash} from "@shared/lib/format"
+import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
 
 import TracePageHeader from "./TracePageHeader"
 
@@ -29,6 +32,9 @@ function TracePage() {
   const {setError} = useGlobalError()
   const [instructionDetails, setInstructionDetails] = useState<InstructionDetail[]>([])
   const [cumulativeGasSinceBegin, setCumulativeGasSinceBegin] = useState<number>(0)
+  const {history, addToHistory, removeFromHistory} = useTxHistory()
+  const [showHistoryDropdown, setShowHistoryDropdown] = useState(false)
+  const [isInputFocused, setIsInputFocused] = useState(false)
 
   const gasMap = useGasMap(result?.trace)
   const executionsMap = useExecutionsMap(result?.trace)
@@ -94,6 +100,12 @@ function TracePage() {
       try {
         const rr = await traceTx(textToSubmit)
         setResult(rr)
+        if (!fromHeader) {
+          const computeInfo = rr?.result?.emulatedTx?.computeInfo
+          const exitCode = computeInfo !== "skipped" ? computeInfo?.exitCode : undefined
+          addToHistory({hash: textToSubmit, exitCode})
+        }
+        setShowHistoryDropdown(false)
         window.history.pushState({}, "", `?tx=${textToSubmit}`)
       } catch (e) {
         console.error(e)
@@ -106,7 +118,7 @@ function TracePage() {
         setLoading(false)
       }
     },
-    [headerInputText, inputText, setError],
+    [headerInputText, inputText, setError, addToHistory],
   )
 
   const handleHeaderSubmit = useCallback(() => {
@@ -158,7 +170,72 @@ function TracePage() {
                 placeholder="Search by transaction hash"
                 loading={loading}
                 autoFocus={true}
+                onFocus={() => {
+                  setIsInputFocused(true)
+                }}
+                onBlur={() => {
+                  setIsInputFocused(false)
+                  setTimeout(() => setShowHistoryDropdown(false), 100)
+                }}
+                onInputClick={() => {
+                  if (isInputFocused) {
+                    setShowHistoryDropdown(true)
+                  }
+                }}
               />
+              {showHistoryDropdown && history.length > 0 && (
+                <ul
+                  className={styles.historyDropdown}
+                  onMouseDown={e => e.preventDefault()}
+                  role="listbox"
+                  aria-label="Transaction history"
+                >
+                  {history.slice(0, Math.min(4, history.length)).map((entry: TxHistoryEntry) => {
+                    const statusType: StatusType =
+                      entry.exitCode === undefined || entry.exitCode === 0 ? "success" : "failed"
+                    return (
+                      <li
+                        key={entry.hash}
+                        onClick={() => {
+                          setInputText(entry.hash)
+                          setShowHistoryDropdown(false)
+                          void handleSubmit(false, entry.hash)
+                        }}
+                        onKeyDown={e => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault()
+                            setInputText(entry.hash)
+                            setShowHistoryDropdown(false)
+                            void handleSubmit(false, entry.hash)
+                          }
+                        }}
+                        className={styles.historyItem}
+                        role="option"
+                        tabIndex={0}
+                        aria-selected={false}
+                      >
+                        <FiClock size={16} className={styles.historyItemIcon} />
+                        <span className={styles.historyItemText}>
+                          {shortenHash(entry.hash, 16, 16)}
+                        </span>
+                        {entry.exitCode !== undefined && (
+                          <StatusBadge type={statusType} text={`Exit code: ${entry.exitCode}`} />
+                        )}
+                        <button
+                          className={styles.historyItemDeleteButton}
+                          onClick={e => {
+                            e.stopPropagation()
+                            removeFromHistory(entry.hash)
+                          }}
+                          title="Remove from history"
+                        >
+                          <FiX size={16} />
+                        </button>
+                      </li>
+                    )
+                  })}
+                </ul>
+              )}
             </div>
             <InlineLoader
               message="Tracing transaction"

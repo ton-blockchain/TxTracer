@@ -29,3 +29,11 @@ export const formatNumber = (v: number | bigint | undefined | null) => {
   if (v === undefined || v === null) return "—"
   return <span className="number-value">{v.toString()}</span>
 }
+
+export const shortenHash = (hash: string, startChars: number, endChars: number): string => {
+  if (!hash) return "—"
+  if (hash.length <= startChars + endChars + 3) {
+    return hash
+  }
+  return `${hash.substring(0, startChars)}...${hash.substring(hash.length - endChars)}`
+}
