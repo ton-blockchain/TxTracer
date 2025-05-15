@@ -26,6 +26,24 @@ Based on [TxTracer-core](https://github.com/tact-lang/txtracer-core).
 - **Network Support:** Mainnet and testnet support (with a badge if the transaction is from testnet).
 - **Light/Dark Theme:** Switch between light and dark modes for user comfort.
 
+## How to use
+
+Go to https://txtracer.ton.org/, enter the transaction hash, click the "Trace" button and start
+diving into the contract!
+
+If you want to share a link to a specific transaction, you can add the `tx` parameter:
+
+https://txtracer.ton.org/?tx=60e5cd74c32c1ccd193599a9ebee6cae33f5e76d9ba29031d0bf3adb4ab37363
+
+### Transactions to play with
+
+If you just want to try TxTracer, here are some interesting transactions:
+
+- [Out of gas exception](https://txtracer.ton.org/?tx=64ec9aa3d0515783fc32e8ecf741e00815d82396752a0ac6aef367483acd6908)
+- [Huge contract](https://txtracer.ton.org/?tx=041293cf00939d8df12badbdf6ab9e2091c8121941dbb170c543595403b5b97b)
+- [Skipped compute phase](https://txtracer.ton.org/?tx=654fc2160a3ad81ef05803e99fcec13a9a309e937bacbd0534e4dbee018ca594)
+- [Deep cells](https://txtracer.ton.org/?tx=f8b7a5b598c65ecb180338eec103bf28c199bf8346453342eb7022ccf2ea39f6)
+
 ## Inspiration
 
 This project is heavily inspired by [retracer](https://retracer.ton.org/).
