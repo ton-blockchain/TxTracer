@@ -71,7 +71,8 @@
 .detailValueFull {
   composes: detailValue;
   width: 100%;
-  text-align: center;
+  padding: var(--spacing-sm) 0;
+  text-align: left;
 }
 
 .highlightValue {
