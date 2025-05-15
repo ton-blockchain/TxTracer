@@ -20,13 +20,13 @@ Based on [TxTracer-core](https://github.com/tact-lang/txtracer-core).
   documentation on hover.
   - Code editor with highlighting.
   - Hover documentation for instructions.
-  - Information about the number of executions of a given line when hovering.
-  - Displaying the exit code next to the instruction that threw it.
-  - Ability to go to any line by Ctrl/Cmd + Click.
+  - Number of executions of a given line on hover.
+  - Exit code next to the instruction that threw it.
+  - Go to any line by Ctrl/Cmd + Click.
 - **Stack Viewer:** View the stack with different colors for different data types.
-- **Transaction Details:** Ability to view transaction details, Out Actions, VM, and executor logs.
+- **Transaction Details:** View transaction details, Out Actions, VM, and executor logs.
 - **Network Support:** Mainnet and testnet support (with a badge if the transaction is from testnet).
-- **Light/Dark Theme:** Switch between light and dark modes for user comfort.
+- **Light/Dark Theme:** Switch between light and dark themes.
 
 ## How to use
 
