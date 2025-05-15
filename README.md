@@ -7,6 +7,8 @@ for navigating complex transactions.
 
 Based on [TxTracer-core](https://github.com/tact-lang/txtracer-core).
 
+![cover.png](docs/cover.png)
+
 ## Features
 
 - **Transaction Tracing:** Visualize and step through TON transaction execution.
