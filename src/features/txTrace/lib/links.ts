@@ -106,9 +106,10 @@ function fromTriple(lt: string | undefined, hash: string | undefined, address: s
   if (lt === undefined || hash === undefined || address === undefined) {
     throw new Error("Invalid ton.cx link")
   }
+  const bufferHash = hash.endsWith("=") ? Buffer.from(hash, "base64") : Buffer.from(hash, "hex")
   return {
     lt: BigInt(lt),
-    hash: Buffer.from(hash, "base64"),
+    hash: bufferHash,
     address: Address.parse(address),
   }
 }

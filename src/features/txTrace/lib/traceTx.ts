@@ -1,4 +1,4 @@
-import {retrace} from "@tonstudio/txtracer-core"
+import {retrace, retraceBaseTx} from "@tonstudio/txtracer-core"
 import type {TraceResult} from "@tonstudio/txtracer-core/dist/types"
 import {decompileCell, compileCellWithMapping} from "tact-asm/dist/runtime/instr"
 import {
@@ -14,6 +14,12 @@ import * as l from "tact-asm/dist/logs"
 import type {RetraceResultAndCode, NetworkType} from "@features/txTrace/ui"
 
 import {
+  type ExtractionResult,
+  extractTxInfoFromLink,
+  SingleHash,
+} from "@features/txTrace/lib/links.ts"
+
+import {
   TxNotFoundError,
   NetworkError,
   TxTraceError,
@@ -22,30 +28,46 @@ import {
 } from "./errors"
 
 export type ExitCode = {
-  num: number
-  description: string
-  info: undefined | InstructionInfo
+  readonly num: number
+  readonly description: string
+  readonly info: undefined | InstructionInfo
 }
 
-async function maybeTestnet(txHash: string): Promise<{result: TraceResult; network: NetworkType}> {
+async function retraceAny(info: ExtractionResult): Promise<TraceResult> {
+  if (info.$ === "BaseInfo") {
+    return retraceBaseTx(info.testnet, info.info)
+  }
+  if (info.$ === "SingleHash") {
+    return retrace(info.testnet, info.hash)
+  }
+
+  throw new Error("Invalid extraction result")
+}
+
+async function maybeTestnet(link: string): Promise<{result: TraceResult; network: NetworkType}> {
+  const txLinkInfo = extractTxInfoFromLink(link)
+  if (txLinkInfo === undefined && link.startsWith("https://")) {
+    throw new Error("Unsupported link format: " + link)
+  }
+
   try {
     await wait(500) // rate limit
-    const result = await retrace(false, txHash)
+    const result = await retraceAny(txLinkInfo ?? SingleHash(link, false))
     return {result, network: "mainnet"}
   } catch (error: unknown) {
     if (error instanceof Error && error.message.includes("Cannot find transaction info")) {
       console.log("Cannot find in mainnet, trying to find in testnet")
       await wait(500) // rate limit
-      const result = await retrace(true, txHash)
+      const result = await retraceAny(txLinkInfo ?? SingleHash(link, true))
       return {result, network: "testnet"}
     }
     throw error
   }
 }
 
-async function doTrace(txHash: string) {
+async function doTrace(link: string) {
   try {
-    return await maybeTestnet(txHash)
+    return await maybeTestnet(link)
   } catch (e: unknown) {
     let message = "An unknown error occurred."
     if (e instanceof Error) {
@@ -152,8 +174,8 @@ function extractCodeAndTrace(result: TraceResult) {
   return {code, exitCode, traceInfo}
 }
 
-export async function traceTx(txHash: string): Promise<RetraceResultAndCode> {
-  const {result, network} = await doTrace(txHash)
+export async function traceTx(link: string): Promise<RetraceResultAndCode> {
+  const {result, network} = await doTrace(link)
   const {code, traceInfo, exitCode} = extractCodeAndTrace(result)
   return {result, code, trace: traceInfo, exitCode, network}
 }

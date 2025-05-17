@@ -80,7 +80,7 @@ describe("should parse links", () => {
     checkTripleResult(res, {
       testnet: false,
       lt: 43546193000009n,
-      hash: "7a236ab8bdec69ae46c02a5142dfe0dc45bf03b30607c5f88fdf86daeb8e393b",
+      hash: "eiNquL3saa5GwCpRQt/g3EW/A7MGB8X4j9+G2uuOOTs=",
       address: "EQCVervJ0JDFlSdOsPos17zHdRBU-kHHl09iXOmRIW-5lwXW",
     })
   })
@@ -92,7 +92,7 @@ describe("should parse links", () => {
     checkTripleResult(res, {
       testnet: true,
       lt: 34542319000001n,
-      hash: "041293cf00939d8df12badbdf6ab9e2091c8121941dbb170c543595403b5b97b",
+      hash: "BBKTzwCTnY3xK6299queIJHIEhlB27FwxUNZVAO1uXs=",
       address: "EQAkEiMt8S8Ur-umCyUn6YPXxpTzlSHH3T1vglKIFvuNObcl",
     })
   })

@@ -758,10 +758,10 @@
   resolved "https://registry.yarnpkg.com/@tonstudio/parser-runtime/-/parser-runtime-0.0.1.tgz#469955fb7ea354d4fadaa5964359b11fd17f926b"
   integrity sha512-5s4fLkXWxa4SAd7QGGvJXe13GakEo0J3VF5dUI/i3A//bGZxMwCp1FcnbErpNs3y0LcAZoXE5FCUnDowDQptqw==
 
-"@tonstudio/txtracer-core@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@tonstudio/txtracer-core/-/txtracer-core-0.0.1.tgz#de1dae7ccc5d31f3a2fb315a27ade5b6f3171133"
-  integrity sha512-Xh9fvZONGD9++mtt0LxiGbr1uYNipxOQoSamAkbJ+IR7zqnQdyvwlpc7GxlQTBIknb6xRp7B7niDMiV/UuZCrQ==
+"@tonstudio/txtracer-core@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@tonstudio/txtracer-core/-/txtracer-core-0.1.0.tgz#4eeb2cc1e1691f18c25a92c66ee6766eae24396f"
+  integrity sha512-Dd2oLMOW+SC+zcY4ZjvS9HAoP2Era/S6EMoP9432D9kGPH5piyJumQaRaPPq+gB70G0a+EyWy3ehJy33bKT7XQ==
   dependencies:
     "@ton/core" "^0.60.1"
     "@ton/sandbox" "^0.29.0"
