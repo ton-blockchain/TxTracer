@@ -96,8 +96,8 @@ export function extractTxInfoFromLink(txLink: string): ExtractionResult | undefi
   if (txLink.startsWith("https://dton.io/tx") || txLink.startsWith("https://testnet.dton.io/tx")) {
     // https://dton.io/tx/F64C6A3CDF3FAD1D786AACF9A6130F18F3F76EEB71294F53BBD812AD3703E70A
     const testnet = txLink.includes("testnet.")
-    const infoPart = testnet ? txLink.slice(27) : txLink.slice(19)
-    return SingleHash(infoPart, testnet)
+    const hash = testnet ? txLink.slice(27) : txLink.slice(19)
+    return SingleHash(hash, testnet)
   }
 
   return undefined
