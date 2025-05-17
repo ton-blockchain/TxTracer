@@ -18,11 +18,11 @@ Based on [TxTracer-core](https://github.com/tact-lang/txtracer-core).
   BoC hex.
 - **Code Viewer & Inspector:** View TVM assembly code with execution counts, gas usage, and detailed instruction
   documentation on hover.
-    - Code editor with highlighting.
-    - Hover documentation for instructions.
-    - Number of executions of a given line on hover.
-    - Exit code next to the instruction that threw it.
-    - Go to any line by Ctrl/Cmd + Click.
+  - Code editor with highlighting.
+  - Hover documentation for instructions.
+  - Number of executions of a given line on hover.
+  - Exit code next to the instruction that threw it.
+  - Go to any line by Ctrl/Cmd + Click.
 - **Stack Viewer:** View the stack with different colors for different data types.
 - **Transaction Details:** View transaction details, Out Actions, VM, and executor logs.
 - **Network Support:** Mainnet and testnet support (with a badge if the transaction is from the testnet).
@@ -30,10 +30,10 @@ Based on [TxTracer-core](https://github.com/tact-lang/txtracer-core).
 
 ## How to use
 
-Go to https://txtracer.ton.org/, enter the transaction hash or transaction link from popular viewers, 
+Go to https://txtracer.ton.org/, enter the transaction hash or transaction link from explorer,
 click the "Trace" button, and start diving into the contract!
 
-TxTracer supports links from the following viewers:
+TxTracer supports links from the following explorers:
 
 - `https://ton.cx`
 - `https://tonviewer.com`
