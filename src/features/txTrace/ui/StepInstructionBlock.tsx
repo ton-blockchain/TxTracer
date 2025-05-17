@@ -61,11 +61,7 @@ export const StepInstructionsList: React.FC<StepInstructionsListProps> = ({steps
   return (
     <>
       {steps.map((instruction, index) => (
-        <div
-          key={index}
-          className={styles.instructionItem}
-          style={{height: `${itemHeight}px`}}
-        >
+        <div key={index} className={styles.instructionItem} style={{height: `${itemHeight}px`}}>
           <span className={styles.instructionName}>{instruction.name}</span>
           <span className={styles.instructionGas}>{instruction.gasCost.toString()} gas</span>
         </div>
