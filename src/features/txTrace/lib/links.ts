@@ -4,9 +4,9 @@ import {Address} from "@ton/core"
 export type ExtractionResult = BaseInfo | SingleHash
 
 export type BaseInfo = {
-  $: "BaseInfo"
-  info: BaseTxInfo
-  testnet: boolean
+  readonly $: "BaseInfo"
+  readonly info: BaseTxInfo
+  readonly testnet: boolean
 }
 
 export const BaseInfo = (info: BaseTxInfo, testnet: boolean): BaseInfo => ({
@@ -16,9 +16,9 @@ export const BaseInfo = (info: BaseTxInfo, testnet: boolean): BaseInfo => ({
 })
 
 export type SingleHash = {
-  $: "SingleHash"
-  hash: string
-  testnet: boolean
+  readonly $: "SingleHash"
+  readonly hash: string
+  readonly testnet: boolean
 }
 export const SingleHash = (hash: string, testnet: boolean): SingleHash => ({
   $: "SingleHash",
