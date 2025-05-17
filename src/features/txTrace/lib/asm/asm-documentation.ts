@@ -19,6 +19,7 @@ export function generateAsmDoc(instruction: AsmInstruction): string | null {
     "```",
     stackInfo,
     `- Gas: \`${gas}\``,
+    `- Opcode: \`${instruction.doc.opcode}\``,
     "",
     instruction.doc.description,
     "",
