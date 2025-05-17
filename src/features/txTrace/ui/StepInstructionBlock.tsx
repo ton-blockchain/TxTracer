@@ -8,13 +8,13 @@ export interface InstructionDetail {
 }
 
 interface StepInstructionBlockProps {
-  readonly instructions: readonly InstructionDetail[]
+  readonly steps: readonly InstructionDetail[]
   readonly currentIndex: number
   readonly itemHeight?: number
 }
 
 export const StepInstructionBlock: React.FC<StepInstructionBlockProps> = ({
-  instructions,
+  steps,
   currentIndex,
   itemHeight = 48,
 }) => {
@@ -25,9 +25,9 @@ export const StepInstructionBlock: React.FC<StepInstructionBlockProps> = ({
     const targetTransformY = -currentIndex * itemHeight
     setTransformY(targetTransformY)
     prevIndexRef.current = currentIndex
-  }, [currentIndex, instructions.length, itemHeight])
+  }, [currentIndex, steps.length, itemHeight])
 
-  if (!instructions || instructions.length === 0) {
+  if (steps.length === 0) {
     return (
       <div className={styles.stepInstructionContainer} style={{height: `${itemHeight}px`}}>
         <div className={styles.instructionItem} style={{height: `${itemHeight}px`}}>
@@ -37,33 +37,44 @@ export const StepInstructionBlock: React.FC<StepInstructionBlockProps> = ({
     )
   }
 
-  const safeCurrentIndex = Math.max(0, Math.min(instructions.length - 1, currentIndex))
-
   return (
     <div className={styles.stepInstructionContainer} style={{height: `${itemHeight}px`}}>
       <div
         className={styles.instructionWindow}
         style={{
           transform: `translateY(${transformY}px)`,
-          height: `${instructions.length * itemHeight}px`,
+          height: `${steps.length * itemHeight}px`,
         }}
       >
-        {instructions.map((instruction, index) => (
-          <div
-            key={index}
-            className={styles.instructionItem}
-            style={{height: `${itemHeight}px`}}
-            aria-hidden={index !== safeCurrentIndex}
-          >
-            <span className={styles.instructionName}>{instruction.name}</span>
-            {instruction.gasCost.toString().trim() !== "" && (
-              <span className={styles.instructionGas}>{instruction.gasCost.toString()} gas</span>
-            )}
-          </div>
-        ))}
+        <StepInstructionsListMemo steps={steps} itemHeight={itemHeight} />
       </div>
     </div>
   )
 }
+
+interface StepInstructionsListProps {
+  readonly steps: readonly InstructionDetail[]
+  readonly itemHeight?: number
+}
+
+export const StepInstructionsList: React.FC<StepInstructionsListProps> = ({steps, itemHeight}) => {
+  return (
+    <>
+      {steps.map((instruction, index) => (
+        <div
+          key={index}
+          className={styles.instructionItem}
+          style={{height: `${itemHeight}px`}}
+        >
+          <span className={styles.instructionName}>{instruction.name}</span>
+          <span className={styles.instructionGas}>{instruction.gasCost.toString()} gas</span>
+        </div>
+      ))}
+    </>
+  )
+}
+
+export const StepInstructionsListMemo = React.memo(StepInstructionsList)
+StepInstructionsListMemo.displayName = "StepInstructionsListMemo"
 
 export default React.memo(StepInstructionBlock)

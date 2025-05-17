@@ -20,6 +20,7 @@
   display: flex;
   align-items: center;
   justify-content: left;
+  padding-top: 1px;
   white-space: nowrap;
   width: 100%;
   box-sizing: border-box;

@@ -101,7 +101,7 @@ function findExitCode(vmLogs: string, mappingInfo: MappingInfo) {
     return undefined // no exception found
   }
 
-  // find last position before exception
+  // find the last position before exception
   const loc = reversedEntries.find(it => it.$ === "VmLoc")
   const info = findInstructionInfo(mappingInfo, {
     hash: loc?.hash?.toLowerCase() ?? "",

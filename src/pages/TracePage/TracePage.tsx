@@ -319,7 +319,7 @@ function TracePage() {
                       </div>
                       {instructionDetails.length > 0 && (
                         <StepInstructionBlock
-                          instructions={instructionDetails}
+                          steps={instructionDetails}
                           currentIndex={selectedStep}
                           itemHeight={32}
                         />
