@@ -5,6 +5,7 @@ import styles from "./Button.module.css"
 export type ButtonVariant = "primary" | "ghost" | "outline"
 export type ButtonSize = "sm" | "md" | "lg"
 
+// eslint-disable-next-line functional/type-declaration-immutability
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   readonly variant?: ButtonVariant
   readonly size?: ButtonSize

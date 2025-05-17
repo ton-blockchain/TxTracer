@@ -8,6 +8,7 @@ import eslintPluginJsxA11y from "eslint-plugin-jsx-a11y"
 import eslintPluginImport from "eslint-plugin-import"
 import eslintConfigPrettier from "eslint-config-prettier"
 import unusedImports from "eslint-plugin-unused-imports"
+import functional from "eslint-plugin-functional"
 
 export default tseslint.config(
   {ignores: ["dist", "src/polyfills.ts"]},
@@ -32,6 +33,7 @@ export default tseslint.config(
       "jsx-a11y": eslintPluginJsxA11y,
       import: eslintPluginImport,
       "@unused-imports": unusedImports,
+      functional: functional,
     },
     rules: {
       ...reactPlugin.configs.recommended.rules,
@@ -61,6 +63,18 @@ export default tseslint.config(
       "import/export": "error",
       "@unused-imports/no-unused-imports": "error",
       "jsx-a11y/no-autofocus": "off",
+      "functional/type-declaration-immutability": [
+        "error",
+        {
+          rules: [
+            {
+              identifiers: ".+",
+              immutability: "ReadonlyShallow",
+              comparator: "AtLeast",
+            },
+          ],
+        },
+      ],
     },
     settings: {
       react: {
