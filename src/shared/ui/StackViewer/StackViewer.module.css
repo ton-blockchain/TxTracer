@@ -60,6 +60,7 @@
 }
 
 .stackItem {
+  position: relative;
   flex: 1;
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--border-radius-sm);
@@ -72,6 +73,10 @@
 .stackItem:hover {
   opacity: 0.9;
   box-shadow: var(--stack-item-hover-shadow);
+}
+
+.stackItem:hover .stackItemCopyButton {
+  opacity: 1;
 }
 
 .stackItemLabel {
@@ -93,6 +98,13 @@
   margin-top: 2px;
 }
 
+.stackItemCopyButton {
+  opacity: 0;
+  position: absolute;
+  top: 0.15rem;
+  right: var(--spacing-xs);
+}
+
 .nullItem {
   composes: stackItem;
   background-color: var(--stack-item-null-bg);
@@ -112,8 +124,20 @@
   word-break: break-all;
 }
 
+.integerItemCopyButton {
+  composes: stackItemCopyButton;
+  background-color: var(--stack-item-integer-bg);
+  color: var(--stack-item-integer-text);
+}
+
 .cellItem {
   composes: stackItem;
+  background-color: var(--stack-item-cell-bg);
+  color: var(--stack-item-cell-text);
+}
+
+.cellItemCopyButton {
+  composes: stackItemCopyButton;
   background-color: var(--stack-item-cell-bg);
   color: var(--stack-item-cell-text);
 }
@@ -124,8 +148,20 @@
   color: var(--stack-item-slice-text);
 }
 
+.sliceItemCopyButton {
+  composes: stackItemCopyButton;
+  background-color: var(--stack-item-slice-bg);
+  color: var(--stack-item-slice-text);
+}
+
 .builderItem {
   composes: stackItem;
+  background-color: var(--stack-item-builder-bg);
+  color: var(--stack-item-builder-text);
+}
+
+.builderItemCopyButton {
+  composes: stackItemCopyButton;
   background-color: var(--stack-item-builder-bg);
   color: var(--stack-item-builder-text);
 }
@@ -136,8 +172,20 @@
   color: var(--stack-item-continuation-text);
 }
 
+.continuationItemCopyButton {
+  composes: stackItemCopyButton;
+  background-color: var(--stack-item-continuation-bg);
+  color: var(--stack-item-continuation-text);
+}
+
 .addressItem {
   composes: stackItem;
+  background-color: var(--stack-item-address-bg);
+  color: var(--stack-item-address-text);
+}
+
+.addressItemCopyButton {
+  composes: stackItemCopyButton;
   background-color: var(--stack-item-address-bg);
   color: var(--stack-item-address-text);
 }
