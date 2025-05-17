@@ -24,32 +24,12 @@
 }
 
 .copyIcon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: var(--spacing-sm);
-  padding: var(--spacing-xs);
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  opacity: 0.65;
-  border-radius: var(--border-radius-sm);
   color: var(--color-primary);
-  transition:
-    opacity 0.15s ease,
-    background-color 0.15s ease;
 }
 
 .copyIcon:hover {
   opacity: 1;
   background-color: rgba(var(--color-primary-rgb), 0.1);
-}
-
-.copyIcon svg {
-  width: var(--font-size-sm);
-  height: var(--font-size-sm);
-  display: block;
-  stroke: currentColor;
 }
 
 .copyIcon.copied {
@@ -61,15 +41,4 @@
 .copyIcon.copied svg {
   stroke: var(--color-primary);
   animation: popIn 0.2s ease-out;
-}
-
-@keyframes popIn {
-  0% {
-    transform: scale(0.7);
-    opacity: 0.5;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
 }

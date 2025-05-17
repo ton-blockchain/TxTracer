@@ -5,6 +5,8 @@ import {motion, AnimatePresence} from "framer-motion"
 
 import StackItemDetailsModal from "@shared/ui/StackItemDetailsModal/StackItemDetailsModal"
 
+import {CopyButton} from "@shared/CopyButton/CopyButton.tsx"
+
 import styles from "./StackViewer.module.css"
 
 const truncateMiddle = (text: string, maxLength: number = 30): JSX.Element => {
@@ -133,6 +135,11 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
         return (
           <div className={styles.integerItem} key={keyPrefix}>
             {value}
+            <CopyButton
+              className={styles.integerItemCopyButton}
+              title="Copy integer value"
+              value={value.toString()}
+            />
           </div>
         )
       }
@@ -157,20 +164,12 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
               <div className={styles.stackItemDetails}>
                 Bits: {cell.bits.length}, Refs: {cell.refs.length}
               </div>
+              <CopyButton
+                className={styles.cellItemCopyButton}
+                title="Copy cell as BoC"
+                value={element.boc}
+              />
             </div>
-            {expandedItem === keyPrefix && (
-              <div className={styles.stackItemFullview}>
-                <button
-                  className={styles.closeBtn}
-                  onClick={e => {
-                    e.stopPropagation()
-                    setExpandedItem(null)
-                  }}
-                >
-                  Collapse
-                </button>
-              </div>
-            )}
           </div>
         )
       }
@@ -181,6 +180,7 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
           const address = safeLoadAddress(cell)
           if (address) {
             const string = address.toRawString()
+            const readable = address.toString()
             return (
               <div
                 className={styles.addressItem}
@@ -196,19 +196,11 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
                 <div className={styles.stackItemValue}>
                   {expandedItem === keyPrefix ? string : truncateMiddle(string, 40)}
                 </div>
-                {expandedItem === keyPrefix && (
-                  <div className={styles.stackItemFullview}>
-                    <button
-                      className={styles.closeBtn}
-                      onClick={e => {
-                        e.stopPropagation()
-                        setExpandedItem(null)
-                      }}
-                    >
-                      Collapse
-                    </button>
-                  </div>
-                )}
+                <CopyButton
+                  className={styles.addressItemCopyButton}
+                  title="Copy address as base64"
+                  value={readable}
+                />
               </div>
             )
           }
@@ -230,24 +222,16 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
                 : expandedItem === keyPrefix
                   ? element.hex
                   : truncateMiddle(element.hex, 40)}
+              <CopyButton
+                className={styles.sliceItemCopyButton}
+                title="Copy slice as BoC"
+                value={element.hex}
+              />
             </div>
             <div className={styles.stackItemDetails}>
               Bits: {element.startBit}-{cell.bits.length}, Refs: {element.startRef}-
               {cell.refs.length}
             </div>
-            {expandedItem === keyPrefix && (
-              <div className={styles.stackItemFullview}>
-                <button
-                  className={styles.closeBtn}
-                  onClick={e => {
-                    e.stopPropagation()
-                    setExpandedItem(null)
-                  }}
-                >
-                  Collapse
-                </button>
-              </div>
-            )}
           </div>
         )
       }
@@ -273,19 +257,11 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
             <div className={styles.stackItemDetails}>
               Bits: {cell.bits.length}, Refs: {cell.refs.length}
             </div>
-            {expandedItem === keyPrefix && (
-              <div className={styles.stackItemFullview}>
-                <button
-                  className={styles.closeBtn}
-                  onClick={e => {
-                    e.stopPropagation()
-                    setExpandedItem(null)
-                  }}
-                >
-                  Collapse
-                </button>
-              </div>
-            )}
+            <CopyButton
+              className={styles.builderItemCopyButton}
+              title="Copy builder as BoC"
+              value={element.hex}
+            />
           </div>
         )
       }
@@ -305,6 +281,11 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
             <div className={styles.stackItemValue}>
               {expandedItem === keyPrefix ? element.name : truncateMiddle(element.name, 40)}
             </div>
+            <CopyButton
+              className={styles.continuationItemCopyButton}
+              title="Copy continuation"
+              value={element.name}
+            />
             {expandedItem === keyPrefix && (
               <div className={styles.stackItemFullview}>
                 <button
@@ -335,19 +316,11 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
             <div className={styles.stackItemValue}>
               {expandedItem === keyPrefix ? element.value : truncateMiddle(element.value, 40)}
             </div>
-            {expandedItem === keyPrefix && (
-              <div className={styles.stackItemFullview}>
-                <button
-                  className={styles.closeBtn}
-                  onClick={e => {
-                    e.stopPropagation()
-                    setExpandedItem(null)
-                  }}
-                >
-                  Collapse
-                </button>
-              </div>
-            )}
+            <CopyButton
+              className={styles.addressItemCopyButton}
+              title="Copy address as base64"
+              value={element.value}
+            />
           </div>
         )
       }
@@ -374,19 +347,6 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
             <div className={styles.stackItemValue}>
               {expandedItem === keyPrefix ? element.value : truncateMiddle(element.value, 40)}
             </div>
-            {expandedItem === keyPrefix && (
-              <div className={styles.stackItemFullview}>
-                <button
-                  className={styles.closeBtn}
-                  onClick={e => {
-                    e.stopPropagation()
-                    setExpandedItem(null)
-                  }}
-                >
-                  Collapse
-                </button>
-              </div>
-            )}
           </div>
         )
       default:
