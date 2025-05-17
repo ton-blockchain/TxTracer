@@ -180,6 +180,7 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
           const address = safeLoadAddress(cell)
           if (address) {
             const string = address.toRawString()
+            const readable = address.toString()
             return (
               <div
                 className={styles.addressItem}
@@ -198,7 +199,7 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
                 <CopyButton
                   className={styles.addressItemCopyButton}
                   title="Copy address as base64"
-                  value={string}
+                  value={readable}
                 />
               </div>
             )
