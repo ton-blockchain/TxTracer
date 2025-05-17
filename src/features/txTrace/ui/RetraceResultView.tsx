@@ -42,14 +42,10 @@ const RetraceResultViewFc: React.FC<RetraceResultViewProps> = ({result}) => {
       {/* details table */}
       <TransactionDetailsTable data={result} />
 
-      {result.result.emulatedTx.actions.length > 0 && (
-        <div className="actions-section">
-          <h3 className="actions-heading">
-            Out Actions ({result.result.emulatedTx.actions.length})
-          </h3>
-          <ActionsList actions={result.result.emulatedTx.actions} onSelect={handleSelect} />
-        </div>
-      )}
+      <div className="actions-section">
+        <h3 className="actions-heading">Out Actions ({result.result.emulatedTx.actions.length})</h3>
+        <ActionsList actions={result.result.emulatedTx.actions} onSelect={handleSelect} />
+      </div>
 
       {/* modal */}
       <ActionModal
