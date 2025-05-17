@@ -1,9 +1,9 @@
 import React from "react"
 
 interface IconProps {
-  svg: React.ReactNode
-  size?: number
-  className?: string
+  readonly svg: React.ReactNode
+  readonly size?: number
+  readonly className?: string
 }
 
 const Icon: React.FC<IconProps> = ({svg, size = 16, className = ""}) => (
