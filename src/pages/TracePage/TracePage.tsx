@@ -167,7 +167,7 @@ function TracePage() {
                 onSubmit={() => {
                   void handleSubmit(false)
                 }}
-                placeholder="Search by transaction hash"
+                placeholder="Search by transaction hash or explorer link"
                 loading={loading}
                 autoFocus={true}
                 onFocus={() => {

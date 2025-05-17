@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
-    "@tonstudio/txtracer-core": "^0.0.1",
+    "@tonstudio/txtracer-core": "^0.1.0",
     "@ton/crypto": "^3.3.0",
     "buffer": "^6.0.3",
     "framer-motion": "^12.11.0",

@@ -25,13 +25,21 @@ Based on [TxTracer-core](https://github.com/tact-lang/txtracer-core).
   - Go to any line by Ctrl/Cmd + Click.
 - **Stack Viewer:** View the stack with different colors for different data types.
 - **Transaction Details:** View transaction details, Out Actions, VM, and executor logs.
-- **Network Support:** Mainnet and testnet support (with a badge if the transaction is from testnet).
+- **Network Support:** Mainnet and testnet support (with a badge if the transaction is from the testnet).
 - **Light/Dark Theme:** Switch between light and dark themes.
 
 ## How to use
 
-Go to https://txtracer.ton.org/, enter the transaction hash, click the "Trace" button and start
-diving into the contract!
+Go to https://txtracer.ton.org/, enter the transaction hash or transaction link from explorer,
+click the "Trace" button, and start diving into the contract!
+
+TxTracer supports links from the following explorers:
+
+- `https://ton.cx`
+- `https://tonviewer.com`
+- `https://tonscan.org`
+- `https://explorer.toncoin.org`
+- `https://dton.io`
 
 If you want to share a link to a specific transaction, you can add the `tx` parameter:
 

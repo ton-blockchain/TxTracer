@@ -4,7 +4,7 @@ const VALID_TEST_HASH_PLACEHOLDER =
   "5c7d6c306ca8a6ada7716d02f63e18a5b6f91ab9851caef0d22bd26e97eff7e8"
 
 async function startTracing(page: Page) {
-  const searchInput = page.getByPlaceholder("Search by transaction hash")
+  const searchInput = page.getByPlaceholder("Search by transaction hash or explorer link")
   await expect(searchInput).toBeVisible()
   await searchInput.fill(VALID_TEST_HASH_PLACEHOLDER)
   await expect(searchInput).toHaveValue(VALID_TEST_HASH_PLACEHOLDER)
@@ -27,7 +27,7 @@ test.describe("TxTracer Main Workflow", () => {
   test("should have an input field for transaction hash", async ({page}: {page: Page}) => {
     await page.goto("/")
 
-    const searchInput = page.getByPlaceholder("Search by transaction hash")
+    const searchInput = page.getByPlaceholder("Search by transaction hash or explorer link")
     await expect(searchInput).toBeVisible()
     await expect(searchInput).toBeEnabled()
   })
@@ -39,7 +39,7 @@ test.describe("TxTracer Main Workflow", () => {
   }) => {
     await page.goto(`/?tx=${VALID_TEST_HASH_PLACEHOLDER}`)
 
-    const searchInput = page.getByPlaceholder("Search by transaction hash")
+    const searchInput = page.getByPlaceholder("Search by transaction hash or explorer link")
     await expect(searchInput).toHaveValue(VALID_TEST_HASH_PLACEHOLDER)
   })
 })
