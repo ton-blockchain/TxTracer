@@ -8,7 +8,6 @@ export type BaseInfo = {
   readonly info: BaseTxInfo
   readonly testnet: boolean
 }
-
 export const BaseInfo = (info: BaseTxInfo, testnet: boolean): BaseInfo => ({
   $: "BaseInfo",
   info,
