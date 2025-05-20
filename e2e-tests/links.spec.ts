@@ -47,17 +47,17 @@ test.describe("TxTracer Viewers Links", () => {
     ["toncoin testnet", TONCOIN_TESTNET],
     ["dton", DTON],
     ["dton testnet", DTON_TESTNET],
-  ];
+  ]
 
   tracingCases.forEach(([name, link]) => {
-    test(`should successfully trace '${name}' link`, async ({ page }) => {
-      await wait()  // TODO: Remove that. Cause we have only 1 rps from toncenter without API key
-      await page.goto("/");
-      await startTracing(page, link);
-      await checkPageLoaded(page);
-    });
-  });
-});
+    test(`should successfully trace '${name}' link`, async ({page}) => {
+      await wait() // TODO: Remove that. Cause we have only 1 rps from toncenter without API key
+      await page.goto("/")
+      await startTracing(page, link)
+      await checkPageLoaded(page)
+    })
+  })
+})
 
 async function checkPageLoaded(page: Page) {
   const stepCounter = page.getByTestId("step-counter-info")
