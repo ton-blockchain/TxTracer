@@ -15,6 +15,7 @@ interface TracePageHeaderProps {
 
 const TracePageHeaderFc: React.FC<TracePageHeaderProps> = ({pageTitle, network, children}) => {
   const isPlayground = pageTitle === "playground"
+  const isExplorer = pageTitle === "explorer"
 
   return (
     <header className={styles.header}>
@@ -24,6 +25,7 @@ const TracePageHeaderFc: React.FC<TracePageHeaderProps> = ({pageTitle, network, 
           <span className={styles.logoText}>TxTracer</span>
         </a>
         {isPlayground && <span className={styles.pageTitle}>Playground</span>}
+        {isExplorer && <span className={styles.pageTitle}>Code Explorer</span>}
         {network === "testnet" && <Badge color="red">Testnet</Badge>}
       </div>
 

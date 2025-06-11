@@ -10,8 +10,10 @@ import {ThemeProvider} from "@shared/lib/themeContext"
 import {ThemeToggleButton} from "@features/themeSwitcher/ui/ThemeToggleButton"
 
 import {ErrorBoundary} from "./app/ErrorBoundary"
+
 const TracePage = React.lazy(() => import("./pages/TracePage/TracePage"))
 const PlaygroundPage = React.lazy(() => import("./pages/PlaygroundPage/PlaygroundPage"))
+const GodboltPage = React.lazy(() => import("./pages/GodboltPage/GodboltPage"))
 
 function AppShell() {
   const {error, clearError, setError} = useGlobalError()
@@ -45,6 +47,16 @@ function AppShell() {
               element={
                 <Suspense fallback={<FullScreenLoader baseMessage="Loading Playground..." />}>
                   <PlaygroundPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/godbolt"
+              element={
+                <Suspense
+                  fallback={<FullScreenLoader baseMessage="Loading Godbolt Playground..." />}
+                >
+                  <GodboltPage />
                 </Suspense>
               }
             />

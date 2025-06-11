@@ -1,6 +1,7 @@
 import {languages} from "monaco-editor"
 
 export const TASM_LANGUAGE_ID = "tasm"
+export const FUNC_LANGUAGE_ID = "func"
 
 export const tasmLanguageDefinition: languages.IMonarchLanguage = {
   keywords: ["ref", "embed", "exotic", "library"],
@@ -21,7 +22,7 @@ export const tasmLanguageDefinition: languages.IMonarchLanguage = {
       [/\[/, {token: "delimiter.square", next: "@push"}],
       [/]/, {token: "delimiter.square", next: "@pop"}],
       [/\(\)/, "delimiter.parenthesis"],
-      [/\//, "comment"],
+      [/\/\/.*?$/, "comment"],
       [/\b(alias|of)\b/, "alias"],
       [/\s+/, "white"],
     ],

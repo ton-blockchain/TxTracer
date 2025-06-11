@@ -5,7 +5,7 @@
   "type": "module",
   "homepage": "https://txtracer.ton.org/",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 5174",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -20,11 +20,13 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
+    "@ton-community/func-js": "^0.9.1",
     "@ton/core": "^0.60.1",
     "@ton/crypto": "^3.3.0",
     "@ton/sandbox": "^0.32.1",
     "@ton/test-utils": "^0.7.0",
     "@tonstudio/txtracer-core": "^0.1.0",
+    "allotment": "^1.20.4",
     "buffer": "^6.0.3",
     "framer-motion": "^12.11.0",
     "monaco-editor": "^0.52.2",
@@ -32,7 +34,7 @@
     "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.6.0",
-    "ton-assembly": "../tasm/ton-assembly-0.0.2.tgz"
+    "ton-assembly": "../tasm/ton-assembly-0.0.3.tgz"
   },
   "devDependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
