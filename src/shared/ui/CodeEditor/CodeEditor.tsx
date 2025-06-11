@@ -172,7 +172,9 @@ const CodeEditor = React.forwardRef<
     const editorRef = useRef<monacoTypes.editor.IStandaloneCodeEditor | null>(null)
 
     // @ts-expect-error todo
-    React.useImperativeHandle(ref, () => editorRef.current, [])
+    // we need it actually
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    React.useImperativeHandle(ref, () => editorRef.current, [editorRef.current])
     const decorationsRef = useRef<string[]>([])
     const [editorReady, setEditorReady] = useState(false)
     const [isFoldedState, setIsFolded] = useState(false)
