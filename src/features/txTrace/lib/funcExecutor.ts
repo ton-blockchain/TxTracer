@@ -16,7 +16,6 @@ export interface FuncCompilationResult {
   readonly mapping: Map<number, trace.InstructionInfo[]>
 }
 
-// Re-export for convenience
 export {loadFuncMapping, type FuncMapping}
 
 export const compileFuncCode = async (code: string): Promise<FuncCompilationResult | undefined> => {

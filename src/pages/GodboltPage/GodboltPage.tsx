@@ -27,32 +27,29 @@ import styles from "./GodboltPage.module.css"
 const CodeEditor = React.lazy(() => import("@shared/ui/CodeEditor"))
 
 const DEFAULT_FUNC_CODE = `() recv_internal() {
-
+    ;; write your code here
 }`
 
-const DEFAULT_SECOND_CODE = `// Second editor content
-// You can write additional code here`
+const DEFAULT_ASM_CODE = ``
 
-const LOCAL_STORAGE_KEY = "txtracer-godbolt-code"
-const SECOND_EDITOR_KEY = "txtracer-godbolt-second-code"
+const FUNC_EDITOR_KEY = "txtracer-godbolt-func-code"
+const ASM_EDITOR_KEY = "txtracer-godbolt-asm-code"
 
 function GodboltPage() {
   const [funcCode, setFuncCode] = useState(() => {
-    return localStorage.getItem(LOCAL_STORAGE_KEY) ?? DEFAULT_FUNC_CODE
+    return localStorage.getItem(FUNC_EDITOR_KEY) ?? DEFAULT_FUNC_CODE
   })
-  const [secondCode] = useState(() => {
-    return localStorage.getItem(SECOND_EDITOR_KEY) ?? DEFAULT_SECOND_CODE
+  const [asmCode, setAsmCode] = useState(() => {
+    return localStorage.getItem(ASM_EDITOR_KEY) ?? DEFAULT_ASM_CODE
   })
   const [result, setResult] = useState<FuncCompilationResult | undefined>(undefined)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string>("")
   const {setError: setGlobalError} = useGlobalError()
 
-  // Editor refs for auto-scroll functionality
   const funcEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
   const asmEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
 
-  // Parse source map from result
   const sourceMap = useMemo(() => {
     if (result?.funcSourceMap) {
       try {
@@ -65,7 +62,6 @@ function GodboltPage() {
     return undefined
   }, [result?.funcSourceMap])
 
-  // Source map highlighting
   const {
     funcHighlightGroups,
     asmHighlightGroups,
@@ -82,40 +78,17 @@ function GodboltPage() {
     result?.assembly,
   )
 
-  // Use filtered assembly code for display when available, otherwise show default
-  const displayedAsmCode = result?.assembly
-    ? filteredAsmCode || "// Processing assembly..."
-    : secondCode
+  const displayedAsmCode = result?.assembly ? (filteredAsmCode ?? "") : asmCode
 
-  // Debug logging
+  // Saving editors code
   useEffect(() => {
-    if (result?.assembly) {
-      console.log("Original assembly length:", result.assembly.length)
-      console.log("Filtered assembly length:", filteredAsmCode?.length || 0)
-      console.log("Has DEBUGMARK in original:", result.assembly.includes("DEBUGMARK"))
-      console.log("Has DEBUGMARK in filtered:", filteredAsmCode?.includes("DEBUGMARK") || false)
-      console.log(
-        "Filtered code preview:",
-        filteredAsmCode?.substring(0, 200) || "No filtered code",
-      )
-      console.log("Displayed code preview:", displayedAsmCode?.substring(0, 200))
-      console.log("Has DEBUGMARK in displayed:", displayedAsmCode?.includes("DEBUGMARK"))
-    }
-  }, [result?.assembly, filteredAsmCode, displayedAsmCode, sourceMap])
-
-  useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, funcCode)
+    localStorage.setItem(FUNC_EDITOR_KEY, funcCode)
   }, [funcCode])
-
   useEffect(() => {
-    localStorage.setItem(SECOND_EDITOR_KEY, secondCode)
-  }, [secondCode])
+    localStorage.setItem(ASM_EDITOR_KEY, asmCode)
+  }, [asmCode])
 
   const handleExecute = useCallback(async () => {
-    if (!funcCode.trim()) {
-      return
-    }
-
     setLoading(true)
     setError("")
     setResult(undefined)
@@ -123,7 +96,7 @@ function GodboltPage() {
     try {
       const result = await compileFuncCode(funcCode)
       setResult(result)
-      console.log(result?.funcSourceMap)
+      setAsmCode(displayedAsmCode)
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error"
       setError(errorMessage)
@@ -131,7 +104,7 @@ function GodboltPage() {
     } finally {
       setLoading(false)
     }
-  }, [funcCode, setGlobalError])
+  }, [displayedAsmCode, funcCode, setGlobalError])
 
   const handleCodeChange = useCallback((newCode: string) => {
     setFuncCode(newCode)

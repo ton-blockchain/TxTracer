@@ -1,6 +1,8 @@
 import {languages} from "monaco-editor"
 
 export const funcLanguageDefinition: languages.IMonarchLanguage = {
+  defaultToken: "invalid",
+
   keywords: [
     "forall",
     "return",
@@ -120,6 +122,8 @@ export const funcLanguageDefinition: languages.IMonarchLanguage = {
 
       // Tilde operators (function calls)
       [/~[a-zA-Z_][a-zA-Z0-9_]*/, "identifier.method"],
+      // Method names (with dot prefix)
+      [/\.[a-zA-Z_][a-zA-Z0-9_]*/, "identifier.method"],
 
       // Regular identifiers and keywords
       [
@@ -132,9 +136,6 @@ export const funcLanguageDefinition: languages.IMonarchLanguage = {
           },
         },
       ],
-
-      // Method names (with dot prefix)
-      [/\.[a-zA-Z_][a-zA-Z0-9_]*/, "identifier.method"],
 
       // Numbers
       [/-?0x[0-9a-fA-F]+/, "number.hex"],

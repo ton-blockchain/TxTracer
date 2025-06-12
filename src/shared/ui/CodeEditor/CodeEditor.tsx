@@ -5,95 +5,14 @@ import {editor, type IMarkdownString, Position} from "monaco-editor"
 
 import {useTheme} from "@shared/lib/themeContext"
 import type {ExitCode} from "@features/txTrace/lib/traceTx"
-import {findInstruction, generateAsmDoc, asmData} from "@features/txTrace/lib/asm"
+import {asmData, findInstruction, generateAsmDoc} from "@features/txTrace/lib/asm"
 
 import {funcLanguageDefinition} from "@shared/ui/CodeEditor/FuncLanguageDefinition.ts"
 
-import {TASM_LANGUAGE_ID, FUNC_LANGUAGE_ID, tasmLanguageDefinition} from "./TasmLanguageDefinition"
+import {DARK_THEME, LIGHT_THEME} from "@shared/ui/CodeEditor/themes.tsx"
+
+import {FUNC_LANGUAGE_ID, TASM_LANGUAGE_ID, tasmLanguageDefinition} from "./TasmLanguageDefinition"
 import styles from "./CodeEditor.module.css"
-
-const tasmTheme: editor.IStandaloneThemeData = {
-  base: "vs",
-  inherit: true,
-  rules: [{token: "instruction", foreground: "#0033B3"}],
-  colors: {
-    "editor.foreground": "#000000",
-  },
-}
-
-const tasmDarkTheme: editor.IStandaloneThemeData = {
-  base: "vs-dark",
-  inherit: true,
-  rules: [
-    {
-      token: "instruction",
-      foreground: "#749DED",
-    },
-    {
-      token: "alias",
-      foreground: "#9a9a9a",
-    },
-  ],
-  colors: {
-    "editor.foreground": "#000000",
-    "editor.background": "#1c1c1e",
-  },
-}
-
-const funcTheme: editor.IStandaloneThemeData = {
-  base: "vs",
-  inherit: true,
-  rules: [
-    {token: "keyword", foreground: "#0033B3", fontStyle: "bold"},
-    {token: "type", foreground: "#871094", fontStyle: "bold"},
-    {token: "string", foreground: "#067D17"},
-    {token: "string.number", foreground: "#1750EB"},
-    {token: "string.slice", foreground: "#1750EB"},
-    {token: "string.asm", foreground: "#067D17", fontStyle: "italic"},
-    {token: "number", foreground: "#1750EB"},
-    {token: "number.hex", foreground: "#1750EB"},
-    {token: "number.version", foreground: "#1750EB"},
-    {token: "comment", foreground: "#8C8C8C", fontStyle: "italic"},
-    {token: "keyword.directive", foreground: "#9C5D27"},
-    {token: "keyword.methodid", foreground: "#9C5D27", fontStyle: "bold"},
-    {token: "identifier.method", foreground: "#871094"},
-    {token: "identifier.special", foreground: "#795E26", fontStyle: "bold"},
-    {token: "identifier.backtick", foreground: "#000000"},
-    {token: "keyword.underscore", foreground: "#0033B3"},
-    {token: "operator", foreground: "#000000"},
-  ],
-  colors: {
-    "editor.foreground": "#000000",
-  },
-}
-
-const funcDarkTheme: editor.IStandaloneThemeData = {
-  base: "vs-dark",
-  inherit: true,
-  rules: [
-    {token: "keyword", foreground: "#569CD6", fontStyle: "bold"},
-    {token: "type", foreground: "#4EC9B0", fontStyle: "bold"},
-    {token: "string", foreground: "#CE9178"},
-    {token: "string.number", foreground: "#B5CEA8"},
-    {token: "string.slice", foreground: "#B5CEA8"},
-    {token: "string.asm", foreground: "#CE9178", fontStyle: "italic"},
-    {token: "number", foreground: "#B5CEA8"},
-    {token: "number.hex", foreground: "#B5CEA8"},
-    {token: "number.version", foreground: "#B5CEA8"},
-    {token: "comment", foreground: "#6A9955", fontStyle: "italic"},
-    {token: "keyword.directive", foreground: "#C586C0"},
-    {token: "keyword.methodid", foreground: "#C586C0", fontStyle: "bold"},
-    {token: "identifier.method", foreground: "#4EC9B0"},
-    {token: "identifier.special", foreground: "#DCDCAA", fontStyle: "bold"},
-    {token: "identifier.backtick", foreground: "#D4D4D4"},
-    {token: "keyword.underscore", foreground: "#569CD6"},
-    {token: "operator", foreground: "#D4D4D4"},
-  ],
-  colors: {
-    "editor.foreground": "#D4D4D4",
-    "editor.background": "#1c1c1e",
-  },
-}
 
 export interface HighlightGroup {
   readonly lines: number[]
@@ -129,21 +48,18 @@ interface FoldingRange {
 }
 
 const initializeMonaco = (monaco: typeof monacoTypes, language?: "tasm" | "func") => {
-  monaco.languages.register({id: TASM_LANGUAGE_ID})
-  monaco.languages.setMonarchTokensProvider(TASM_LANGUAGE_ID, tasmLanguageDefinition)
-  monaco.editor.defineTheme("tasmTheme", tasmTheme)
-  monaco.editor.defineTheme("tasmDarkTheme", tasmDarkTheme)
-
-  monaco.languages.register({id: FUNC_LANGUAGE_ID})
-  monaco.languages.setMonarchTokensProvider(FUNC_LANGUAGE_ID, funcLanguageDefinition)
-  monaco.editor.defineTheme("funcTheme", funcTheme)
-  monaco.editor.defineTheme("funcDarkTheme", funcDarkTheme)
-
   if (language === "tasm") {
-    monaco.editor.setTheme("tasmTheme")
-  } else if (language === "func") {
-    monaco.editor.setTheme("funcTheme")
+    monaco.languages.register({id: TASM_LANGUAGE_ID})
+    monaco.languages.setMonarchTokensProvider(TASM_LANGUAGE_ID, tasmLanguageDefinition)
   }
+
+  if (language === "func") {
+    monaco.languages.register({id: FUNC_LANGUAGE_ID})
+    monaco.languages.setMonarchTokensProvider(FUNC_LANGUAGE_ID, funcLanguageDefinition)
+  }
+
+  monaco.editor.defineTheme("light-theme", LIGHT_THEME)
+  monaco.editor.defineTheme("dark-theme", DARK_THEME)
 }
 
 const CodeEditor = React.forwardRef<
@@ -199,21 +115,15 @@ const CodeEditor = React.forwardRef<
 
     useEffect(() => {
       if (!monaco) return
-      let monacoTheme: string
-      if (language === "func") {
-        monacoTheme = appTheme === "dark" ? "funcDarkTheme" : "funcTheme"
-      } else {
-        monacoTheme = appTheme === "dark" ? "tasmDarkTheme" : "tasmTheme"
-      }
-      monaco.editor.setTheme(monacoTheme)
+      monaco.editor.setTheme(appTheme === "dark" ? "dark-theme" : "light-theme")
     }, [appTheme, monaco, editorReady, language])
 
     useEffect(() => {
-      if (editorReady) {
+      if (editorReady && language === "tasm") {
         // preload assembly data
         asmData()
       }
-    }, [editorReady])
+    }, [editorReady, language])
 
     /* ---------------------------- decorations ------------------------------ */
     const updateDecorations = useCallback(() => {
@@ -237,8 +147,8 @@ const CodeEditor = React.forwardRef<
       }
 
       // Add source map highlight groups
-      highlightGroups.forEach((group, index) => {
-        group.lines.forEach(lineNumber => {
+      for (const [index, group] of highlightGroups.entries()) {
+        for (const lineNumber of group.lines) {
           if (lineNumber > 0 && lineNumber <= totalLines) {
             allDecorations.push({
               range: new monaco.Range(lineNumber, 1, lineNumber, 1),
@@ -252,11 +162,11 @@ const CodeEditor = React.forwardRef<
               },
             })
           }
-        })
-      })
+        }
+      }
 
       // Add hovered lines highlighting
-      hoveredLines.forEach(lineNumber => {
+      for (const lineNumber of hoveredLines) {
         if (lineNumber > 0 && lineNumber <= totalLines) {
           allDecorations.push({
             range: new monaco.Range(lineNumber, 1, lineNumber, 1),
@@ -266,7 +176,7 @@ const CodeEditor = React.forwardRef<
             },
           })
         }
-      })
+      }
 
       // highlight every line in editor
       // 1. if a line was not executed, it grayed out
@@ -657,8 +567,8 @@ const CodeEditor = React.forwardRef<
             height="100%"
             width="100%"
             language={language === "func" ? FUNC_LANGUAGE_ID : TASM_LANGUAGE_ID}
+            path={language === "func" ? "main.fc" : "out.tasm"}
             value={code}
-            theme="tasmTheme"
             options={{
               minimap: {enabled: false},
               readOnly,
@@ -681,7 +591,7 @@ const CodeEditor = React.forwardRef<
               setEditorReady(true)
             }}
             onChange={value => {
-              if (onChange && value !== undefined) {
+              if (onChange !== undefined && value !== undefined) {
                 onChange(value)
               }
               updateDecorations()
