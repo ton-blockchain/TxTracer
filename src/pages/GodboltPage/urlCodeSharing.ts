@@ -17,7 +17,7 @@ export function encodeCodeToUrl(code: string): string {
   try {
     const encoded = stringToHex(code)
     const url = new URL(window.location.href)
-    url.search = ''
+    url.search = ""
     url.hash = `code=${encoded}`
     return url.toString()
   } catch (error) {
@@ -30,11 +30,11 @@ export function decodeCodeFromUrl(): string | null {
   try {
     const url = new URL(window.location.href)
     const hash = url.hash.substring(1) // remove # symbol
-    
-    if (!hash.startsWith('code=')) {
+
+    if (!hash.startsWith("code=")) {
       return null
     }
-    
+
     const encoded = hash.substring(5) // remove 'code=' prefix
     if (!encoded) return null
 

@@ -3,6 +3,8 @@ import Editor, {useMonaco} from "@monaco-editor/react"
 import * as monacoTypes from "monaco-editor"
 import {editor, type IMarkdownString, Position} from "monaco-editor"
 
+import {trace} from "ton-assembly/dist"
+
 import {useTheme} from "@shared/lib/themeContext"
 import type {ExitCode} from "@features/txTrace/lib/traceTx"
 import {asmData, findInstruction, generateAsmDoc} from "@features/txTrace/lib/asm"
@@ -13,6 +15,58 @@ import {DARK_THEME, LIGHT_THEME} from "@shared/ui/CodeEditor/themes.tsx"
 
 import {FUNC_LANGUAGE_ID, TASM_LANGUAGE_ID, tasmLanguageDefinition} from "./TasmLanguageDefinition"
 import styles from "./CodeEditor.module.css"
+
+const getFuncTypeString = (type: trace.FuncType): string => {
+  switch (type) {
+    case trace.FuncType.INT:
+      return "int"
+    case trace.FuncType.CELL:
+      return "cell"
+    case trace.FuncType.SLICE:
+      return "slice"
+    case trace.FuncType.BUILDER:
+      return "builder"
+    case trace.FuncType.CONT:
+      return "cont"
+    case trace.FuncType.TUPLE:
+      return "tuple"
+    case trace.FuncType.TYPE:
+      return "type"
+    default:
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      return `type(${type})`
+  }
+}
+
+const getVariableKind = (flags: number): string => {
+  const flagStrings: string[] = []
+
+  if (flags & trace.FuncVarFlag.IN) return "Parameter"
+  if (flags & trace.FuncVarFlag.NAMED) return "Local variable"
+  if (flags & trace.FuncVarFlag.TMP) return "Temp variable"
+
+  return flagStrings.length > 0 ? flagStrings.join(", ") : "var"
+}
+
+const formatVariablesForHover = (variables: trace.FuncVar[]): string => {
+  if (variables.length === 0) {
+    return "No variables in scope"
+  }
+
+  const variablesList = [...variables]
+    .reverse()
+    .map(variable => {
+      const kind = `${getVariableKind(variable.flags)}`
+      const name = `${variable.name}`
+      const type = getFuncTypeString(variable.type)
+      const value = variable.value ?? ""
+      const valuePresentation = value.length !== 0 ? ` = ${value}` : ""
+      return `${kind} \`${name}: ${type}\`${valuePresentation}\n`
+    })
+    .join("\n")
+
+  return `**Live variables:**\n\n${variablesList}`
+}
 
 export interface HighlightGroup {
   readonly lines: number[]
@@ -45,6 +99,7 @@ interface CodeEditorProps {
   readonly highlightRanges?: readonly HighlightRange[]
   readonly markers?: readonly monacoTypes.editor.IMarkerData[]
   readonly needBorderRadius?: boolean
+  readonly getVariablesForLine?: (line: number) => trace.FuncVar[] | undefined
 }
 
 interface CodeBlock {
@@ -95,6 +150,7 @@ const CodeEditor = React.forwardRef<
       highlightRanges = [],
       markers = [],
       needBorderRadius = true,
+      getVariablesForLine,
     },
     ref,
   ) => {
@@ -412,57 +468,78 @@ const CodeEditor = React.forwardRef<
 
       const provider = monaco.languages.registerHoverProvider(TASM_LANGUAGE_ID, {
         provideHover(model: editor.ITextModel, position: Position) {
-          const word = model.getWordAtPosition(position)
-          if (!word) return null
+          if (language !== "tasm") return null
 
+          const word = model.getWordAtPosition(position)
           const lineNumber = position.lineNumber
-          const lineContent = model.getLineContent(lineNumber)
-          const tokens = monaco.editor.tokenize(lineContent, TASM_LANGUAGE_ID)[0]
-          let tokenType = ""
-          for (let i = 0; i < tokens.length; i++) {
-            const token = tokens[i]
-            const start = token.offset + 1
-            const end = i + 1 < tokens.length ? tokens[i + 1].offset + 1 : lineContent.length + 1
-            if (position.column >= start && position.column < end) {
-              tokenType = token.type
-              break
-            }
+          const hoverContents: IMarkdownString[] = []
+
+          const variables = getVariablesForLine?.(lineNumber)
+          if (variables && variables.length > 0) {
+            hoverContents.push({value: formatVariablesForHover(variables)})
+            hoverContents.push({value: "---"})
           }
 
-          if (lineExecutions && lineGas && tokenType.includes("instruction")) {
-            const gasUsed = lineGas[lineNumber]
-            const executionCount = lineExecutions[lineNumber]
-            const hoverContents: IMarkdownString[] = []
-
-            const instructionInfo = findInstruction(word.word)
-            if (instructionInfo === undefined) {
-              hoverContents.push({
-                value:
-                  "The assembly instructions documentation is loading—please hover over the instruction again.",
-              })
-              hoverContents.push({value: "---"})
-            }
-            if (instructionInfo) {
-              const asmDoc = generateAsmDoc(instructionInfo)
-              if (asmDoc) {
-                hoverContents.push({value: asmDoc})
-                hoverContents.push({value: "---"})
+          if (word) {
+            const lineContent = model.getLineContent(lineNumber)
+            const tokens = monaco.editor.tokenize(lineContent, TASM_LANGUAGE_ID)[0]
+            let tokenType = ""
+            for (let i = 0; i < tokens.length; i++) {
+              const token = tokens[i]
+              const start = token.offset + 1
+              const end = i + 1 < tokens.length ? tokens[i + 1].offset + 1 : lineContent.length + 1
+              if (position.column >= start && position.column < end) {
+                tokenType = token.type
+                break
               }
             }
 
-            if (gasUsed === undefined && executionCount === undefined) {
-              hoverContents.push({value: `**Not executed**`})
-            } else if (executionCount !== undefined) {
-              hoverContents.push({value: `**Executions:** ${executionCount}`})
-            }
+            if (tokenType.includes("instruction")) {
+              const instructionInfo = findInstruction(word.word)
+              if (instructionInfo === undefined) {
+                hoverContents.push({
+                  value:
+                    "The assembly instructions documentation is loading—please hover over the instruction again.",
+                })
+              } else if (instructionInfo) {
+                const asmDoc = generateAsmDoc(instructionInfo)
+                if (asmDoc) {
+                  hoverContents.push({value: asmDoc})
+                }
+              }
 
+              if (lineExecutions && lineGas) {
+                const gasUsed = lineGas[lineNumber]
+                const executionCount = lineExecutions[lineNumber]
+
+                if (hoverContents.length > 0) {
+                  hoverContents.push({value: "---"})
+                }
+
+                if (gasUsed === undefined && executionCount === undefined) {
+                  hoverContents.push({value: `**Not executed**`})
+                } else if (executionCount !== undefined) {
+                  hoverContents.push({value: `**Executions:** ${executionCount}`})
+                }
+              }
+            }
+          }
+
+          if (hoverContents.length > 0) {
             return {
-              range: new monaco.Range(
-                position.lineNumber,
-                word.startColumn,
-                position.lineNumber,
-                word.endColumn,
-              ),
+              range: word
+                ? new monaco.Range(
+                    position.lineNumber,
+                    word.startColumn,
+                    position.lineNumber,
+                    word.endColumn,
+                  )
+                : new monaco.Range(
+                    position.lineNumber,
+                    1,
+                    position.lineNumber,
+                    model.getLineLength(position.lineNumber) + 1,
+                  ),
               contents: hoverContents,
             }
           }
@@ -473,7 +550,7 @@ const CodeEditor = React.forwardRef<
       return () => {
         provider.dispose()
       }
-    }, [monaco, editorReady, lineGas, lineExecutions])
+    }, [monaco, editorReady, lineGas, lineExecutions, getVariablesForLine])
 
     useEffect(() => {
       if (!monaco || !editorRef.current) return

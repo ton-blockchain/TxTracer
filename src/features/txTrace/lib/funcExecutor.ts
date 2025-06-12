@@ -2,11 +2,7 @@ import {Cell} from "@ton/core"
 import {runtime as i, text, trace} from "ton-assembly/dist"
 
 import {FUNC_STDLIB} from "@features/txTrace/lib/funcStdlib.ts"
-import {
-  funcCompile,
-  type FuncMapping,
-  loadFuncMapping,
-} from "@features/txTrace/lib/func/func-compile.ts"
+import {funcCompile} from "@features/txTrace/lib/func/func-compile.ts"
 
 export interface FuncCompilationResult {
   readonly instructions: i.Instr[]
@@ -15,8 +11,6 @@ export interface FuncCompilationResult {
   readonly funcSourceMap?: string
   readonly mapping: Map<number, trace.InstructionInfo[]>
 }
-
-export {loadFuncMapping, type FuncMapping}
 
 export class FuncCompilationError extends Error {
   constructor(message: string) {

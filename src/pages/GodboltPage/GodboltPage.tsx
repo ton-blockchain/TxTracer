@@ -6,6 +6,8 @@ import "allotment/dist/style.css"
 
 import type * as monaco from "monaco-editor"
 
+import {trace} from "ton-assembly/dist"
+
 import InlineLoader from "@shared/ui/InlineLoader"
 import ErrorBanner from "@shared/ui/ErrorBanner/ErrorBanner"
 import {useGlobalError} from "@shared/lib/errorContext"
@@ -18,7 +20,6 @@ import {
   compileFuncCode,
   FuncCompilationError,
   type FuncCompilationResult,
-  loadFuncMapping,
 } from "@features/txTrace/lib/funcExecutor.ts"
 
 import {parseFuncErrors, convertErrorsToMarkers} from "@features/txTrace/lib/funcErrorParser"
@@ -64,7 +65,7 @@ function GodboltPage() {
   const sourceMap = useMemo(() => {
     if (result?.funcSourceMap) {
       try {
-        return loadFuncMapping(result.funcSourceMap)
+        return trace.loadFuncMapping(result.funcSourceMap)
       } catch (e) {
         console.error("Failed to parse source map:", e)
         return undefined
@@ -82,6 +83,7 @@ function GodboltPage() {
     handleFuncLineHover,
     handleAsmLineHover,
     filteredAsmCode,
+    getVariablesForAsmLine,
   } = useSourceMapHighlight(
     sourceMap,
     result?.mapping,
@@ -251,6 +253,7 @@ function GodboltPage() {
                   highlightGroups={asmHighlightGroups}
                   hoveredLines={asmHoveredLines}
                   onLineHover={handleAsmLineHover}
+                  getVariablesForLine={getVariablesForAsmLine}
                   needBorderRadius={false}
                 />
               </Suspense>

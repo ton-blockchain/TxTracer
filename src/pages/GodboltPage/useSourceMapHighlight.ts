@@ -3,7 +3,6 @@ import type * as monaco from "monaco-editor"
 
 import {trace} from "ton-assembly/dist"
 
-import type {FuncMapping} from "@features/txTrace/lib/func/func-compile"
 import type {HighlightGroup, HighlightRange} from "@shared/ui/CodeEditor/CodeEditor"
 
 export interface UseSourceMapHighlightReturn {
@@ -15,6 +14,7 @@ export interface UseSourceMapHighlightReturn {
   readonly handleFuncLineHover: (line: number | null) => void
   readonly handleAsmLineHover: (line: number | null) => void
   readonly filteredAsmCode: string
+  readonly getVariablesForAsmLine: (line: number) => trace.FuncVar[] | undefined
 }
 
 function filterDebugMarks(asmCode: string): {
@@ -76,7 +76,7 @@ const COLORS = [
 ]
 
 export function useSourceMapHighlight(
-  sourceMap: FuncMapping | undefined,
+  sourceMap: trace.FuncMapping | undefined,
   debugSectionToInstructions?: Map<number, trace.InstructionInfo[]>,
   funcEditorRef?: React.RefObject<monaco.editor.IStandaloneCodeEditor | null>,
   asmEditorRef?: React.RefObject<monaco.editor.IStandaloneCodeEditor | null>,
@@ -247,6 +247,27 @@ export function useSourceMapHighlight(
     ]
   }, [hoveredAsmLine, sourceMap, asmLineToDebugMark])
 
+  const getVariablesForAsmLine = useCallback(
+    (line: number): trace.FuncVar[] | undefined => {
+      if (!sourceMap || !asmLineToDebugMark.has(line)) {
+        return undefined
+      }
+
+      const debugMarkId = asmLineToDebugMark.get(line)
+      if (debugMarkId === undefined) {
+        return undefined
+      }
+
+      const location = sourceMap.locations[debugMarkId]
+      if (!location || location.file !== "main.fc") {
+        return undefined
+      }
+
+      return location.vars ?? undefined
+    },
+    [sourceMap, asmLineToDebugMark],
+  )
+
   return {
     funcHighlightGroups,
     asmHighlightGroups,
@@ -256,5 +277,6 @@ export function useSourceMapHighlight(
     handleFuncLineHover,
     handleAsmLineHover,
     filteredAsmCode,
+    getVariablesForAsmLine,
   }
 }

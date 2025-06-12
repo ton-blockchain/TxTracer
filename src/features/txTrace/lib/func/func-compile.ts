@@ -1,3 +1,5 @@
+import {trace} from "ton-assembly/dist"
+
 // Convert base64 to Uint8Array for browser compatibility
 function base64ToUint8Array(base64: string): Uint8Array {
   const binaryString = atob(base64)
@@ -83,7 +85,7 @@ export type FuncCompilationResult =
       log: string
       fift: string
       output: Buffer
-      sourceMap: undefined | FuncMapping
+      sourceMap: undefined | trace.FuncMapping
     }
 
 type CompileResult =
@@ -96,58 +98,13 @@ type CompileResult =
       codeBoc: string
       fiftCode: string
       warnings: string
-      debugInfo: undefined | FuncMapping
+      debugInfo: undefined | trace.FuncMapping
     }
 
 export type FuncConfig = {
   sources: string[]
   optLevel: number
   debugInfo: boolean
-}
-
-/**
- * Represents a FunC source location.
- */
-export type FuncSourceLoc = {
-  readonly file: string
-  readonly line: number
-  readonly pos: number
-  readonly length: number
-  readonly vars: undefined | FuncVar[]
-  readonly func: string
-  readonly first_stmt: undefined | boolean
-  readonly ret: undefined | boolean
-}
-
-/**
- * Represents a FunC local variable descriptor.
- */
-export type FuncVar = {
-  readonly name: string
-  readonly type: number
-  readonly flags: number
-}
-
-/**
- * Represents a FunC global variable descriptor.
- */
-export type FuncGlobalVar = {
-  readonly name: string
-}
-
-/**
- * Represents a FunC mapping.
- */
-export type FuncMapping = {
-  readonly globals: readonly FuncGlobalVar[]
-  readonly locations: readonly FuncSourceLoc[]
-}
-
-/**
- * Loads a FunC mapping from a string.
- */
-export const loadFuncMapping = (content: string): FuncMapping => {
-  return JSON.parse(content) as FuncMapping
 }
 
 export async function funcCompile(args: {
