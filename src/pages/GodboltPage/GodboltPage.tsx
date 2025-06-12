@@ -1,6 +1,6 @@
 import React, {useState, useCallback, Suspense, useEffect, useMemo, useRef} from "react"
 
-import {FiPlay} from "react-icons/fi"
+import {FiPlay, FiShare2, FiCheck} from "react-icons/fi"
 import {Allotment} from "allotment"
 import "allotment/dist/style.css"
 
@@ -24,6 +24,7 @@ import {
 import {parseFuncErrors, convertErrorsToMarkers} from "@features/txTrace/lib/funcErrorParser"
 
 import {useSourceMapHighlight} from "./useSourceMapHighlight"
+import {decodeCodeFromUrl, encodeCodeToUrl} from "./urlCodeSharing"
 
 import styles from "./GodboltPage.module.css"
 
@@ -40,6 +41,10 @@ const ASM_EDITOR_KEY = "txtracer-godbolt-asm-code"
 
 function GodboltPage() {
   const [funcCode, setFuncCode] = useState(() => {
+    const sharedCode = decodeCodeFromUrl()
+    if (sharedCode) {
+      return sharedCode
+    }
     return localStorage.getItem(FUNC_EDITOR_KEY) ?? DEFAULT_FUNC_CODE
   })
   const [asmCode] = useState(() => {
@@ -49,6 +54,7 @@ function GodboltPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string>("")
   const [errorMarkers, setErrorMarkers] = useState<monaco.editor.IMarkerData[]>([])
+  const [isCopied, setIsCopied] = useState(false)
   const {setError: setGlobalError} = useGlobalError()
 
   const funcEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
@@ -156,6 +162,30 @@ function GodboltPage() {
     setError("")
   }, [])
 
+  const handleShareCode = useCallback(async () => {
+    const shareUrl = encodeCodeToUrl(funcCode)
+
+    try {
+      await navigator.clipboard.writeText(shareUrl)
+      setIsCopied(true)
+      setTimeout(() => setIsCopied(false), 1000)
+      console.log("Share URL copied to clipboard:", shareUrl)
+    } catch (error) {
+      console.error("Failed to copy to clipboard:", error)
+      const textArea = document.createElement("textarea")
+      textArea.value = shareUrl
+      document.body.appendChild(textArea)
+      textArea.select()
+      const success = document.execCommand("copy")
+      document.body.removeChild(textArea)
+
+      if (success) {
+        setIsCopied(true)
+        setTimeout(() => setIsCopied(false), 1000)
+      }
+    }
+  }, [funcCode])
+
   return (
     <div className={styles.traceViewWrapper}>
       <TracePageHeader pageTitle="explorer">
@@ -174,6 +204,14 @@ function GodboltPage() {
                 Compile
               </>
             )}
+          </Button>
+          <Button
+            onClick={() => void handleShareCode()}
+            title={isCopied ? "Link copied!" : "Share code via URL"}
+            className={`${styles.shareButton} ${isCopied ? styles.copied : ""}`}
+          >
+            {isCopied ? <FiCheck size={16} /> : <FiShare2 size={16} />}
+            {isCopied ? "Copied!" : "Share"}
           </Button>
         </div>
       </TracePageHeader>

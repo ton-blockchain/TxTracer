@@ -17,6 +17,9 @@
   --color-success-rgb: 52, 199, 89;
   --color-success-bg: #e6f7eb;
   --color-success-text: #276a3d;
+  --color-share-copied-bg: #e6f7eb;
+  --color-share-copied-border: #34c759;
+  --color-share-copied-text: #276a3d;
 
   --color-error: #ff3b30;
   --color-error-rgb: 255, 59, 48;
@@ -68,6 +71,7 @@
   --color-details-header: var(--color-background-primary);
 
   --color-border: #c6c6c8;
+  --color-border-hover: #6c6c6c;
   --color-divider: #e5e5ea;
 
   --status-badge-success-border-color: var(--color-success, #34c759);
@@ -203,6 +207,8 @@
   --cell-bg-color-5: #f3e7fd;
   --cell-bg-color-5-hover: #e9d9f8;
 
+  --share-button-bg: var(--color-background-primary);
+
   font-family: var(--font-family-sans), sans-serif;
   line-height: 1.5;
   font-weight: var(--font-weight-normal);
@@ -234,6 +240,9 @@
   --color-success-rgb: 48, 209, 88;
   --color-success-bg: #1c3e26;
   --color-success-text: #7cd996;
+  --color-share-copied-bg: #1c3e26;
+  --color-share-copied-border: #30d158;
+  --color-share-copied-text: #7cd996;
 
   --color-error: #ff453a;
   --color-error-rgb: 255, 69, 58;
@@ -285,6 +294,7 @@
   --color-details-header: var(--color-background-primary);
 
   --color-border: #48484a;
+  --color-border-hover: #737373;
   --color-divider: #3a3a3c;
   --color-border-light-alpha: rgba(var(--color-white-rgb), 0.2);
 
@@ -381,6 +391,8 @@
   --cell-bg-color-4-hover: #403b26;
   --cell-bg-color-5: #3c2e4a;
   --cell-bg-color-5-hover: #322640;
+
+  --share-button-bg: var(--color-background-tertiary);
 }
 
 #root {
