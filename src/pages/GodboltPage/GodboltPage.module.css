@@ -121,11 +121,19 @@
 }
 
 .editorPanel {
+  padding-top: 10px;
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow: hidden;
   background-color: var(--color-background-primary);
-  border: 1px solid var(--color-border);
   border-radius: var(--border-radius-lg);
+}
+
+.editorPanelLeft {
+  margin-right: var(--spacing-xs);
+}
+
+.editorPanelRight {
+  margin-left: var(--spacing-xs);
 }

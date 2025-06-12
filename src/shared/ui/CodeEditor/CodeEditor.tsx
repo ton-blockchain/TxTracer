@@ -35,6 +35,7 @@ interface CodeEditorProps {
   readonly highlightGroups?: readonly HighlightGroup[]
   readonly hoveredLines?: readonly number[]
   readonly markers?: readonly monacoTypes.editor.IMarkerData[]
+  readonly needBorderRadius?: boolean
 }
 
 interface CodeBlock {
@@ -83,6 +84,7 @@ const CodeEditor = React.forwardRef<
       highlightGroups = [],
       hoveredLines = [],
       markers = [],
+      needBorderRadius = true,
     },
     ref,
   ) => {
@@ -577,7 +579,13 @@ const CodeEditor = React.forwardRef<
     /* -------------------------------- render ------------------------------- */
     return (
       <>
-        <div className={styles.editorWrapper}>
+        <div
+          className={
+            needBorderRadius
+              ? styles.editorWrapperWithBorderRadius
+              : styles.editorWrapperWithoutBorderRadius
+          }
+        >
           <Editor
             height="100%"
             width="100%"

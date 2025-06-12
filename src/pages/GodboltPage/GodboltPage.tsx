@@ -97,7 +97,6 @@ function GodboltPage() {
     async (codeToCompile: string) => {
       setLoading(true)
       setError("")
-      setResult(undefined)
       setErrorMarkers([])
 
       try {
@@ -129,16 +128,13 @@ function GodboltPage() {
   const handleCodeChange = useCallback(
     (newCode: string) => {
       setFuncCode(newCode)
-      setResult(undefined)
       setError("")
       setErrorMarkers([])
 
-      // Clear existing timer
       if (debounceTimerRef.current) {
         clearTimeout(debounceTimerRef.current)
       }
 
-      // Set new timer for auto-compilation with the latest code
       debounceTimerRef.current = setTimeout(() => {
         void handleExecuteWithCode(newCode)
       }, 0)
@@ -184,9 +180,9 @@ function GodboltPage() {
       {error && <ErrorBanner message={error} onClose={clearError} />}
 
       <div className={styles.appContainer}>
-        <Allotment defaultSizes={[50, 50]} className={styles.editorsContainer}>
+        <Allotment defaultSizes={[50, 50]} className={styles.editorsContainer} separator={false}>
           <Allotment.Pane minSize={200}>
-            <div className={styles.editorPanel}>
+            <div className={styles.editorPanel + " " + styles.editorPanelLeft}>
               <Suspense fallback={<InlineLoader message="Loading Editor..." loading={true} />}>
                 <CodeEditor
                   ref={funcEditorRef}
@@ -198,13 +194,14 @@ function GodboltPage() {
                   hoveredLines={funcHoveredLines}
                   onLineHover={handleFuncLineHover}
                   markers={errorMarkers}
+                  needBorderRadius={false}
                 />
               </Suspense>
             </div>
           </Allotment.Pane>
 
           <Allotment.Pane minSize={200}>
-            <div className={styles.editorPanel}>
+            <div className={styles.editorPanel + " " + styles.editorPanelRight}>
               <Suspense fallback={<InlineLoader message="Loading Editor..." loading={true} />}>
                 <CodeEditor
                   ref={asmEditorRef}
@@ -214,6 +211,7 @@ function GodboltPage() {
                   highlightGroups={asmHighlightGroups}
                   hoveredLines={asmHoveredLines}
                   onLineHover={handleAsmLineHover}
+                  needBorderRadius={false}
                 />
               </Suspense>
             </div>

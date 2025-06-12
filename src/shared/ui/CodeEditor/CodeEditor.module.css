@@ -86,8 +86,17 @@
 .editorWrapper {
   position: relative;
   height: 100%;
-  border-radius: var(--border-radius-lg);
   overflow: hidden;
+}
+
+.editorWrapperWithBorderRadius {
+  composes: editorWrapper;
+  border-radius: var(--border-radius-lg);
+}
+
+.editorWrapperWithoutBorderRadius {
+  composes: editorWrapper;
+  border-radius: 0 !important;
 }
 
 .editorHint {
