@@ -33,6 +33,13 @@
   box-shadow: inset 0 0 0 1px rgba(255, 215, 0, 0.2) !important;
 }
 
+:global(.monaco-editor .precise-highlight) {
+  background-color: rgba(255, 0, 0, 0.1) !important;
+  box-shadow: inset 0 0 0 2px rgba(255, 0, 0, 0.2) !important;
+  border-radius: var(--border-radius-sm) !important;
+  font-weight: bold !important;
+}
+
 :global(.monaco-editor .source-map-group-0) {
   background-color: rgba(255, 107, 107, 0.15) !important;
   border-left: 3px solid #ff6b6b !important;

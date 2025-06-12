@@ -4,13 +4,14 @@ import type * as monaco from "monaco-editor"
 import {trace} from "ton-assembly/dist"
 
 import type {FuncMapping} from "@features/txTrace/lib/func/func-compile"
-import type {HighlightGroup} from "@shared/ui/CodeEditor/CodeEditor"
+import type {HighlightGroup, HighlightRange} from "@shared/ui/CodeEditor/CodeEditor"
 
 export interface UseSourceMapHighlightReturn {
   readonly funcHighlightGroups: readonly HighlightGroup[]
   readonly asmHighlightGroups: readonly HighlightGroup[]
   readonly funcHoveredLines: readonly number[]
   readonly asmHoveredLines: readonly number[]
+  readonly funcPreciseHighlightRanges: readonly HighlightRange[]
   readonly handleFuncLineHover: (line: number | null) => void
   readonly handleAsmLineHover: (line: number | null) => void
   readonly filteredAsmCode: string
@@ -20,20 +21,31 @@ function filterDebugMarks(asmCode: string): {
   filteredCode: string
   originalToFiltered: Map<number, number>
   filteredToOriginal: Map<number, number>
+  asmLineToDebugMark: Map<number, number>
 } {
   const lines = asmCode.split("\n")
   const filteredLines: string[] = []
   const originalToFiltered = new Map<number, number>()
   const filteredToOriginal = new Map<number, number>()
+  const asmLineToDebugMark = new Map<number, number>()
 
   let filteredLineNumber = 1
+  let currentDebugMark: number | null = null
 
   for (let i = 0; i < lines.length; i++) {
     const originalLineNumber = i + 1
     const line = lines[i].trim()
 
     if (line.startsWith("DEBUGMARK ")) {
+      const debugMarkMatch = line.match(/DEBUGMARK (\d+)/)
+      if (debugMarkMatch) {
+        currentDebugMark = parseInt(debugMarkMatch[1], 10)
+      }
       continue
+    }
+
+    if (currentDebugMark !== null) {
+      asmLineToDebugMark.set(filteredLineNumber, currentDebugMark)
     }
 
     filteredLines.push(lines[i])
@@ -46,6 +58,7 @@ function filterDebugMarks(asmCode: string): {
     filteredCode: filteredLines.join("\n"),
     originalToFiltered,
     filteredToOriginal,
+    asmLineToDebugMark,
   }
 }
 
@@ -72,17 +85,19 @@ export function useSourceMapHighlight(
   const [hoveredFuncLine, setHoveredFuncLine] = useState<number | null>(null)
   const [hoveredAsmLine, setHoveredAsmLine] = useState<number | null>(null)
 
-  const {filteredAsmCode, originalToFiltered} = useMemo(() => {
+  const {filteredAsmCode, originalToFiltered, asmLineToDebugMark} = useMemo(() => {
     if (!originalAsmCode) {
       return {
         filteredAsmCode: "",
         originalToFiltered: new Map<number, number>(),
+        asmLineToDebugMark: new Map<number, number>(),
       }
     }
     const result = filterDebugMarks(originalAsmCode)
     return {
       filteredAsmCode: result.filteredCode,
       originalToFiltered: result.originalToFiltered,
+      asmLineToDebugMark: result.asmLineToDebugMark,
     }
   }, [originalAsmCode])
 
@@ -206,11 +221,38 @@ export function useSourceMapHighlight(
     return []
   }, [hoveredFuncLine, funcToAsmMap])
 
+  const funcPreciseHighlightRanges = useMemo((): HighlightRange[] => {
+    if (!hoveredAsmLine || !sourceMap || !asmLineToDebugMark.has(hoveredAsmLine)) {
+      return []
+    }
+
+    const debugMarkId = asmLineToDebugMark.get(hoveredAsmLine)
+    if (debugMarkId === undefined) {
+      return []
+    }
+
+    const location = sourceMap.locations[debugMarkId]
+    if (!location || location.file !== "main.fc") {
+      return []
+    }
+
+    return [
+      {
+        line: location.line,
+        startColumn: location.pos + 1,
+        endColumn: location.pos + location.length + 1,
+        color: "#FF0000",
+        className: "precise-highlight",
+      },
+    ]
+  }, [hoveredAsmLine, sourceMap, asmLineToDebugMark])
+
   return {
     funcHighlightGroups,
     asmHighlightGroups,
     funcHoveredLines,
     asmHoveredLines,
+    funcPreciseHighlightRanges,
     handleFuncLineHover,
     handleAsmLineHover,
     filteredAsmCode,

@@ -72,6 +72,7 @@ function GodboltPage() {
     asmHighlightGroups,
     funcHoveredLines,
     asmHoveredLines,
+    funcPreciseHighlightRanges,
     handleFuncLineHover,
     handleAsmLineHover,
     filteredAsmCode,
@@ -192,6 +193,7 @@ function GodboltPage() {
                   language="func"
                   highlightGroups={funcHighlightGroups}
                   hoveredLines={funcHoveredLines}
+                  highlightRanges={funcPreciseHighlightRanges}
                   onLineHover={handleFuncLineHover}
                   markers={errorMarkers}
                   needBorderRadius={false}

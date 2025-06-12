@@ -20,6 +20,14 @@ export interface HighlightGroup {
   readonly className?: string
 }
 
+export interface HighlightRange {
+  readonly line: number
+  readonly startColumn: number
+  readonly endColumn: number
+  readonly color: string
+  readonly className?: string
+}
+
 interface CodeEditorProps {
   readonly code: string
   readonly highlightLine?: number
@@ -34,6 +42,7 @@ interface CodeEditorProps {
   readonly language?: "tasm" | "func"
   readonly highlightGroups?: readonly HighlightGroup[]
   readonly hoveredLines?: readonly number[]
+  readonly highlightRanges?: readonly HighlightRange[]
   readonly markers?: readonly monacoTypes.editor.IMarkerData[]
   readonly needBorderRadius?: boolean
 }
@@ -83,6 +92,7 @@ const CodeEditor = React.forwardRef<
       language = "tasm",
       highlightGroups = [],
       hoveredLines = [],
+      highlightRanges = [],
       markers = [],
       needBorderRadius = true,
     },
@@ -182,6 +192,19 @@ const CodeEditor = React.forwardRef<
         }
       }
 
+      for (const range of highlightRanges) {
+        if (range.line > 0 && range.line <= totalLines) {
+          allDecorations.push({
+            range: new monaco.Range(range.line, range.startColumn, range.line, range.endColumn),
+            options: {
+              isWholeLine: false,
+              className: range.className || "precise-highlight",
+              inlineClassName: range.className || "precise-highlight",
+            },
+          })
+        }
+      }
+
       // highlight every line in editor
       // 1. if a line was not executed, it grayed out
       // 2. if a line was executed,
@@ -241,6 +264,7 @@ const CodeEditor = React.forwardRef<
       hoveredLine,
       highlightGroups,
       hoveredLines,
+      highlightRanges,
     ])
 
     /* ----------------------- folding inactive blocks ----------------------- */
