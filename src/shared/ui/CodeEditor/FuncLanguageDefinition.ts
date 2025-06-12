@@ -127,9 +127,9 @@ export const funcLanguageDefinition: languages.IMonarchLanguage = {
       [/[a-zA-Z_][a-zA-Z0-9_'?]*(?=\()/, "identifier.function"],
 
       // Tilde operators (function calls)
-      [/~[a-zA-Z_][a-zA-Z0-9_]*/, "identifier.function"],
+      [/~[a-zA-Z_][a-zA-Z0-9_?]*/, "identifier.function"],
       // Method names (with dot prefix)
-      [/\.[a-zA-Z_][a-zA-Z0-9_]*/, "identifier.function"],
+      [/\.[a-zA-Z_][a-zA-Z0-9_?]*/, "identifier.function"],
 
       // Regular identifiers and keywords
       [

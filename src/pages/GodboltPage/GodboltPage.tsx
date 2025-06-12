@@ -49,6 +49,7 @@ function GodboltPage() {
 
   const funcEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
   const asmEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null)
 
   const sourceMap = useMemo(() => {
     if (result?.funcSourceMap) {
@@ -88,28 +89,56 @@ function GodboltPage() {
     localStorage.setItem(ASM_EDITOR_KEY, asmCode)
   }, [asmCode])
 
+  const handleExecuteWithCode = useCallback(
+    async (codeToCompile: string) => {
+      setLoading(true)
+      setError("")
+      setResult(undefined)
+
+      try {
+        const compilationResult = await compileFuncCode(codeToCompile)
+        setResult(compilationResult)
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : "Unknown error"
+        setError(errorMessage)
+        setGlobalError(`Failed to compile FunC code: ${errorMessage}`)
+      } finally {
+        setLoading(false)
+      }
+    },
+    [setGlobalError],
+  )
+
   const handleExecute = useCallback(async () => {
-    setLoading(true)
-    setError("")
-    setResult(undefined)
+    await handleExecuteWithCode(funcCode)
+  }, [funcCode, handleExecuteWithCode])
 
-    try {
-      const result = await compileFuncCode(funcCode)
-      setResult(result)
-      setAsmCode(displayedAsmCode)
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Unknown error"
-      setError(errorMessage)
-      setGlobalError(`Failed to execute assembly code: ${errorMessage}`)
-    } finally {
-      setLoading(false)
+  const handleCodeChange = useCallback(
+    (newCode: string) => {
+      setFuncCode(newCode)
+      setResult(undefined)
+      setError("")
+
+      // Clear existing timer
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current)
+      }
+
+      // Set new timer for auto-compilation with the latest code
+      debounceTimerRef.current = setTimeout(() => {
+        void handleExecuteWithCode(newCode)
+      }, 0)
+    },
+    [handleExecuteWithCode],
+  )
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current)
+      }
     }
-  }, [displayedAsmCode, funcCode, setGlobalError])
-
-  const handleCodeChange = useCallback((newCode: string) => {
-    setFuncCode(newCode)
-    setResult(undefined)
-    setError("")
   }, [])
 
   const clearError = useCallback(() => {
