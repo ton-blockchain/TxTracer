@@ -18,6 +18,13 @@ export interface FuncCompilationResult {
 
 export {loadFuncMapping, type FuncMapping}
 
+export class FuncCompilationError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = "FuncCompilationError"
+  }
+}
+
 export const compileFuncCode = async (code: string): Promise<FuncCompilationResult | undefined> => {
   const result = await funcCompile({
     entries: ["main.fc"],
@@ -35,8 +42,7 @@ export const compileFuncCode = async (code: string): Promise<FuncCompilationResu
   })
 
   if (!result.ok) {
-    console.error(result.log)
-    return undefined
+    throw new FuncCompilationError(result.log)
   }
 
   const codeCell = Cell.fromBoc(result.output)[0]

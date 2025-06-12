@@ -16,9 +16,12 @@ import ButtonLoader from "@shared/ui/ButtonLoader/ButtonLoader.tsx"
 
 import {
   compileFuncCode,
+  FuncCompilationError,
   type FuncCompilationResult,
   loadFuncMapping,
 } from "@features/txTrace/lib/funcExecutor.ts"
+
+import {parseFuncErrors, convertErrorsToMarkers} from "@features/txTrace/lib/funcErrorParser"
 
 import {useSourceMapHighlight} from "./useSourceMapHighlight"
 
@@ -39,12 +42,13 @@ function GodboltPage() {
   const [funcCode, setFuncCode] = useState(() => {
     return localStorage.getItem(FUNC_EDITOR_KEY) ?? DEFAULT_FUNC_CODE
   })
-  const [asmCode, setAsmCode] = useState(() => {
+  const [asmCode] = useState(() => {
     return localStorage.getItem(ASM_EDITOR_KEY) ?? DEFAULT_ASM_CODE
   })
   const [result, setResult] = useState<FuncCompilationResult | undefined>(undefined)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string>("")
+  const [errorMarkers, setErrorMarkers] = useState<monaco.editor.IMarkerData[]>([])
   const {setError: setGlobalError} = useGlobalError()
 
   const funcEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
@@ -94,14 +98,23 @@ function GodboltPage() {
       setLoading(true)
       setError("")
       setResult(undefined)
+      setErrorMarkers([])
 
       try {
         const compilationResult = await compileFuncCode(codeToCompile)
         setResult(compilationResult)
+        setErrorMarkers([])
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : "Unknown error"
-        setError(errorMessage)
-        setGlobalError(`Failed to compile FunC code: ${errorMessage}`)
+
+        if (!(error instanceof FuncCompilationError)) {
+          setError(errorMessage)
+          setGlobalError(`Failed to compile FunC code: ${errorMessage}`)
+        }
+
+        const parsedErrors = parseFuncErrors(errorMessage)
+        const markers = convertErrorsToMarkers(parsedErrors)
+        setErrorMarkers(markers)
       } finally {
         setLoading(false)
       }
@@ -118,6 +131,7 @@ function GodboltPage() {
       setFuncCode(newCode)
       setResult(undefined)
       setError("")
+      setErrorMarkers([])
 
       // Clear existing timer
       if (debounceTimerRef.current) {
@@ -183,6 +197,7 @@ function GodboltPage() {
                   highlightGroups={funcHighlightGroups}
                   hoveredLines={funcHoveredLines}
                   onLineHover={handleFuncLineHover}
+                  markers={errorMarkers}
                 />
               </Suspense>
             </div>

@@ -34,6 +34,7 @@ interface CodeEditorProps {
   readonly language?: "tasm" | "func"
   readonly highlightGroups?: readonly HighlightGroup[]
   readonly hoveredLines?: readonly number[]
+  readonly markers?: readonly monacoTypes.editor.IMarkerData[]
 }
 
 interface CodeBlock {
@@ -81,6 +82,7 @@ const CodeEditor = React.forwardRef<
       language = "tasm",
       highlightGroups = [],
       hoveredLines = [],
+      markers = [],
     },
     ref,
   ) => {
@@ -541,6 +543,19 @@ const CodeEditor = React.forwardRef<
         provider.dispose()
       }
     }, [monaco, editorReady, exitCode])
+
+    useEffect(() => {
+      if (!monaco || !editorRef.current || !markers) return
+
+      const model = editorRef.current.getModel()
+      if (!model) return
+
+      monaco.editor.setModelMarkers(model, "FunC", [...markers])
+
+      return () => {
+        monaco.editor.setModelMarkers(model, "FunC", [])
+      }
+    }, [monaco, markers, editorReady])
 
     useEffect(() => {
       if (!editorReady || !editorRef.current) {
