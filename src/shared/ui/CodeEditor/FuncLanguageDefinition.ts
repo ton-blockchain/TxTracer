@@ -112,7 +112,7 @@ export const funcLanguageDefinition: languages.IMonarchLanguage = {
       [/(>=|<=|=|>|<|\^)?([0-9]+)(.[0-9]+)?(.[0-9]+)?/, "number.version"],
 
       // Method identifiers with % prefix
-      [/%[a-zA-Z_][a-zA-Z0-9_]*/, "identifier.method"],
+      [/%[a-zA-Z_][a-zA-Z0-9_]*/, "identifier.function"],
 
       // Special function identifiers with $ prefix and apostrophes
       [/\$[a-zA-Z_][a-zA-Z0-9_$']*/, "identifier.special"],
@@ -120,10 +120,16 @@ export const funcLanguageDefinition: languages.IMonarchLanguage = {
       // Identifiers in backticks
       [/`[^`]+`/, "identifier.backtick"],
 
+      // Constants in UPPER_CASE
+      [/\b[A-Z][A-Z0-9_]*\b/, "identifier.constant"],
+
+      // Function calls with parentheses
+      [/[a-zA-Z_][a-zA-Z0-9_'?]*(?=\()/, "identifier.function"],
+
       // Tilde operators (function calls)
-      [/~[a-zA-Z_][a-zA-Z0-9_]*/, "identifier.method"],
+      [/~[a-zA-Z_][a-zA-Z0-9_]*/, "identifier.function"],
       // Method names (with dot prefix)
-      [/\.[a-zA-Z_][a-zA-Z0-9_]*/, "identifier.method"],
+      [/\.[a-zA-Z_][a-zA-Z0-9_]*/, "identifier.function"],
 
       // Regular identifiers and keywords
       [
