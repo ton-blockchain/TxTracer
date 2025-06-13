@@ -1,9 +1,11 @@
 import React from "react"
+import {FiSettings} from "react-icons/fi"
 
 import type {StackElement} from "ton-assembly-test-dev/dist/logs"
 
 import Button from "@shared/ui/Button"
 import StackViewer from "@shared/ui/StackViewer"
+import StackEditor from "@shared/ui/StackEditor"
 import StepInstructionBlock, {
   type InstructionDetail,
 } from "@features/txTrace/ui/StepInstructionBlock"
@@ -33,6 +35,13 @@ export interface TraceSidePanelProps {
 
   readonly placeholderMessage?: string
   readonly statusMessage?: string
+
+  readonly showStackSetup?: boolean
+  readonly onSetupStack?: () => void
+
+  readonly initialStack?: StackElement[]
+  readonly onInitialStackChange?: (stack: StackElement[]) => void
+  readonly hasExecutionResults?: boolean
 }
 
 const TraceSidePanel: React.FC<TraceSidePanelProps> = ({
@@ -51,8 +60,14 @@ const TraceSidePanel: React.FC<TraceSidePanelProps> = ({
   showGas = false,
   placeholderMessage,
   statusMessage,
+  showStackSetup = false,
+  onSetupStack = () => {},
+  initialStack = [],
+  onInitialStackChange = () => {},
+  hasExecutionResults = false,
 }) => {
   const hasData = totalSteps > 0 && currentStep
+  const showInitialStackEditor = showStackSetup && !hasExecutionResults
 
   return (
     <div className={styles.sidePanel}>
@@ -141,8 +156,30 @@ const TraceSidePanel: React.FC<TraceSidePanelProps> = ({
             </Button>
           </div>
         </div>
+
         <div className={styles.stackViewerContainer}>
-          <StackViewer stack={currentStack} title="Stack" />
+          {showInitialStackEditor ? (
+            <StackEditor stack={initialStack} onStackChange={onInitialStackChange} />
+          ) : (
+            <>
+              <div className={styles.stackHeader}>
+                <span>Stack</span>
+                {showStackSetup && hasExecutionResults && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={onSetupStack}
+                    title="Setup initial stack"
+                    className={styles.stackSetupButton}
+                  >
+                    <FiSettings size={14} />
+                    Setup
+                  </Button>
+                )}
+              </div>
+              <StackViewer stack={currentStack} title="" />
+            </>
+          )}
         </div>
       </div>
     </div>

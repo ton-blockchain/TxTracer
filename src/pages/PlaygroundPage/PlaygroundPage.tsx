@@ -1,9 +1,11 @@
 import React, {useState, useCallback, Suspense, useMemo, useEffect} from "react"
+import type {StackElement} from "ton-assembly-test-dev/dist/trace"
 
 import {FiPlay} from "react-icons/fi"
 
 import InlineLoader from "@shared/ui/InlineLoader"
 import TraceSidePanel from "@shared/ui/TraceSidePanel"
+
 import {executeAssemblyCode, type AssemblyExecutionResult} from "@features/tasm/lib/executor.ts"
 import {useGlobalError} from "@shared/lib/errorContext"
 import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
@@ -30,6 +32,7 @@ NOP
 `
 
 const LOCAL_STORAGE_KEY = "txtracer-playground-assembly-code"
+const INITIAL_STACK_STORAGE_KEY = "txtracer-playground-initial-stack"
 
 function PlaygroundPage() {
   const [assemblyCode, setAssemblyCode] = useState(() => {
@@ -37,6 +40,15 @@ function PlaygroundPage() {
   })
   const [result, setResult] = useState<AssemblyExecutionResult | undefined>(undefined)
   const [loading, setLoading] = useState(false)
+  const [initialStack, setInitialStack] = useState<StackElement[]>(() => {
+    try {
+      const saved = localStorage.getItem(INITIAL_STACK_STORAGE_KEY)
+      return saved ? (JSON.parse(saved) as StackElement[]) : []
+    } catch {
+      return []
+    }
+  })
+
   const {setError, clearError} = useGlobalError()
 
   const trace = result?.traceInfo
@@ -89,7 +101,7 @@ function PlaygroundPage() {
     setResult(undefined)
 
     try {
-      const result = await executeAssemblyCode(assemblyCode)
+      const result = await executeAssemblyCode(assemblyCode, initialStack)
       setResult(result)
       console.log(result.vmLogs)
     } catch (error) {
@@ -98,11 +110,20 @@ function PlaygroundPage() {
     } finally {
       setLoading(false)
     }
-  }, [assemblyCode, clearError, setError])
+  }, [assemblyCode, clearError, initialStack, setError])
 
   useEffect(() => {
     localStorage.setItem(LOCAL_STORAGE_KEY, assemblyCode)
   }, [assemblyCode])
+
+  useEffect(() => {
+    localStorage.setItem(
+      INITIAL_STACK_STORAGE_KEY,
+      JSON.stringify(initialStack, (_, value) => {
+        return typeof value === "bigint" ? value.toString() : ""
+      }),
+    )
+  }, [initialStack])
 
   const handleCodeChange = useCallback(
     (newCode: string) => {
@@ -112,6 +133,11 @@ function PlaygroundPage() {
     },
     [clearError],
   )
+
+  const handleStackChange = useCallback((newStack: StackElement[]) => {
+    setInitialStack(newStack)
+    setResult(undefined)
+  }, [])
 
   const txStatus: StatusType | undefined = useMemo(() => {
     if (!result) return undefined
@@ -185,6 +211,10 @@ function PlaygroundPage() {
             instructionDetails={instructionDetails}
             cumulativeGas={cumulativeGas}
             showGas={true}
+            showStackSetup={true}
+            initialStack={initialStack}
+            onInitialStackChange={handleStackChange}
+            hasExecutionResults={!!result}
           />
         </div>
       </div>

@@ -4,14 +4,51 @@ import {Cell, contractAddress, toNano, TupleBuilder} from "@ton/core"
 import {GetMethodError, type SandboxContract, type TreasuryContract} from "@ton/sandbox"
 import {Blockchain} from "@ton/sandbox"
 import {createMappingInfo, type MappingInfo} from "ton-assembly-test-dev/dist/trace/mapping"
+import type {StackElement} from "ton-assembly-test-dev/dist/trace"
 
 import {trace} from "ton-assembly-test-dev/dist"
 
 import {type ExitCode, findExitCode} from "@features/txTrace/lib/traceTx.ts"
 
+function stackElementsToTupleBuilder(stackElements: StackElement[]): TupleBuilder {
+  const builder = new TupleBuilder()
+
+  for (const element of stackElements) {
+    switch (element.$) {
+      case "Integer":
+        builder.writeNumber(element.value)
+        break
+      case "Cell":
+        try {
+          const cell = Cell.fromHex(element.boc)
+          builder.writeCell(cell)
+        } catch {
+          console.warn("Invalid cell BoC, skipping:", element.boc)
+        }
+        break
+      case "Slice":
+        try {
+          const cell = Cell.fromHex(element.hex)
+          builder.writeSlice(cell.beginParse())
+        } catch {
+          console.warn("Invalid slice hex, skipping:", element.hex)
+        }
+        break
+      case "Null":
+        // TupleBuilder doesn't have writeNull, skip null elements
+        break
+      default:
+        console.warn("Unsupported stack element type:", element.$)
+    }
+  }
+
+  return builder
+}
+
 export const executeInstructions = async (
   codeCell: Cell,
   id: number = 0,
+  initialStack: StackElement[] = [],
 ): Promise<[TupleReader, string]> => {
   class TestContract implements Contract {
     public readonly address: Address
@@ -31,8 +68,12 @@ export const executeInstructions = async (
       await provider.internal(via, {...args, body: body})
     }
 
-    public async getAny(provider: ContractProvider, id: number): Promise<[TupleReader, string]> {
-      const builder = new TupleBuilder()
+    public async getAny(
+      provider: ContractProvider,
+      id: number,
+      initialStack: StackElement[],
+    ): Promise<[TupleReader, string]> {
+      const builder = stackElementsToTupleBuilder(initialStack)
       const res = await provider.get(id, builder.build())
 
       // @ts-expect-error TS2551
@@ -64,7 +105,7 @@ export const executeInstructions = async (
     new Cell(),
   )
 
-  const [stack, vmLogs] = await openContract.getAny(id)
+  const [stack, vmLogs] = await openContract.getAny(id, initialStack)
   return [stack, vmLogs]
 }
 
@@ -87,6 +128,7 @@ export class TasmCompilationError extends Error {
 
 export const executeAssemblyCode = async (
   assemblyCode: string,
+  initialStack: StackElement[] = [],
 ): Promise<AssemblyExecutionResult> => {
   const parseResult = text.parse("playground.tasm", assemblyCode)
 
@@ -100,7 +142,7 @@ export const executeAssemblyCode = async (
   const mappingInfo = createMappingInfo(mapping)
 
   try {
-    const [stack, vmLogs] = await executeInstructions(codeCell)
+    const [stack, vmLogs] = await executeInstructions(codeCell, 0, initialStack)
 
     const traceInfo = trace.createTraceInfoPerTransaction(vmLogs, mappingInfo, undefined)[0]
 

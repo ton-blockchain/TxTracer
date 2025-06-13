@@ -71,6 +71,21 @@
   background-color: var(--color-background-primary);
 }
 
+.stackHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.stackSetupButton {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
 .navigationControls {
   display: flex;
   justify-content: space-between;
