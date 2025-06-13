@@ -1,6 +1,5 @@
 import React, {useState, useCallback, Suspense, useEffect, useMemo, useRef} from "react"
 
-import {FiPlay, FiShare2, FiCheck, FiSettings} from "react-icons/fi"
 import {Allotment} from "allotment"
 import "allotment/dist/style.css"
 
@@ -13,8 +12,6 @@ import ErrorBanner from "@shared/ui/ErrorBanner/ErrorBanner"
 import {useGlobalError} from "@shared/lib/errorContext"
 
 import TracePageHeader from "@app/pages/TracePage/TracePageHeader"
-import Button from "@shared/ui/Button"
-import ButtonLoader from "@shared/ui/ButtonLoader/ButtonLoader.tsx"
 
 import {
   compileFuncCode,
@@ -24,9 +21,11 @@ import {
 
 import {parseFuncErrors, convertErrorsToMarkers} from "@features/txTrace/lib/funcErrorParser"
 
-import {useSourceMapHighlight} from "./useSourceMapHighlight"
-import {decodeCodeFromUrl, encodeCodeToUrl} from "./urlCodeSharing"
-import {useGodboltSettings} from "./useGodboltSettings"
+import {CompileButton, SettingsDropdown, ShareButton} from "@app/pages/GodboltPage/components"
+
+import {useSourceMapHighlight} from "./hooks/useSourceMapHighlight"
+import {useGodboltSettings} from "./hooks/useGodboltSettings"
+import {decodeCodeFromUrl} from "./urlCodeSharing"
 
 import styles from "./GodboltPage.module.css"
 
@@ -56,12 +55,10 @@ function GodboltPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string>("")
   const [errorMarkers, setErrorMarkers] = useState<monaco.editor.IMarkerData[]>([])
-  const [isCopied, setIsCopied] = useState(false)
   const {setError: setGlobalError} = useGlobalError()
 
   const funcEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
   const asmEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
-  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null)
 
   const sourceMap = useMemo(() => {
     if (result?.funcSourceMap) {
@@ -95,7 +92,6 @@ function GodboltPage() {
 
   const displayedAsmCode = result?.assembly ? (filteredAsmCode ?? "") : asmCode
 
-  // Saving editors code
   useEffect(() => {
     localStorage.setItem(FUNC_EDITOR_KEY, funcCode)
   }, [funcCode])
@@ -103,14 +99,14 @@ function GodboltPage() {
     localStorage.setItem(ASM_EDITOR_KEY, asmCode)
   }, [asmCode])
 
-  const handleExecuteWithCode = useCallback(
-    async (codeToCompile: string) => {
+  const handleExecuteCode = useCallback(
+    async (code: string) => {
       setLoading(true)
       setError("")
       setErrorMarkers([])
 
       try {
-        const compilationResult = await compileFuncCode(codeToCompile)
+        const compilationResult = await compileFuncCode(code)
         setResult(compilationResult)
         setErrorMarkers([])
       } catch (error) {
@@ -132,17 +128,11 @@ function GodboltPage() {
   )
 
   const handleExecute = useCallback(async () => {
-    await handleExecuteWithCode(funcCode)
-  }, [funcCode, handleExecuteWithCode])
+    await handleExecuteCode(funcCode)
+  }, [funcCode, handleExecuteCode])
 
-  const {
-    showVariablesInHover,
-    showDocsInHover,
-    autoCompile,
-    toggleShowVariablesInHover,
-    toggleShowDocsInHover,
-    toggleAutoCompile,
-  } = useGodboltSettings()
+  const godboltSettingsHook = useGodboltSettings()
+  const {showVariablesInHover, showDocsInHover, autoCompile} = godboltSettingsHook
 
   const handleCodeChange = useCallback(
     (newCode: string) => {
@@ -152,225 +142,31 @@ function GodboltPage() {
 
       if (!autoCompile) return
 
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current)
-      }
-
-      debounceTimerRef.current = setTimeout(() => {
-        void handleExecuteWithCode(newCode)
-      }, 0)
+      void handleExecuteCode(newCode)
     },
-    [handleExecuteWithCode, autoCompile],
+    [handleExecuteCode, autoCompile],
   )
-
-  // Cleanup timer on unmount
-  useEffect(() => {
-    return () => {
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current)
-      }
-    }
-  }, [])
 
   const clearError = useCallback(() => {
     setError("")
   }, [])
 
-  const handleShareCode = useCallback(async () => {
-    const shareUrl = encodeCodeToUrl(funcCode)
-
-    try {
-      await navigator.clipboard.writeText(shareUrl)
-      setIsCopied(true)
-      setTimeout(() => setIsCopied(false), 1000)
-      console.log("Share URL copied to clipboard:", shareUrl)
-    } catch (error) {
-      console.error("Failed to copy to clipboard:", error)
-      const textArea = document.createElement("textarea")
-      textArea.value = shareUrl
-      document.body.appendChild(textArea)
-      textArea.select()
-      const success = document.execCommand("copy")
-      document.body.removeChild(textArea)
-
-      if (success) {
-        setIsCopied(true)
-        setTimeout(() => setIsCopied(false), 1000)
-      }
-    }
-  }, [funcCode])
-
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
-  const settingsRef = useRef<HTMLDivElement | null>(null)
-  const settingsButtonRef = useRef<HTMLButtonElement | null>(null)
-
-  const handleSettingsKeyDown = useCallback((event: React.KeyboardEvent) => {
-    switch (event.key) {
-      case "Escape": {
-        setIsSettingsOpen(false)
-        settingsButtonRef.current?.focus()
-        break
-      }
-      case "ArrowDown": {
-        event.preventDefault()
-        const firstCheckbox: HTMLElement | null | undefined =
-          settingsRef.current?.querySelector('input[type="checkbox"]')
-        firstCheckbox?.focus()
-        break
-      }
-    }
-  }, [])
-
-  const handleSettingsItemKeyDown = useCallback(
-    (event: React.KeyboardEvent, action: () => void) => {
-      switch (event.key) {
-        case "Enter":
-        case " ":
-          event.preventDefault()
-          action()
-          break
-        case "Escape":
-          setIsSettingsOpen(false)
-          settingsButtonRef.current?.focus()
-          break
-      }
-    },
-    [],
-  )
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) {
-        setIsSettingsOpen(false)
-      }
-    }
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && isSettingsOpen) {
-        setIsSettingsOpen(false)
-        settingsButtonRef.current?.focus()
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside)
-    document.addEventListener("keydown", handleKeyDown)
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-      document.removeEventListener("keydown", handleKeyDown)
-    }
-  }, [isSettingsOpen])
-
   return (
     <div className={styles.traceViewWrapper}>
       <TracePageHeader pageTitle="explorer">
         <div className={styles.mainActionContainer} role="toolbar" aria-label="Code editor actions">
-          <Button
-            onClick={() => void handleExecute()}
-            disabled={loading}
+          <CompileButton
+            onCompile={() => void handleExecute()}
+            loading={loading}
             className={styles.executeButton}
-            title="Compile FunC code to assembly"
-            aria-label={loading ? "Compiling code..." : "Compile FunC code"}
-            aria-describedby="compile-status"
-          >
-            {loading ? (
-              <ButtonLoader>Compile</ButtonLoader>
-            ) : (
-              <>
-                <FiPlay size={16} aria-hidden="true" />
-                Compile
-              </>
-            )}
-          </Button>
-          <Button
-            onClick={() => void handleShareCode()}
-            title={isCopied ? "Link copied!" : "Share code via URL"}
-            className={`${styles.shareButton} ${isCopied ? styles.copied : ""}`}
-            aria-label={isCopied ? "Code link copied to clipboard" : "Share code via URL"}
-            aria-live="polite"
-          >
-            {isCopied ? (
-              <FiCheck size={16} aria-hidden="true" />
-            ) : (
-              <FiShare2 size={16} aria-hidden="true" />
-            )}
-            {isCopied ? "Copied!" : "Share"}
-          </Button>
-          <div className={styles.settingsContainer} ref={settingsRef}>
-            <button
-              type="button"
-              className={styles.settingsButton}
-              title="Settings"
-              onClick={() => setIsSettingsOpen(prev => !prev)}
-              ref={settingsButtonRef}
-              onKeyDown={event => handleSettingsKeyDown(event)}
-              aria-label="Open settings menu"
-              aria-expanded={isSettingsOpen}
-              aria-haspopup="menu"
-              aria-controls="settings-menu"
-            >
-              <FiSettings size={16} aria-hidden="true" />
-            </button>
-            {isSettingsOpen && (
-              <div
-                className={styles.settingsDropdown}
-                role="menu"
-                id="settings-menu"
-                aria-label="Settings menu"
-              >
-                <label className={styles.settingsItem} aria-checked={showVariablesInHover}>
-                  <input
-                    type="checkbox"
-                    checked={showVariablesInHover}
-                    onChange={toggleShowVariablesInHover}
-                    onKeyDown={event =>
-                      handleSettingsItemKeyDown(event, toggleShowVariablesInHover)
-                    }
-                    aria-describedby="vars-hover-desc"
-                    tabIndex={0}
-                  />
-                  <span className={styles.checkboxCustom} aria-hidden="true"></span>
-                  <span className={styles.checkboxLabel} id="vars-hover-desc">
-                    Show variables on hover
-                  </span>
-                </label>
-                <label className={styles.settingsItem} aria-checked={showDocsInHover}>
-                  <input
-                    type="checkbox"
-                    checked={showDocsInHover}
-                    onChange={toggleShowDocsInHover}
-                    onKeyDown={event => handleSettingsItemKeyDown(event, toggleShowDocsInHover)}
-                    aria-describedby="docs-hover-desc"
-                    tabIndex={0}
-                  />
-                  <span className={styles.checkboxCustom} aria-hidden="true"></span>
-                  <span className={styles.checkboxLabel} id="docs-hover-desc">
-                    Show instruction docs
-                  </span>
-                </label>
-                <label className={styles.settingsItem} aria-checked={autoCompile}>
-                  <input
-                    type="checkbox"
-                    checked={autoCompile}
-                    onChange={toggleAutoCompile}
-                    onKeyDown={event => handleSettingsItemKeyDown(event, toggleAutoCompile)}
-                    aria-describedby="auto-compile-desc"
-                    tabIndex={0}
-                  />
-                  <span className={styles.checkboxCustom} aria-hidden="true"></span>
-                  <span className={styles.checkboxLabel} id="auto-compile-desc">
-                    Auto-compile on change
-                  </span>
-                </label>
-              </div>
-            )}
-          </div>
+          />
+          <ShareButton value={funcCode} />
+          <SettingsDropdown hooks={godboltSettingsHook} />
         </div>
       </TracePageHeader>
 
       {error && <ErrorBanner message={error} onClose={clearError} />}
 
-      {/* Screen reader status announcements */}
       <div id="compile-status" className="sr-only" aria-live="polite" aria-atomic="true">
         {loading && "Compiling code..."}
         {result && !loading && "Code compiled successfully"}

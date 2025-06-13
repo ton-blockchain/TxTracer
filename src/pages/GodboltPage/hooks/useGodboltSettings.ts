@@ -1,12 +1,12 @@
 import {useState, useCallback} from "react"
 
-interface GodboltSettings {
+export interface GodboltSettings {
   readonly showVariablesInHover: boolean
   readonly showDocsInHover: boolean
   readonly autoCompile: boolean
 }
 
-interface GodboltSettingsHook extends GodboltSettings {
+export interface GodboltSettingsHook extends GodboltSettings {
   readonly toggleShowVariablesInHover: () => void
   readonly toggleShowDocsInHover: () => void
   readonly toggleAutoCompile: () => void
