@@ -1,6 +1,6 @@
 import React, {useState, useCallback, Suspense, useEffect, useMemo, useRef} from "react"
 
-import {FiPlay, FiShare2, FiCheck} from "react-icons/fi"
+import {FiPlay, FiShare2, FiCheck, FiSettings} from "react-icons/fi"
 import {Allotment} from "allotment"
 import "allotment/dist/style.css"
 
@@ -26,6 +26,7 @@ import {parseFuncErrors, convertErrorsToMarkers} from "@features/txTrace/lib/fun
 
 import {useSourceMapHighlight} from "./useSourceMapHighlight"
 import {decodeCodeFromUrl, encodeCodeToUrl} from "./urlCodeSharing"
+import {useGodboltSettings} from "./useGodboltSettings"
 
 import styles from "./GodboltPage.module.css"
 
@@ -134,11 +135,22 @@ function GodboltPage() {
     await handleExecuteWithCode(funcCode)
   }, [funcCode, handleExecuteWithCode])
 
+  const {
+    showVariablesInHover,
+    showDocsInHover,
+    autoCompile,
+    toggleShowVariablesInHover,
+    toggleShowDocsInHover,
+    toggleAutoCompile,
+  } = useGodboltSettings()
+
   const handleCodeChange = useCallback(
     (newCode: string) => {
       setFuncCode(newCode)
       setError("")
       setErrorMarkers([])
+
+      if (!autoCompile) return
 
       if (debounceTimerRef.current) {
         clearTimeout(debounceTimerRef.current)
@@ -148,7 +160,7 @@ function GodboltPage() {
         void handleExecuteWithCode(newCode)
       }, 0)
     },
-    [handleExecuteWithCode],
+    [handleExecuteWithCode, autoCompile],
   )
 
   // Cleanup timer on unmount
@@ -188,6 +200,21 @@ function GodboltPage() {
     }
   }, [funcCode])
 
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+  const settingsRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) {
+        setIsSettingsOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
+
   return (
     <div className={styles.traceViewWrapper}>
       <TracePageHeader pageTitle="explorer">
@@ -215,6 +242,43 @@ function GodboltPage() {
             {isCopied ? <FiCheck size={16} /> : <FiShare2 size={16} />}
             {isCopied ? "Copied!" : "Share"}
           </Button>
+          <div className={styles.settingsContainer} ref={settingsRef}>
+            <button
+              type="button"
+              className={styles.settingsButton}
+              title="Settings"
+              onClick={() => setIsSettingsOpen(prev => !prev)}
+            >
+              <FiSettings size={16} />
+            </button>
+            {isSettingsOpen && (
+              <div className={styles.settingsDropdown}>
+                <label className={styles.settingsItem}>
+                  <input
+                    type="checkbox"
+                    checked={showVariablesInHover}
+                    onChange={toggleShowVariablesInHover}
+                  />
+                  <span className={styles.checkboxCustom}></span>
+                  <span className={styles.checkboxLabel}>Show variables on hover</span>
+                </label>
+                <label className={styles.settingsItem}>
+                  <input
+                    type="checkbox"
+                    checked={showDocsInHover}
+                    onChange={toggleShowDocsInHover}
+                  />
+                  <span className={styles.checkboxCustom}></span>
+                  <span className={styles.checkboxLabel}>Show instruction docs</span>
+                </label>
+                <label className={styles.settingsItem}>
+                  <input type="checkbox" checked={autoCompile} onChange={toggleAutoCompile} />
+                  <span className={styles.checkboxCustom}></span>
+                  <span className={styles.checkboxLabel}>Auto-compile on change</span>
+                </label>
+              </div>
+            )}
+          </div>
         </div>
       </TracePageHeader>
 
@@ -253,7 +317,8 @@ function GodboltPage() {
                   highlightGroups={asmHighlightGroups}
                   hoveredLines={asmHoveredLines}
                   onLineHover={handleAsmLineHover}
-                  getVariablesForLine={getVariablesForAsmLine}
+                  getVariablesForLine={showVariablesInHover ? getVariablesForAsmLine : undefined}
+                  showInstructionDocs={showDocsInHover}
                   needBorderRadius={false}
                 />
               </Suspense>

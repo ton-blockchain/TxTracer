@@ -100,6 +100,7 @@ interface CodeEditorProps {
   readonly markers?: readonly monacoTypes.editor.IMarkerData[]
   readonly needBorderRadius?: boolean
   readonly getVariablesForLine?: (line: number) => trace.FuncVar[] | undefined
+  readonly showInstructionDocs?: boolean
 }
 
 interface CodeBlock {
@@ -151,6 +152,7 @@ const CodeEditor = React.forwardRef<
       markers = [],
       needBorderRadius = true,
       getVariablesForLine,
+      showInstructionDocs = true,
     },
     ref,
   ) => {
@@ -494,7 +496,7 @@ const CodeEditor = React.forwardRef<
               }
             }
 
-            if (tokenType.includes("instruction")) {
+            if (tokenType.includes("instruction") && showInstructionDocs) {
               const instructionInfo = findInstruction(word.word)
               if (instructionInfo === undefined) {
                 hoverContents.push({
@@ -550,7 +552,7 @@ const CodeEditor = React.forwardRef<
       return () => {
         provider.dispose()
       }
-    }, [monaco, editorReady, lineGas, lineExecutions, getVariablesForLine])
+    }, [monaco, editorReady, lineGas, lineExecutions, getVariablesForLine, showInstructionDocs, language])
 
     useEffect(() => {
       if (!monaco || !editorRef.current) return

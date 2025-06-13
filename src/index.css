@@ -156,6 +156,7 @@
 
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
+  --spacing-mds: 0.75rem;
   --spacing-md: 1rem;
   --spacing-lg: 1.5rem;
   --spacing-xl: 2rem;
@@ -208,6 +209,12 @@
   --cell-bg-color-5-hover: #e9d9f8;
 
   --share-button-bg: var(--color-background-primary);
+
+  --settings-dropdown-bg: var(--color-background-primary);
+  --settings-dropdown-border: var(--color-border);
+  --settings-dropdown-shadow: var(--shadow-lg);
+  --settings-item-hover-bg: var(--color-neutral-bg-hover-alpha);
+  --settings-checkbox-accent: var(--color-primary);
 
   font-family: var(--font-family-sans), sans-serif;
   line-height: 1.5;
@@ -393,6 +400,12 @@
   --cell-bg-color-5-hover: #322640;
 
   --share-button-bg: var(--color-background-tertiary);
+
+  --settings-dropdown-bg: var(--color-background-tertiary);
+  --settings-dropdown-border: var(--color-border);
+  --settings-dropdown-shadow: var(--shadow-lg);
+  --settings-item-hover-bg: var(--color-neutral-bg-hover-alpha);
+  --settings-checkbox-accent: var(--color-primary);
 }
 
 #root {
