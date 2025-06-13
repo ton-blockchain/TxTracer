@@ -22,9 +22,10 @@ export const CompileButton: React.FC<CompileButtonProps> = ({
       onClick={onCompile}
       disabled={loading || disabled}
       className={className}
-      title="Compile FunC code to assembly"
+      title={loading ? "Compiling FunC code..." : "Compile FunC code to assembly (Ctrl/Cmd+Enter)"}
       aria-label={loading ? "Compiling code..." : "Compile FunC code"}
       aria-describedby="compile-status"
+      aria-keyshortcuts="Control+Enter"
     >
       {loading ? (
         <ButtonLoader>Compile</ButtonLoader>

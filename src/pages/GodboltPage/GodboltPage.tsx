@@ -143,6 +143,22 @@ function GodboltPage() {
     [handleExecuteCode, autoCompile, clearError, setResult],
   )
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+        event.preventDefault()
+        if (!loading) {
+          void handleExecute(funcCode)
+        }
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown)
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [handleExecute, funcCode, loading])
+
   // Compile code on page open
   useEffect(() => {
     if (editorsReady.func && editorsReady.asm) {
@@ -172,15 +188,18 @@ function GodboltPage() {
         {error && !loading && `Compilation failed: ${error}`}
       </div>
 
+      <div className="sr-only">Press Ctrl+Enter or Cmd+Enter to compile the FunC code</div>
+
       <main className={styles.appContainer} role="main" aria-label="Code editor workspace">
         <Allotment defaultSizes={[50, 50]} className={styles.editorsContainer} separator={false}>
           <Allotment.Pane minSize={200}>
-            <div
+            <section
               className={styles.editorPanel + " " + styles.editorPanelLeft}
-              aria-label="FunC code editor"
-              role="region"
+              aria-labelledby="func-editor-heading"
             >
-              <h2 className="sr-only">FunC Source Code</h2>
+              <h2 id="func-editor-heading" className="sr-only">
+                FunC Source Code Editor
+              </h2>
               <Suspense fallback={<InlineLoader message="Loading Editor..." loading={true} />}>
                 <CodeEditor
                   code={funcCode}
@@ -199,16 +218,17 @@ function GodboltPage() {
                   }}
                 />
               </Suspense>
-            </div>
+            </section>
           </Allotment.Pane>
 
           <Allotment.Pane minSize={200}>
-            <div
+            <section
               className={styles.editorPanel + " " + styles.editorPanelRight}
-              aria-label="Assembly output"
-              role="region"
+              aria-labelledby="asm-editor-heading"
             >
-              <h2 className="sr-only">Generated Assembly Code</h2>
+              <h2 id="asm-editor-heading" className="sr-only">
+                Generated Assembly Code Output
+              </h2>
               <Suspense fallback={<InlineLoader message="Loading Editor..." loading={true} />}>
                 <CodeEditor
                   code={displayedAsmCode}
@@ -227,7 +247,7 @@ function GodboltPage() {
                   }}
                 />
               </Suspense>
-            </div>
+            </section>
           </Allotment.Pane>
         </Allotment>
       </main>
