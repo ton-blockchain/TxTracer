@@ -5,6 +5,10 @@ import {GetMethodError, type SandboxContract, type TreasuryContract} from "@ton/
 import {Blockchain} from "@ton/sandbox"
 import {createMappingInfo, type MappingInfo} from "ton-assembly-test-dev/dist/trace/mapping"
 
+import {createTraceInfoPerTransaction, type TraceInfo} from "ton-assembly-test-dev/dist/trace"
+
+import {type ExitCode, findExitCode} from "@features/txTrace/lib/traceTx.ts"
+
 export const executeInstructions = async (
   codeCell: Cell,
   id: number = 0,
@@ -69,9 +73,16 @@ export interface AssemblyExecutionResult {
   readonly vmLogs: string
   readonly instructions: i.Instr[]
   readonly code: string
-  readonly success: boolean
-  readonly error?: string
   readonly mappingInfo: MappingInfo | null
+  readonly exitCode: ExitCode | undefined
+  readonly traceInfo: TraceInfo | undefined
+}
+
+export class TasmCompilationError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = "TasmCompilationError"
+  }
 }
 
 export const executeAssemblyCode = async (
@@ -80,15 +91,9 @@ export const executeAssemblyCode = async (
   const parseResult = text.parse("playground.tasm", assemblyCode)
 
   if (parseResult.$ === "ParseFailure") {
-    return {
-      stack: {items: [], remaining: 0} as unknown as TupleReader,
-      vmLogs: "",
-      instructions: [],
-      code: assemblyCode,
-      success: false,
-      error: `Parse error: ${parseResult.error.message}`,
-      mappingInfo: null,
-    }
+    const loc = parseResult.error.loc
+    const pos = loc.file + ":" + loc.line
+    throw new TasmCompilationError(pos + ": " + parseResult.error.message)
   }
 
   const [codeCell, mapping] = i.compileCellWithMapping(parseResult.instructions)
@@ -97,24 +102,29 @@ export const executeAssemblyCode = async (
   try {
     const [stack, vmLogs] = await executeInstructions(codeCell)
 
+    const traceInfo = createTraceInfoPerTransaction(vmLogs, mappingInfo, undefined)[0]
+
     return {
       stack,
       vmLogs,
       instructions: parseResult.instructions,
       code: assemblyCode,
-      success: true,
       mappingInfo,
+      exitCode: undefined,
+      traceInfo,
     }
   } catch (error: unknown) {
     if (error instanceof GetMethodError) {
+      const exitCode = findExitCode(error.vmLogs, mappingInfo)
+      console.log(exitCode)
       return {
         stack: {items: [], remaining: 0} as unknown as TupleReader,
         vmLogs: error.vmLogs,
         instructions: parseResult.instructions,
         code: assemblyCode,
-        success: true,
         mappingInfo,
-        error: undefined,
+        exitCode,
+        traceInfo: undefined,
       }
     }
 

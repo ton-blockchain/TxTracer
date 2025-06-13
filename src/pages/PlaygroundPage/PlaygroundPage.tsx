@@ -3,10 +3,8 @@ import React, {useState, useCallback, Suspense, useMemo, useEffect} from "react"
 import {FiPlay} from "react-icons/fi"
 
 import InlineLoader from "@shared/ui/InlineLoader"
-import ErrorBanner from "@shared/ui/ErrorBanner/ErrorBanner"
 import TraceSidePanel from "@shared/ui/TraceSidePanel"
 import {executeAssemblyCode, type AssemblyExecutionResult} from "@features/tasm/lib/executor.ts"
-import {usePlaygroundTrace} from "@features/tasm/hooks/usePlaygroundTrace"
 import {useGlobalError} from "@shared/lib/errorContext"
 import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
 import {useLineExecutionData, useTraceStepper} from "@features/txTrace/hooks"
@@ -39,10 +37,9 @@ function PlaygroundPage() {
   })
   const [result, setResult] = useState<AssemblyExecutionResult | undefined>(undefined)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string>("")
-  const {setError: setGlobalError} = useGlobalError()
+  const {setError, clearError} = useGlobalError()
 
-  const {trace, exitCode} = usePlaygroundTrace(result)
+  const trace = result?.traceInfo
 
   const {
     selectedStep,
@@ -88,53 +85,45 @@ function PlaygroundPage() {
     }
 
     setLoading(true)
-    setError("")
+    clearError()
     setResult(undefined)
 
     try {
       const result = await executeAssemblyCode(assemblyCode)
       setResult(result)
-
-      if (!result.success && result.error) {
-        setError(result.error)
-      }
+      console.log(result.vmLogs)
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error"
-      setError(errorMessage)
-      setGlobalError(`Failed to execute assembly code: ${errorMessage}`)
+      setError(`Failed to execute assembly code: ${errorMessage}`)
     } finally {
       setLoading(false)
     }
-  }, [assemblyCode, setGlobalError])
+  }, [assemblyCode, clearError, setError])
 
   useEffect(() => {
     localStorage.setItem(LOCAL_STORAGE_KEY, assemblyCode)
   }, [assemblyCode])
 
-  const handleCodeChange = useCallback((newCode: string) => {
-    setAssemblyCode(newCode)
-    setResult(undefined)
-    setError("")
-  }, [])
-
-  const clearError = useCallback(() => {
-    setError("")
-  }, [])
+  const handleCodeChange = useCallback(
+    (newCode: string) => {
+      setAssemblyCode(newCode)
+      setResult(undefined)
+      clearError()
+    },
+    [clearError],
+  )
 
   const txStatus: StatusType | undefined = useMemo(() => {
     if (!result) return undefined
 
-    if (exitCode && exitCode.num !== 0) {
+    if (result.exitCode && result.exitCode.num !== 0) {
       return "failed"
     }
-    if (result.success) {
-      return "success"
-    }
-    return undefined
-  }, [result, exitCode])
+    return "success"
+  }, [result])
 
   const shouldShowStatusContainer = txStatus !== undefined
-  const txStatusText = `Exit code: ${exitCode?.num ?? 0}`
+  const txStatusText = `Exit code: ${result?.exitCode?.num ?? 0}`
 
   return (
     <div className={styles.traceViewWrapper}>
@@ -165,8 +154,6 @@ function PlaygroundPage() {
         </div>
       </PageHeader>
 
-      {error && <ErrorBanner message={error} onClose={clearError} />}
-
       <div className={styles.appContainer}>
         <div className={styles.mainContent}>
           <div style={{flex: "1", position: "relative"}}>
@@ -178,7 +165,7 @@ function PlaygroundPage() {
                 highlightLine={highlightLine}
                 lineExecutionData={lineExecutionData}
                 shouldCenter={transitionType === "button"}
-                exitCode={exitCode?.info ? exitCode : undefined}
+                exitCode={result?.exitCode}
                 onLineClick={findStepByLine}
               />
             </Suspense>

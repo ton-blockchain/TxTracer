@@ -1,20 +1,20 @@
 import {retrace, retraceBaseTx} from "@tonstudio/txtracer-core"
 import type {TraceResult} from "@tonstudio/txtracer-core/dist/types"
-import {decompileCell, compileCellWithMapping} from "ton-assembly-test-dev/dist/runtime/instr"
+import {compileCellWithMapping, decompileCell} from "ton-assembly-test-dev/dist/runtime/instr"
 import {
   createMappingInfo,
-  type MappingInfo,
   type InstructionInfo,
+  type MappingInfo,
 } from "ton-assembly-test-dev/dist/trace/mapping"
 import {type Step} from "ton-assembly-test-dev/dist/trace"
 import {
   createTraceInfoPerTransaction,
   findInstructionInfo,
 } from "ton-assembly-test-dev/dist/trace/trace"
-import {print, parse} from "ton-assembly-test-dev/dist/text"
+import {parse, print} from "ton-assembly-test-dev/dist/text"
 import * as l from "ton-assembly-test-dev/dist/logs"
 
-import type {RetraceResultAndCode, NetworkType} from "@features/txTrace/ui"
+import type {NetworkType, RetraceResultAndCode} from "@features/txTrace/ui"
 
 import {
   type ExtractionResult,
@@ -23,11 +23,11 @@ import {
 } from "@features/txTrace/lib/links.ts"
 
 import {
-  TxNotFoundError,
   NetworkError,
-  TxTraceError,
   TooManyRequests,
   TxHashInvalidError,
+  TxNotFoundError,
+  TxTraceError,
 } from "./errors"
 
 export type ExitCode = {
@@ -108,6 +108,12 @@ export function findException(reversedEntries: l.VmLine[]) {
         num: it.errno,
       }
     }
+    if (it.$ === "VmException") {
+      return {
+        text: it.message,
+        num: it.errno,
+      }
+    }
     if (it.$ === "VmUnknown") {
       if (it.text.includes("unhandled out-of-gas exception")) {
         return {text: it.text, num: -14}
@@ -115,6 +121,13 @@ export function findException(reversedEntries: l.VmLine[]) {
     }
     return undefined
   })
+  const exceptionWithDescription = mapped.find(it => {
+    const length = it?.text?.length ?? 0
+    return length > 0
+  })
+  if (exceptionWithDescription) {
+    return exceptionWithDescription
+  }
   return mapped.find(it => it !== undefined)
 }
 
