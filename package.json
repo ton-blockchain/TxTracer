@@ -34,7 +34,7 @@
     "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.6.0",
-    "ton-assembly": "../tasm/ton-assembly-0.0.4.tgz"
+    "ton-assembly-test-dev": "0.0.5"
   },
   "devDependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",

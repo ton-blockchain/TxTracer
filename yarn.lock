@@ -4307,17 +4307,10 @@ toidentifier@1.0.1:
   resolved "https://registry.yarnpkg.com/toidentifier/-/toidentifier-1.0.1.tgz#3be34321a88a820ed1bd80dfaa33e479fbb8dd35"
   integrity sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==
 
-ton-assembly@../tasm/ton-assembly-0.0.3.tgz:
-  version "0.0.3"
-  resolved "../tasm/ton-assembly-0.0.3.tgz#96084815ec7820323435ca1b8fd31e868eb21c89"
-  dependencies:
-    "@ton/core" "^0.60.1"
-    "@tonstudio/parser-runtime" "^0.0.1"
-    cac "^6.7.14"
-
-ton-assembly@../tasm/ton-assembly-0.0.4.tgz:
-  version "0.0.4"
-  resolved "../tasm/ton-assembly-0.0.4.tgz#5afb26a09a302b27aaf2cda864f64b6b3fa756fc"
+ton-assembly-test-dev@0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/ton-assembly-test-dev/-/ton-assembly-test-dev-0.0.5.tgz#307713e5c82a6a57109d3cd6203df6cdda393eaa"
+  integrity sha512-jMc1eLUIVlvgk1cSonEKo3fJvlqxayzszf/1jI+jhBKcv+wR3M7zKYZlXKfUNBp8TqvdGFlRZeqWJm4dRzhjng==
   dependencies:
     "@ton/core" "^0.60.1"
     "@tonstudio/parser-runtime" "^0.0.1"

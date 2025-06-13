@@ -1,15 +1,18 @@
 import {retrace, retraceBaseTx} from "@tonstudio/txtracer-core"
 import type {TraceResult} from "@tonstudio/txtracer-core/dist/types"
-import {decompileCell, compileCellWithMapping} from "ton-assembly/dist/runtime/instr"
+import {decompileCell, compileCellWithMapping} from "ton-assembly-test-dev/dist/runtime/instr"
 import {
   createMappingInfo,
   type MappingInfo,
   type InstructionInfo,
-} from "ton-assembly/dist/trace/mapping"
-import {type Step} from "ton-assembly/dist/trace"
-import {createTraceInfoPerTransaction, findInstructionInfo} from "ton-assembly/dist/trace/trace"
-import {print, parse} from "ton-assembly/dist/text"
-import * as l from "ton-assembly/dist/logs"
+} from "ton-assembly-test-dev/dist/trace/mapping"
+import {type Step} from "ton-assembly-test-dev/dist/trace"
+import {
+  createTraceInfoPerTransaction,
+  findInstructionInfo,
+} from "ton-assembly-test-dev/dist/trace/trace"
+import {print, parse} from "ton-assembly-test-dev/dist/text"
+import * as l from "ton-assembly-test-dev/dist/logs"
 
 import type {RetraceResultAndCode, NetworkType} from "@features/txTrace/ui"
 

@@ -1,4 +1,4 @@
-import {trace} from "ton-assembly/dist"
+import {trace} from "ton-assembly-test-dev/dist"
 
 // Convert base64 to Uint8Array for browser compatibility
 function base64ToUint8Array(base64: string): Uint8Array {

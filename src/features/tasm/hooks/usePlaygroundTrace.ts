@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react"
-import {createTraceInfoPerTransaction, type TraceInfo} from "ton-assembly/dist/trace"
+import {createTraceInfoPerTransaction, type TraceInfo} from "ton-assembly-test-dev/dist/trace"
 
 import type {AssemblyExecutionResult} from "@features/tasm/lib/executor.ts"
 import type {ExitCode} from "@features/txTrace/lib/traceTx"

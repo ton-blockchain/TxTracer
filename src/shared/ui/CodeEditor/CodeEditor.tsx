@@ -83,7 +83,7 @@ interface CodeEditorProps {
   /** Callback fired when the code content changes */
   readonly onChange?: (value: string) => void
 
-  /** Error markers to display in the editor. Used for compilation errors in FunC on Code Explorer page */
+  /** Error markers to display in the editor. Used for compilation errors in FunC on the Code Explorer page */
   readonly markers?: readonly monacoTypes.editor.IMarkerData[]
 }
 

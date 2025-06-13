@@ -1,5 +1,5 @@
 import {useMemo} from "react"
-import type {TraceInfo} from "ton-assembly/dist/trace"
+import type {TraceInfo} from "ton-assembly-test-dev/dist/trace"
 
 export type LinesExecutionData = Record<number, LineExecutionData>
 
