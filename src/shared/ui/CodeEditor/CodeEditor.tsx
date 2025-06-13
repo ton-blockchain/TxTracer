@@ -42,207 +42,199 @@ interface CodeEditorProps {
   readonly getVariablesForLine?: (line: number) => FuncVar[] | undefined
   readonly showVariablesDocs?: boolean
   readonly showInstructionDocs?: boolean
+  readonly onEditorMount?: (editor: monacoTypes.editor.IStandaloneCodeEditor) => void
 }
 
-const CodeEditor = React.forwardRef<
-  monacoTypes.editor.IStandaloneCodeEditor | null,
-  CodeEditorProps
->(
-  (
-    {
-      code,
-      highlightLine,
-      lineGas,
-      lineExecutions,
-      onLineClick = () => {},
-      onLineHover,
-      shouldCenter = true,
-      exitCode,
-      readOnly = true,
-      onChange,
-      language = "tasm",
-      highlightGroups = [],
-      hoveredLines = [],
-      highlightRanges = [],
-      markers = [],
-      needBorderRadius = true,
-      getVariablesForLine,
-      showVariablesDocs = true,
-      showInstructionDocs = true,
-    },
-    ref,
-  ) => {
-    const editorRef = useRef<monacoTypes.editor.IStandaloneCodeEditor | null>(null)
-    const [editorReady, setEditorReady] = useState(false)
-    const [isFoldedState, setIsFolded] = useState(false)
+const CodeEditor: React.FC<CodeEditorProps> = ({
+  code,
+  highlightLine,
+  lineGas,
+  lineExecutions,
+  onLineClick = () => {},
+  onLineHover,
+  shouldCenter = true,
+  exitCode,
+  readOnly = true,
+  onChange,
+  language = "tasm",
+  highlightGroups = [],
+  hoveredLines = [],
+  highlightRanges = [],
+  markers = [],
+  needBorderRadius = true,
+  getVariablesForLine,
+  showVariablesDocs = true,
+  showInstructionDocs = true,
+  onEditorMount,
+}) => {
+  const editorRef = useRef<monacoTypes.editor.IStandaloneCodeEditor | null>(null)
+  const [editorReady, setEditorReady] = useState(false)
+  const [isFoldedState, setIsFolded] = useState(false)
 
-    const {monaco, isMac} = useMonacoSetup({language})
+  const {monaco, isMac} = useMonacoSetup({language})
 
-    const {isCtrlPressed, hoveredLine} = useEditorEvents({
-      monaco,
-      editorRef,
-      lineGas,
-      onLineClick,
-      onLineHover,
-      editorReady,
-    })
+  const {isCtrlPressed, hoveredLine} = useEditorEvents({
+    monaco,
+    editorRef,
+    lineGas,
+    onLineClick,
+    onLineHover,
+    editorReady,
+  })
 
-    const {updateDecorations} = useDecorations({
-      monaco,
-      highlightLine,
-      lineGas,
-      highlightGroups,
-      hoveredLines,
-      highlightRanges,
-      isCtrlPressed,
-      hoveredLine,
-      shouldCenter,
-    })
+  const {updateDecorations} = useDecorations({
+    monaco,
+    highlightLine,
+    lineGas,
+    highlightGroups,
+    hoveredLines,
+    highlightRanges,
+    isCtrlPressed,
+    hoveredLine,
+    shouldCenter,
+  })
 
-    useTasmHoverProvider({
-      monaco,
-      editorRef,
-      lineExecutions,
-      getVariablesForLine,
-      showVariablesDocs,
-      showInstructionDocs,
-      enabled: language === "tasm",
-    })
+  useTasmHoverProvider({
+    monaco,
+    editorRef,
+    lineExecutions,
+    getVariablesForLine,
+    showVariablesDocs,
+    showInstructionDocs,
+    enabled: language === "tasm",
+  })
 
-    useTasmCodeLensProvider({
-      monaco,
-      editorRef,
-      exitCode,
-      editorReady,
-      enabled: language === "tasm",
-    })
+  useTasmCodeLensProvider({
+    monaco,
+    editorRef,
+    exitCode,
+    editorReady,
+    enabled: language === "tasm",
+  })
 
-    useFuncLanguageProviders({
-      monaco,
-      editorRef,
-      markers,
-      enabled: language === "func",
-    })
+  useFuncLanguageProviders({
+    monaco,
+    editorRef,
+    markers,
+    enabled: language === "func",
+  })
 
-    const {collapseInactiveBlocks} = useFolding({
-      monaco,
-      editorRef,
-      lineExecutions,
-    })
+  const {collapseInactiveBlocks} = useFolding({
+    monaco,
+    editorRef,
+    lineExecutions,
+  })
 
-    // @ts-expect-error todo
-    // we need it actually
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    React.useImperativeHandle(ref, () => editorRef.current, [editorRef.current])
+  /* ----------------------- folding inactive blocks ----------------------- */
+  const handleCollapseInactiveBlocks = useCallback(() => {
+    if (isFoldedState) return
+    setIsFolded(true)
+    collapseInactiveBlocks()
+  }, [collapseInactiveBlocks, isFoldedState])
 
-    /* ----------------------- folding inactive blocks ----------------------- */
-    const handleCollapseInactiveBlocks = useCallback(() => {
-      if (isFoldedState) return
-      setIsFolded(true)
-      collapseInactiveBlocks()
-    }, [collapseInactiveBlocks, isFoldedState])
+  /* -------------------------------- effects ------------------------------ */
+  useEffect(() => {
+    if (!editorRef.current) return
+    if (isFoldedState) return // don't apply decorations and folds a second time
 
-    /* -------------------------------- effects ------------------------------ */
-    useEffect(() => {
-      if (!editorRef.current) return
-      if (isFoldedState) return // don't apply decorations and folds a second time
+    updateDecorations(editorRef.current)
+    handleCollapseInactiveBlocks()
+  }, [lineGas, updateDecorations, handleCollapseInactiveBlocks, isFoldedState])
 
+  useEffect(() => {
+    if (!editorReady || !editorRef.current) return
+
+    updateDecorations(editorRef.current)
+    handleCollapseInactiveBlocks()
+  }, [editorReady, updateDecorations, handleCollapseInactiveBlocks])
+
+  // Update decorations on pressed ctrl
+  useEffect(() => {
+    if (editorRef.current) {
       updateDecorations(editorRef.current)
-      handleCollapseInactiveBlocks()
-    }, [lineGas, updateDecorations, handleCollapseInactiveBlocks, isFoldedState])
+    }
+  }, [isCtrlPressed, updateDecorations])
 
-    useEffect(() => {
-      if (!editorReady || !editorRef.current) return
+  // Handle resize events
+  useEffect(() => {
+    if (!editorReady || !editorRef.current) {
+      return
+    }
 
-      updateDecorations(editorRef.current)
-      handleCollapseInactiveBlocks()
-    }, [editorReady, updateDecorations, handleCollapseInactiveBlocks])
+    const handleResize = () => {
+      editorRef.current?.layout()
+    }
 
-    // Update decorations on pressed ctrl
-    useEffect(() => {
-      if (editorRef.current) {
-        updateDecorations(editorRef.current)
-      }
-    }, [isCtrlPressed, updateDecorations])
+    window.addEventListener("resize", handleResize)
+    handleResize()
 
-    // Handle resize events
-    useEffect(() => {
-      if (!editorReady || !editorRef.current) {
-        return
-      }
+    return () => {
+      window.removeEventListener("resize", handleResize)
+    }
+  }, [editorReady])
 
-      const handleResize = () => {
-        editorRef.current?.layout()
-      }
+  /* -------------------------------- render ------------------------------- */
+  const needFloatingTip = lineGas && readOnly && language === "tasm"
 
-      window.addEventListener("resize", handleResize)
-      handleResize()
-
-      return () => {
-        window.removeEventListener("resize", handleResize)
-      }
-    }, [editorReady])
-
-    /* -------------------------------- render ------------------------------- */
-    const needFloatingTip = lineGas && readOnly && language === "tasm"
-
-    return (
-      <>
-        <div
-          className={
-            needBorderRadius
-              ? styles.editorWrapperWithBorderRadius
-              : styles.editorWrapperWithoutBorderRadius
-          }
-        >
-          <Editor
-            height="100%"
-            width="100%"
-            language={language === "func" ? FUNC_LANGUAGE_ID : TASM_LANGUAGE_ID}
-            path={language === "func" ? "main.fc" : "out.tasm"}
-            value={code}
-            options={{
-              minimap: {enabled: false},
-              readOnly,
-              lineNumbers: "on",
-              automaticLayout: true,
-              scrollBeyondLastLine: false,
-              wordWrap: "on",
-              fontSize: 14,
-              fontFamily: "JetBrains Mono",
-              glyphMargin: true,
-              folding: true,
-              foldingStrategy: "auto",
-              stickyScroll: {enabled: false},
-              scrollbar: {
-                useShadows: false,
-              },
-            }}
-            onMount={editor => {
-              editorRef.current = editor
-              setEditorReady(true)
-            }}
-            onChange={value => {
-              if (onChange !== undefined && value !== undefined) {
-                onChange(value)
-              }
-              if (editorRef.current) {
-                updateDecorations(editorRef.current)
-              }
-            }}
-          />
+  return (
+    <>
+      <div
+        className={
+          needBorderRadius
+            ? styles.editorWrapperWithBorderRadius
+            : styles.editorWrapperWithoutBorderRadius
+        }
+      >
+        <Editor
+          height="100%"
+          width="100%"
+          language={language === "func" ? FUNC_LANGUAGE_ID : TASM_LANGUAGE_ID}
+          path={language === "func" ? "main.fc" : "out.tasm"}
+          value={code}
+          options={{
+            minimap: {enabled: false},
+            readOnly,
+            lineNumbers: "on",
+            automaticLayout: true,
+            scrollBeyondLastLine: false,
+            wordWrap: "on",
+            fontSize: 14,
+            fontFamily: "JetBrains Mono",
+            glyphMargin: true,
+            folding: true,
+            foldingStrategy: "auto",
+            stickyScroll: {enabled: false},
+            scrollbar: {
+              useShadows: false,
+            },
+          }}
+          onMount={editor => {
+            editorRef.current = editor
+            setEditorReady(true)
+            if (onEditorMount) {
+              onEditorMount(editor)
+            }
+          }}
+          onChange={value => {
+            if (onChange !== undefined && value !== undefined) {
+              onChange(value)
+            }
+            if (editorRef.current) {
+              updateDecorations(editorRef.current)
+            }
+          }}
+        />
+      </div>
+      {needFloatingTip && (
+        <div className={styles.editorHint}>
+          <kbd>{isMac ? "⌘" : "Ctrl"}</kbd> + <kbd>Click</kbd> to navigate to trace step
+          <span className={styles.hintDivider}>|</span>
+          <kbd>←</kbd> <kbd>→</kbd> to step through trace
         </div>
-        {needFloatingTip && (
-          <div className={styles.editorHint}>
-            <kbd>{isMac ? "⌘" : "Ctrl"}</kbd> + <kbd>Click</kbd> to navigate to trace step
-            <span className={styles.hintDivider}>|</span>
-            <kbd>←</kbd> <kbd>→</kbd> to step through trace
-          </div>
-        )}
-      </>
-    )
-  },
-)
+      )}
+    </>
+  )
+}
 
 CodeEditor.displayName = "CodeEditor"
 

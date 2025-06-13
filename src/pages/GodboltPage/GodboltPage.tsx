@@ -149,7 +149,6 @@ function GodboltPage() {
               <h2 className="sr-only">FunC Source Code</h2>
               <Suspense fallback={<InlineLoader message="Loading Editor..." loading={true} />}>
                 <CodeEditor
-                  ref={funcEditorRef}
                   code={funcCode}
                   onChange={handleCodeChange}
                   readOnly={false}
@@ -160,6 +159,9 @@ function GodboltPage() {
                   onLineHover={handleFuncLineHover}
                   markers={errorMarkers}
                   needBorderRadius={false}
+                  onEditorMount={editor => {
+                    funcEditorRef.current = editor
+                  }}
                 />
               </Suspense>
             </div>
@@ -174,7 +176,6 @@ function GodboltPage() {
               <h2 className="sr-only">Generated Assembly Code</h2>
               <Suspense fallback={<InlineLoader message="Loading Editor..." loading={true} />}>
                 <CodeEditor
-                  ref={asmEditorRef}
                   code={displayedAsmCode}
                   readOnly={true}
                   language="tasm"
@@ -185,6 +186,9 @@ function GodboltPage() {
                   showVariablesDocs={showVariablesInHover}
                   showInstructionDocs={showDocsInHover}
                   needBorderRadius={false}
+                  onEditorMount={editor => {
+                    asmEditorRef.current = editor
+                  }}
                 />
               </Suspense>
             </div>
