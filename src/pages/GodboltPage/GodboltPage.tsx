@@ -181,7 +181,8 @@ function GodboltPage() {
                   highlightGroups={asmHighlightGroups}
                   hoveredLines={asmHoveredLines}
                   onLineHover={handleAsmLineHover}
-                  getVariablesForLine={showVariablesInHover ? getVariablesForAsmLine : undefined}
+                  getVariablesForLine={getVariablesForAsmLine}
+                  showVariablesDocs={showVariablesInHover}
                   showInstructionDocs={showDocsInHover}
                   needBorderRadius={false}
                 />

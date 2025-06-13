@@ -3,70 +3,17 @@ import Editor, {useMonaco} from "@monaco-editor/react"
 import * as monacoTypes from "monaco-editor"
 import {editor, type IMarkdownString, Position} from "monaco-editor"
 
-import {trace} from "ton-assembly/dist"
-
-import {useTheme} from "@shared/lib/themeContext"
 import {asmData, findInstruction, generateAsmDoc} from "@features/tasm/lib"
 import type {ExitCode} from "@features/txTrace/lib/traceTx"
+import {formatVariablesForHover, type FuncVar} from "@features/godbolt/lib/func/variables.ts"
 
+import {useTheme} from "@shared/lib/themeContext"
 import {DARK_THEME, LIGHT_THEME} from "@shared/ui/CodeEditor/themes.tsx"
 import {funcLanguageDefinition} from "@shared/ui/CodeEditor/languages/FuncLanguageDefinition.ts"
 import {tasmLanguageDefinition} from "@shared/ui/CodeEditor/languages/TasmLanguageDefinition"
 import {FUNC_LANGUAGE_ID, TASM_LANGUAGE_ID} from "@shared/ui/CodeEditor/languages"
 
 import styles from "./CodeEditor.module.css"
-
-const getFuncTypeString = (type: trace.FuncType): string => {
-  switch (type) {
-    case trace.FuncType.INT:
-      return "int"
-    case trace.FuncType.CELL:
-      return "cell"
-    case trace.FuncType.SLICE:
-      return "slice"
-    case trace.FuncType.BUILDER:
-      return "builder"
-    case trace.FuncType.CONT:
-      return "cont"
-    case trace.FuncType.TUPLE:
-      return "tuple"
-    case trace.FuncType.TYPE:
-      return "type"
-    default:
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      return `type(${type})`
-  }
-}
-
-const getVariableKind = (flags: number): string => {
-  const flagStrings: string[] = []
-
-  if (flags & trace.FuncVarFlag.IN) return "Parameter"
-  if (flags & trace.FuncVarFlag.NAMED) return "Local variable"
-  if (flags & trace.FuncVarFlag.TMP) return "Temp variable"
-
-  return flagStrings.length > 0 ? flagStrings.join(", ") : "var"
-}
-
-const formatVariablesForHover = (variables: trace.FuncVar[]): string => {
-  if (variables.length === 0) {
-    return "No variables in scope"
-  }
-
-  const variablesList = [...variables]
-    .reverse()
-    .map(variable => {
-      const kind = `${getVariableKind(variable.flags)}`
-      const name = `${variable.name}`
-      const type = getFuncTypeString(variable.type)
-      const value = variable.value ?? ""
-      const valuePresentation = value.length !== 0 ? ` = ${value}` : ""
-      return `${kind} \`${name}: ${type}\`${valuePresentation}\n`
-    })
-    .join("\n")
-
-  return `**Live variables:**\n\n${variablesList}`
-}
 
 export interface HighlightGroup {
   readonly lines: number[]
@@ -99,7 +46,8 @@ interface CodeEditorProps {
   readonly highlightRanges?: readonly HighlightRange[]
   readonly markers?: readonly monacoTypes.editor.IMarkerData[]
   readonly needBorderRadius?: boolean
-  readonly getVariablesForLine?: (line: number) => trace.FuncVar[] | undefined
+  readonly getVariablesForLine?: (line: number) => FuncVar[] | undefined
+  readonly showVariablesDocs?: boolean
   readonly showInstructionDocs?: boolean
 }
 
@@ -152,6 +100,7 @@ const CodeEditor = React.forwardRef<
       markers = [],
       needBorderRadius = true,
       getVariablesForLine,
+      showVariablesDocs = true,
       showInstructionDocs = true,
     },
     ref,
@@ -256,8 +205,8 @@ const CodeEditor = React.forwardRef<
             range: new monaco.Range(range.line, range.startColumn, range.line, range.endColumn),
             options: {
               isWholeLine: false,
-              className: range.className || "precise-highlight",
-              inlineClassName: range.className || "precise-highlight",
+              className: range.className ?? "precise-highlight",
+              inlineClassName: range.className ?? "precise-highlight",
             },
           })
         }
@@ -405,6 +354,7 @@ const CodeEditor = React.forwardRef<
     }, [editorReady, updateDecorations, collapseInactiveBlocks])
 
     /* --------------------------- editor listeners -------------------------- */
+    // Line click handler
     useEffect(() => {
       if (!editorRef.current) return
       const disposable = editorRef.current.onMouseDown((e: editor.IEditorMouseEvent) => {
@@ -414,7 +364,9 @@ const CodeEditor = React.forwardRef<
           (e.event.ctrlKey || e.event.metaKey)
         ) {
           const lineNumber = e.target.position?.lineNumber
-          if (lineNumber && lineGas && lineGas[lineNumber] !== undefined) onLineClick(lineNumber)
+          if (lineNumber && lineGas && lineGas[lineNumber] !== undefined) {
+            onLineClick(lineNumber)
+          }
         }
       })
       return () => disposable.dispose()
@@ -447,6 +399,7 @@ const CodeEditor = React.forwardRef<
       }
     }, [isCtrlPressed, setIsCtrlPressed, setHoveredLine])
 
+    // Keyboard events
     useEffect(() => {
       document.addEventListener("keydown", handleKeyDown)
       document.addEventListener("keyup", handleKeyUp)
@@ -458,15 +411,16 @@ const CodeEditor = React.forwardRef<
       }
     }, [handleKeyDown, handleKeyUp, handleBlur])
 
-    // update decorations on pressed ctrl
+    // Update decorations on pressed ctrl
     useEffect(() => {
       if (editorRef.current) {
         updateDecorations()
       }
     }, [isCtrlPressed, updateDecorations])
 
+    // Hover documentation support
     useEffect(() => {
-      if (!monaco || !editorReady) return
+      if (!monaco || !editorRef.current) return
 
       const provider = monaco.languages.registerHoverProvider(TASM_LANGUAGE_ID, {
         provideHover(model: editor.ITextModel, position: Position) {
@@ -476,10 +430,12 @@ const CodeEditor = React.forwardRef<
           const lineNumber = position.lineNumber
           const hoverContents: IMarkdownString[] = []
 
-          const variables = getVariablesForLine?.(lineNumber)
-          if (variables && variables.length > 0) {
-            hoverContents.push({value: formatVariablesForHover(variables)})
-            hoverContents.push({value: "---"})
+          if (showVariablesDocs && getVariablesForLine) {
+            const variables = getVariablesForLine(lineNumber)
+            if (variables && variables.length > 0) {
+              hoverContents.push({value: formatVariablesForHover(variables)})
+              hoverContents.push({value: "---"})
+            }
           }
 
           if (word) {
@@ -510,17 +466,16 @@ const CodeEditor = React.forwardRef<
                 }
               }
 
-              if (lineExecutions && lineGas) {
-                const gasUsed = lineGas[lineNumber]
+              if (lineExecutions) {
                 const executionCount = lineExecutions[lineNumber]
 
                 if (hoverContents.length > 0) {
                   hoverContents.push({value: "---"})
                 }
 
-                if (gasUsed === undefined && executionCount === undefined) {
+                if (executionCount === undefined) {
                   hoverContents.push({value: `**Not executed**`})
-                } else if (executionCount !== undefined) {
+                } else {
                   hoverContents.push({value: `**Executions:** ${executionCount}`})
                 }
               }
@@ -554,14 +509,14 @@ const CodeEditor = React.forwardRef<
       }
     }, [
       monaco,
-      editorReady,
-      lineGas,
+      language,
       lineExecutions,
       getVariablesForLine,
       showInstructionDocs,
-      language,
+      showVariablesDocs,
     ])
 
+    // Ctrl+click go to line support
     useEffect(() => {
       if (!monaco || !editorRef.current) return
 
@@ -609,6 +564,7 @@ const CodeEditor = React.forwardRef<
       }
     }, [monaco, onLineHover])
 
+    // Code lenses feature
     useEffect(() => {
       if (!monaco || !editorRef.current) return
 
@@ -655,8 +611,9 @@ const CodeEditor = React.forwardRef<
       return () => {
         provider.dispose()
       }
-    }, [monaco, editorReady, exitCode])
+    }, [monaco, exitCode])
 
+    // Set code errors for FunC
     useEffect(() => {
       if (!monaco || !editorRef.current || !markers) return
 
@@ -670,6 +627,7 @@ const CodeEditor = React.forwardRef<
       }
     }, [monaco, markers, editorReady])
 
+    // Handle resize events
     useEffect(() => {
       if (!editorReady || !editorRef.current) {
         return
@@ -688,6 +646,8 @@ const CodeEditor = React.forwardRef<
     }, [editorReady])
 
     /* -------------------------------- render ------------------------------- */
+    const needFloatingTip = lineGas && readOnly && language === "tasm"
+
     return (
       <>
         <div
@@ -732,7 +692,7 @@ const CodeEditor = React.forwardRef<
             }}
           />
         </div>
-        {lineGas && readOnly && language === "tasm" && (
+        {needFloatingTip && (
           <div className={styles.editorHint}>
             <kbd>{isMac ? "⌘" : "Ctrl"}</kbd> + <kbd>Click</kbd> to navigate to trace step
             <span className={styles.hintDivider}>|</span>
