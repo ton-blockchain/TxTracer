@@ -143,22 +143,24 @@ function PlaygroundPage() {
             {txStatus && <StatusBadge type={txStatus} text={txStatusText} />}
           </div>
         )}
-        <div className={styles.mainActionContainer}>
-          <Button
-            onClick={() => void handleExecute()}
-            disabled={loading}
-            className={styles.executeButton}
-            title="Execute Assembly Code"
-          >
-            {loading ? (
-              <ButtonLoader>Execute</ButtonLoader>
-            ) : (
-              <>
-                <FiPlay size={16} />
-                Execute
-              </>
-            )}
-          </Button>
+        <div className={styles.headerContent}>
+          <div className={styles.mainActionContainer}>
+            <Button
+              onClick={() => void handleExecute()}
+              disabled={loading}
+              className={styles.executeButton}
+              title="Execute Assembly Code"
+            >
+              {loading ? (
+                <ButtonLoader>Execute</ButtonLoader>
+              ) : (
+                <>
+                  <FiPlay size={16} />
+                  Execute
+                </>
+              )}
+            </Button>
+          </div>
         </div>
       </PageHeader>
 

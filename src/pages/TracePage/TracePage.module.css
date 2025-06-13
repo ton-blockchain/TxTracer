@@ -29,6 +29,11 @@
 }
 
 /* header */
+.headerContent {
+  display: flex;
+  flex-grow: 1;
+}
+
 .searchInputContainer {
   flex-grow: 1;
   max-width: 600px;

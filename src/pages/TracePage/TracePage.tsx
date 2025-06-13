@@ -310,33 +310,35 @@ function TracePage() {
       {result && (
         <div className={styles.traceViewWrapper}>
           <PageHeader pageTitle={""} network={result?.network ?? "mainnet"}>
-            <div className={styles.searchInputContainer}>
-              <SearchInput
-                value={headerInputText}
-                onChange={setHeaderInputText}
-                onSubmit={handleHeaderSubmit}
-                placeholder="Trace another transaction hash"
-                loading={loading}
-                autoFocus={false}
-                compact={true}
-              />
-            </div>
-
-            {shouldShowStatusContainer && (
-              <div className={styles.txStatusContainer}>
-                {txStatus && <StatusBadge type={txStatus} text={txStatusText} />}
-                {stateUpdateHashOk === false && (
-                  <TooltipHint
-                    tooltipText={
-                      "Because the transaction runs in a local sandbox, we can't always reproduce it exactly. Sandbox replay was incomplete, and some values may differ from those on the real blockchain."
-                    }
-                    placement="bottom"
-                  >
-                    <StatusBadge type="warning" text="Trace Incomplete" />
-                  </TooltipHint>
-                )}
+            <div className={styles.headerContent}>
+              <div className={styles.searchInputContainer}>
+                <SearchInput
+                  value={headerInputText}
+                  onChange={setHeaderInputText}
+                  onSubmit={handleHeaderSubmit}
+                  placeholder="Trace another transaction hash"
+                  loading={loading}
+                  autoFocus={false}
+                  compact={true}
+                />
               </div>
-            )}
+
+              {shouldShowStatusContainer && (
+                <div className={styles.txStatusContainer}>
+                  {txStatus && <StatusBadge type={txStatus} text={txStatusText} />}
+                  {stateUpdateHashOk === false && (
+                    <TooltipHint
+                      tooltipText={
+                        "Because the transaction runs in a local sandbox, we can't always reproduce it exactly. Sandbox replay was incomplete, and some values may differ from those on the real blockchain."
+                      }
+                      placement="bottom"
+                    >
+                      <StatusBadge type="warning" text="Trace Incomplete" />
+                    </TooltipHint>
+                  )}
+                </div>
+              )}
+            </div>
           </PageHeader>
           <div className={styles.appContainer}>
             <div
