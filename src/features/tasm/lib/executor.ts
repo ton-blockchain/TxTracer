@@ -115,8 +115,9 @@ export const executeAssemblyCode = async (
     }
   } catch (error: unknown) {
     if (error instanceof GetMethodError) {
+      const traceInfo = createTraceInfoPerTransaction(error.vmLogs, mappingInfo, undefined)[0]
       const exitCode = findExitCode(error.vmLogs, mappingInfo)
-      console.log(exitCode)
+
       return {
         stack: {items: [], remaining: 0} as unknown as TupleReader,
         vmLogs: error.vmLogs,
@@ -124,7 +125,7 @@ export const executeAssemblyCode = async (
         code: assemblyCode,
         mappingInfo,
         exitCode,
-        traceInfo: undefined,
+        traceInfo,
       }
     }
 
