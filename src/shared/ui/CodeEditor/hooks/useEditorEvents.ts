@@ -34,6 +34,11 @@ export const useEditorEvents = ({
       if ((e.ctrlKey || e.metaKey) && !isCtrlPressed) {
         setIsCtrlPressed(true)
       }
+
+      if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+        e.preventDefault()
+        e.stopPropagation()
+      }
     },
     [isCtrlPressed],
   )

@@ -1,4 +1,4 @@
-import React, {useState, useCallback, type JSX} from "react"
+import React, {useState, useCallback, type JSX, useEffect} from "react"
 import {FiPlus, FiTrash2, FiArrowUp, FiArrowDown, FiFileText, FiCheck, FiX} from "react-icons/fi"
 import {type StackElement} from "ton-assembly-test-dev/dist/trace"
 import {logs} from "ton-assembly-test-dev/dist"
@@ -81,6 +81,20 @@ const StackEditor: React.FC<StackEditorProps> = ({stack, onStackChange}) => {
   const [isAddingNewItem, setIsAddingNewItem] = useState(false)
   const [newItemForm, setNewItemForm] = useState<StackItemForm>({type: "Integer", value: ""})
   const [validationError, setValidationError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "s") {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown)
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [])
 
   const toggleExpand = (key: string) => {
     setExpandedItem(prev => (prev === key ? null : key))
