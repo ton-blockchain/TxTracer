@@ -270,7 +270,7 @@ function TracePage() {
                     Experiment with TVM assembly code directly in your browser. Write, test, and
                     debug assembly instructions with real-time execution.
                   </p>
-                  <span className={styles.featureCardBadge}>Interactive</span>
+                  <span className={styles.featureCardBadge}>Playground</span>
                 </Link>
 
                 <Link to="/code-explorer" className={styles.featureCard}>
