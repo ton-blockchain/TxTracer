@@ -202,6 +202,41 @@ function GodboltPage() {
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const settingsRef = useRef<HTMLDivElement | null>(null)
+  const settingsButtonRef = useRef<HTMLButtonElement | null>(null)
+
+  const handleSettingsKeyDown = useCallback((event: React.KeyboardEvent) => {
+    switch (event.key) {
+      case "Escape": {
+        setIsSettingsOpen(false)
+        settingsButtonRef.current?.focus()
+        break
+      }
+      case "ArrowDown": {
+        event.preventDefault()
+        const firstCheckbox: HTMLElement | null | undefined =
+          settingsRef.current?.querySelector('input[type="checkbox"]')
+        firstCheckbox?.focus()
+        break
+      }
+    }
+  }, [])
+
+  const handleSettingsItemKeyDown = useCallback(
+    (event: React.KeyboardEvent, action: () => void) => {
+      switch (event.key) {
+        case "Enter":
+        case " ":
+          event.preventDefault()
+          action()
+          break
+        case "Escape":
+          setIsSettingsOpen(false)
+          settingsButtonRef.current?.focus()
+          break
+      }
+    },
+    [],
+  )
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -209,27 +244,40 @@ function GodboltPage() {
         setIsSettingsOpen(false)
       }
     }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && isSettingsOpen) {
+        setIsSettingsOpen(false)
+        settingsButtonRef.current?.focus()
+      }
+    }
+
     document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("keydown", handleKeyDown)
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("keydown", handleKeyDown)
     }
-  }, [])
+  }, [isSettingsOpen])
 
   return (
     <div className={styles.traceViewWrapper}>
       <TracePageHeader pageTitle="explorer">
-        <div className={styles.mainActionContainer}>
+        <div className={styles.mainActionContainer} role="toolbar" aria-label="Code editor actions">
           <Button
             onClick={() => void handleExecute()}
             disabled={loading}
             className={styles.executeButton}
-            title="Compile"
+            title="Compile FunC code to assembly"
+            aria-label={loading ? "Compiling code..." : "Compile FunC code"}
+            aria-describedby="compile-status"
           >
             {loading ? (
               <ButtonLoader>Compile</ButtonLoader>
             ) : (
               <>
-                <FiPlay size={16} />
+                <FiPlay size={16} aria-hidden="true" />
                 Compile
               </>
             )}
@@ -238,8 +286,14 @@ function GodboltPage() {
             onClick={() => void handleShareCode()}
             title={isCopied ? "Link copied!" : "Share code via URL"}
             className={`${styles.shareButton} ${isCopied ? styles.copied : ""}`}
+            aria-label={isCopied ? "Code link copied to clipboard" : "Share code via URL"}
+            aria-live="polite"
           >
-            {isCopied ? <FiCheck size={16} /> : <FiShare2 size={16} />}
+            {isCopied ? (
+              <FiCheck size={16} aria-hidden="true" />
+            ) : (
+              <FiShare2 size={16} aria-hidden="true" />
+            )}
             {isCopied ? "Copied!" : "Share"}
           </Button>
           <div className={styles.settingsContainer} ref={settingsRef}>
@@ -248,33 +302,65 @@ function GodboltPage() {
               className={styles.settingsButton}
               title="Settings"
               onClick={() => setIsSettingsOpen(prev => !prev)}
+              ref={settingsButtonRef}
+              onKeyDown={event => handleSettingsKeyDown(event)}
+              aria-label="Open settings menu"
+              aria-expanded={isSettingsOpen}
+              aria-haspopup="menu"
+              aria-controls="settings-menu"
             >
-              <FiSettings size={16} />
+              <FiSettings size={16} aria-hidden="true" />
             </button>
             {isSettingsOpen && (
-              <div className={styles.settingsDropdown}>
-                <label className={styles.settingsItem}>
+              <div
+                className={styles.settingsDropdown}
+                role="menu"
+                id="settings-menu"
+                aria-label="Settings menu"
+              >
+                <label className={styles.settingsItem} aria-checked={showVariablesInHover}>
                   <input
                     type="checkbox"
                     checked={showVariablesInHover}
                     onChange={toggleShowVariablesInHover}
+                    onKeyDown={event =>
+                      handleSettingsItemKeyDown(event, toggleShowVariablesInHover)
+                    }
+                    aria-describedby="vars-hover-desc"
+                    tabIndex={0}
                   />
-                  <span className={styles.checkboxCustom}></span>
-                  <span className={styles.checkboxLabel}>Show variables on hover</span>
+                  <span className={styles.checkboxCustom} aria-hidden="true"></span>
+                  <span className={styles.checkboxLabel} id="vars-hover-desc">
+                    Show variables on hover
+                  </span>
                 </label>
-                <label className={styles.settingsItem}>
+                <label className={styles.settingsItem} aria-checked={showDocsInHover}>
                   <input
                     type="checkbox"
                     checked={showDocsInHover}
                     onChange={toggleShowDocsInHover}
+                    onKeyDown={event => handleSettingsItemKeyDown(event, toggleShowDocsInHover)}
+                    aria-describedby="docs-hover-desc"
+                    tabIndex={0}
                   />
-                  <span className={styles.checkboxCustom}></span>
-                  <span className={styles.checkboxLabel}>Show instruction docs</span>
+                  <span className={styles.checkboxCustom} aria-hidden="true"></span>
+                  <span className={styles.checkboxLabel} id="docs-hover-desc">
+                    Show instruction docs
+                  </span>
                 </label>
-                <label className={styles.settingsItem}>
-                  <input type="checkbox" checked={autoCompile} onChange={toggleAutoCompile} />
-                  <span className={styles.checkboxCustom}></span>
-                  <span className={styles.checkboxLabel}>Auto-compile on change</span>
+                <label className={styles.settingsItem} aria-checked={autoCompile}>
+                  <input
+                    type="checkbox"
+                    checked={autoCompile}
+                    onChange={toggleAutoCompile}
+                    onKeyDown={event => handleSettingsItemKeyDown(event, toggleAutoCompile)}
+                    aria-describedby="auto-compile-desc"
+                    tabIndex={0}
+                  />
+                  <span className={styles.checkboxCustom} aria-hidden="true"></span>
+                  <span className={styles.checkboxLabel} id="auto-compile-desc">
+                    Auto-compile on change
+                  </span>
                 </label>
               </div>
             )}
@@ -284,10 +370,22 @@ function GodboltPage() {
 
       {error && <ErrorBanner message={error} onClose={clearError} />}
 
-      <div className={styles.appContainer}>
+      {/* Screen reader status announcements */}
+      <div id="compile-status" className="sr-only" aria-live="polite" aria-atomic="true">
+        {loading && "Compiling code..."}
+        {result && !loading && "Code compiled successfully"}
+        {error && !loading && `Compilation failed: ${error}`}
+      </div>
+
+      <main className={styles.appContainer} role="main" aria-label="Code editor workspace">
         <Allotment defaultSizes={[50, 50]} className={styles.editorsContainer} separator={false}>
           <Allotment.Pane minSize={200}>
-            <div className={styles.editorPanel + " " + styles.editorPanelLeft}>
+            <div
+              className={styles.editorPanel + " " + styles.editorPanelLeft}
+              aria-label="FunC code editor"
+              role="region"
+            >
+              <h2 className="sr-only">FunC Source Code</h2>
               <Suspense fallback={<InlineLoader message="Loading Editor..." loading={true} />}>
                 <CodeEditor
                   ref={funcEditorRef}
@@ -307,7 +405,12 @@ function GodboltPage() {
           </Allotment.Pane>
 
           <Allotment.Pane minSize={200}>
-            <div className={styles.editorPanel + " " + styles.editorPanelRight}>
+            <div
+              className={styles.editorPanel + " " + styles.editorPanelRight}
+              aria-label="Assembly output"
+              role="region"
+            >
+              <h2 className="sr-only">Generated Assembly Code</h2>
               <Suspense fallback={<InlineLoader message="Loading Editor..." loading={true} />}>
                 <CodeEditor
                   ref={asmEditorRef}
@@ -325,7 +428,7 @@ function GodboltPage() {
             </div>
           </Allotment.Pane>
         </Allotment>
-      </div>
+      </main>
     </div>
   )
 }
