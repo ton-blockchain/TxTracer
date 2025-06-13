@@ -5,11 +5,8 @@ import {FiPlay} from "react-icons/fi"
 import InlineLoader from "@shared/ui/InlineLoader"
 import ErrorBanner from "@shared/ui/ErrorBanner/ErrorBanner"
 import TraceSidePanel from "@shared/ui/TraceSidePanel"
-import {
-  executeAssemblyCode,
-  type AssemblyExecutionResult,
-} from "@features/txTrace/lib/asm/assemblyExecutor.ts"
-import {usePlaygroundTrace} from "@features/txTrace/hooks/usePlaygroundTrace"
+import {executeAssemblyCode, type AssemblyExecutionResult} from "@features/tasm/lib/executor.ts"
+import {usePlaygroundTrace} from "@features/tasm/hooks/usePlaygroundTrace"
 import {useGlobalError} from "@shared/lib/errorContext"
 import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
 import {useExecutionsMap, useTraceStepper, useGasMap} from "@features/txTrace/hooks"

@@ -6,8 +6,8 @@ import {
   compileFuncCode,
   FuncCompilationError,
   type FuncCompilationResult,
-} from "@features/txTrace/lib/funcExecutor"
-import {parseFuncErrors, convertErrorsToMarkers} from "@features/txTrace/lib/funcErrorParser"
+} from "@features/godbolt/lib/func/compilation.ts"
+import {parseFuncErrors, convertErrorsToMarkers} from "@features/godbolt/lib/func/error-parser.ts"
 
 export interface UseCompilationReturn {
   readonly result: FuncCompilationResult | undefined

@@ -1,8 +1,8 @@
 import {Cell} from "@ton/core"
 import {runtime as i, text, trace} from "ton-assembly/dist"
 
-import {FUNC_STDLIB} from "@features/txTrace/lib/funcStdlib.ts"
-import {funcCompile} from "@features/txTrace/lib/func/func-compile.ts"
+import {FUNC_STDLIB} from "@features/godbolt/lib/func/stdlib.ts"
+import {funcCompile} from "@features/godbolt/lib/func/func-wasm/func-compile.ts"
 
 export interface FuncCompilationResult {
   readonly instructions: i.Instr[]

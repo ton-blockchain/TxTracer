@@ -45,7 +45,7 @@ export function convertErrorsToMarkers(errors: ParsedError[]): monaco.editor.IMa
     startLineNumber: error.line,
     startColumn: error.column,
     endLineNumber: error.line,
-    endColumn: error.column + 1, // Highlight at least one character
+    endColumn: error.column + 1,
     message: error.message,
     source: "FunC Compiler",
   }))

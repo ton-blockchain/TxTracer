@@ -6,8 +6,8 @@ import {editor, type IMarkdownString, Position} from "monaco-editor"
 import {trace} from "ton-assembly/dist"
 
 import {useTheme} from "@shared/lib/themeContext"
+import {asmData, findInstruction, generateAsmDoc} from "@features/tasm/lib"
 import type {ExitCode} from "@features/txTrace/lib/traceTx"
-import {asmData, findInstruction, generateAsmDoc} from "@features/txTrace/lib/asm"
 
 import {DARK_THEME, LIGHT_THEME} from "@shared/ui/CodeEditor/themes.tsx"
 import {funcLanguageDefinition} from "@shared/ui/CodeEditor/languages/FuncLanguageDefinition.ts"
