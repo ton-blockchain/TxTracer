@@ -22,9 +22,11 @@ interface FoldingRange {
   readonly end: number
 }
 
-export const useFolding = (options: UseFoldingOptions): UseFoldingReturn => {
-  const {monaco, editorRef, lineExecutions} = options
-
+export const useFolding = ({
+  monaco,
+  editorRef,
+  lineExecutions,
+}: UseFoldingOptions): UseFoldingReturn => {
   const collapseInactiveBlocks = useCallback(() => {
     if (!editorRef.current || !monaco) return
 

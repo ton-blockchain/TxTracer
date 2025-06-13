@@ -1,7 +1,9 @@
 export {useMonacoSetup} from "./useMonacoSetup"
 export {useDecorations} from "./useDecorations"
 export {useEditorEvents} from "./useEditorEvents"
-export {useLanguageProviders} from "./useLanguageProviders"
+export {useTasmHoverProvider} from "./useTasmHoverProvider"
+export {useTasmCodeLensProvider} from "./useTasmCodeLensProvider"
+export {useFuncLanguageProviders} from "./useFuncLanguageProviders"
 export {useFolding} from "./useFolding"
 
 export type {SupportedLanguage} from "./useMonacoSetup"

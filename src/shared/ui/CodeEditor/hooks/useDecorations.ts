@@ -160,19 +160,17 @@ const createExecutionDecorations = (
   return decorations
 }
 
-export const useDecorations = (options: UseDecorationsOptions): UseDecorationsReturn => {
-  const {
-    monaco,
-    highlightLine,
-    lineGas,
-    highlightGroups = [],
-    hoveredLines = [],
-    highlightRanges = [],
-    isCtrlPressed = false,
-    hoveredLine = null,
-    shouldCenter = true,
-  } = options
-
+export const useDecorations = ({
+  monaco,
+  highlightLine,
+  lineGas,
+  highlightGroups = [],
+  hoveredLines = [],
+  highlightRanges = [],
+  isCtrlPressed = false,
+  hoveredLine = null,
+  shouldCenter = true,
+}: UseDecorationsOptions): UseDecorationsReturn => {
   const decorationsRef = useRef<string[]>([])
 
   const updateDecorations = useCallback(

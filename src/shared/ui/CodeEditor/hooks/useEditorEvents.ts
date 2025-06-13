@@ -16,9 +16,14 @@ interface UseEditorEventsReturn {
   readonly hoveredLine: number | null
 }
 
-export const useEditorEvents = (options: UseEditorEventsOptions): UseEditorEventsReturn => {
-  const {monaco, editorRef, lineGas, onLineClick, onLineHover, editorReady = true} = options
-
+export const useEditorEvents = ({
+  monaco,
+  editorRef,
+  lineGas,
+  onLineClick,
+  onLineHover,
+  editorReady = true,
+}: UseEditorEventsOptions): UseEditorEventsReturn => {
   const [isCtrlPressed, setIsCtrlPressed] = useState(false)
   const [hoveredLine, setHoveredLine] = useState<number | null>(null)
 

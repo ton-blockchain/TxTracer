@@ -11,7 +11,9 @@ import {
   useMonacoSetup,
   useDecorations,
   useEditorEvents,
-  useLanguageProviders,
+  useTasmHoverProvider,
+  useTasmCodeLensProvider,
+  useFuncLanguageProviders,
   useFolding,
   type SupportedLanguage,
   type HighlightGroup,
@@ -97,17 +99,29 @@ const CodeEditor = React.forwardRef<
       shouldCenter,
     })
 
-    useLanguageProviders({
+    useTasmHoverProvider({
       monaco,
       editorRef,
-      language,
       lineExecutions,
       getVariablesForLine,
       showVariablesDocs,
       showInstructionDocs,
+      enabled: language === "tasm",
+    })
+
+    useTasmCodeLensProvider({
+      monaco,
+      editorRef,
       exitCode,
-      markers,
       editorReady,
+      enabled: language === "tasm",
+    })
+
+    useFuncLanguageProviders({
+      monaco,
+      editorRef,
+      markers,
+      enabled: language === "func",
     })
 
     const {collapseInactiveBlocks} = useFolding({
