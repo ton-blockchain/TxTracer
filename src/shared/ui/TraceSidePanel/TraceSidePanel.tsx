@@ -59,13 +59,15 @@ const TraceSidePanel: React.FC<TraceSidePanelProps> = ({
       <div className={styles.stepDetails}>
         <div className={styles.stepHeader}>
           <div className={styles.stepHeaderTop}>
-            <span className={styles.stepCounter}>
+            <span className={styles.stepCounter} data-testid="step-counter-info">
               {hasData
                 ? `Step ${selectedStep + 1} of ${totalSteps}`
                 : placeholderMessage || "Ready"}
             </span>
-            {showGas && cumulativeGas !== undefined && (
-              <span className={styles.cumulativeGasCounter}>Used gas: {cumulativeGas}</span>
+            {showGas && (
+              <span className={styles.cumulativeGasCounter} data-testid="cumulative-gas-counter">
+                Used gas: {cumulativeGas}
+              </span>
             )}
             {statusMessage && <span className={styles.statusMessage}>{statusMessage}</span>}
           </div>
@@ -103,6 +105,7 @@ const TraceSidePanel: React.FC<TraceSidePanelProps> = ({
               className={styles.navButton}
               disabled={!canGoPrev || totalSteps === 0}
               title="Go to First Step"
+              data-testid="go-to-first-step-button"
             >
               First
             </Button>
@@ -112,6 +115,7 @@ const TraceSidePanel: React.FC<TraceSidePanelProps> = ({
               className={styles.navButton}
               disabled={!canGoPrev || totalSteps === 0}
               title="Previous Step"
+              data-testid="prev-step-button"
             >
               Prev
             </Button>
@@ -121,6 +125,7 @@ const TraceSidePanel: React.FC<TraceSidePanelProps> = ({
               className={styles.navButton}
               disabled={!canGoNext || totalSteps === 0}
               title="Next Step"
+              data-testid="next-step-button"
             >
               Next
             </Button>
@@ -130,6 +135,7 @@ const TraceSidePanel: React.FC<TraceSidePanelProps> = ({
               className={styles.navButton}
               disabled={!canGoNext || totalSteps === 0}
               title="Go to Last Step"
+              data-testid="go-to-last-step-button"
             >
               Last
             </Button>

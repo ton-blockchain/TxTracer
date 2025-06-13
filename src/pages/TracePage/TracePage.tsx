@@ -366,6 +366,7 @@ function TracePage() {
                 onNext={handleNext}
                 onFirst={goToFirstStep}
                 onLast={goToLastStep}
+                showGas={true}
                 placeholderMessage="No trace steps available."
                 instructionDetails={instructionDetails}
                 cumulativeGas={cumulativeGasSinceBegin}
