@@ -9,7 +9,7 @@ import {trace} from "ton-assembly/dist"
 
 import InlineLoader from "@shared/ui/InlineLoader"
 import ErrorBanner from "@shared/ui/ErrorBanner/ErrorBanner"
-import TracePageHeader from "@app/pages/TracePage/TracePageHeader"
+import PageHeader from "@shared/ui/PageHeader"
 
 import {CompileButton, SettingsDropdown, ShareButton} from "@app/pages/GodboltPage/components"
 
@@ -118,7 +118,7 @@ function GodboltPage() {
 
   return (
     <div className={styles.traceViewWrapper}>
-      <TracePageHeader pageTitle="explorer">
+      <PageHeader pageTitle="explorer">
         <div className={styles.mainActionContainer} role="toolbar" aria-label="Code editor actions">
           <CompileButton
             onCompile={() => void handleExecute(funcCode)}
@@ -128,7 +128,7 @@ function GodboltPage() {
           <ShareButton value={funcCode} />
           <SettingsDropdown hooks={godboltSettingsHook} />
         </div>
-      </TracePageHeader>
+      </PageHeader>
 
       {error && <ErrorBanner message={error} onClose={clearError} />}
 

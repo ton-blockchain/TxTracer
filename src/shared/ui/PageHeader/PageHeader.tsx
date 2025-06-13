@@ -5,15 +5,15 @@ import {FiGithub, FiBookOpen} from "react-icons/fi"
 import Badge from "@shared/ui/Badge"
 import type {NetworkType} from "@features/txTrace/ui"
 
-import styles from "./TracePageHeader.module.css"
+import styles from "./PageHeader.module.css"
 
-interface TracePageHeaderProps {
+interface PageHeaderProps {
   readonly pageTitle: string
   readonly network?: NetworkType
   readonly children?: React.ReactNode
 }
 
-const TracePageHeaderFc: React.FC<TracePageHeaderProps> = ({pageTitle, network, children}) => {
+const PageHeaderFc: React.FC<PageHeaderProps> = ({pageTitle, network, children}) => {
   const isPlayground = pageTitle === "playground"
   const isExplorer = pageTitle === "explorer"
 
@@ -55,7 +55,7 @@ const TracePageHeaderFc: React.FC<TracePageHeaderProps> = ({pageTitle, network, 
   )
 }
 
-const MemoizedTracePageHeader = React.memo(TracePageHeaderFc)
-MemoizedTracePageHeader.displayName = "TracePageHeader"
+const MemoizedPageHeader = React.memo(PageHeaderFc)
+MemoizedPageHeader.displayName = "PageHeader"
 
-export default MemoizedTracePageHeader
+export default MemoizedPageHeader

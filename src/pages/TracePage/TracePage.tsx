@@ -17,7 +17,7 @@ import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
 
 import {TooltipHint} from "@shared/ui/TooltipHint"
 
-import TracePageHeader from "./TracePageHeader"
+import PageHeader from "@shared/ui/PageHeader"
 
 import styles from "./TracePage.module.css"
 
@@ -283,7 +283,7 @@ function TracePage() {
 
       {result && (
         <div className={styles.traceViewWrapper}>
-          <TracePageHeader pageTitle={""} network={result?.network ?? "mainnet"}>
+          <PageHeader pageTitle={""} network={result?.network ?? "mainnet"}>
             <div className={styles.searchInputContainer}>
               <SearchInput
                 value={headerInputText}
@@ -311,7 +311,7 @@ function TracePage() {
                 )}
               </div>
             )}
-          </TracePageHeader>
+          </PageHeader>
           <div className={styles.appContainer}>
             <div
               className={`${styles.mainContent} ${detailsExpanded ? styles.mainContentMinimized : ""}`}

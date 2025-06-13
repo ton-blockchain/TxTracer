@@ -16,7 +16,7 @@ import {useExecutionsMap, useTraceStepper, useGasMap} from "@features/txTrace/ho
 import {normalizeGas} from "@features/txTrace/lib/traceTx"
 import type {InstructionDetail} from "@features/txTrace/ui/StepInstructionBlock"
 
-import TracePageHeader from "@app/pages/TracePage/TracePageHeader"
+import PageHeader from "@shared/ui/PageHeader"
 import Button from "@shared/ui/Button"
 import ButtonLoader from "@shared/ui/ButtonLoader/ButtonLoader.tsx"
 
@@ -140,7 +140,7 @@ function PlaygroundPage() {
 
   return (
     <div className={styles.traceViewWrapper}>
-      <TracePageHeader pageTitle="playground">
+      <PageHeader pageTitle="playground">
         {shouldShowStatusContainer && (
           <div className={styles.txStatusContainer}>
             {txStatus && <StatusBadge type={txStatus} text={txStatusText} />}
@@ -163,7 +163,7 @@ function PlaygroundPage() {
             )}
           </Button>
         </div>
-      </TracePageHeader>
+      </PageHeader>
 
       {error && <ErrorBanner message={error} onClose={clearError} />}
 
