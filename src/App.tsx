@@ -51,7 +51,7 @@ function AppShell() {
               }
             />
             <Route
-              path="/godbolt"
+              path="/code-explorer"
               element={
                 <Suspense
                   fallback={<FullScreenLoader baseMessage="Loading Godbolt Playground..." />}
