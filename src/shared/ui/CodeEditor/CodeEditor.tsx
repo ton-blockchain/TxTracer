@@ -9,11 +9,11 @@ import {useTheme} from "@shared/lib/themeContext"
 import type {ExitCode} from "@features/txTrace/lib/traceTx"
 import {asmData, findInstruction, generateAsmDoc} from "@features/txTrace/lib/asm"
 
-import {funcLanguageDefinition} from "@shared/ui/CodeEditor/FuncLanguageDefinition.ts"
-
 import {DARK_THEME, LIGHT_THEME} from "@shared/ui/CodeEditor/themes.tsx"
+import {funcLanguageDefinition} from "@shared/ui/CodeEditor/languages/FuncLanguageDefinition.ts"
+import {tasmLanguageDefinition} from "@shared/ui/CodeEditor/languages/TasmLanguageDefinition"
+import {FUNC_LANGUAGE_ID, TASM_LANGUAGE_ID} from "@shared/ui/CodeEditor/languages"
 
-import {FUNC_LANGUAGE_ID, TASM_LANGUAGE_ID, tasmLanguageDefinition} from "./TasmLanguageDefinition"
 import styles from "./CodeEditor.module.css"
 
 const getFuncTypeString = (type: trace.FuncType): string => {

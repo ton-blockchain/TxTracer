@@ -1,8 +1,5 @@
 import {languages} from "monaco-editor"
 
-export const TASM_LANGUAGE_ID = "tasm"
-export const FUNC_LANGUAGE_ID = "func"
-
 export const tasmLanguageDefinition: languages.IMonarchLanguage = {
   keywords: ["ref", "embed", "exotic", "library"],
   operators: ["=>"],
