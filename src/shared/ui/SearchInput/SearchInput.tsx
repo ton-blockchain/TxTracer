@@ -40,14 +40,18 @@ const SearchInput: React.FC<SearchInputProps> = ({
   const buttonClass = `${styles.submitButton} ${compact ? styles.compactButton : ""}`
 
   return (
-    <div className={wrapperClass}>
-      <div className={`${styles.searchIcon} ${compact ? styles.compactSearchIcon : ""}`}>
+    <div className={wrapperClass} role="search">
+      <div
+        className={`${styles.searchIcon} ${compact ? styles.compactSearchIcon : ""}`}
+        aria-hidden="true"
+      >
         <svg
           width="20"
           height="20"
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
         >
           <path
             d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
@@ -83,6 +87,8 @@ const SearchInput: React.FC<SearchInputProps> = ({
         }}
         onClick={onInputClick}
         className={inputClass}
+        aria-label={placeholder ?? "Search transaction"}
+        aria-describedby={compact ? undefined : "search-instructions"}
       />
       <Button
         variant="primary"
@@ -90,9 +96,16 @@ const SearchInput: React.FC<SearchInputProps> = ({
         className={buttonClass}
         onClick={onSubmit}
         disabled={loading}
+        aria-label={loading ? "Tracing transaction..." : "Trace transaction"}
+        title={loading ? "Tracing..." : "Trace transaction (Enter)"}
       >
         Trace
       </Button>
+      {!compact && (
+        <div id="search-instructions" className="sr-only">
+          Press Enter or click Trace button to search. Use Ctrl+Enter or Cmd+Enter as shortcut.
+        </div>
+      )}
     </div>
   )
 }

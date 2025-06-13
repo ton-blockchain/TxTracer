@@ -18,7 +18,7 @@ export const CopyButton: React.FC<{
         setIsCopied(true)
       })
       .catch(err => {
-        console.error("Failed to copy address: ", err)
+        console.error("Failed to copy: ", err)
       })
   }, [value])
 
@@ -40,6 +40,7 @@ export const CopyButton: React.FC<{
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      aria-hidden="true"
     >
       <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -55,22 +56,32 @@ export const CopyButton: React.FC<{
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      aria-hidden="true"
     >
       <polyline points="20 6 9 17 4 12"></polyline>
     </svg>
   )
 
   return (
-    <button
-      onClick={e => {
-        e.stopPropagation()
-        handleCopy()
-      }}
-      className={`${styles.copyIcon} ${isCopied ? styles.copied : ""} ${className ?? ""}`}
-      title={isCopied ? "Copied!" : title}
-      disabled={isCopied}
-    >
-      <Icon svg={isCopied ? checkIconSvg : copyIconSvg} />
-    </button>
+    <>
+      <button
+        onClick={e => {
+          e.stopPropagation()
+          handleCopy()
+        }}
+        className={`${styles.copyIcon} ${isCopied ? styles.copied : ""} ${className ?? ""}`}
+        title={isCopied ? "Copied!" : title}
+        aria-label={isCopied ? "Copied to clipboard" : `Copy ${title.toLowerCase()}`}
+        disabled={isCopied}
+        type="button"
+      >
+        <Icon svg={isCopied ? checkIconSvg : copyIconSvg} />
+      </button>
+
+      {/* Live region for screen reader announcements */}
+      <div className="sr-only" aria-live="polite" aria-atomic="true">
+        {isCopied && "Copied to clipboard"}
+      </div>
+    </>
   )
 }

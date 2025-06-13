@@ -28,6 +28,27 @@
   background-color: var(--color-background-secondary);
 }
 
+/* header */
+.headerContent {
+  display: flex;
+  flex-grow: 1;
+}
+
+.searchInputContainer {
+  flex-grow: 1;
+  max-width: 600px;
+}
+
+.txStatusContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-left: var(--spacing-sm);
+}
+
+.mainActionContainer {
+}
+
 .mainContent {
   display: grid;
   grid-template-columns: calc(100% - 500px - var(--spacing-sm)) 400px;
@@ -40,17 +61,6 @@
 }
 
 .mainContentMinimized {
-}
-
-.sidePanel {
-  width: 480px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  border-radius: var(--border-radius-lg);
-  background-color: var(--color-background-primary);
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
 }
 
 .detailsSection {
@@ -132,11 +142,10 @@
 .centeredInputContainer {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   height: 100%;
   padding: 0 var(--spacing-lg) var(--spacing-2xl);
-  margin-top: 100px;
+  margin-top: 265px;
 }
 
 .txtracerLogo {
@@ -272,6 +281,88 @@
   color: var(--color-text-primary);
 }
 
+.featureCards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+  margin-top: 5rem;
+  max-width: 600px;
+  width: 100%;
+}
+
+.featureCard {
+  background: var(--color-background-primary);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-md);
+  text-decoration: none;
+  color: inherit;
+  transition: all var(--transition-duration-fast) ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.featureCard:hover {
+  text-decoration: none;
+
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.2);
+  border-color: var(--color-primary);
+}
+
+.featureCard:focus {
+  outline-offset: 2px;
+  text-decoration: none;
+}
+
+.featureCardIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--spacing-sm);
+  font-size: 20px;
+  transition: all var(--transition-duration-fast) ease;
+}
+
+.playgroundIcon {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.explorerIcon {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+.featureCardTitle {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.featureCardDescription {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.featureCardBadge {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  color: white;
+  font-size: 10px;
+  font-weight: var(--font-weight-medium);
+  padding: 2px var(--spacing-sm);
+  border-radius: var(--border-radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 .createBy {
   color: var(--tracepage-create-by-text-color);
   font-size: var(--font-size-sm);
@@ -286,88 +377,6 @@
 
 .createBy a:hover {
   color: var(--tracepage-create-by-link-hover-color);
-}
-
-.stepDetails {
-  background-color: var(--color-background-primary);
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.stepHeader {
-  padding: var(--spacing-md) var(--spacing-md) 0 var(--spacing-md);
-  background-color: var(--color-background-primary);
-  border-bottom: 1px solid var(--color-divider);
-  margin-bottom: 0;
-}
-
-.stepHeaderTop {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-sm);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-}
-
-.stepCounter {
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
-}
-
-.stepInstructionBlock {
-  display: flex;
-  align-items: center;
-  margin-bottom: var(--spacing-md);
-  background-color: var(--color-background-secondary);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--border-radius-sm);
-}
-
-.stepInstruction {
-  font-family: var(--font-family-mono), monospace;
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
-}
-
-.stepGas {
-  color: var(--table-gas-value-color);
-  font-weight: var(--font-weight-medium);
-  margin-left: var(--spacing-sm);
-  white-space: nowrap;
-  font-size: var(--font-size-sm);
-}
-
-.stackViewerContainer {
-  flex: 1;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-  padding: var(--spacing-md);
-  background-color: var(--color-background-primary);
-}
-
-.navigationControls {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--spacing-sm);
-  padding: 0 0 var(--spacing-md);
-}
-
-.navButton {
-  background-color: var(--color-background-secondary);
-  border: none;
-  border-radius: 6px;
-  padding: 8px 16px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  flex: 1;
-  transition: border-color 0.2s;
-  color: var(--color-text-secondary);
 }
 
 .mainContent > div[data-testid="code-editor-container"] {
@@ -429,16 +438,9 @@
     overflow: hidden;
   }
 
-  .sidePanel {
-    height: 40%;
-    width: 100%;
-    flex: none;
-    min-width: auto;
-  }
-
   .centeredInputContainer {
     padding: 0 var(--spacing-md) var(--spacing-lg);
-    margin-top: 50px;
+    margin-top: 160px;
   }
 
   .txtracerLogo {
@@ -461,6 +463,32 @@
 
   .inputCard {
     max-width: 100%;
+  }
+
+  .featureCards {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-2xl);
+    max-width: 100%;
+  }
+
+  .featureCard {
+    padding: var(--spacing-mds);
+  }
+
+  .featureCardIcon {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .featureCardTitle {
+    font-size: var(--font-size-sm);
+  }
+
+  .featureCardDescription {
+    font-size: 11px;
   }
 
   .detailsSection {
@@ -490,16 +518,6 @@
   .detailsContent {
     height: calc(100% - 40px);
     overflow-y: auto;
-  }
-
-  .stepDetails {
-    height: 100%;
-    overflow: hidden;
-  }
-
-  .stackViewerContainer {
-    flex-shrink: 1;
-    min-height: 150px;
   }
 
   .detailsSectionExpanded .detailsContent .actions-section {
@@ -560,4 +578,28 @@
     max-width: 100%;
     box-sizing: border-box;
   }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+:global(.sr-only) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

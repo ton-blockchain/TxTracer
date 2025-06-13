@@ -11,7 +11,13 @@ import unusedImports from "eslint-plugin-unused-imports"
 import functional from "eslint-plugin-functional"
 
 export default tseslint.config(
-  {ignores: ["dist", "src/polyfills.ts"]},
+  {
+    ignores: [
+      "dist",
+      "src/polyfills.ts",
+      "src/features/godbolt/lib/func/func-wasm/func-compile.ts",
+    ],
+  },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommendedTypeChecked],
     files: ["**/*.{ts,tsx}"],

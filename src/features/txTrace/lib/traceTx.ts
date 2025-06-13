@@ -1,17 +1,20 @@
 import {retrace, retraceBaseTx} from "@tonstudio/txtracer-core"
 import type {TraceResult} from "@tonstudio/txtracer-core/dist/types"
-import {decompileCell, compileCellWithMapping} from "tact-asm/dist/runtime/instr"
+import {compileCellWithMapping, decompileCell} from "ton-assembly-test-dev/dist/runtime/instr"
 import {
   createMappingInfo,
-  type MappingInfo,
   type InstructionInfo,
-} from "tact-asm/dist/trace/mapping"
-import {type Step} from "tact-asm/dist/trace"
-import {createTraceInfoPerTransaction, findInstructionInfo} from "tact-asm/dist/trace/trace"
-import {print, parse} from "tact-asm/dist/text"
-import * as l from "tact-asm/dist/logs"
+  type MappingInfo,
+} from "ton-assembly-test-dev/dist/trace/mapping"
+import {type Step} from "ton-assembly-test-dev/dist/trace"
+import {
+  createTraceInfoPerTransaction,
+  findInstructionInfo,
+} from "ton-assembly-test-dev/dist/trace/trace"
+import {parse, print} from "ton-assembly-test-dev/dist/text"
+import * as l from "ton-assembly-test-dev/dist/logs"
 
-import type {RetraceResultAndCode, NetworkType} from "@features/txTrace/ui"
+import type {NetworkType, RetraceResultAndCode} from "@features/txTrace/ui"
 
 import {
   type ExtractionResult,
@@ -20,11 +23,11 @@ import {
 } from "@features/txTrace/lib/links.ts"
 
 import {
-  TxNotFoundError,
   NetworkError,
-  TxTraceError,
   TooManyRequests,
   TxHashInvalidError,
+  TxNotFoundError,
+  TxTraceError,
 } from "./errors"
 
 export type ExitCode = {
@@ -97,11 +100,17 @@ async function doTrace(link: string) {
   }
 }
 
-function findException(reversedEntries: l.VmLine[]) {
+export function findException(reversedEntries: l.VmLine[]) {
   const mapped = reversedEntries.map(it => {
     if (it.$ === "VmExceptionHandler") {
       return {
         text: ``, // default case, no further explanations
+        num: it.errno,
+      }
+    }
+    if (it.$ === "VmException") {
+      return {
+        text: it.message,
         num: it.errno,
       }
     }
@@ -112,10 +121,17 @@ function findException(reversedEntries: l.VmLine[]) {
     }
     return undefined
   })
+  const exceptionWithDescription = mapped.find(it => {
+    const length = it?.text?.length ?? 0
+    return length > 0
+  })
+  if (exceptionWithDescription) {
+    return exceptionWithDescription
+  }
   return mapped.find(it => it !== undefined)
 }
 
-function findExitCode(vmLogs: string, mappingInfo: MappingInfo) {
+export function findExitCode(vmLogs: string, mappingInfo: MappingInfo) {
   const res = l.parse(vmLogs)
   const reversedEntries = [...res].reverse()
   const description = findException(reversedEntries)
