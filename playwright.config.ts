@@ -74,7 +74,7 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: {
     command: "yarn dev",
-    url: "http://localhost:5173/", // Ensure this matches your app's base path if served by dev server
+    url: "http://localhost:5174/", // Ensure this matches your app's base path if served by dev server
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
   },
