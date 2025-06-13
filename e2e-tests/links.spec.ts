@@ -53,7 +53,7 @@ test.describe("TxTracer Viewers Links", () => {
     test(`should successfully trace '${name}' link`, async ({page}) => {
       if (name.includes("testnet")) {
         // something bad with testnet now
-        return;
+        return
       }
 
       await wait() // TODO: Remove that. Cause we have only 1 rps from toncenter without API key
