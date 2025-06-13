@@ -1,33 +1,23 @@
 import React, {useCallback, useEffect, useRef, useState} from "react"
-import Editor, {useMonaco} from "@monaco-editor/react"
+import Editor from "@monaco-editor/react"
 import * as monacoTypes from "monaco-editor"
 import {editor, type IMarkdownString, Position} from "monaco-editor"
 
-import {asmData, findInstruction, generateAsmDoc} from "@features/tasm/lib"
+import {findInstruction, generateAsmDoc} from "@features/tasm/lib"
 import type {ExitCode} from "@features/txTrace/lib/traceTx"
 import {formatVariablesForHover, type FuncVar} from "@features/godbolt/lib/func/variables.ts"
 
-import {useTheme} from "@shared/lib/themeContext"
-import {DARK_THEME, LIGHT_THEME} from "@shared/ui/CodeEditor/themes.tsx"
-import {funcLanguageDefinition} from "@shared/ui/CodeEditor/languages/FuncLanguageDefinition.ts"
-import {tasmLanguageDefinition} from "@shared/ui/CodeEditor/languages/TasmLanguageDefinition"
 import {FUNC_LANGUAGE_ID, TASM_LANGUAGE_ID} from "@shared/ui/CodeEditor/languages"
 
+import {
+  useMonacoSetup,
+  useDecorations,
+  type SupportedLanguage,
+  type HighlightGroup,
+  type HighlightRange,
+} from "./hooks"
+
 import styles from "./CodeEditor.module.css"
-
-export interface HighlightGroup {
-  readonly lines: number[]
-  readonly color: string
-  readonly className?: string
-}
-
-export interface HighlightRange {
-  readonly line: number
-  readonly startColumn: number
-  readonly endColumn: number
-  readonly color: string
-  readonly className?: string
-}
 
 interface CodeEditorProps {
   readonly code: string
@@ -40,7 +30,7 @@ interface CodeEditorProps {
   readonly exitCode?: ExitCode
   readonly readOnly?: boolean
   readonly onChange?: (value: string) => void
-  readonly language?: "tasm" | "func"
+  readonly language?: SupportedLanguage
   readonly highlightGroups?: readonly HighlightGroup[]
   readonly hoveredLines?: readonly number[]
   readonly highlightRanges?: readonly HighlightRange[]
@@ -60,21 +50,6 @@ interface CodeBlock {
 interface FoldingRange {
   readonly start: number
   readonly end: number
-}
-
-const initializeMonaco = (monaco: typeof monacoTypes, language?: "tasm" | "func") => {
-  if (language === "tasm") {
-    monaco.languages.register({id: TASM_LANGUAGE_ID})
-    monaco.languages.setMonarchTokensProvider(TASM_LANGUAGE_ID, tasmLanguageDefinition)
-  }
-
-  if (language === "func") {
-    monaco.languages.register({id: FUNC_LANGUAGE_ID})
-    monaco.languages.setMonarchTokensProvider(FUNC_LANGUAGE_ID, funcLanguageDefinition)
-  }
-
-  monaco.editor.defineTheme("light-theme", LIGHT_THEME)
-  monaco.editor.defineTheme("dark-theme", DARK_THEME)
 }
 
 const CodeEditor = React.forwardRef<
@@ -105,174 +80,32 @@ const CodeEditor = React.forwardRef<
     },
     ref,
   ) => {
-    const monaco = useMonaco()
     const editorRef = useRef<monacoTypes.editor.IStandaloneCodeEditor | null>(null)
+    const [editorReady, setEditorReady] = useState(false)
+    const [isFoldedState, setIsFolded] = useState(false)
+    const [isCtrlPressed, setIsCtrlPressed] = useState(false)
+    const [hoveredLine, setHoveredLine] = useState<number | null>(null)
+
+    const {monaco, isMac} = useMonacoSetup({language})
+    const {updateDecorations} = useDecorations({
+      monaco,
+      highlightLine,
+      lineGas,
+      highlightGroups,
+      hoveredLines,
+      highlightRanges,
+      isCtrlPressed,
+      hoveredLine,
+      shouldCenter,
+    })
 
     // @ts-expect-error todo
     // we need it actually
     // eslint-disable-next-line react-hooks/exhaustive-deps
     React.useImperativeHandle(ref, () => editorRef.current, [editorRef.current])
-    const decorationsRef = useRef<string[]>([])
-    const [editorReady, setEditorReady] = useState(false)
-    const [isFoldedState, setIsFolded] = useState(false)
-    const [isCtrlPressed, setIsCtrlPressed] = useState(false)
-    const [hoveredLine, setHoveredLine] = useState<number | null>(null)
-    const {theme: appTheme} = useTheme()
-    const [isMac, setIsMac] = useState(false)
-
-    /* --------------------------------- init -------------------------------- */
-    useEffect(() => {
-      if (!monaco) return
-      initializeMonaco(monaco, language)
-    }, [monaco, language])
-
-    useEffect(() => {
-      if (typeof window !== "undefined" && typeof navigator !== "undefined") {
-        // noinspection JSDeprecatedSymbols
-        // better way?
-        setIsMac(navigator.platform.toUpperCase().indexOf("MAC") >= 0)
-      }
-    }, [])
-
-    useEffect(() => {
-      if (!monaco) return
-      monaco.editor.setTheme(appTheme === "dark" ? "dark-theme" : "light-theme")
-    }, [appTheme, monaco, editorReady, language])
-
-    useEffect(() => {
-      if (editorReady && language === "tasm") {
-        // preload assembly data
-        asmData()
-      }
-    }, [editorReady, language])
 
     /* ---------------------------- decorations ------------------------------ */
-    const updateDecorations = useCallback(() => {
-      if (!editorRef.current || !monaco) return
-
-      const model = editorRef.current.getModel()
-      if (!model) return
-
-      const totalLines = model.getLineCount()
-      const allDecorations: monacoTypes.editor.IModelDeltaDecoration[] = []
-
-      // highlight the requested line (used for the current line step)
-      if (highlightLine !== undefined) {
-        allDecorations.push({
-          range: new monaco.Range(highlightLine, 1, highlightLine, 1),
-          options: {
-            isWholeLine: true,
-            className: "highlighted-line",
-          },
-        })
-      }
-
-      // Add source map highlight groups
-      for (const [index, group] of highlightGroups.entries()) {
-        for (const lineNumber of group.lines) {
-          if (lineNumber > 0 && lineNumber <= totalLines) {
-            allDecorations.push({
-              range: new monaco.Range(lineNumber, 1, lineNumber, 1),
-              options: {
-                isWholeLine: true,
-                className: group.className || `source-map-group-${index}`,
-                overviewRuler: {
-                  color: group.color,
-                  position: 1,
-                },
-              },
-            })
-          }
-        }
-      }
-
-      // Add hovered lines highlighting
-      for (const lineNumber of hoveredLines) {
-        if (lineNumber > 0 && lineNumber <= totalLines) {
-          allDecorations.push({
-            range: new monaco.Range(lineNumber, 1, lineNumber, 1),
-            options: {
-              isWholeLine: true,
-              className: "source-map-hovered-line",
-            },
-          })
-        }
-      }
-
-      for (const range of highlightRanges) {
-        if (range.line > 0 && range.line <= totalLines) {
-          allDecorations.push({
-            range: new monaco.Range(range.line, range.startColumn, range.line, range.endColumn),
-            options: {
-              isWholeLine: false,
-              className: range.className ?? "precise-highlight",
-              inlineClassName: range.className ?? "precise-highlight",
-            },
-          })
-        }
-      }
-
-      // highlight every line in editor
-      // 1. if a line was not executed, it grayed out
-      // 2. if a line was executed,
-      //    1. if the user hovers over this line, we highlight it with deep blue
-      //    2. otherwise highlight it as clickable
-      if (lineGas && Object.keys(lineGas).length > 0) {
-        for (let line = 1; line <= totalLines; line++) {
-          const text = model.getLineContent(line)
-          const isEmpty = text.trim() === ""
-          if (isEmpty) continue
-
-          const wasExecuted = lineGas[line] !== undefined
-
-          if (wasExecuted && isCtrlPressed) {
-            const className =
-              hoveredLine === line
-                ? "clickable-line ctrl-pressed hovered-line"
-                : "clickable-line ctrl-pressed"
-            allDecorations.push({
-              range: new monaco.Range(line, 1, line, 1),
-              options: {
-                isWholeLine: true,
-                className,
-                linesDecorationsClassName: "clickable-line-decoration",
-              },
-            })
-          } else if (!wasExecuted) {
-            allDecorations.push({
-              range: new monaco.Range(line, 1, line, model.getLineLength(line) + 1),
-              options: {
-                isWholeLine: false,
-                inlineClassName: "faded-text",
-              },
-            })
-          }
-        }
-      }
-
-      // noinspection JSDeprecatedSymbols
-      decorationsRef.current = editorRef.current.deltaDecorations(
-        decorationsRef.current,
-        allDecorations,
-      )
-
-      // when the user steps, we automatically centered editor for better visibility,
-      // but when the user clicks on a certain line, we don't want to scroll editor to avoid
-      // sharp scroll from under the cursor
-      if (highlightLine !== undefined && shouldCenter) {
-        editorRef.current.revealLineInCenter(highlightLine)
-      }
-    }, [
-      monaco,
-      lineGas,
-      highlightLine,
-      shouldCenter,
-      isCtrlPressed,
-      hoveredLine,
-      highlightGroups,
-      hoveredLines,
-      highlightRanges,
-    ])
+    // Decorations are now handled by the useDecorations hook
 
     /* ----------------------- folding inactive blocks ----------------------- */
     const collapseInactiveBlocks = useCallback(() => {
@@ -342,14 +175,17 @@ const CodeEditor = React.forwardRef<
 
     /* -------------------------------- effects ------------------------------ */
     useEffect(() => {
+      if (!editorRef.current) return
       if (isFoldedState) return // don't apply decorations and folds a second time
-      updateDecorations()
+
+      updateDecorations(editorRef.current)
       collapseInactiveBlocks()
     }, [lineGas, updateDecorations, collapseInactiveBlocks, isFoldedState])
 
     useEffect(() => {
-      if (!editorReady) return
-      updateDecorations()
+      if (!editorReady || !editorRef.current) return
+
+      updateDecorations(editorRef.current)
       collapseInactiveBlocks()
     }, [editorReady, updateDecorations, collapseInactiveBlocks])
 
@@ -414,7 +250,7 @@ const CodeEditor = React.forwardRef<
     // Update decorations on pressed ctrl
     useEffect(() => {
       if (editorRef.current) {
-        updateDecorations()
+        updateDecorations(editorRef.current)
       }
     }, [isCtrlPressed, updateDecorations])
 
@@ -688,7 +524,9 @@ const CodeEditor = React.forwardRef<
               if (onChange !== undefined && value !== undefined) {
                 onChange(value)
               }
-              updateDecorations()
+              if (editorRef.current) {
+                updateDecorations(editorRef.current)
+              }
             }}
           />
         </div>

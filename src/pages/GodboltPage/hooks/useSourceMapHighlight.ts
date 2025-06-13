@@ -3,7 +3,7 @@ import type * as monaco from "monaco-editor"
 
 import {trace} from "ton-assembly/dist"
 
-import type {HighlightGroup, HighlightRange} from "@shared/ui/CodeEditor/CodeEditor"
+import type {HighlightGroup, HighlightRange} from "@shared/ui/CodeEditor"
 
 export interface UseSourceMapHighlightReturn {
   readonly funcHighlightGroups: readonly HighlightGroup[]
