@@ -5945,3 +5945,5 @@ else if (typeof define === "function" && define["amd"])
     return CompilerModule
   })
 else if (typeof exports === "object") exports["CompilerModule"] = CompilerModule
+
+export default CompilerModule

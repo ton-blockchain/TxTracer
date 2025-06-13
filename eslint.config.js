@@ -16,6 +16,7 @@ export default tseslint.config(
       "dist",
       "src/polyfills.ts",
       "src/features/godbolt/lib/func/func-wasm/func-compile.ts",
+      "src/features/godbolt/lib/func/func-wasm/funcfiftlib.d.ts",
     ],
   },
   {

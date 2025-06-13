@@ -1,7 +1,12 @@
 import {trace} from "ton-assembly-test-dev/dist"
+import {FuncFiftLibWasm} from "./funcfiftlib.wasm.ts"
+import CompilerModule from "./funcfiftlib"
 
 // Convert base64 to Uint8Array for browser compatibility
-function base64ToUint8Array(base64: string): Uint8Array {
+function base64ToUint8Array(base64: string | undefined): Uint8Array {
+  if (base64 === undefined) {
+    throw new Error("base64 is undefined")
+  }
   const binaryString = atob(base64)
   const bytes = new Uint8Array(binaryString.length)
   for (let i = 0; i < binaryString.length; i++) {
@@ -10,46 +15,7 @@ function base64ToUint8Array(base64: string): Uint8Array {
   return bytes
 }
 
-// Browser polyfill for CommonJS modules
-function setupCommonJSPolyfill() {
-  if (typeof globalThis.module === "undefined") {
-    // @ts-ignore
-    globalThis.module = {exports: {}}
-  }
-  if (typeof globalThis.exports === "undefined") {
-    globalThis.exports = globalThis.module.exports
-  }
-}
-
-let CompilerModule: (_: object) => any | undefined
-let WasmBinary: Uint8Array | undefined
-
-// Dynamic imports for WASM modules
-async function loadWasmModules() {
-  // Setup CommonJS polyfill before loading modules
-  setupCommonJSPolyfill()
-
-  try {
-    // @ts-ignore
-    await import("./funcfiftlib.js")
-
-    CompilerModule ??= globalThis.module.exports
-
-    // @ts-ignore
-    await import("./funcfiftlib.wasm.js")
-    const wasmBase64String = globalThis.module.exports.FuncFiftLibWasm
-
-    WasmBinary ??= base64ToUint8Array(wasmBase64String)
-
-    return {
-      CompilerModule: CompilerModule,
-      WasmBinary,
-    }
-  } catch (error) {
-    console.error("Failed to load WASM modules:", error)
-    throw error
-  }
-}
+const WasmBinary = base64ToUint8Array(FuncFiftLibWasm)
 
 type Pointer = unknown
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -112,8 +78,6 @@ export async function funcCompile(args: {
   sources: {path: string; content: string}[]
   debugInfo: boolean
 }): Promise<FuncCompilationResult> {
-  await loadWasmModules()
-
   // Parameters
   const files: string[] = args.entries
   const config: FuncConfig = {
