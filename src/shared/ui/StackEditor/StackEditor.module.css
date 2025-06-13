@@ -271,12 +271,12 @@
 }
 
 .textImportInput {
-  width: calc(100% - var(--spacing-lg));
+  width: calc(100% - var(--spacing-xl) - 5px);
   min-height: 60px;
-  padding: var(--spacing-sm);
-  border: 1px solid var(--color-border);
+  padding: var(--spacing-md);
+  border: 1px solid transparent;
   border-radius: var(--border-radius-sm);
-  background-color: var(--color-background-primary);
+  background-color: var(--color-background-secondary);
   color: var(--color-text-primary);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
