@@ -140,7 +140,11 @@ function GodboltPage() {
       setError("")
       setErrorMarkers([])
 
-      if (!autoCompile) return
+      if (!autoCompile) {
+        // reset results since code changed
+        setResult(undefined)
+        return
+      }
 
       void handleExecuteCode(newCode)
     },
