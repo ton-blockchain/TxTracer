@@ -36,6 +36,8 @@
   --color-info-bg: #e0f2ff;
   --color-info-text: #0059b3;
 
+  --color-semi-black: rgba(0, 0, 0, 0.05);
+
   --color-neutral: #8e8e93;
   --color-neutral-rgb: 142, 142, 147;
   --color-neutral-bg: #f0f0f0;
@@ -265,6 +267,8 @@
   --color-info-rgb: var(--color-primary-rgb);
   --color-info-bg: #003366;
   --color-info-text: #66b3ff;
+
+  --color-semi-black: rgb(0, 0, 0, 0.25);
 
   --color-neutral: #8e8e93;
   --color-neutral-rgb: 142, 142, 147;

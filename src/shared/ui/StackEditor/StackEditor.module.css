@@ -344,7 +344,7 @@
   padding: var(--spacing-xs) var(--spacing-xs);
   border-radius: var(--border-radius-sm);
   border: 1px solid transparent;
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: var(--color-semi-black);
   color: var(--color-text);
   font-size: var(--font-size-sm);
   min-width: 0;
