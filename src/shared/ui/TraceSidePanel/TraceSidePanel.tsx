@@ -1,5 +1,4 @@
 import React from "react"
-import {FiSettings} from "react-icons/fi"
 
 import type {StackElement} from "ton-assembly-test-dev/dist/logs"
 
@@ -61,7 +60,6 @@ const TraceSidePanel: React.FC<TraceSidePanelProps> = ({
   placeholderMessage,
   statusMessage,
   showStackSetup = false,
-  onSetupStack = () => {},
   initialStack = [],
   onInitialStackChange = () => {},
   hasExecutionResults = false,
@@ -164,18 +162,6 @@ const TraceSidePanel: React.FC<TraceSidePanelProps> = ({
             <>
               <div className={styles.stackHeader}>
                 <span>Stack</span>
-                {showStackSetup && hasExecutionResults && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={onSetupStack}
-                    title="Setup initial stack"
-                    className={styles.stackSetupButton}
-                  >
-                    <FiSettings size={14} />
-                    Setup
-                  </Button>
-                )}
               </div>
               <StackViewer stack={currentStack} title="" />
             </>

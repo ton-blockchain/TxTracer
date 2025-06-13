@@ -43,8 +43,22 @@ function PlaygroundPage() {
   const [initialStack, setInitialStack] = useState<StackElement[]>(() => {
     try {
       const saved = localStorage.getItem(INITIAL_STACK_STORAGE_KEY)
-      return saved ? (JSON.parse(saved) as StackElement[]) : []
-    } catch {
+      if (!saved) return []
+
+      return JSON.parse(saved, (key, value) => {
+        if (key === "value" && typeof value === "string" && value.match(/^-?\d+$/)) {
+          try {
+            return BigInt(value)
+          } catch {
+            return value
+          }
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return value
+      }) as StackElement[]
+    } catch (error) {
+      localStorage.removeItem(INITIAL_STACK_STORAGE_KEY)
+      console.warn("Failed to restore initial stack from localStorage:", error)
       return []
     }
   })
@@ -117,12 +131,17 @@ function PlaygroundPage() {
   }, [assemblyCode])
 
   useEffect(() => {
-    localStorage.setItem(
-      INITIAL_STACK_STORAGE_KEY,
-      JSON.stringify(initialStack, (_, value) => {
-        return typeof value === "bigint" ? value.toString() : ""
-      }),
-    )
+    try {
+      localStorage.setItem(
+        INITIAL_STACK_STORAGE_KEY,
+        JSON.stringify(initialStack, (_, value) => {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+          return typeof value === "bigint" ? value.toString() : value
+        }),
+      )
+    } catch (error) {
+      console.warn("Failed to save initial stack to localStorage:", error)
+    }
   }, [initialStack])
 
   const handleCodeChange = useCallback(

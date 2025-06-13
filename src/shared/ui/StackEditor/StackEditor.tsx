@@ -5,6 +5,8 @@ import {logs} from "ton-assembly-test-dev/dist"
 import {Cell, Address, Builder} from "@ton/core"
 import {motion, AnimatePresence} from "framer-motion"
 
+import {RiFileCloseLine} from "react-icons/ri"
+
 import Button from "@shared/ui/Button"
 import {CopyButton} from "@shared/CopyButton/CopyButton.tsx"
 
@@ -637,6 +639,7 @@ const StackEditor: React.FC<StackEditorProps> = ({stack, onStackChange}) => {
               onClick={clearStack}
               disabled={!Array.isArray(stack) || stack.length === 0}
             >
+              <RiFileCloseLine size={16} />
               Clear All
             </Button>
           </div>
@@ -659,7 +662,7 @@ const StackEditor: React.FC<StackEditorProps> = ({stack, onStackChange}) => {
                 disabled={!textStackInput.trim()}
               >
                 <FiCheck size={16} />
-                Apply Stack
+                Apply
               </Button>
               <Button
                 className={styles.stackButton}
@@ -708,6 +711,7 @@ const StackEditor: React.FC<StackEditorProps> = ({stack, onStackChange}) => {
                   </div>
                   <div className={styles.stackItemActions}>
                     <Button
+                      className={styles.stackNavigationButton}
                       variant="ghost"
                       size="sm"
                       onClick={() => moveStackItem(originalIndex, "up")}
@@ -717,6 +721,7 @@ const StackEditor: React.FC<StackEditorProps> = ({stack, onStackChange}) => {
                       <FiArrowUp size={14} />
                     </Button>
                     <Button
+                      className={styles.stackNavigationButton}
                       variant="ghost"
                       size="sm"
                       onClick={() => moveStackItem(originalIndex, "down")}
@@ -726,6 +731,7 @@ const StackEditor: React.FC<StackEditorProps> = ({stack, onStackChange}) => {
                       <FiArrowDown size={14} />
                     </Button>
                     <Button
+                      className={styles.stackNavigationButton}
                       variant="ghost"
                       size="sm"
                       onClick={() => removeStackItem(originalIndex)}
