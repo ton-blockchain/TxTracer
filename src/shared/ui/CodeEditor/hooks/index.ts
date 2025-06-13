@@ -3,6 +3,7 @@ export {useDecorations} from "./useDecorations"
 export {useEditorEvents} from "./useEditorEvents"
 export {useTasmHoverProvider} from "./useTasmHoverProvider"
 export {useTasmCodeLensProvider} from "./useTasmCodeLensProvider"
+export {useTasmCompletionProvider} from "./useTasmCompletionProvider"
 export {useFuncLanguageProviders} from "./useFuncLanguageProviders"
 export {useFolding} from "./useFolding"
 

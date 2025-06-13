@@ -15,6 +15,7 @@ import {
   useEditorEvents,
   useTasmHoverProvider,
   useTasmCodeLensProvider,
+  useTasmCompletionProvider,
   useFuncLanguageProviders,
   useFolding,
   type SupportedLanguage,
@@ -149,6 +150,13 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     monaco,
     editorRef,
     exitCode,
+    editorReady,
+    enabled: language === "tasm",
+  })
+
+  useTasmCompletionProvider({
+    monaco,
+    editorRef,
     editorReady,
     enabled: language === "tasm",
   })
