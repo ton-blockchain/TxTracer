@@ -588,6 +588,7 @@ const StackEditor: React.FC<StackEditorProps> = ({stack, onStackChange}) => {
         </div>
         <div className={styles.stackItemActions}>
           <Button
+            className={styles.stackNavigationButton}
             variant="ghost"
             size="sm"
             onClick={handleSaveNewItem}
@@ -598,7 +599,13 @@ const StackEditor: React.FC<StackEditorProps> = ({stack, onStackChange}) => {
           >
             <FiCheck size={14} />
           </Button>
-          <Button variant="ghost" size="sm" onClick={handleCancelAddingItem} title="Cancel">
+          <Button
+            className={styles.stackNavigationButton}
+            variant="ghost"
+            size="sm"
+            onClick={handleCancelAddingItem}
+            title="Cancel"
+          >
             <FiX size={14} />
           </Button>
         </div>
