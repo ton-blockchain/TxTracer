@@ -27,7 +27,9 @@ PUSHINT_8 100
 ADD
 PUSHINT_16 200
 SUB
-ACCEPT`
+
+NOP
+`
 
 const LOCAL_STORAGE_KEY = "txtracer-playground-assembly-code"
 

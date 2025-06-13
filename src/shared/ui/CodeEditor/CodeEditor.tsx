@@ -215,7 +215,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   }, [editorReady])
 
   /* -------------------------------- render ------------------------------- */
-  const needFloatingTip = lineExecutionData && readOnly && language === "tasm"
+  const needFloatingTip = lineExecutionData && language === "tasm"
 
   return (
     <>
