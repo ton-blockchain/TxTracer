@@ -1,7 +1,12 @@
 .sidePanel {
-  width: 100%;
-  flex: none;
-  min-width: auto;
+  width: 480px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--border-radius-lg);
+  background-color: var(--color-background-primary);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
 }
 
 .stepDetails {

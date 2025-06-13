@@ -29,7 +29,7 @@
 
 .mainContent {
   display: grid;
-  grid-template-columns: calc(100% - 415px - var(--spacing-sm)) 400px;
+  grid-template-columns: calc(100% - 500px - var(--spacing-sm)) 400px;
   width: 100%;
   height: 100%;
   overflow: hidden;
