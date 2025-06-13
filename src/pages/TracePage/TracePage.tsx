@@ -124,6 +124,22 @@ function TracePage() {
     void handleSubmit(true)
   }, [handleSubmit])
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+        event.preventDefault()
+        if (!loading) {
+          void handleSubmit(false)
+        }
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown)
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [handleSubmit, loading])
+
   const toggleDetails = useCallback(() => setDetailsExpanded(prev => !prev), [])
 
   const handleDetailsKeyDown = useCallback(
@@ -153,7 +169,14 @@ function TracePage() {
   return (
     <>
       {!result && (
-        <div className={styles.inputPage}>
+        <main className={styles.inputPage}>
+          <div id="trace-status" className="sr-only" aria-live="polite" aria-atomic="true">
+            {loading && "Tracing transaction..."}
+            {result && !loading && "Transaction traced successfully"}
+          </div>
+
+          <div className="sr-only">Press Ctrl+Enter or Cmd+Enter to trace the transaction</div>
+
           <div className={styles.externalLinksContainer}>
             <a
               href="https://github.com/tact-lang/txtracer"
@@ -161,20 +184,25 @@ function TracePage() {
               rel="noopener noreferrer"
               title="GitHub Repository"
               className={styles.iconLink}
+              aria-label="View TxTracer source code on GitHub"
             >
-              <FiGithub size={24} />
+              <FiGithub size={24} aria-hidden="true" />
             </a>
           </div>
 
           <div className={styles.centeredInputContainer}>
-            <div className={styles.txtracerLogo}>
-              <div className={styles.logoDiamond}></div>
+            <header className={styles.txtracerLogo}>
+              <div className={styles.logoDiamond} aria-hidden="true"></div>
               <h1 data-testid="app-title" className={styles.txtracerLogoH1}>
                 <span>TxTracer</span>
                 <span className={styles.titleTon}>The Open Network</span>
               </h1>
-            </div>
-            <div className={styles.inputCard}>
+            </header>
+
+            <section aria-labelledby="search-heading" className={styles.inputCard}>
+              <h2 id="search-heading" className="sr-only">
+                Transaction Search
+              </h2>
               <SearchInput
                 value={inputText}
                 onChange={setInputText}
@@ -228,7 +256,7 @@ function TracePage() {
                         tabIndex={0}
                         aria-selected={false}
                       >
-                        <FiClock size={16} className={styles.historyItemIcon} />
+                        <FiClock size={16} className={styles.historyItemIcon} aria-hidden="true" />
                         <span className={styles.historyItemText}>
                           {shortenHash(entry.hash, 16, 16)}
                         </span>
@@ -242,15 +270,16 @@ function TracePage() {
                             removeFromHistory(entry.hash)
                           }}
                           title="Remove from history"
+                          aria-label={`Remove transaction ${shortenHash(entry.hash, 8, 8)} from history`}
                         >
-                          <FiX size={16} />
+                          <FiX size={16} aria-hidden="true" />
                         </button>
                       </li>
                     )
                   })}
                 </ul>
               )}
-            </div>
+            </section>
 
             {loading ? (
               <InlineLoader
@@ -259,10 +288,13 @@ function TracePage() {
                 loading={loading}
               />
             ) : (
-              <div className={styles.featureCards}>
+              <section aria-labelledby="features-heading" className={styles.featureCards}>
+                <h2 id="features-heading" className="sr-only">
+                  Available Tools
+                </h2>
                 <Link to="/play" className={styles.featureCard}>
                   <div className={`${styles.featureCardIcon} ${styles.playgroundIcon}`}>
-                    <FiPlay />
+                    <FiPlay aria-hidden="true" />
                   </div>
                   <h3 className={styles.featureCardTitle}>Assembly Playground</h3>
                   <p className={styles.featureCardDescription}>
@@ -274,7 +306,7 @@ function TracePage() {
 
                 <Link to="/code-explorer" className={styles.featureCard}>
                   <div className={`${styles.featureCardIcon} ${styles.explorerIcon}`}>
-                    <FiSearch />
+                    <FiSearch aria-hidden="true" />
                   </div>
                   <h3 className={styles.featureCardTitle}>Code Explorer</h3>
                   <p className={styles.featureCardDescription}>
@@ -283,34 +315,43 @@ function TracePage() {
                   </p>
                   <span className={styles.featureCardBadge}>Explorer</span>
                 </Link>
-              </div>
+              </section>
             )}
           </div>
 
-          <span className={styles.createBy}>
+          <footer className={styles.createBy}>
             Created by{" "}
             <a href="https://tonstudio.io" target="_blank" rel="noreferrer">
               TON Studio
             </a>
-          </span>
-        </div>
+          </footer>
+        </main>
       )}
 
       {loading && !result && (
-        <div className={styles.inputPage}>
+        <main className={styles.inputPage}>
           <InlineLoader
             message="Tracing transaction"
             subtext="This may take a few moments"
             loading={true}
           />
-        </div>
+        </main>
       )}
 
       {result && (
         <div className={styles.traceViewWrapper}>
+          <div id="trace-results-status" className="sr-only" aria-live="polite" aria-atomic="true">
+            {loading && "Loading new transaction trace..."}
+            {result && !loading && "Transaction trace loaded successfully"}
+          </div>
+
           <PageHeader pageTitle={""} network={result?.network ?? "mainnet"}>
             <div className={styles.headerContent}>
-              <div className={styles.searchInputContainer}>
+              <div
+                className={styles.searchInputContainer}
+                role="search"
+                aria-label="Search for another transaction"
+              >
                 <SearchInput
                   value={headerInputText}
                   onChange={setHeaderInputText}
@@ -323,7 +364,7 @@ function TracePage() {
               </div>
 
               {shouldShowStatusContainer && (
-                <div className={styles.txStatusContainer}>
+                <div className={styles.txStatusContainer} role="status" aria-live="polite">
                   {txStatus && <StatusBadge type={txStatus} text={txStatusText} />}
                   {stateUpdateHashOk === false && (
                     <TooltipHint
@@ -339,11 +380,19 @@ function TracePage() {
               )}
             </div>
           </PageHeader>
-          <div className={styles.appContainer}>
+
+          <main className={styles.appContainer}>
             <div
               className={`${styles.mainContent} ${detailsExpanded ? styles.mainContentMinimized : ""}`}
             >
-              <div data-testid="code-editor-container" style={{flex: "1", position: "relative"}}>
+              <section
+                aria-labelledby="code-viewer-heading"
+                data-testid="code-editor-container"
+                style={{flex: "1", position: "relative"}}
+              >
+                <h2 id="code-viewer-heading" className="sr-only">
+                  Transaction Code Viewer
+                </h2>
                 <Suspense fallback={<InlineLoader message="Loading Editor..." loading={true} />}>
                   <CodeEditor
                     code={result.code}
@@ -354,7 +403,7 @@ function TracePage() {
                     exitCode={result.exitCode}
                   />
                 </Suspense>
-              </div>
+              </section>
               <TraceSidePanel
                 selectedStep={selectedStep}
                 totalSteps={totalSteps}
@@ -372,8 +421,9 @@ function TracePage() {
                 cumulativeGas={cumulativeGasSinceBegin}
               />
             </div>
-            <div
+            <section
               className={`${styles.detailsSection} ${detailsExpanded ? styles.detailsSectionExpanded : ""}`}
+              aria-labelledby="transaction-details-heading"
             >
               <div
                 data-testid="details-header"
@@ -382,22 +432,28 @@ function TracePage() {
                 onKeyDown={handleDetailsKeyDown}
                 role="button"
                 tabIndex={0}
+                aria-expanded={detailsExpanded}
+                aria-controls="transaction-details-content"
               >
                 <div className={styles.detailsTitle}>
-                  <span>TRANSACTION DETAILS</span>
+                  <span id="transaction-details-heading">TRANSACTION DETAILS</span>
                 </div>
               </div>
               {detailsExpanded && (
-                <div data-testid="details-content" className={styles.detailsContent}>
+                <div
+                  id="transaction-details-content"
+                  data-testid="details-content"
+                  className={styles.detailsContent}
+                >
                   <div className={styles.transactionDetailsPanelInTracePage}>
                     <RetraceResultView result={result} />
                   </div>
                 </div>
               )}
-            </div>
-          </div>
+            </section>
+          </main>
           {loading && result && (
-            <div className={styles.loadingOverlay}>
+            <div className={styles.loadingOverlay} role="status" aria-live="polite">
               <InlineLoader
                 message="Tracing new transaction..."
                 subtext="This may take a few moments"
