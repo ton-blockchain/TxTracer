@@ -5,7 +5,7 @@ import {GetMethodError, type SandboxContract, type TreasuryContract} from "@ton/
 import {Blockchain} from "@ton/sandbox"
 import {createMappingInfo, type MappingInfo} from "ton-assembly-test-dev/dist/trace/mapping"
 
-import {createTraceInfoPerTransaction, type TraceInfo} from "ton-assembly-test-dev/dist/trace"
+import {trace} from "ton-assembly-test-dev/dist"
 
 import {type ExitCode, findExitCode} from "@features/txTrace/lib/traceTx.ts"
 
@@ -75,7 +75,7 @@ export interface AssemblyExecutionResult {
   readonly code: string
   readonly mappingInfo: MappingInfo | null
   readonly exitCode: ExitCode | undefined
-  readonly traceInfo: TraceInfo | undefined
+  readonly traceInfo: trace.TraceInfo | undefined
 }
 
 export class TasmCompilationError extends Error {
@@ -92,7 +92,7 @@ export const executeAssemblyCode = async (
 
   if (parseResult.$ === "ParseFailure") {
     const loc = parseResult.error.loc
-    const pos = loc.file + ":" + loc.line
+    const pos = loc.file + ":" + (loc.line + 1)
     throw new TasmCompilationError(pos + ": " + parseResult.error.message)
   }
 
@@ -102,7 +102,7 @@ export const executeAssemblyCode = async (
   try {
     const [stack, vmLogs] = await executeInstructions(codeCell)
 
-    const traceInfo = createTraceInfoPerTransaction(vmLogs, mappingInfo, undefined)[0]
+    const traceInfo = trace.createTraceInfoPerTransaction(vmLogs, mappingInfo, undefined)[0]
 
     return {
       stack,
@@ -115,7 +115,7 @@ export const executeAssemblyCode = async (
     }
   } catch (error: unknown) {
     if (error instanceof GetMethodError) {
-      const traceInfo = createTraceInfoPerTransaction(error.vmLogs, mappingInfo, undefined)[0]
+      const traceInfo = trace.createTraceInfoPerTransaction(error.vmLogs, mappingInfo, undefined)[0]
       const exitCode = findExitCode(error.vmLogs, mappingInfo)
 
       return {
