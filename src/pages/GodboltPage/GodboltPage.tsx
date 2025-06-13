@@ -23,11 +23,34 @@ import styles from "./GodboltPage.module.css"
 
 const CodeEditor = React.lazy(() => import("@shared/ui/CodeEditor"))
 
-const DEFAULT_FUNC_CODE = `() recv_internal() {
-    ;; write your code here
-}`
+const DEFAULT_FUNC_CODE = `#include "stdlib.fc";
 
-const DEFAULT_ASM_CODE = ``
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) {
+    var cs = in_msg_cell.begin_parse();
+    var flags = cs~load_uint(4);  ;; int_msg_info$0 ihr_disabled:Bool   bounce:Bool bounced:Bool
+    if (flags & 1) {
+        ;; ignore all bounced messages
+        return ();
+    }
+    if (in_msg.slice_bits() < 32) {
+        ;; ignore simple transfers
+        return ();
+    }
+    int op = in_msg~load_uint(32);
+    if (op != 0x706c7567) & (op != 0x64737472) { ;; "plug" & "dstr"
+        ;; ignore all messages not related to plugins
+        return ();
+    }
+    slice s_addr = cs~load_msg_addr();
+    (int wc, int addr_hash) = parse_std_addr(s_addr);
+  
+    ;; ... other code
+
+    throw(wc + addr_hash);
+}
+`
+
+const DEFAULT_ASM_CODE = `// Compile to see assembly here`
 
 const FUNC_EDITOR_KEY = "txtracer-godbolt-func-code"
 const ASM_EDITOR_KEY = "txtracer-godbolt-asm-code"

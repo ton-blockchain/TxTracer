@@ -30,11 +30,11 @@ const setStoredBoolean = (key: string, value: boolean): void => {
 
 export const useGodboltSettings = (): GodboltSettingsHook => {
   const [showVariablesInHover, setShowVariablesInHover] = useState(() =>
-    getStoredBoolean(STORAGE_KEYS.SHOW_VARS_HOVER, true),
+    getStoredBoolean(STORAGE_KEYS.SHOW_VARS_HOVER, false),
   )
 
   const [showDocsInHover, setShowDocsInHover] = useState(() =>
-    getStoredBoolean(STORAGE_KEYS.SHOW_DOCS_HOVER, true),
+    getStoredBoolean(STORAGE_KEYS.SHOW_DOCS_HOVER, false),
   )
 
   const [autoCompile, setAutoCompile] = useState(() =>
