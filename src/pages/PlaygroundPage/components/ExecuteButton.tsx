@@ -10,13 +10,18 @@ export function ExecuteButton(props: {onClick: () => undefined; disabled: boolea
       onClick={props.onClick}
       disabled={props.disabled}
       className={styles.executeButton}
-      title="Execute Assembly Code"
+      title={
+        props.disabled ? "Executing Assembly Code..." : "Execute Assembly Code (Ctrl/Cmd+Enter)"
+      }
+      aria-label={props.disabled ? "Executing assembly code..." : "Execute assembly code"}
+      aria-describedby="execution-status"
+      aria-keyshortcuts="Control+Enter"
     >
       {props.disabled ? (
         <ButtonLoader>Execute</ButtonLoader>
       ) : (
         <>
-          <FiPlay size={16} />
+          <FiPlay size={16} aria-hidden="true" />
           Execute
         </>
       )}

@@ -132,6 +132,22 @@ function PlaygroundPage() {
   }, [assemblyCode, clearError, initialStack, setError])
 
   useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+        event.preventDefault()
+        if (!loading) {
+          void handleExecute()
+        }
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown)
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [handleExecute, loading])
+
+  useEffect(() => {
     localStorage.setItem(LOCAL_STORAGE_KEY, assemblyCode)
   }, [assemblyCode])
 
@@ -179,21 +195,39 @@ function PlaygroundPage() {
     <div className={styles.traceViewWrapper}>
       <PageHeader pageTitle="playground">
         {shouldShowStatusContainer && (
-          <div className={styles.txStatusContainer}>
+          <div className={styles.txStatusContainer} role="status" aria-live="polite">
             {txStatus && <StatusBadge type={txStatus} text={txStatusText} />}
           </div>
         )}
         <div className={styles.headerContent}>
-          <div className={styles.mainActionContainer}>
+          <div
+            className={styles.mainActionContainer}
+            role="toolbar"
+            aria-label="Assembly code actions"
+          >
             <ExecuteButton onClick={() => void handleExecute()} disabled={loading} />
             <ShareButton value={assemblyCode} />
           </div>
         </div>
       </PageHeader>
 
-      <div className={styles.appContainer}>
+      <div id="execution-status" className="sr-only" aria-live="polite" aria-atomic="true">
+        {loading && "Executing assembly code..."}
+        {result && !loading && "Assembly code executed successfully"}
+        {result?.exitCode &&
+          result.exitCode.num !== 0 &&
+          !loading &&
+          `Execution completed with exit code ${result.exitCode.num}`}
+      </div>
+
+      <div className="sr-only">Press Ctrl+Enter or Cmd+Enter to execute the assembly code</div>
+
+      <main className={styles.appContainer} role="main" aria-label="Assembly code playground">
         <div className={styles.mainContent}>
           <div style={{flex: "1", position: "relative"}}>
+            <h2 id="code-editor-heading" className="sr-only">
+              Assembly Code Editor
+            </h2>
             <Suspense fallback={<InlineLoader message="Loading Editor..." loading={true} />}>
               <CodeEditor
                 code={assemblyCode}
@@ -228,7 +262,7 @@ function PlaygroundPage() {
             hasExecutionResults={!!result}
           />
         </div>
-      </div>
+      </main>
     </div>
   )
 }
