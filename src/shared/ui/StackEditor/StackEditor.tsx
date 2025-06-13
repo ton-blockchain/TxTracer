@@ -1,8 +1,8 @@
 import React, {useState, useCallback, type JSX} from "react"
-import {FiPlus, FiTrash2, FiArrowUp, FiArrowDown, FiFileText, FiCheck} from "react-icons/fi"
+import {FiPlus, FiTrash2, FiArrowUp, FiArrowDown, FiFileText, FiCheck, FiX} from "react-icons/fi"
 import {type StackElement} from "ton-assembly-test-dev/dist/trace"
 import {logs} from "ton-assembly-test-dev/dist"
-import {Cell} from "@ton/core"
+import {Cell, Address, Builder} from "@ton/core"
 import {motion, AnimatePresence} from "framer-motion"
 
 import Button from "@shared/ui/Button"
@@ -16,7 +16,7 @@ export interface StackEditorProps {
 }
 
 interface StackItemForm {
-  readonly type: "Integer" | "Cell" | "Slice" | "Null"
+  readonly type: "Integer" | "Cell" | "Slice" | "Address" | "Null"
   readonly value: string
 }
 
@@ -72,64 +72,17 @@ const safeCellFromHex = (boc: string) => {
 }
 
 const StackEditor: React.FC<StackEditorProps> = ({stack, onStackChange}) => {
-  const [newItem, setNewItem] = useState<StackItemForm>({type: "Integer", value: ""})
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
   const [showTextImport, setShowTextImport] = useState(false)
   const [textStackInput, setTextStackInput] = useState("")
   const [parseError, setParseError] = useState<string | null>(null)
+  const [isAddingNewItem, setIsAddingNewItem] = useState(false)
+  const [newItemForm, setNewItemForm] = useState<StackItemForm>({type: "Integer", value: ""})
+  const [validationError, setValidationError] = useState<string | null>(null)
 
   const toggleExpand = (key: string) => {
     setExpandedItem(prev => (prev === key ? null : key))
   }
-
-  const addStackItem = useCallback(() => {
-    if (newItem.type !== "Null" && !newItem.value.trim()) {
-      return
-    }
-
-    let stackElement: StackElement
-
-    try {
-      switch (newItem.type) {
-        case "Integer":
-          stackElement = {
-            $: "Integer",
-            value: BigInt(newItem.value),
-          }
-          break
-        case "Cell":
-          // Validate BoC hex
-          Cell.fromHex(newItem.value)
-          stackElement = {
-            $: "Cell",
-            boc: newItem.value,
-          }
-          break
-        case "Slice":
-          stackElement = {
-            $: "Slice",
-            hex: newItem.value,
-            startBit: 0,
-            endBit: 0,
-            startRef: 0,
-            endRef: 0,
-          }
-          break
-        case "Null":
-          stackElement = {
-            $: "Null",
-          }
-          break
-        default:
-          return
-      }
-
-      onStackChange([stackElement, ...(Array.isArray(stack) ? stack : [])])
-      setNewItem({type: "Integer", value: ""})
-    } catch (error) {
-      console.error("Invalid stack item:", error)
-    }
-  }, [newItem, stack, onStackChange])
 
   const removeStackItem = useCallback(
     (originalIndex: number) => {
@@ -194,6 +147,120 @@ const StackEditor: React.FC<StackEditorProps> = ({stack, onStackChange}) => {
       setParseError(error instanceof Error ? error.message : "Parse error")
     }
   }, [textStackInput, onStackChange])
+
+  const validateValue = useCallback((type: StackItemForm["type"], value: string): string | null => {
+    if (type === "Null") return null
+    if (!value.trim()) return null
+
+    try {
+      switch (type) {
+        case "Integer":
+          BigInt(value)
+          break
+        case "Cell":
+          Cell.fromHex(value)
+          break
+        case "Slice":
+          if (!/^[0-9a-fA-F]*$/.test(value)) {
+            return "Invalid hex format"
+          }
+          break
+        case "Address":
+          Address.parse(value)
+          break
+      }
+      return null
+    } catch (error) {
+      return error instanceof Error ? error.message : "Invalid value"
+    }
+  }, [])
+
+  const handleStartAddingItem = useCallback(() => {
+    setIsAddingNewItem(true)
+    setNewItemForm({type: "Integer", value: ""})
+    setValidationError(null)
+    setShowTextImport(false)
+  }, [])
+
+  const handleCancelAddingItem = useCallback(() => {
+    setIsAddingNewItem(false)
+    setNewItemForm({type: "Integer", value: ""})
+    setValidationError(null)
+  }, [])
+
+  const handleSaveNewItem = useCallback(() => {
+    if (newItemForm.type !== "Null" && !newItemForm.value.trim()) {
+      setValidationError("Value is required")
+      return
+    }
+
+    const error = validateValue(newItemForm.type, newItemForm.value)
+    if (error) {
+      setValidationError(error)
+      return
+    }
+
+    setValidationError(null)
+    let stackElement: StackElement
+
+    try {
+      switch (newItemForm.type) {
+        case "Integer":
+          stackElement = {
+            $: "Integer",
+            value: BigInt(newItemForm.value),
+          }
+          break
+        case "Cell":
+          // Validate BoC hex
+          Cell.fromHex(newItemForm.value)
+          stackElement = {
+            $: "Cell",
+            boc: newItemForm.value,
+          }
+          break
+        case "Slice":
+          stackElement = {
+            $: "Slice",
+            hex: newItemForm.value,
+            startBit: 0,
+            endBit: 0,
+            startRef: 0,
+            endRef: 0,
+          }
+          break
+        case "Address": {
+          const address = Address.parse(newItemForm.value)
+          const builder = new Builder()
+          builder.storeAddress(address)
+          const addressCell = builder.endCell()
+          stackElement = {
+            $: "Slice",
+            hex: addressCell.toBoc().toString("hex"),
+            startBit: 0,
+            endBit: addressCell.bits.length,
+            startRef: 0,
+            endRef: addressCell.refs.length,
+          }
+          break
+        }
+        case "Null":
+          stackElement = {
+            $: "Null",
+          }
+          break
+        default:
+          return
+      }
+
+      onStackChange([...(Array.isArray(stack) ? stack : []), stackElement])
+      setIsAddingNewItem(false)
+      setNewItemForm({type: "Integer", value: ""})
+      setValidationError(null)
+    } catch (error) {
+      setValidationError(error instanceof Error ? error.message : "Invalid value")
+    }
+  }, [newItemForm, stack, onStackChange, validateValue])
 
   const renderStackElement = (
     element: StackElement,
@@ -406,6 +473,123 @@ const StackEditor: React.FC<StackEditorProps> = ({stack, onStackChange}) => {
     }
   }
 
+  const renderNewItemForm = (): JSX.Element => {
+    const getTypeClassName = (type: string) => {
+      switch (type) {
+        case "Integer":
+          return styles.integerItem
+        case "Cell":
+          return styles.cellItem
+        case "Slice":
+          return styles.sliceItem
+        case "Address":
+          return styles.addressItem
+        case "Null":
+          return styles.nullItem
+        default:
+          return ""
+      }
+    }
+
+    return (
+      <>
+        <div className={styles.stackIndex}>{Array.isArray(stack) ? stack.length : 0}</div>
+        <div className={styles.stackItemContainer}>
+          <div className={`${getTypeClassName(newItemForm.type)} ${styles.newItemFormItem}`}>
+            <div className={styles.newItemFormContent}>
+              <select
+                value={newItemForm.type}
+                onChange={e => {
+                  setNewItemForm({
+                    ...newItemForm,
+                    type: e.target.value as StackItemForm["type"],
+                    value: "",
+                  })
+                  setValidationError(null)
+                }}
+                onKeyDown={e => {
+                  if (e.key === "Enter") {
+                    e.preventDefault()
+                    if (newItemForm.type === "Null") {
+                      handleSaveNewItem()
+                    } else {
+                      // Focus the input field
+                      const input = e.currentTarget.parentElement?.querySelector("input")
+                      input?.focus()
+                    }
+                  } else if (e.key === "Escape") {
+                    e.preventDefault()
+                    handleCancelAddingItem()
+                  }
+                }}
+                className={styles.inlineTypeSelect}
+              >
+                <option value="Integer">Integer</option>
+                <option value="Cell">Cell</option>
+                <option value="Slice">Slice</option>
+                <option value="Address">Address</option>
+                <option value="Null">Null</option>
+              </select>
+
+              {newItemForm.type !== "Null" ? (
+                <input
+                  type="text"
+                  value={newItemForm.value}
+                  onChange={e => {
+                    const newValue = e.target.value
+                    setNewItemForm({...newItemForm, value: newValue})
+                    // Clear validation error when user starts typing
+                    if (validationError) {
+                      setValidationError(null)
+                    }
+                  }}
+                  onKeyDown={e => {
+                    if (e.key === "Enter") {
+                      e.preventDefault()
+                      handleSaveNewItem()
+                    } else if (e.key === "Escape") {
+                      e.preventDefault()
+                      handleCancelAddingItem()
+                    }
+                  }}
+                  placeholder={
+                    newItemForm.type === "Integer"
+                      ? ""
+                      : newItemForm.type === "Cell"
+                        ? "BoC hex"
+                        : newItemForm.type === "Address"
+                          ? "0:abc123... or EQD..."
+                          : "Hex data"
+                  }
+                  className={`${styles.inlineValueInput} ${validationError ? styles.inputError : ""}`}
+                  autoFocus
+                />
+              ) : (
+                <div className={styles.nullValuePlaceholder}></div>
+              )}
+            </div>
+          </div>
+        </div>
+        <div className={styles.stackItemActions}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleSaveNewItem}
+            disabled={
+              (newItemForm.type !== "Null" && !newItemForm.value.trim()) || !!validationError
+            }
+            title="Save"
+          >
+            <FiCheck size={14} />
+          </Button>
+          <Button variant="ghost" size="sm" onClick={handleCancelAddingItem} title="Cancel">
+            <FiX size={14} />
+          </Button>
+        </div>
+      </>
+    )
+  }
+
   const itemVariants = {
     initial: {opacity: 0, y: 20},
     animate: {opacity: 1, y: 0},
@@ -426,6 +610,16 @@ const StackEditor: React.FC<StackEditorProps> = ({stack, onStackChange}) => {
         <div className={styles.stackHeader}>
           <h4>Initial Stack</h4>
           <div className={styles.stackHeaderActions}>
+            <Button
+              className={styles.stackButton}
+              variant="ghost"
+              size="sm"
+              onClick={handleStartAddingItem}
+              disabled={isAddingNewItem}
+              title="Add new item"
+            >
+              <FiPlus size={16} />
+            </Button>
             <Button
               className={styles.stackButton}
               variant="ghost"
@@ -478,11 +672,25 @@ const StackEditor: React.FC<StackEditorProps> = ({stack, onStackChange}) => {
           </div>
         )}
 
-        {!Array.isArray(stack) || stack.length === 0 ? (
+        {(!Array.isArray(stack) || stack.length === 0) && !isAddingNewItem ? (
           <div className={styles.emptyStack}>Empty stack</div>
         ) : (
           <div className={styles.stackItems}>
             <AnimatePresence mode="popLayout">
+              {isAddingNewItem && (
+                <motion.div
+                  key="new-item-form"
+                  layout
+                  variants={itemVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  transition={{type: "spring", stiffness: 300, damping: 30}}
+                  className={styles.stackElement}
+                >
+                  {renderNewItemForm()}
+                </motion.div>
+              )}
               {[...itemsToRender].reverse().map(({element, key, originalIndex}) => (
                 <motion.div
                   key={key}
@@ -531,45 +739,6 @@ const StackEditor: React.FC<StackEditorProps> = ({stack, onStackChange}) => {
             </AnimatePresence>
           </div>
         )}
-      </div>
-
-      <div className={styles.addItemForm}>
-        <div className={styles.compactFormRow}>
-          <select
-            value={newItem.type}
-            onChange={e => setNewItem({...newItem, type: e.target.value as StackItemForm["type"]})}
-            className={styles.typeSelect}
-          >
-            <option value="Integer">Integer</option>
-            <option value="Cell">Cell</option>
-            <option value="Slice">Slice</option>
-            <option value="Null">Null</option>
-          </select>
-
-          {newItem.type !== "Null" && (
-            <input
-              type="text"
-              value={newItem.value}
-              onChange={e => setNewItem({...newItem, value: e.target.value})}
-              placeholder={
-                newItem.type === "Integer"
-                  ? "42, -100"
-                  : newItem.type === "Cell"
-                    ? "BoC hex"
-                    : "hex data"
-              }
-              className={styles.valueInput}
-            />
-          )}
-
-          <Button
-            onClick={addStackItem}
-            disabled={!newItem.value.trim() && newItem.type !== "Null"}
-            size="sm"
-          >
-            <FiPlus size={14} />
-          </Button>
-        </div>
       </div>
     </div>
   )

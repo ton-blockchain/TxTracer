@@ -306,70 +306,60 @@
 }
 
 /* Add item form */
-.addItemForm {
-  padding: var(--spacing-md);
-  border-top: 1px solid var(--color-border);
+/* New item form styles */
+.newItemFormItem {
+  position: relative;
 }
 
-.addItemForm h4 {
-  margin: 0 0 var(--spacing-md) 0;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-}
-
-.formRow {
-  margin-bottom: var(--spacing-sm);
-}
-
-.compactFormRow {
+.newItemFormContent {
   display: flex;
-  gap: var(--spacing-sm);
   align-items: center;
-}
-
-.typeSelect,
-.valueInput {
-  padding: var(--spacing-sm);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-sm);
-  background-color: var(--color-background-primary);
-  color: var(--color-text-primary);
-  font-size: var(--font-size-sm);
-}
-
-.formRow .typeSelect,
-.formRow .valueInput {
+  gap: var(--spacing-xs);
   width: 100%;
 }
 
-.compactFormRow .typeSelect {
-  min-width: 80px;
-  flex-shrink: 0;
+.inlineTypeSelect {
+  padding: var(--spacing-xs) 0;
+  border: 0;
+  border-radius: var(--border-radius-sm);
+  background-color: transparent;
+  color: var(--color-text);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  min-width: 70px;
+  margin-right: var(--spacing-xs);
 }
 
-.compactFormRow .valueInput {
+.inlineTypeSelect:focus {
+  outline: none;
+  border: 0;
+}
+
+.inlineValueInput {
   flex: 1;
+  padding: var(--spacing-xs) var(--spacing-xs);
+  border-radius: var(--border-radius-sm);
+  border: 1px solid transparent;
+  background-color: rgba(0, 0, 0, 0.25);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
   min-width: 0;
 }
 
-.typeSelect:focus,
-.valueInput:focus {
+.inlineValueInput:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px var(--color-primary-alpha);
+  box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.2);
 }
 
-.valueInput {
-  font-family: var(--font-family-mono);
+.inlineValueInput::placeholder {
+  color: inherit;
+  font-size: var(--font-size-xs);
 }
 
-.valueInput::placeholder {
-  color: var(--color-text-placeholder);
-}
-
-.formActions {
-  display: flex;
-  justify-content: flex-start;
+.inputError {
+  border: 1px solid var(--color-error) !important;
+  background-color: rgba(255, 0, 0, 0.1) !important;
 }
 
 @media (max-width: 768px) {
@@ -408,17 +398,13 @@
     padding: var(--spacing-sm);
   }
 
-  .addItemForm {
-    padding: var(--spacing-sm);
-  }
-
-  .compactFormRow {
+  .newItemFormContent {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .compactFormRow .typeSelect,
-  .compactFormRow .valueInput {
+  .inlineTypeSelect,
+  .inlineValueInput {
     width: 100%;
     min-width: auto;
   }
