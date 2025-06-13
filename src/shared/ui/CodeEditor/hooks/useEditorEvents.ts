@@ -2,10 +2,12 @@ import {useCallback, useEffect, useState, type RefObject} from "react"
 import type * as monacoTypes from "monaco-editor"
 import {editor} from "monaco-editor"
 
+import type {LinesExecutionData} from "@features/txTrace/hooks"
+
 interface UseEditorEventsOptions {
   readonly monaco: typeof monacoTypes | null
   readonly editorRef: RefObject<monacoTypes.editor.IStandaloneCodeEditor | null>
-  readonly lineGas?: Record<number, number>
+  readonly lineExecutionData?: LinesExecutionData
   readonly onLineClick?: (line: number) => void
   readonly onLineHover?: (line: number | null) => void
   readonly editorReady?: boolean
@@ -19,7 +21,7 @@ interface UseEditorEventsReturn {
 export const useEditorEvents = ({
   monaco,
   editorRef,
-  lineGas,
+  lineExecutionData,
   onLineClick,
   onLineHover,
   editorReady = true,
@@ -65,14 +67,19 @@ export const useEditorEvents = ({
       ) {
         const lineNumber = e.target.position?.lineNumber
 
-        if (lineNumber && lineGas && lineGas[lineNumber] !== undefined && onLineClick) {
+        if (
+          lineNumber &&
+          lineExecutionData &&
+          lineExecutionData[lineNumber] !== undefined &&
+          onLineClick
+        ) {
           onLineClick(lineNumber)
         }
       }
     })
 
     return () => disposable.dispose()
-  }, [editorRef, lineGas, onLineClick, monaco, editorReady])
+  }, [editorRef, lineExecutionData, onLineClick, monaco, editorReady])
 
   // Combined mouse move handler for both Ctrl+click hover and source map hover
   useEffect(() => {
@@ -82,7 +89,12 @@ export const useEditorEvents = ({
       const lineNumber = e.target.position?.lineNumber
 
       // Handle Ctrl+click hover (for clickable lines)
-      if (isCtrlPressed && lineNumber && lineGas && lineGas[lineNumber] !== undefined) {
+      if (
+        isCtrlPressed &&
+        lineNumber &&
+        lineExecutionData &&
+        lineExecutionData[lineNumber] !== undefined
+      ) {
         setHoveredLine(lineNumber)
       } else if (isCtrlPressed) {
         setHoveredLine(null)
@@ -112,7 +124,7 @@ export const useEditorEvents = ({
       disposable.dispose()
       editorDom?.removeEventListener("mouseleave", handleMouseLeave)
     }
-  }, [monaco, editorRef, isCtrlPressed, lineGas, onLineHover, editorReady])
+  }, [monaco, editorRef, isCtrlPressed, lineExecutionData, onLineHover, editorReady])
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown)

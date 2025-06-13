@@ -6,7 +6,7 @@ import {RetraceResultView} from "@features/txTrace/ui"
 import type {RetraceResultAndCode} from "@features/txTrace/ui"
 import TraceSidePanel from "@shared/ui/TraceSidePanel"
 import {traceTx, normalizeGas} from "@features/txTrace/lib/traceTx"
-import {useGasMap, useTraceStepper, useExecutionsMap} from "@features/txTrace/hooks"
+import {useLineExecutionData, useTraceStepper} from "@features/txTrace/hooks"
 import SearchInput from "@shared/ui/SearchInput"
 import InlineLoader from "@shared/ui/InlineLoader"
 import {useGlobalError} from "@shared/lib/errorContext"
@@ -36,8 +36,7 @@ function TracePage() {
   const [showHistoryDropdown, setShowHistoryDropdown] = useState(false)
   const [isInputFocused, setIsInputFocused] = useState(false)
 
-  const gasMap = useGasMap(result?.trace)
-  const executionsMap = useExecutionsMap(result?.trace)
+  const lineExecutionData = useLineExecutionData(result?.trace)
   const {
     selectedStep,
     highlightLine,
@@ -349,8 +348,7 @@ function TracePage() {
                   <CodeEditor
                     code={result.code}
                     highlightLine={highlightLine}
-                    lineGas={gasMap}
-                    lineExecutions={executionsMap}
+                    lineExecutionData={lineExecutionData}
                     onLineClick={findStepByLine}
                     shouldCenter={transitionType === "button"}
                     exitCode={result.exitCode}

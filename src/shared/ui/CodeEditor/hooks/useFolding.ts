@@ -1,10 +1,12 @@
 import {useCallback, type RefObject} from "react"
 import type * as monacoTypes from "monaco-editor"
 
+import type {LinesExecutionData} from "@features/txTrace/hooks"
+
 interface UseFoldingOptions {
   readonly monaco: typeof monacoTypes | null
   readonly editorRef: RefObject<monacoTypes.editor.IStandaloneCodeEditor | null>
-  readonly lineExecutions?: Record<number, number>
+  readonly lineExecutionData?: LinesExecutionData
 }
 
 interface UseFoldingReturn {
@@ -25,7 +27,7 @@ interface FoldingRange {
 export const useFolding = ({
   monaco,
   editorRef,
-  lineExecutions,
+  lineExecutionData,
 }: UseFoldingOptions): UseFoldingReturn => {
   const collapseInactiveBlocks = useCallback(() => {
     if (!editorRef.current || !monaco) return
@@ -39,7 +41,7 @@ export const useFolding = ({
     const model = editorRef.current.getModel()
     if (!model) return
 
-    if (!lineExecutions || Object.keys(lineExecutions).length === 0) return
+    if (!lineExecutionData || Object.keys(lineExecutionData).length === 0) return
 
     const totalLines = model.getLineCount()
     const foldingRanges: FoldingRange[] = []
@@ -65,7 +67,7 @@ export const useFolding = ({
       let allLinesInactive = true
       for (let line = block.start; line <= block.end; line++) {
         const lineText = model.getLineContent(line)
-        const isActiveLine = lineExecutions[line] !== undefined
+        const isActiveLine = lineExecutionData[line] !== undefined
         const isEmpty = lineText.trim() === ""
         if (isActiveLine && !isEmpty) {
           allLinesInactive = false
@@ -88,7 +90,7 @@ export const useFolding = ({
         }
       }
     }, 100)
-  }, [editorRef, monaco, lineExecutions])
+  }, [editorRef, monaco, lineExecutionData])
 
   return {
     collapseInactiveBlocks,

@@ -1,6 +1,8 @@
 import {useCallback, useRef} from "react"
 import type * as monacoTypes from "monaco-editor"
 
+import type {LinesExecutionData} from "@features/txTrace/hooks"
+
 export interface HighlightGroup {
   readonly lines: number[]
   readonly color: string
@@ -18,7 +20,7 @@ export interface HighlightRange {
 interface UseDecorationsOptions {
   readonly monaco: typeof monacoTypes | null
   readonly highlightLine?: number
-  readonly lineGas?: Record<number, number>
+  readonly lineExecutionData?: LinesExecutionData
   readonly highlightGroups?: readonly HighlightGroup[]
   readonly hoveredLines?: readonly number[]
   readonly highlightRanges?: readonly HighlightRange[]
@@ -118,7 +120,7 @@ const createHighlightRangeDecorations = (
 
 const createExecutionDecorations = (
   monaco: typeof monacoTypes,
-  lineGas: Record<number, number>,
+  lineExecutionData: LinesExecutionData,
   isCtrlPressed: boolean,
   hoveredLine: number | null,
   model: monacoTypes.editor.ITextModel,
@@ -131,7 +133,7 @@ const createExecutionDecorations = (
     const isEmpty = text.trim() === ""
     if (isEmpty) continue
 
-    const wasExecuted = lineGas[line] !== undefined
+    const wasExecuted = lineExecutionData[line] !== undefined
 
     if (wasExecuted && isCtrlPressed) {
       const className =
@@ -163,7 +165,7 @@ const createExecutionDecorations = (
 export const useDecorations = ({
   monaco,
   highlightLine,
-  lineGas,
+  lineExecutionData,
   highlightGroups = [],
   hoveredLines = [],
   highlightRanges = [],
@@ -199,9 +201,15 @@ export const useDecorations = ({
         allDecorations.push(...createHighlightRangeDecorations(monaco, highlightRanges, totalLines))
 
         // Add execution-based decorations
-        if (lineGas && Object.keys(lineGas).length > 0) {
+        if (lineExecutionData && Object.keys(lineExecutionData).length > 0) {
           allDecorations.push(
-            ...createExecutionDecorations(monaco, lineGas, isCtrlPressed, hoveredLine, model),
+            ...createExecutionDecorations(
+              monaco,
+              lineExecutionData,
+              isCtrlPressed,
+              hoveredLine,
+              model,
+            ),
           )
         }
 
@@ -222,7 +230,7 @@ export const useDecorations = ({
       highlightGroups,
       hoveredLines,
       highlightRanges,
-      lineGas,
+      lineExecutionData,
       shouldCenter,
       isCtrlPressed,
       hoveredLine,

@@ -5,12 +5,14 @@ import {editor, type IMarkdownString, Position} from "monaco-editor"
 import {findInstruction, generateAsmDoc} from "@features/tasm/lib"
 import {formatVariablesForHover, type FuncVar} from "@features/godbolt/lib/func/variables"
 
+import type {LinesExecutionData} from "@features/txTrace/hooks"
+
 import {TASM_LANGUAGE_ID} from "../languages"
 
 interface UseTasmHoverProviderOptions {
   readonly monaco: typeof monacoTypes | null
   readonly editorRef: RefObject<monacoTypes.editor.IStandaloneCodeEditor | null>
-  readonly lineExecutions?: Record<number, number>
+  readonly lineExecutionData?: LinesExecutionData
   readonly getVariablesForLine?: (line: number) => FuncVar[] | undefined
   readonly showVariablesDocs?: boolean
   readonly showInstructionDocs?: boolean
@@ -20,7 +22,7 @@ interface UseTasmHoverProviderOptions {
 export const useTasmHoverProvider = ({
   monaco,
   editorRef,
-  lineExecutions,
+  lineExecutionData,
   getVariablesForLine,
   showVariablesDocs = true,
   showInstructionDocs = true,
@@ -71,17 +73,17 @@ export const useTasmHoverProvider = ({
               }
             }
 
-            if (lineExecutions) {
-              const executionCount = lineExecutions[lineNumber]
+            if (lineExecutionData) {
+              const executionData = lineExecutionData[lineNumber]
 
               if (hoverContents.length > 0) {
                 hoverContents.push({value: "---"})
               }
 
-              if (executionCount === undefined) {
+              if (executionData === undefined) {
                 hoverContents.push({value: `**Not executed**`})
               } else {
-                hoverContents.push({value: `**Executions:** ${executionCount}`})
+                hoverContents.push({value: `**Executions:** ${executionData.executions}`})
               }
             }
           }
@@ -114,7 +116,7 @@ export const useTasmHoverProvider = ({
     }
   }, [
     monaco,
-    lineExecutions,
+    lineExecutionData,
     getVariablesForLine,
     showInstructionDocs,
     showVariablesDocs,

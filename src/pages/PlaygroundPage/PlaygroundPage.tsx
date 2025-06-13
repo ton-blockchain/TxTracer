@@ -9,7 +9,7 @@ import {executeAssemblyCode, type AssemblyExecutionResult} from "@features/tasm/
 import {usePlaygroundTrace} from "@features/tasm/hooks/usePlaygroundTrace"
 import {useGlobalError} from "@shared/lib/errorContext"
 import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
-import {useExecutionsMap, useTraceStepper, useGasMap} from "@features/txTrace/hooks"
+import {useLineExecutionData, useTraceStepper} from "@features/txTrace/hooks"
 import {normalizeGas} from "@features/txTrace/lib/traceTx"
 import type {InstructionDetail} from "@features/txTrace/ui/StepInstructionBlock"
 
@@ -58,8 +58,7 @@ function PlaygroundPage() {
     transitionType,
   } = useTraceStepper(trace)
 
-  const executionsMap = useExecutionsMap(trace)
-  const gasMap = useGasMap(trace)
+  const lineExecutionData = useLineExecutionData(trace)
 
   const instructionDetails: InstructionDetail[] = useMemo(() => {
     if (!trace) return []
@@ -175,8 +174,7 @@ function PlaygroundPage() {
                 onChange={handleCodeChange}
                 readOnly={false}
                 highlightLine={highlightLine}
-                lineExecutions={executionsMap}
-                lineGas={gasMap}
+                lineExecutionData={lineExecutionData}
                 shouldCenter={transitionType === "button"}
                 exitCode={exitCode?.info ? exitCode : undefined}
                 onLineClick={findStepByLine}

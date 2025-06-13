@@ -7,6 +7,8 @@ import type {FuncVar} from "@features/godbolt/lib/func/variables.ts"
 
 import {FUNC_LANGUAGE_ID, TASM_LANGUAGE_ID} from "@shared/ui/CodeEditor/languages"
 
+import type {LinesExecutionData} from "@features/txTrace/hooks"
+
 import {
   useMonacoSetup,
   useDecorations,
@@ -43,11 +45,8 @@ interface CodeEditorProps {
   /** Line number to highlight (1-indexed). Used for showing the current execution step */
   readonly highlightLine?: number
 
-  /** Map of line numbers to gas costs. Used for execution visualization and ctrl+click navigation */
-  readonly lineGas?: Record<number, number>
-
-  /** Map of line numbers to execution counts. Used for showing how many times each line was executed */
-  readonly lineExecutions?: Record<number, number>
+  /** Execution data for each line including gas costs and execution counts */
+  readonly lineExecutionData?: LinesExecutionData
 
   /** Callback fired when a user ctrl+clicks on a line with gas data */
   readonly onLineClick?: (line: number) => void
@@ -91,8 +90,7 @@ interface CodeEditorProps {
 const CodeEditor: React.FC<CodeEditorProps> = ({
   code,
   highlightLine,
-  lineGas,
-  lineExecutions,
+  lineExecutionData,
   onLineClick = () => {},
   onLineHover,
   shouldCenter = true,
@@ -119,7 +117,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   const {isCtrlPressed, hoveredLine} = useEditorEvents({
     monaco,
     editorRef,
-    lineGas,
+    lineExecutionData,
     onLineClick,
     onLineHover,
     editorReady,
@@ -128,7 +126,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   const {updateDecorations} = useDecorations({
     monaco,
     highlightLine,
-    lineGas,
+    lineExecutionData,
     highlightGroups,
     hoveredLines,
     highlightRanges,
@@ -140,7 +138,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   useTasmHoverProvider({
     monaco,
     editorRef,
-    lineExecutions,
+    lineExecutionData,
     getVariablesForLine,
     showVariablesDocs,
     showInstructionDocs,
@@ -165,7 +163,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   const {collapseInactiveBlocks} = useFolding({
     monaco,
     editorRef,
-    lineExecutions,
+    lineExecutionData,
   })
 
   /* ----------------------- folding inactive blocks ----------------------- */
@@ -182,7 +180,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 
     updateDecorations(editorRef.current)
     handleCollapseInactiveBlocks()
-  }, [lineGas, updateDecorations, handleCollapseInactiveBlocks, isFoldedState])
+  }, [lineExecutionData, updateDecorations, handleCollapseInactiveBlocks, isFoldedState])
 
   useEffect(() => {
     if (!editorReady || !editorRef.current) return
@@ -217,7 +215,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   }, [editorReady])
 
   /* -------------------------------- render ------------------------------- */
-  const needFloatingTip = lineGas && readOnly && language === "tasm"
+  const needFloatingTip = lineExecutionData && readOnly && language === "tasm"
 
   return (
     <>
