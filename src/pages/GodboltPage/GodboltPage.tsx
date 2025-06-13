@@ -77,6 +77,8 @@ function GodboltPage() {
   const funcEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
   const asmEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
 
+  const [editorsReady, setEditorsReady] = useState({func: false, asm: false})
+
   const {
     result,
     loading,
@@ -139,6 +141,13 @@ function GodboltPage() {
     [handleExecuteCode, autoCompile, clearError, setResult],
   )
 
+  // Compile code on page open
+  useEffect(() => {
+    if (editorsReady.func && editorsReady.asm) {
+      void handleExecuteCode(funcCode)
+    }
+  }, [editorsReady.func, editorsReady.asm, handleExecuteCode, funcCode])
+
   return (
     <div className={styles.traceViewWrapper}>
       <PageHeader pageTitle="explorer">
@@ -184,6 +193,7 @@ function GodboltPage() {
                   needBorderRadius={false}
                   onEditorMount={editor => {
                     funcEditorRef.current = editor
+                    setEditorsReady(prev => ({...prev, func: true}))
                   }}
                 />
               </Suspense>
@@ -211,6 +221,7 @@ function GodboltPage() {
                   needBorderRadius={false}
                   onEditorMount={editor => {
                     asmEditorRef.current = editor
+                    setEditorsReady(prev => ({...prev, asm: true}))
                   }}
                 />
               </Suspense>
