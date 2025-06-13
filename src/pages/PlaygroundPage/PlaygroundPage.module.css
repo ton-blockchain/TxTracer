@@ -20,6 +20,9 @@
 }
 
 .mainActionContainer {
+  display: flex;
+  justify-self: flex-end;
+  gap: var(--spacing-md);
   margin-left: auto;
   margin-right: var(--spacing-lg);
 }

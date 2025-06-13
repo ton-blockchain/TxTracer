@@ -1,12 +1,10 @@
-import React, {useState, useCallback, Suspense, useMemo, useEffect} from "react"
+import React, {Suspense, useCallback, useEffect, useMemo, useState} from "react"
 import type {StackElement} from "ton-assembly-test-dev/dist/trace"
-
-import {FiPlay} from "react-icons/fi"
 
 import InlineLoader from "@shared/ui/InlineLoader"
 import TraceSidePanel from "@shared/ui/TraceSidePanel"
 
-import {executeAssemblyCode, type AssemblyExecutionResult} from "@features/tasm/lib/executor.ts"
+import {type AssemblyExecutionResult, executeAssemblyCode} from "@features/tasm/lib/executor.ts"
 import {useGlobalError} from "@shared/lib/errorContext"
 import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
 import {useLineExecutionData, useTraceStepper} from "@features/txTrace/hooks"
@@ -14,8 +12,11 @@ import {normalizeGas} from "@features/txTrace/lib/traceTx"
 import type {InstructionDetail} from "@features/txTrace/ui/StepInstructionBlock"
 
 import PageHeader from "@shared/ui/PageHeader"
-import Button from "@shared/ui/Button"
-import ButtonLoader from "@shared/ui/ButtonLoader/ButtonLoader.tsx"
+
+import ShareButton from "@shared/ui/ShareButton/ShareButton.tsx"
+import {decodeCodeFromUrl} from "@app/pages/GodboltPage/urlCodeSharing.ts"
+
+import {ExecuteButton} from "@app/pages/PlaygroundPage/components/ExecuteButton.tsx"
 
 import styles from "./PlaygroundPage.module.css"
 
@@ -36,6 +37,10 @@ const INITIAL_STACK_STORAGE_KEY = "txtracer-playground-initial-stack"
 
 function PlaygroundPage() {
   const [assemblyCode, setAssemblyCode] = useState(() => {
+    const sharedCode = decodeCodeFromUrl()
+    if (sharedCode) {
+      return sharedCode
+    }
     return localStorage.getItem(LOCAL_STORAGE_KEY) ?? DEFAULT_ASSEMBLY_CODE
   })
   const [result, setResult] = useState<AssemblyExecutionResult | undefined>(undefined)
@@ -180,21 +185,8 @@ function PlaygroundPage() {
         )}
         <div className={styles.headerContent}>
           <div className={styles.mainActionContainer}>
-            <Button
-              onClick={() => void handleExecute()}
-              disabled={loading}
-              className={styles.executeButton}
-              title="Execute Assembly Code"
-            >
-              {loading ? (
-                <ButtonLoader>Execute</ButtonLoader>
-              ) : (
-                <>
-                  <FiPlay size={16} />
-                  Execute
-                </>
-              )}
-            </Button>
+            <ExecuteButton onClick={() => void handleExecute()} disabled={loading} />
+            <ShareButton value={assemblyCode} />
           </div>
         </div>
       </PageHeader>

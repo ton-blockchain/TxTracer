@@ -11,9 +11,11 @@ import InlineLoader from "@shared/ui/InlineLoader"
 import ErrorBanner from "@shared/ui/ErrorBanner/ErrorBanner"
 import PageHeader from "@shared/ui/PageHeader"
 
-import {CompileButton, SettingsDropdown, ShareButton} from "@app/pages/GodboltPage/components"
+import {CompileButton, SettingsDropdown} from "@app/pages/GodboltPage/components"
 
 import {useSourceMapHighlight} from "@app/pages/GodboltPage/hooks"
+
+import ShareButton from "@shared/ui/ShareButton/ShareButton.tsx"
 
 import {useGodboltSettings} from "./hooks/useGodboltSettings"
 import {useCompilation} from "./hooks/useCompilation"
