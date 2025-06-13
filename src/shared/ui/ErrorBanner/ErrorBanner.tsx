@@ -31,10 +31,19 @@ const ErrorBanner: React.FC<Props> = ({message, onClose}) => {
       className={`${styles.errorBanner} ${isClosing ? styles.slideOut : ""}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
     >
       <span>{message}</span>
-      <Button variant="ghost" size="sm" onClick={handleClose}>
-        ×
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={handleClose}
+        aria-label="Close error message"
+        title="Close error message (Esc)"
+      >
+        <span aria-hidden="true">×</span>
       </Button>
     </div>
   )

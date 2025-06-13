@@ -39,20 +39,25 @@ export const ShareButton: React.FC<ShareButtonProps> = ({value}) => {
   }, [value])
 
   return (
-    <Button
-      onClick={() => void handleShareCode()}
-      title={isCopied ? "Link copied!" : "Share code via URL"}
-      className={className}
-      aria-label={isCopied ? "Code link copied to clipboard" : "Share code via URL"}
-      aria-live="polite"
-    >
-      {isCopied ? (
-        <FiCheck size={16} aria-hidden="true" />
-      ) : (
-        <FiShare2 size={16} aria-hidden="true" />
-      )}
-      {isCopied ? "Copied!" : "Share"}
-    </Button>
+    <>
+      <Button
+        onClick={() => void handleShareCode()}
+        title={isCopied ? "Link copied!" : "Share code via URL"}
+        className={className}
+        aria-label={isCopied ? "Code link copied to clipboard" : "Share code via URL"}
+      >
+        {isCopied ? (
+          <FiCheck size={16} aria-hidden="true" />
+        ) : (
+          <FiShare2 size={16} aria-hidden="true" />
+        )}
+        {isCopied ? "Copied!" : "Share"}
+      </Button>
+
+      <div className="sr-only" aria-live="polite" aria-atomic="true">
+        {isCopied && "Share link copied to clipboard"}
+      </div>
+    </>
   )
 }
 

@@ -18,10 +18,10 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({pageTitle, network, children})
   const isExplorer = pageTitle === "explorer"
 
   return (
-    <header className={styles.header}>
+    <header className={styles.header} role="banner">
       <div className={styles.logoContainer}>
-        <a href="/" className={styles.logo}>
-          <div className={styles.logoDiamond}></div>
+        <a href="/" className={styles.logo} aria-label="TxTracer home page">
+          <div className={styles.logoDiamond} aria-hidden="true"></div>
           <span className={styles.logoText}>TxTracer</span>
         </a>
         {isPlayground && <span className={styles.pageTitle}>Playground</span>}
@@ -31,15 +31,16 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({pageTitle, network, children})
 
       {children}
 
-      <div className={styles.headerLinks}>
+      <nav className={styles.headerLinks} aria-label="External links">
         <a
           href="https://docs.ton.org/"
           target="_blank"
           rel="noopener noreferrer"
           title="TON Documentation"
           className={styles.iconLink}
+          aria-label="Open TON Documentation in new tab"
         >
-          <FiBookOpen size={20} />
+          <FiBookOpen size={20} aria-hidden="true" />
         </a>
         <a
           href="https://github.com/tact-lang/txtracer"
@@ -47,10 +48,11 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({pageTitle, network, children})
           rel="noopener noreferrer"
           title="GitHub Repository"
           className={styles.iconLink}
+          aria-label="Open TxTracer GitHub repository in new tab"
         >
-          <FiGithub size={20} />
+          <FiGithub size={20} aria-hidden="true" />
         </a>
-      </div>
+      </nav>
     </header>
   )
 }
