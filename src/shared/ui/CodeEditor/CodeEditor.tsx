@@ -23,26 +23,69 @@ import {
 import styles from "./CodeEditor.module.css"
 
 interface CodeEditorProps {
+  /* -------------------------------- Core Editor -------------------------------- */
+  /** The source code to display in the editor */
   readonly code: string
-  readonly highlightLine?: number
-  readonly lineGas?: Record<number, number>
-  readonly lineExecutions?: Record<number, number>
-  readonly onLineClick?: (line: number) => void
-  readonly onLineHover?: (line: number | null) => void
-  readonly shouldCenter?: boolean
-  readonly exitCode?: ExitCode
-  readonly readOnly?: boolean
-  readonly onChange?: (value: string) => void
+
+  /** Programming language for syntax highlighting. Supports 'tasm' and 'func' */
   readonly language?: SupportedLanguage
-  readonly highlightGroups?: readonly HighlightGroup[]
-  readonly hoveredLines?: readonly number[]
-  readonly highlightRanges?: readonly HighlightRange[]
-  readonly markers?: readonly monacoTypes.editor.IMarkerData[]
+
+  /** Whether the editor is read-only or allows editing */
+  readonly readOnly?: boolean
+
+  /** Whether to apply border radius to the editor wrapper */
   readonly needBorderRadius?: boolean
-  readonly getVariablesForLine?: (line: number) => FuncVar[] | undefined
-  readonly showVariablesDocs?: boolean
-  readonly showInstructionDocs?: boolean
+
+  /** Callback fired when the Monaco editor instance is mounted and ready */
   readonly onEditorMount?: (editor: monacoTypes.editor.IStandaloneCodeEditor) => void
+
+  /* -------------------------------- Trace Features -------------------------------- */
+  /** Line number to highlight (1-indexed). Used for showing the current execution step */
+  readonly highlightLine?: number
+
+  /** Map of line numbers to gas costs. Used for execution visualization and ctrl+click navigation */
+  readonly lineGas?: Record<number, number>
+
+  /** Map of line numbers to execution counts. Used for showing how many times each line was executed */
+  readonly lineExecutions?: Record<number, number>
+
+  /** Callback fired when a user ctrl+clicks on a line with gas data */
+  readonly onLineClick?: (line: number) => void
+
+  /** Whether to center the editor view on the highlighted line */
+  readonly shouldCenter?: boolean
+
+  /** Exit code information to display as code lens above the error line */
+  readonly exitCode?: ExitCode
+
+  /** Whether to show instruction documentation in hover tooltips for TASM */
+  readonly showInstructionDocs?: boolean
+
+  /* -------------------------------- Godbolt/Source Mapping -------------------------------- */
+  /** Groups of lines to highlight with different colors. Used for source map visualization */
+  readonly highlightGroups?: readonly HighlightGroup[]
+
+  /** Individual lines to highlight with hover effect. Used for temporary highlighting */
+  readonly hoveredLines?: readonly number[]
+
+  /** Specific text ranges to highlight with precise positioning */
+  readonly highlightRanges?: readonly HighlightRange[]
+
+  /** Callback fired when a user hovers over a line. Used for source map highlighting */
+  readonly onLineHover?: (line: number | null) => void
+
+  /** Function to get variable information for a specific line. Used in TASM hover tooltips */
+  readonly getVariablesForLine?: (line: number) => FuncVar[] | undefined
+
+  /** Whether to show variable documentation in hover tooltips for TASM */
+  readonly showVariablesDocs?: boolean
+
+  /* -------------------------------- Playground/Editing -------------------------------- */
+  /** Callback fired when the code content changes */
+  readonly onChange?: (value: string) => void
+
+  /** Error markers to display in the editor. Used for compilation errors in FunC on Code Explorer page */
+  readonly markers?: readonly monacoTypes.editor.IMarkerData[]
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = ({
