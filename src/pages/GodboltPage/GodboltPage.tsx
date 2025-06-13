@@ -9,22 +9,14 @@ import {trace} from "ton-assembly/dist"
 
 import InlineLoader from "@shared/ui/InlineLoader"
 import ErrorBanner from "@shared/ui/ErrorBanner/ErrorBanner"
-import {useGlobalError} from "@shared/lib/errorContext"
-
 import TracePageHeader from "@app/pages/TracePage/TracePageHeader"
-
-import {
-  compileFuncCode,
-  FuncCompilationError,
-  type FuncCompilationResult,
-} from "@features/txTrace/lib/funcExecutor.ts"
-
-import {parseFuncErrors, convertErrorsToMarkers} from "@features/txTrace/lib/funcErrorParser"
 
 import {CompileButton, SettingsDropdown, ShareButton} from "@app/pages/GodboltPage/components"
 
-import {useSourceMapHighlight} from "./hooks/useSourceMapHighlight"
+import {useSourceMapHighlight} from "@app/pages/GodboltPage/hooks"
+
 import {useGodboltSettings} from "./hooks/useGodboltSettings"
+import {useCompilation} from "./hooks/useCompilation"
 import {decodeCodeFromUrl} from "./urlCodeSharing"
 
 import styles from "./GodboltPage.module.css"
@@ -51,14 +43,27 @@ function GodboltPage() {
   const [asmCode] = useState(() => {
     return localStorage.getItem(ASM_EDITOR_KEY) ?? DEFAULT_ASM_CODE
   })
-  const [result, setResult] = useState<FuncCompilationResult | undefined>(undefined)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string>("")
-  const [errorMarkers, setErrorMarkers] = useState<monaco.editor.IMarkerData[]>([])
-  const {setError: setGlobalError} = useGlobalError()
+
+  useEffect(() => {
+    localStorage.setItem(FUNC_EDITOR_KEY, funcCode)
+  }, [funcCode])
+  useEffect(() => {
+    localStorage.setItem(ASM_EDITOR_KEY, asmCode)
+  }, [asmCode])
 
   const funcEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
   const asmEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
+
+  const {
+    result,
+    loading,
+    error,
+    errorMarkers,
+    handleExecuteCode,
+    handleExecute,
+    clearError,
+    setResult,
+  } = useCompilation()
 
   const sourceMap = useMemo(() => {
     if (result?.funcSourceMap) {
@@ -92,53 +97,13 @@ function GodboltPage() {
 
   const displayedAsmCode = result?.assembly ? (filteredAsmCode ?? "") : asmCode
 
-  useEffect(() => {
-    localStorage.setItem(FUNC_EDITOR_KEY, funcCode)
-  }, [funcCode])
-  useEffect(() => {
-    localStorage.setItem(ASM_EDITOR_KEY, asmCode)
-  }, [asmCode])
-
-  const handleExecuteCode = useCallback(
-    async (code: string) => {
-      setLoading(true)
-      setError("")
-      setErrorMarkers([])
-
-      try {
-        const compilationResult = await compileFuncCode(code)
-        setResult(compilationResult)
-        setErrorMarkers([])
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "Unknown error"
-
-        if (!(error instanceof FuncCompilationError)) {
-          setError(errorMessage)
-          setGlobalError(`Failed to compile FunC code: ${errorMessage}`)
-        }
-
-        const parsedErrors = parseFuncErrors(errorMessage)
-        const markers = convertErrorsToMarkers(parsedErrors)
-        setErrorMarkers(markers)
-      } finally {
-        setLoading(false)
-      }
-    },
-    [setGlobalError],
-  )
-
-  const handleExecute = useCallback(async () => {
-    await handleExecuteCode(funcCode)
-  }, [funcCode, handleExecuteCode])
-
   const godboltSettingsHook = useGodboltSettings()
   const {showVariablesInHover, showDocsInHover, autoCompile} = godboltSettingsHook
 
   const handleCodeChange = useCallback(
     (newCode: string) => {
       setFuncCode(newCode)
-      setError("")
-      setErrorMarkers([])
+      clearError()
 
       if (!autoCompile) {
         // reset results since code changed
@@ -148,19 +113,15 @@ function GodboltPage() {
 
       void handleExecuteCode(newCode)
     },
-    [handleExecuteCode, autoCompile],
+    [handleExecuteCode, autoCompile, clearError, setResult],
   )
-
-  const clearError = useCallback(() => {
-    setError("")
-  }, [])
 
   return (
     <div className={styles.traceViewWrapper}>
       <TracePageHeader pageTitle="explorer">
         <div className={styles.mainActionContainer} role="toolbar" aria-label="Code editor actions">
           <CompileButton
-            onCompile={() => void handleExecute()}
+            onCompile={() => void handleExecute(funcCode)}
             loading={loading}
             className={styles.executeButton}
           />
