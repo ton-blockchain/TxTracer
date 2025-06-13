@@ -552,7 +552,15 @@ const CodeEditor = React.forwardRef<
       return () => {
         provider.dispose()
       }
-    }, [monaco, editorReady, lineGas, lineExecutions, getVariablesForLine, showInstructionDocs, language])
+    }, [
+      monaco,
+      editorReady,
+      lineGas,
+      lineExecutions,
+      getVariablesForLine,
+      showInstructionDocs,
+      language,
+    ])
 
     useEffect(() => {
       if (!monaco || !editorRef.current) return
