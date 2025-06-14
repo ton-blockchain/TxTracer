@@ -33,7 +33,8 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          "ton-vendor": ["@ton/core", "@ton/crypto", "@ton/sandbox"],
+          "ton-vendor": ["@ton/core"],
+          "ton-sandbox": ["@ton/sandbox"],
           "monaco-editor-core": ["monaco-editor"],
         },
       },
