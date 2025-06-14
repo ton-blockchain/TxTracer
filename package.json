@@ -35,7 +35,7 @@
     "react-helmet-async": "^2.0.5",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.6.0",
-    "ton-assembly-test-dev": "0.0.6"
+    "ton-assembly-test-dev": "0.0.7"
   },
   "devDependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",

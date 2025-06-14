@@ -17,11 +17,10 @@ import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
 
 import {TooltipHint} from "@shared/ui/TooltipHint"
 
-import PageHeader from "@shared/ui/PageHeader"
-
 import styles from "./TracePage.module.css"
 
 const CodeEditor = React.lazy(() => import("@shared/ui/CodeEditor"))
+const PageHeader = React.lazy(() => import("@shared/ui/PageHeader"))
 
 function TracePage() {
   const [inputText, setInputText] = useState("")

@@ -4085,10 +4085,10 @@ to-regex-range@^5.0.1:
   dependencies:
     is-number "^7.0.0"
 
-ton-assembly-test-dev@0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/ton-assembly-test-dev/-/ton-assembly-test-dev-0.0.6.tgz#c81d181a9387706884d47e1f37aae6a83fcaae88"
-  integrity sha512-B7OpAzxFlpLvOSghHSVfgj4hgrpuwnP7xAphWIgRmH7NXYWKCSkhVRA3B8mYg+AHDwfMbh2TzYt5wh4ZKczgvw==
+ton-assembly-test-dev@0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/ton-assembly-test-dev/-/ton-assembly-test-dev-0.0.7.tgz#bdb534c6f73378e9121f48d248385899a71d92ad"
+  integrity sha512-Yc6Sb4lNvr4Q6viZHzhcny13mpBObFzFRONPqvq9ieMd25EG3Qdx4kHcsG/mtwFLaPALRAiuJzZ1y9PuLO+DwQ==
   dependencies:
     "@ton/core" "^0.60.1"
     "@tonstudio/parser-runtime" "^0.0.1"
