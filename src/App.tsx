@@ -1,5 +1,5 @@
 import React, {Suspense} from "react"
-import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom"
+import {HashRouter, Routes, Route, Navigate} from "react-router-dom"
 import {HelmetProvider} from "react-helmet-async"
 
 import ErrorBanner from "@shared/ui/ErrorBanner/ErrorBanner"
@@ -24,7 +24,7 @@ function AppShell() {
     <main>
       {error && <ErrorBanner message={error} onClose={clearError} />}
 
-      <BrowserRouter>
+      <HashRouter>
         <ErrorBoundary
           resetKey={error}
           onError={err => {
@@ -80,7 +80,7 @@ function AppShell() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </ErrorBoundary>
-      </BrowserRouter>
+      </HashRouter>
 
       <ThemeToggleButton />
     </main>
