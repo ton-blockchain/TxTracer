@@ -6,7 +6,9 @@ import "../../index.css"
 
 import {GlobalErrorProvider} from "@shared/lib/errorContext"
 import {ThemeProvider} from "@shared/lib/themeContext"
-import {App} from "@app/pages/TracePage/App.tsx"
+import {PageWrapper} from "@app/app/PageWrapper"
+
+import TracePage from "./TracePage"
 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -14,7 +16,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <GlobalErrorProvider>
       <ThemeProvider>
         <HelmetProvider>
-          <App />
+          <PageWrapper loadingMessage="Loading TxTracer...">
+            <TracePage />
+          </PageWrapper>
         </HelmetProvider>
       </ThemeProvider>
     </GlobalErrorProvider>
