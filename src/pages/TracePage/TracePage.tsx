@@ -1,6 +1,6 @@
 import React, {useState, useEffect, Suspense, useCallback} from "react"
 import {FiGithub, FiClock, FiX, FiPlay, FiSearch} from "react-icons/fi"
-import {Link} from "react-router-dom"
+// Removed Link import - using regular <a> tags for MPA navigation
 
 import {RetraceResultView} from "@features/txTrace/ui"
 import type {RetraceResultAndCode} from "@features/txTrace/ui"
@@ -291,7 +291,7 @@ function TracePage() {
                 <h2 id="features-heading" className="sr-only">
                   Available Tools
                 </h2>
-                <Link to="/play" className={styles.featureCard}>
+                <a href="/play/" className={styles.featureCard}>
                   <div className={`${styles.featureCardIcon} ${styles.playgroundIcon}`}>
                     <FiPlay aria-hidden="true" />
                   </div>
@@ -301,9 +301,9 @@ function TracePage() {
                     debug assembly instructions with real-time execution.
                   </p>
                   <span className={styles.featureCardBadge}>Playground</span>
-                </Link>
+                </a>
 
-                <Link to="/code-explorer" className={styles.featureCard}>
+                <a href="/code-explorer/" className={styles.featureCard}>
                   <div className={`${styles.featureCardIcon} ${styles.explorerIcon}`}>
                     <FiSearch aria-hidden="true" />
                   </div>
@@ -313,7 +313,7 @@ function TracePage() {
                     understanding how your smart contracts work under the hood.
                   </p>
                   <span className={styles.featureCardBadge}>Explorer</span>
-                </Link>
+                </a>
               </section>
             )}
           </div>

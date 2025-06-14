@@ -1,16 +1,14 @@
 import React from "react"
 import {Helmet} from "react-helmet-async"
-import {useLocation} from "react-router-dom"
 
 export interface Props {
   readonly title?: string
   readonly description?: string
   readonly imageUrl?: string
+  readonly pathname?: string
 }
 
-const PageMetadata: React.FC<Props> = ({title, description, imageUrl}) => {
-  const location = useLocation()
-
+const PageMetadata: React.FC<Props> = ({title, description, imageUrl, pathname = "/"}) => {
   const defaultTitle = "TxTracer"
   const siteName = "TxTracer | TON"
   const defaultDescription =
@@ -21,7 +19,7 @@ const PageMetadata: React.FC<Props> = ({title, description, imageUrl}) => {
   const pageTitle = title ? `${title} | ${defaultTitle}` : siteName
   const pageDescription = description || defaultDescription
   const pageImage = imageUrl || defaultImageUrl
-  const pageUrl = `${siteUrl}${location.pathname}${location.search}`
+  const pageUrl = `${siteUrl}${pathname}`
 
   return (
     <Helmet>
