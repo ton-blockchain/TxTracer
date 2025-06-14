@@ -1,0 +1,92 @@
+.traceViewWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: var(--color-background-secondary);
+}
+
+.appContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.daemonMessage {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  margin: 16px;
+  background-color: var(--color-warning-bg);
+  border: 1px solid var(--color-warning);
+  border-radius: var(--border-radius-md);
+  color: var(--color-warning-text);
+}
+
+.daemonMessageIcon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.daemonMessageContent {
+  flex: 1;
+}
+
+.daemonMessageContent h3 {
+  margin: 0 0 8px 0;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+}
+
+.daemonMessageContent p {
+  margin: 8px 0;
+  font-size: var(--font-size-sm);
+  line-height: 1.4;
+}
+
+.daemonMessageContent code {
+  display: inline-block;
+  background-color: var(--color-background-tertiary);
+  padding: 4px 8px;
+  border-radius: var(--border-radius-sm);
+  font-family: var(--font-family-mono), monospace;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-primary);
+  margin: 4px 0;
+}
+
+/* header */
+.headerContent {
+  display: flex;
+  flex-grow: 1;
+}
+
+.searchInputContainer {
+  flex-grow: 1;
+  max-width: 600px;
+}
+
+.txStatusContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-left: var(--spacing-sm);
+}
+
+.mainActionContainer {
+}
+
+.mainContent {
+  display: grid;
+  grid-template-columns: calc(100% - 500px - var(--spacing-sm)) 400px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transition: height var(--transition-duration-normal) ease;
+  gap: var(--spacing-sm);
+  padding: 0 var(--spacing-sm) var(--spacing-sm) var(--spacing-sm);
+}
+
+.mainContentMinimized {
+}

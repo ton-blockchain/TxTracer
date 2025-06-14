@@ -34,6 +34,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, "index.html"),
         play: resolve(__dirname, "play/index.html"),
+        sandbox: resolve(__dirname, "sandbox/index.html"),
         "code-explorer": resolve(__dirname, "code-explorer/index.html"),
       },
       output: {
