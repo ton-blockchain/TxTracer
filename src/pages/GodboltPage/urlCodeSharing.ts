@@ -17,7 +17,9 @@ export function encodeCodeToUrl(code: string): string {
   try {
     const encoded = stringToHex(code)
     const url = new URL(window.location.href)
-    url.searchParams.set("code", encoded)
+    // Clear any existing query parameters and use hash instead
+    url.search = ""
+    url.hash = `code=${encoded}`
     return url.toString()
   } catch (error) {
     console.error("Failed to encode code to URL:", error)
@@ -27,21 +29,36 @@ export function encodeCodeToUrl(code: string): string {
 
 export function decodeCodeFromUrl(): string | null {
   try {
-    const url = new URL(window.location.href)
-    const encoded = url.searchParams.get("code")
+    const hash = window.location.hash.substring(1) // Remove the '#'
+
+    if (!hash.startsWith("code=")) {
+      return null
+    }
+
+    const encoded = hash.substring(5) // Remove 'code='
 
     if (!encoded) {
       return null
     }
 
     if (!/^[0-9a-fA-F]*$/.test(encoded)) {
-      console.error("Invalid hex code in URL query parameter")
+      console.error("Invalid hex code in URL hash")
       return null
     }
 
     return hexToString(encoded)
   } catch (error) {
-    console.error("Failed to decode code from URL query parameter:", error)
+    console.error("Failed to decode code from URL hash:", error)
     return null
+  }
+}
+
+export function clearCodeFromUrl(): void {
+  try {
+    const url = new URL(window.location.href)
+    url.hash = ""
+    window.history.replaceState({}, "", url.toString())
+  } catch (error) {
+    console.error("Failed to clear code from URL:", error)
   }
 }

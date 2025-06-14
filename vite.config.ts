@@ -31,6 +31,11 @@ export default defineConfig({
   build: {
     target: ["es2020"],
     rollupOptions: {
+      input: {
+        main: resolve(__dirname, "index.html"),
+        play: resolve(__dirname, "play/index.html"),
+        "code-explorer": resolve(__dirname, "code-explorer/index.html"),
+      },
       output: {
         manualChunks: {
           "ton-vendor": ["@ton/core", "@ton/ton"],
