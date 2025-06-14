@@ -751,12 +751,11 @@
     jssha "3.2.0"
     tweetnacl "1.0.3"
 
-"@ton/sandbox@^0.32.2":
-  version "0.32.2"
-  resolved "https://registry.yarnpkg.com/@ton/sandbox/-/sandbox-0.32.2.tgz#e949d1df2ae98c1552901597200209163dd8cc42"
-  integrity sha512-D+Yuyka3pMuoD1KPufRGzE3iFZ0QLyba/xC5mfrXoLtV111ubKxc7RscndOsggeru0bdDYm0i/iaWO5YQWqUfw==
+"@ton/sandbox@^0.31.0":
+  version "0.31.0"
+  resolved "https://registry.yarnpkg.com/@ton/sandbox/-/sandbox-0.31.0.tgz#571c8e7a774ba4a6e7194bdf9331ee46869a2c82"
+  integrity sha512-UdcpRwW9EIowQ10kpswj5liy9erhtvVeQ5WlyD/qJMnlKys9BzvNhb9thW3na13x4piN0b/tLkqddtKE4JXcuQ==
   dependencies:
-    chalk "^4.1.2"
     table "^6.9.0"
 
 "@ton/test-utils@^0.7.0":
@@ -4200,13 +4199,13 @@ tweetnacl@1.0.3:
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-1.0.3.tgz#ac0af71680458d8a6378d0d0d050ab1407d35596"
   integrity sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==
 
-txtracer-core-test-dev@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/txtracer-core-test-dev/-/txtracer-core-test-dev-0.1.1.tgz#d2860918c277682f246661c051834fd85dc8dc47"
-  integrity sha512-v/gypXP1DUUd332VIxplBMHUDagQfCquzLrzhAe7eOUnxQ2cq8sXMIXo739/lF2FroFKiSZsGqeybP6aLPUHrQ==
+txtracer-core-test-dev@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/txtracer-core-test-dev/-/txtracer-core-test-dev-0.1.4.tgz#37655e7c8ef9f0ea8cdff2a72b56ce119385058d"
+  integrity sha512-HZX1B4PWv63B7Yrbtj6MNnZBLHIsaHCizL6OL3KrpxDezYY4j2HEzeHBqVt+UHhWHcQpGQ03F7WVrDqqHTkYjg==
   dependencies:
     "@ton/core" "^0.60.1"
-    "@ton/sandbox" "^0.32.2"
+    "@ton/sandbox" "^0.31.0"
     "@ton/ton" "^15.2.1"
     axios "^1.6.7"
 
