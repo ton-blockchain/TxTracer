@@ -16,7 +16,18 @@ export default defineConfig({
     },
   },
   base: "./",
-  plugins: [react(), viteCompression(), viteCompression({algorithm: "brotliCompress", ext: ".br"})],
+  plugins: [
+    react(),
+    viteCompression(),
+    viteCompression({algorithm: "brotliCompress", ext: ".br"}),
+    // Bundle analyzer
+    // visualizer({
+    //   filename: "dist/stats.html",
+    //   open: false,
+    //   gzipSize: true,
+    //   brotliSize: true,
+    // }),
+  ],
   build: {
     target: ["es2020"],
     rollupOptions: {
