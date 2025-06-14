@@ -1,4 +1,4 @@
-import type {BaseTxInfo} from "@tonstudio/txtracer-core"
+import type {BaseTxInfo} from "txtracer-core-test-dev"
 import {Address} from "@ton/core"
 
 export type ExtractionResult = BaseInfo | SingleHash
