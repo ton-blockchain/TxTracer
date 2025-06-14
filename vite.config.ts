@@ -16,14 +16,27 @@ export default defineConfig({
     },
   },
   base: "./",
-  plugins: [react(), viteCompression(), viteCompression({algorithm: "brotliCompress", ext: ".br"})],
+  plugins: [
+    react(),
+    viteCompression(),
+    viteCompression({algorithm: "brotliCompress", ext: ".br"}),
+    // Bundle analyzer
+    // visualizer({
+    //   filename: "dist/stats.html",
+    //   open: false,
+    //   gzipSize: true,
+    //   brotliSize: true,
+    // }),
+  ],
   build: {
     target: ["es2020"],
     rollupOptions: {
       output: {
         manualChunks: {
-          "ton-vendor": ["@ton/core", "@ton/crypto", "@ton/sandbox"],
+          "ton-vendor": ["@ton/core", "@ton/ton"],
+          "ton-sandbox": ["@ton/sandbox"],
           "monaco-editor-core": ["monaco-editor"],
+          "ton-assembly-test-dev": ["ton-assembly-test-dev"],
         },
       },
     },

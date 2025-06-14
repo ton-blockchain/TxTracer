@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from "react"
 import Editor from "@monaco-editor/react"
-import * as monacoTypes from "monaco-editor"
+
+import * as monaco from "monaco-editor"
 
 import type {ExitCode} from "@features/txTrace/lib/traceTx"
 import type {FuncVar} from "@features/godbolt/lib/func/variables.ts"
@@ -40,7 +41,7 @@ interface CodeEditorProps {
   readonly needBorderRadius?: boolean
 
   /** Callback fired when the Monaco editor instance is mounted and ready */
-  readonly onEditorMount?: (editor: monacoTypes.editor.IStandaloneCodeEditor) => void
+  readonly onEditorMount?: (editor: monaco.editor.IStandaloneCodeEditor) => void
 
   /* -------------------------------- Trace Features -------------------------------- */
   /** Line number to highlight (1-indexed). Used for showing the current execution step */
@@ -85,7 +86,7 @@ interface CodeEditorProps {
   readonly onChange?: (value: string) => void
 
   /** Error markers to display in the editor. Used for compilation errors in FunC on the Code Explorer page */
-  readonly markers?: readonly monacoTypes.editor.IMarkerData[]
+  readonly markers?: readonly monaco.editor.IMarkerData[]
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = ({
@@ -109,7 +110,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   showInstructionDocs = true,
   onEditorMount,
 }) => {
-  const editorRef = useRef<monacoTypes.editor.IStandaloneCodeEditor | null>(null)
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
   const [editorReady, setEditorReady] = useState(false)
   const [isFoldedState, setIsFolded] = useState(false)
 
