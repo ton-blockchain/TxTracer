@@ -1,5 +1,5 @@
-import {retrace, retraceBaseTx} from "@tonstudio/txtracer-core"
-import type {TraceResult} from "@tonstudio/txtracer-core/dist/types"
+import {retrace, retraceBaseTx} from "txtracer-core-test-dev"
+import type {TraceResult} from "txtracer-core-test-dev/dist/types"
 import {compileCellWithMapping, decompileCell} from "ton-assembly-test-dev/dist/runtime/instr"
 import {
   createMappingInfo,
@@ -56,7 +56,7 @@ async function maybeTestnet(link: string): Promise<{result: TraceResult; network
   try {
     await wait(500) // rate limit
     const result = await retraceAny(txLinkInfo ?? SingleHash(link, false))
-    return {result, network: "mainnet"}
+    return {result, network: txLinkInfo?.testnet ? "testnet" : "mainnet"}
   } catch (error: unknown) {
     if (error instanceof Error && error.message.includes("Cannot find transaction info")) {
       console.log("Cannot find in mainnet, trying to find in testnet")
