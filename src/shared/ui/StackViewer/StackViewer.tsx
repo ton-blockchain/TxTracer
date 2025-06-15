@@ -195,7 +195,7 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title, onStackItemClick
               >
                 <div className={styles.stackItemLabel}>Address</div>
                 <div className={styles.stackItemValue}>
-                  {expandedItem === keyPrefix ? string : truncateMiddle(string, 40)}
+                  {expandedItem === keyPrefix ? string : truncateMiddle(string, 35)}
                 </div>
                 <CopyButton
                   className={styles.addressItemCopyButton}
@@ -280,7 +280,7 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title, onStackItemClick
           >
             <div className={styles.stackItemLabel}>Continuation</div>
             <div className={styles.stackItemValue}>
-              {expandedItem === keyPrefix ? element.name : truncateMiddle(element.name, 40)}
+              {expandedItem === keyPrefix ? element.name : truncateMiddle(element.name, 35)}
             </div>
             <CopyButton
               className={styles.continuationItemCopyButton}
@@ -315,7 +315,7 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title, onStackItemClick
           >
             <div className={styles.stackItemLabel}>Address</div>
             <div className={styles.stackItemValue}>
-              {expandedItem === keyPrefix ? element.value : truncateMiddle(element.value, 40)}
+              {expandedItem === keyPrefix ? element.value : truncateMiddle(element.value, 35)}
             </div>
             <CopyButton
               className={styles.addressItemCopyButton}
@@ -346,7 +346,7 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title, onStackItemClick
           <div className={styles.unknownItem} key={keyPrefix} role="button" tabIndex={0}>
             <div className={styles.stackItemLabel}>Unknown</div>
             <div className={styles.stackItemValue}>
-              {expandedItem === keyPrefix ? element.value : truncateMiddle(element.value, 40)}
+              {expandedItem === keyPrefix ? element.value : truncateMiddle(element.value, 35)}
             </div>
           </div>
         )

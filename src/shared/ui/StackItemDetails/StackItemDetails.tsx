@@ -5,6 +5,7 @@ import {Cell} from "@ton/core"
 
 import CellTreeView from "@shared/ui/CellTreeView/CellTreeView"
 import DataBlock from "@shared/ui/DataBlock"
+import AddressDetails from "@shared/ui/AddressDetails"
 
 import styles from "./StackItemDetails.module.css"
 
@@ -35,17 +36,42 @@ const StackItemDetails: React.FC<StackItemDetailsProps> = ({itemData, title, onC
     return null
   }
 
+  const safeLoadAddress = (cell: Cell) => {
+    try {
+      return cell.asSlice().loadAddress()
+    } catch {
+      return undefined
+    }
+  }
+
   try {
     const rootCell = cellFromItem(itemData)
     if (rootCell) {
-      cellDetailsContent = (
-        <>
-          <div className={styles.dataSection}>
-            <DataBlock label="" data={rootCell.toBoc().toString("hex")} />
-          </div>
-        </>
-      )
-      treeViewContent = <CellTreeView cell={rootCell} />
+      if (rootCell.bits.length === 267 && rootCell.refs.length === 0) {
+        const address = safeLoadAddress(rootCell)
+        if (address) {
+          cellDetailsContent = <AddressDetails address={address} />
+          treeViewContent = null
+        } else {
+          cellDetailsContent = (
+            <>
+              <div className={styles.dataSection}>
+                <DataBlock label="" data={rootCell.toBoc().toString("hex")} />
+              </div>
+            </>
+          )
+          treeViewContent = <CellTreeView cell={rootCell} />
+        }
+      } else {
+        cellDetailsContent = (
+          <>
+            <div className={styles.dataSection}>
+              <DataBlock label="" data={rootCell.toBoc().toString("hex")} />
+            </div>
+          </>
+        )
+        treeViewContent = <CellTreeView cell={rootCell} />
+      }
     } else {
       treeViewContent = null
       cellDetailsContent = <p>Details for the selected item will be shown here.</p>
@@ -71,9 +97,11 @@ const StackItemDetails: React.FC<StackItemDetailsProps> = ({itemData, title, onC
       <div className={styles.contentContainer}>
         <div className={styles.detailsRow}>{cellDetailsContent}</div>
 
-        <div className={styles.treeRow}>
-          <div className={styles.treeViewContainer}>{treeViewContent}</div>
-        </div>
+        {treeViewContent && (
+          <div className={styles.treeRow}>
+            <div className={styles.treeViewContainer}>{treeViewContent}</div>
+          </div>
+        )}
       </div>
     </div>
   )
