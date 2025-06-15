@@ -1,6 +1,5 @@
 import React, {useState, useEffect, Suspense, useCallback} from "react"
 import {FiGithub, FiClock, FiX, FiPlay, FiSearch} from "react-icons/fi"
-// Removed Link import - using regular <a> tags for MPA navigation
 
 import {type StackElement} from "ton-assembly-test-dev/dist/trace"
 
