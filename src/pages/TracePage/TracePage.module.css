@@ -297,7 +297,7 @@
   padding: var(--spacing-md);
   text-decoration: none;
   color: inherit;
-  transition: all var(--transition-duration-fast) ease;
+  transition: border var(--transition-duration-fast) ease;
   cursor: pointer;
   position: relative;
   overflow: hidden;

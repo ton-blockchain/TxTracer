@@ -258,6 +258,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
               useShadows: false,
             },
           }}
+          loading={<></>}
           onMount={editor => {
             editorRef.current = editor
             setEditorReady(true)

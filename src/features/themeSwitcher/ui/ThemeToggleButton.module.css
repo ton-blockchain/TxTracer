@@ -6,6 +6,8 @@
   border: var(--color-change-theme-border);
   background-color: var(--color-change-theme-background);
   color: var(--color-change-theme-color);
+
+  transition: none;
 }
 
 .toggleButtonText {

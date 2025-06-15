@@ -93,7 +93,7 @@
   font-size: var(--font-size-sm);
   border: 1px solid var(--color-border);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: border 0.2s ease;
 }
 
 .shareButton:hover {
