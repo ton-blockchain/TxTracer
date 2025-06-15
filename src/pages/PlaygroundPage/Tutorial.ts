@@ -82,6 +82,13 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     placement: "left",
   },
   {
+    title: "Share Your Code",
+    content:
+      "Use the share button to generate links to your code.\n\nPerfect for collaboration, asking for help, or showcasing your smart contracts!",
+    target: '[role="toolbar"] button:nth-child(2)',
+    placement: "bottom",
+  },
+  {
     title: "Ready to Code!",
     content:
       "You're all set! You now know how to:\n\n• Write assembly code\n• Execute and debug step by step\n• Monitor gas usage and stack changes\n• Set up initial test conditions\n\nTry modifying the code or writing your own code.\n\nHappy debugging! 🚀",

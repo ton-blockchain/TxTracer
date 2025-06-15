@@ -1,5 +1,7 @@
 import React, {useEffect, useState, useCallback} from "react"
 
+import {FaArrowLeft, FaArrowRight, FaCheck} from "react-icons/fa"
+
 import styles from "./Tutorial.module.css"
 
 export interface TutorialStep {
@@ -134,6 +136,8 @@ const Tutorial: React.FC<TutorialProps> = ({steps, isOpen, onClose, onComplete})
         handlePrevious()
       } else if (event.key === "ArrowRight") {
         handleNext()
+      } else if (event.key === "Enter" && isLast) {
+        handleNext()
       }
       event.stopPropagation()
     }
@@ -147,7 +151,7 @@ const Tutorial: React.FC<TutorialProps> = ({steps, isOpen, onClose, onComplete})
       document.removeEventListener("keydown", handleKeyDown)
       document.body.style.overflow = "unset"
     }
-  }, [isOpen, onClose, isFirst, handleNext, handlePrevious])
+  }, [isOpen, onClose, isFirst, handleNext, handlePrevious, isLast])
 
   useEffect(() => {
     if (!isOpen || steps.length === 0) return
@@ -224,7 +228,9 @@ const Tutorial: React.FC<TutorialProps> = ({steps, isOpen, onClose, onComplete})
         <div className={styles.footer}>
           <div className={styles.stepCounter}>
             {currentStep + 1} of {steps.length}
-            <div className={styles.keyboardHint}>Use ← → keys for navigation</div>
+            <div className={styles.keyboardHint}>
+              {isLast ? "Press Enter or → to finish" : "Use ← → keys for navigation"}
+            </div>
           </div>
 
           <div className={styles.actions}>
@@ -234,14 +240,14 @@ const Tutorial: React.FC<TutorialProps> = ({steps, isOpen, onClose, onComplete})
               disabled={isFirst}
               aria-label="Previous step"
             >
-              ←
+              <FaArrowLeft />
             </button>
             <button
               className={`${styles.button} ${styles.primaryButton}`}
               onClick={handleNext}
               aria-label={isLast ? "Finish tutorial" : "Next step"}
             >
-              {isLast ? "✓" : "→"}
+              {isLast ? <FaCheck /> : <FaArrowRight />}
             </button>
           </div>
         </div>
