@@ -6,11 +6,11 @@ import {defineConfig} from "vite"
 import react from "@vitejs/plugin-react"
 
 const createCNAME = () => ({
-  name: 'create-cname',
+  name: "create-cname",
   writeBundle() {
-    const domain = process.env.CUSTOM_DOMAIN ?? 'txtracer.ton.org'
-    writeFileSync(resolve(__dirname, 'dist/CNAME'), `${domain}\n`)
-  }
+    const domain = process.env.CUSTOM_DOMAIN ?? "txtracer.ton.org"
+    writeFileSync(resolve(__dirname, "dist/CNAME"), `${domain}\n`)
+  },
 })
 
 // https://vite.dev/config/
