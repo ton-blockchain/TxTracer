@@ -7,9 +7,10 @@ import styles from "../GodboltPage.module.css"
 
 interface SettingsDropdownProps {
   readonly hooks: GodboltSettingsHook
+  readonly onHelpClick?: () => void
 }
 
-export const SettingsDropdown: React.FC<SettingsDropdownProps> = ({hooks}) => {
+export const SettingsDropdown: React.FC<SettingsDropdownProps> = ({hooks, onHelpClick}) => {
   const [isOpen, setIsOpen] = useState(false)
   const settingsRef = useRef<HTMLDivElement | null>(null)
   const settingsButtonRef = useRef<HTMLButtonElement | null>(null)
@@ -148,6 +149,17 @@ export const SettingsDropdown: React.FC<SettingsDropdownProps> = ({hooks}) => {
               Auto-compile on change
             </span>
           </label>
+          {onHelpClick && (
+            <button
+              type="button"
+              className={styles.helpButton}
+              onClick={onHelpClick}
+              onKeyDown={event => handleSettingsItemKeyDown(event, onHelpClick)}
+              tabIndex={0}
+            >
+              Show Tutorial
+            </button>
+          )}
         </div>
       )}
     </div>

@@ -1,4 +1,4 @@
-import React, {useState, useCallback, Suspense, useEffect, useMemo, useRef} from "react"
+import React, {Suspense, useCallback, useEffect, useMemo, useRef, useState} from "react"
 
 import {Allotment} from "allotment"
 import "allotment/dist/style.css"
@@ -10,12 +10,15 @@ import {trace} from "ton-assembly-test-dev/dist"
 import InlineLoader from "@shared/ui/InlineLoader"
 import ErrorBanner from "@shared/ui/ErrorBanner/ErrorBanner"
 import PageHeader from "@shared/ui/PageHeader"
+import Tutorial, {useTutorial} from "@shared/ui/Tutorial"
 
 import {CompileButton, SettingsDropdown} from "@app/pages/GodboltPage/components"
 
 import {useSourceMapHighlight} from "@app/pages/GodboltPage/hooks"
 
 import ShareButton from "@shared/ui/ShareButton/ShareButton.tsx"
+
+import {TUTORIAL_STEPS} from "@app/pages/GodboltPage/Tutorial.ts"
 
 import {useGodboltSettings} from "./hooks/useGodboltSettings"
 import {useCompilation} from "./hooks/useCompilation"
@@ -127,6 +130,8 @@ function GodboltPage() {
   const godboltSettingsHook = useGodboltSettings()
   const {showVariablesInHover, showDocsInHover, autoCompile} = godboltSettingsHook
 
+  const tutorial = useTutorial({tutorialKey: "godbolt-page", autoStart: true})
+
   const handleCodeChange = useCallback(
     (newCode: string) => {
       setFuncCode(newCode)
@@ -176,7 +181,7 @@ function GodboltPage() {
             className={styles.executeButton}
           />
           <ShareButton value={funcCode} />
-          <SettingsDropdown hooks={godboltSettingsHook} />
+          <SettingsDropdown hooks={godboltSettingsHook} onHelpClick={tutorial.startTutorial} />
         </div>
       </PageHeader>
 
@@ -251,6 +256,13 @@ function GodboltPage() {
           </Allotment.Pane>
         </Allotment>
       </main>
+
+      <Tutorial
+        steps={TUTORIAL_STEPS}
+        isOpen={tutorial.isOpen}
+        onClose={tutorial.closeTutorial}
+        onComplete={tutorial.completeTutorial}
+      />
     </div>
   )
 }

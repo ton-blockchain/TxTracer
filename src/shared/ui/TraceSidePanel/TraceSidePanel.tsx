@@ -155,7 +155,7 @@ const TraceSidePanel: React.FC<TraceSidePanelProps> = ({
           </div>
         </div>
 
-        <div className={styles.stackViewerContainer}>
+        <div className={`${styles.stackViewerContainer} stack-viewer}`}>
           {showInitialStackEditor ? (
             <StackEditor stack={initialStack} onStackChange={onInitialStackChange} />
           ) : (
