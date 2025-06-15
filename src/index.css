@@ -142,6 +142,7 @@
   --font-family-mono: "SF Mono", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New",
     monospace;
 
+  --font-size-xss: 0.65rem;
   --font-size-xs: 0.75rem;
   --font-size-xsm: 0.82rem;
   --font-size-sm: 0.875rem;

@@ -1,21 +1,24 @@
-import React, {useState, useEffect, Suspense, useCallback} from "react"
-import {FiGithub, FiClock, FiX, FiPlay, FiSearch} from "react-icons/fi"
-// Removed Link import - using regular <a> tags for MPA navigation
+import React, {Suspense, useCallback, useEffect, useState} from "react"
+import {FiClock, FiGithub, FiPlay, FiSearch, FiX} from "react-icons/fi"
 
-import {RetraceResultView} from "@features/txTrace/ui"
+import {type StackElement} from "ton-assembly-test-dev/dist/trace"
+
 import type {RetraceResultAndCode} from "@features/txTrace/ui"
+import {RetraceResultView} from "@features/txTrace/ui"
 import TraceSidePanel from "@shared/ui/TraceSidePanel"
-import {traceTx, normalizeGas} from "@features/txTrace/lib/traceTx"
+import {normalizeGas, traceTx} from "@features/txTrace/lib/traceTx"
 import {useLineExecutionData, useTraceStepper} from "@features/txTrace/hooks"
 import SearchInput from "@shared/ui/SearchInput"
 import InlineLoader from "@shared/ui/InlineLoader"
 import {useGlobalError} from "@shared/lib/errorContext"
 import {type InstructionDetail} from "@features/txTrace/ui/StepInstructionBlock"
-import {useTxHistory, type TxHistoryEntry} from "@shared/lib/useTxHistory"
+import {type TxHistoryEntry, useTxHistory} from "@shared/lib/useTxHistory"
 import {shortenHash} from "@shared/lib/format"
 import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
 
 import {TooltipHint} from "@shared/ui/TooltipHint"
+
+import {StackItemViewer} from "@app/pages/TracePage/StackItemViewer.tsx"
 
 import styles from "./TracePage.module.css"
 
@@ -34,6 +37,10 @@ function TracePage() {
   const {history, addToHistory, removeFromHistory} = useTxHistory()
   const [showHistoryDropdown, setShowHistoryDropdown] = useState(false)
   const [isInputFocused, setIsInputFocused] = useState(false)
+  const [selectedStackItem, setSelectedStackItem] = useState<{
+    element: StackElement
+    title: string
+  } | null>(null)
 
   const lineExecutionData = useLineExecutionData(result?.trace)
   const {
@@ -98,6 +105,7 @@ function TracePage() {
       try {
         const rr = await traceTx(textToSubmit)
         setResult(rr)
+        setSelectedStackItem(null)
         if (!fromHeader) {
           const computeInfo = rr?.result?.emulatedTx?.computeInfo
           const exitCode = computeInfo !== "skipped" ? computeInfo?.exitCode : undefined
@@ -130,6 +138,9 @@ function TracePage() {
         if (!loading) {
           void handleSubmit(false)
         }
+      } else if (event.key === "Escape" && selectedStackItem) {
+        event.preventDefault()
+        setSelectedStackItem(null)
       }
     }
 
@@ -137,7 +148,7 @@ function TracePage() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown)
     }
-  }, [handleSubmit, loading])
+  }, [handleSubmit, loading, selectedStackItem])
 
   const toggleDetails = useCallback(() => setDetailsExpanded(prev => !prev), [])
 
@@ -149,6 +160,25 @@ function TracePage() {
     },
     [toggleDetails],
   )
+
+  const handleStackItemClick = useCallback(
+    (element: StackElement, title: string) => {
+      if (
+        selectedStackItem &&
+        selectedStackItem.element === element &&
+        selectedStackItem.title === title
+      ) {
+        setSelectedStackItem(null)
+      } else {
+        setSelectedStackItem({element, title})
+      }
+    },
+    [selectedStackItem],
+  )
+
+  const handleBackToCode = useCallback(() => {
+    setSelectedStackItem(null)
+  }, [])
 
   const exitCode =
     result?.result?.emulatedTx?.computeInfo !== "skipped"
@@ -387,21 +417,36 @@ function TracePage() {
               <section
                 aria-labelledby="code-viewer-heading"
                 data-testid="code-editor-container"
-                style={{flex: "1", position: "relative"}}
+                className={styles.codeEditorArea}
               >
                 <h2 id="code-viewer-heading" className="sr-only">
                   Transaction Code Viewer
                 </h2>
-                <Suspense fallback={<InlineLoader message="Loading Editor..." loading={true} />}>
-                  <CodeEditor
-                    code={result.code}
-                    highlightLine={highlightLine}
-                    lineExecutionData={lineExecutionData}
-                    onLineClick={findStepByLine}
-                    shouldCenter={transitionType === "button"}
-                    exitCode={result.exitCode}
-                  />
-                </Suspense>
+
+                <div
+                  className={`${styles.codeEditorWrapper} ${selectedStackItem ? styles.codeEditorHidden : ""}`}
+                >
+                  <Suspense fallback={<InlineLoader message="Loading Editor..." loading={true} />}>
+                    <CodeEditor
+                      code={result.code}
+                      highlightLine={highlightLine}
+                      lineExecutionData={lineExecutionData}
+                      onLineClick={findStepByLine}
+                      shouldCenter={transitionType === "button"}
+                      exitCode={result.exitCode}
+                    />
+                  </Suspense>
+                </div>
+
+                {selectedStackItem && (
+                  <div className={styles.stackItemOverlay}>
+                    <StackItemViewer
+                      element={selectedStackItem.element}
+                      title={selectedStackItem.title}
+                      onBack={handleBackToCode}
+                    />
+                  </div>
+                )}
               </section>
               <TraceSidePanel
                 selectedStep={selectedStep}
@@ -418,6 +463,8 @@ function TracePage() {
                 placeholderMessage="No trace steps available."
                 instructionDetails={instructionDetails}
                 cumulativeGas={cumulativeGasSinceBegin}
+                onStackItemClick={handleStackItemClick}
+                className={styles.sidebarArea}
               />
             </div>
             <section

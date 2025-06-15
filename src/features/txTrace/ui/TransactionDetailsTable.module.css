@@ -219,6 +219,8 @@
     width: 100%;
     border-right: none;
     padding-bottom: var(--spacing-xs);
+    padding-left: 0;
+    padding-right: 0;
     text-align: left;
   }
 
@@ -227,6 +229,8 @@
     width: 100%;
     box-sizing: border-box;
     padding-top: var(--spacing-xs);
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .multiColumnRow {
