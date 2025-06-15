@@ -42,6 +42,13 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     },
   },
   {
+    title: "See Exit Code",
+    content:
+      "When your code executes successfully, you'll see an exit code of 0. Other exit codes indicate some kind of errors.",
+    target: '[role="status"]',
+    placement: "bottom",
+  },
+  {
     title: "Great! Code Executed",
     content:
       "Perfect! The code execution completed successfully.\n\nOn the right panel, you can now view the initial stack state before the first instruction execution.",
@@ -77,7 +84,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
   {
     title: "Ready to Code!",
     content:
-      "You're all set! You now know how to:\n\n• Write assembly code\n• Execute and debug step by step\n• Monitor gas usage and stack changes\n• Set up initial test conditions\n\nTry modifying the code or writing your own TVM instructions.\n\nHappy debugging! 🚀",
+      "You're all set! You now know how to:\n\n• Write assembly code\n• Execute and debug step by step\n• Monitor gas usage and stack changes\n• Set up initial test conditions\n\nTry modifying the code or writing your own code.\n\nHappy debugging! 🚀",
     target: '[role="toolbar"]',
     placement: "bottom",
   },
