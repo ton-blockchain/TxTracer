@@ -41,14 +41,7 @@ const StackItemDetails: React.FC<StackItemDetailsProps> = ({itemData, title, onC
       cellDetailsContent = (
         <>
           <div className={styles.dataSection}>
-            <DataBlock label="Cell BoC:" data={rootCell.toBoc().toString("hex")} />
-          </div>
-          <div className={styles.dataSection}>
-            <DataBlock
-              label="Cell Tree representation:"
-              data={rootCell.toString()}
-              maxHeight={300}
-            />
+            <DataBlock label="" data={rootCell.toBoc().toString("hex")} />
           </div>
         </>
       )
@@ -76,11 +69,11 @@ const StackItemDetails: React.FC<StackItemDetailsProps> = ({itemData, title, onC
         </div>
       )}
       <div className={styles.contentContainer}>
-        <div className={styles.leftColumn}>
+        <div className={styles.detailsRow}>{cellDetailsContent}</div>
+
+        <div className={styles.treeRow}>
           <div className={styles.treeViewContainer}>{treeViewContent}</div>
         </div>
-
-        <div className={styles.rightColumn}>{cellDetailsContent}</div>
       </div>
     </div>
   )

@@ -1,10 +1,12 @@
 .detailsContainer {
   height: 100%;
+  max-height: 100%;
   display: flex;
   flex-direction: column;
   background: var(--color-background-primary);
   box-sizing: border-box;
   border-radius: var(--border-radius-lg);
+  overflow: hidden;
 }
 
 .header {
@@ -16,9 +18,9 @@
 }
 
 .title {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   font-weight: 400;
-  color: var(--color-text-primary);
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
@@ -43,39 +45,36 @@
 }
 
 .contentContainer {
-  display: flex;
-  flex: 1;
+  display: grid;
+  grid-template-rows: auto 1fr;
+
   gap: var(--spacing-md);
   overflow: hidden;
   padding: 0 var(--spacing-md) var(--spacing-md);
 }
 
-.leftColumn {
-  flex: 1;
+.treeRow {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-height: 0; /* Важно для корректного flex */
+  min-height: 0;
 }
 
-.rightColumn {
+.detailsRow {
   flex: 1;
-  display: flex;
-  flex-direction: column;
   overflow: auto;
-  min-height: 0; /* Важно для корректного flex */
+  min-height: 0;
 }
 
 .treeViewContainer {
-  flex: 1;
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-md);
   overflow: auto;
   background: var(--color-background-secondary);
-  min-height: 0; /* Важно для корректного flex */
   padding: var(--spacing-sm);
-  display: flex;
-  flex-direction: column;
+  flex: 1;
+  max-height: 600px;
+  min-height: 200px;
 }
 
 .dataSection {
@@ -87,17 +86,31 @@
 }
 
 @media (max-width: 768px) {
+  .detailsContainer {
+    height: auto;
+    max-height: none;
+  }
+
   .contentContainer {
+    display: flex;
     flex-direction: column;
+    gap: var(--spacing-sm);
+    overflow: visible;
   }
 
-  .leftColumn {
-    flex: 1;
-    min-height: 200px;
+  .treeRow {
+    flex: none;
+    overflow: visible;
   }
 
-  .rightColumn {
-    flex: 1;
-    min-height: 200px;
+  .detailsRow {
+    flex: none;
+    overflow: visible;
+  }
+
+  .treeViewContainer {
+    height: auto;
+    max-height: 40vh;
+    min-height: 150px;
   }
 }

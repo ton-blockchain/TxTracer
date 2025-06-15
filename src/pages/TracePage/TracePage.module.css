@@ -435,6 +435,7 @@
     grid-template-areas:
       "editor"
       "sidebar";
+    width: calc(100% - var(--spacing-xs) * 2);
     min-height: 0;
     padding: var(--spacing-xs);
     gap: var(--spacing-xs);
@@ -584,7 +585,13 @@
   }
 
   .stackItemOverlay {
-    height: calc(100vh - 120px);
+    height: 100%;
+    max-height: calc(100vh - 160px);
+  }
+
+  .stackItemViewer {
+    height: 100%;
+    min-height: 0;
   }
 
   .codeEditorHidden {
