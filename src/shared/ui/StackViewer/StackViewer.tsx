@@ -3,8 +3,6 @@ import {type StackElement} from "ton-assembly-test-dev/dist/trace"
 import {Cell} from "@ton/core"
 import {motion, AnimatePresence} from "framer-motion"
 
-import StackItemDetailsModal from "@shared/ui/StackItemDetailsModal/StackItemDetailsModal"
-
 import {CopyButton} from "@shared/CopyButton/CopyButton.tsx"
 
 import styles from "./StackViewer.module.css"
@@ -28,6 +26,7 @@ const truncateMiddle = (text: string, maxLength: number = 30): JSX.Element => {
 interface StackViewerProps {
   readonly stack: readonly StackElement[]
   readonly title?: string
+  readonly onStackItemClick?: (element: StackElement, title: string) => void
 }
 
 const getElementKey = (element: StackElement, index: number): string => {
@@ -73,24 +72,19 @@ const safeLoadAddress = (cell: Cell) => {
   }
 }
 
-const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
+const StackViewer: React.FC<StackViewerProps> = ({stack, title, onStackItemClick}) => {
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
-  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
-  const [selectedStackItemData, setSelectedStackItemData] = useState<StackElement | null>(null)
 
   const toggleExpand = (key: string) => {
     setExpandedItem(prev => (prev === key ? null : key))
   }
 
-  const handleOpenDetailsModal = (itemData: StackElement) => {
-    setSelectedStackItemData(itemData)
-    setIsDetailsModalOpen(true)
-    setExpandedItem(null)
-  }
-
-  const handleCloseDetailsModal = () => {
-    setIsDetailsModalOpen(false)
-    setSelectedStackItemData(null)
+  const handleOpenDetailsModal = (itemData: StackElement, elementTitle: string = "Stack Item") => {
+    if (onStackItemClick) {
+      onStackItemClick(itemData, elementTitle)
+    } else {
+      setExpandedItem(null)
+    }
   }
 
   const renderStackElement = (
@@ -101,10 +95,16 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
     const handleItemClick = () => {
       switch (element.$) {
         case "Cell":
+          handleOpenDetailsModal(element, "Cell Details")
+          break
         case "Slice":
+          handleOpenDetailsModal(element, "Slice Details")
+          break
         case "Builder":
+          handleOpenDetailsModal(element, "Builder Details")
+          break
         case "Address":
-          handleOpenDetailsModal(element)
+          handleOpenDetailsModal(element, "Address Details")
           break
         default:
           toggleExpand(keyPrefix)
@@ -185,9 +185,10 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
               <div
                 className={styles.addressItem}
                 key={keyPrefix}
-                onClick={() => handleOpenDetailsModal(element)}
+                onClick={() => handleOpenDetailsModal(element, "Address Details")}
                 onKeyDown={e => {
-                  if (e.key === "Enter" || e.key === " ") handleOpenDetailsModal(element)
+                  if (e.key === "Enter" || e.key === " ")
+                    handleOpenDetailsModal(element, "Address Details")
                 }}
                 role="button"
                 tabIndex={0}
@@ -398,11 +399,6 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
           </div>
         )}
       </div>
-      <StackItemDetailsModal
-        isOpen={isDetailsModalOpen}
-        onClose={handleCloseDetailsModal}
-        itemData={selectedStackItemData}
-      />
     </div>
   )
 }

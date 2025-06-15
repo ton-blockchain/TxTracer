@@ -3,38 +3,24 @@ import React from "react"
 import {type StackElement} from "ton-assembly-test-dev/dist/trace"
 import {Cell} from "@ton/core"
 
-import Modal from "@shared/ui/Modal"
 import CellTreeView from "@shared/ui/CellTreeView/CellTreeView"
-import Icon from "@shared/ui/Icon"
 import DataBlock from "@shared/ui/DataBlock"
 
-import styles from "./StackItemDetailsModal.module.css"
+import styles from "./StackItemDetails.module.css"
 
-interface StackItemDetailsModalProps {
-  readonly isOpen: boolean
-  readonly onClose: () => void
+interface StackItemDetailsProps {
   readonly itemData: StackElement | null
+  readonly title?: string
+  readonly onClose?: () => void
 }
 
-const CloseIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M15 5L5 15M5 5L15 15"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-)
-
-const StackItemDetailsModal: React.FC<StackItemDetailsModalProps> = ({
-  isOpen,
-  onClose,
-  itemData,
-}) => {
-  if (!isOpen || !itemData) {
-    return null
+const StackItemDetails: React.FC<StackItemDetailsProps> = ({itemData, title, onClose}) => {
+  if (!itemData) {
+    return (
+      <div className={styles.detailsContainer}>
+        <p>No item selected</p>
+      </div>
+    )
   }
 
   let cellDetailsContent: React.ReactNode | null = null
@@ -72,31 +58,32 @@ const StackItemDetailsModal: React.FC<StackItemDetailsModalProps> = ({
       cellDetailsContent = <p>Details for the selected item will be shown here.</p>
     }
   } catch (error) {
-    console.error("Error processing item data for modal:", error)
+    console.error("Error processing item data:", error)
     treeViewContent = null
     cellDetailsContent = <p>Error displaying item details. Data might be malformed.</p>
   }
 
   return (
-    <Modal open={isOpen} onClose={onClose} contentClassName={styles.detailsModalBoxWide}>
-      <div className={styles.detailsLayout}>
-        <div className={styles.modalHeader}>
-          <div className={styles.modalTitle}>Cell tree</div>
-          <button className={styles.closeButton} onClick={onClose}>
-            <Icon svg={<CloseIcon />} size={20} />
-          </button>
+    <div className={styles.detailsContainer}>
+      {(title || onClose) && (
+        <div className={styles.header}>
+          {title && <h3 className={styles.title}>{title}</h3>}
+          {onClose && (
+            <button onClick={onClose} className={styles.closeButton} aria-label="Close details">
+              ×
+            </button>
+          )}
+        </div>
+      )}
+      <div className={styles.contentContainer}>
+        <div className={styles.leftColumn}>
+          <div className={styles.treeViewContainer}>{treeViewContent}</div>
         </div>
 
-        <div className={styles.contentContainer}>
-          <div className={styles.leftColumn}>
-            <div className={styles.treeViewContainer}>{treeViewContent}</div>
-          </div>
-
-          <div className={styles.rightColumn}>{cellDetailsContent}</div>
-        </div>
+        <div className={styles.rightColumn}>{cellDetailsContent}</div>
       </div>
-    </Modal>
+    </div>
   )
 }
 
-export default StackItemDetailsModal
+export default StackItemDetails

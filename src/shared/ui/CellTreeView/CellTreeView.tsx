@@ -81,7 +81,7 @@ const CellTreeView: React.FC<CellTreeViewProps> = ({cell, depth = 0}) => {
   const cellInfoClassName = `${styles.cellInfo} ${refsCount > 0 ? styles.cellInfoClickable : ""}`
   const cellNodeColorClass = styles[`cellNodeColor${(depth % 5) + 1}`]
 
-  return (
+  const cellNodeContent = (
     <div className={`${styles.cellNode}`} style={{marginLeft: depth * 5}}>
       <div
         className={`${cellInfoClassName} ${cellNodeColorClass}`}
@@ -130,6 +130,8 @@ const CellTreeView: React.FC<CellTreeViewProps> = ({cell, depth = 0}) => {
       )}
     </div>
   )
+
+  return cellNodeContent
 }
 
 export default CellTreeView
