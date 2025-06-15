@@ -1,8 +1,17 @@
 /// <reference types="vitest" />
 import {resolve} from "path"
+import {writeFileSync} from "fs"
 
 import {defineConfig} from "vite"
 import react from "@vitejs/plugin-react"
+
+const createCNAME = () => ({
+  name: 'create-cname',
+  writeBundle() {
+    const domain = process.env.CUSTOM_DOMAIN ?? 'txtracer.ton.org'
+    writeFileSync(resolve(__dirname, 'dist/CNAME'), `${domain}\n`)
+  }
+})
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -17,6 +26,7 @@ export default defineConfig({
   base: "./",
   plugins: [
     react(),
+    createCNAME(),
     // Bundle analyzer
     // visualizer({
     //   filename: "dist/stats.html",
