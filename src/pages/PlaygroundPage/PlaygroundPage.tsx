@@ -25,8 +25,7 @@ import styles from "./PlaygroundPage.module.css"
 
 const CodeEditor = React.lazy(() => import("@shared/ui/CodeEditor"))
 
-const DEFAULT_ASSEMBLY_CODE = `SETCP 0
-PUSHINT_8 42
+const DEFAULT_ASSEMBLY_CODE = `PUSHINT_8 42
 PUSHINT_8 100
 ADD
 PUSHINT_16 200

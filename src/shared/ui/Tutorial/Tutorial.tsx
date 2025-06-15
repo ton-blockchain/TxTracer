@@ -7,6 +7,14 @@ export interface TutorialStep {
   readonly content: string
   readonly target?: string
   readonly placement?: "top" | "bottom" | "left" | "right"
+  readonly autoAction?: {
+    readonly type: "click" | "custom"
+    readonly selector?: string
+    readonly action?: () => void
+    readonly delay?: number
+  }
+  readonly onStepEnter?: () => void
+  readonly onStepExit?: () => void
 }
 
 interface TutorialProps {
@@ -100,13 +108,17 @@ const Tutorial: React.FC<TutorialProps> = ({steps, isOpen, onClose, onComplete})
   const isLast = currentStep === steps.length - 1
 
   const handleNext = useCallback(() => {
+    const currentStepData = steps[currentStep]
+
+    currentStepData?.onStepExit?.()
+
     if (isLast) {
       onComplete?.()
       onClose()
     } else {
       setCurrentStep(prev => prev + 1)
     }
-  }, [isLast, onComplete, onClose])
+  }, [currentStep, steps, isLast, onComplete, onClose])
 
   const handlePrevious = useCallback(() => {
     if (!isFirst) {
@@ -123,6 +135,7 @@ const Tutorial: React.FC<TutorialProps> = ({steps, isOpen, onClose, onComplete})
       } else if (event.key === "ArrowRight") {
         handleNext()
       }
+      event.stopPropagation()
     }
 
     if (isOpen) {
@@ -135,6 +148,30 @@ const Tutorial: React.FC<TutorialProps> = ({steps, isOpen, onClose, onComplete})
       document.body.style.overflow = "unset"
     }
   }, [isOpen, onClose, isFirst, handleNext, handlePrevious])
+
+  useEffect(() => {
+    if (!isOpen || steps.length === 0) return
+
+    const step = steps[currentStep]
+
+    step?.onStepEnter?.()
+
+    if (step?.autoAction) {
+      const delay = step.autoAction.delay ?? 500
+      const timer = setTimeout(() => {
+        if (step.autoAction?.type === "click" && step.autoAction.selector) {
+          const element: HTMLElement | null = document.querySelector(step.autoAction.selector)
+          if (element) {
+            element.click()
+          }
+        } else if (step.autoAction?.type === "custom" && step.autoAction.action) {
+          step.autoAction.action()
+        }
+      }, delay)
+
+      return () => clearTimeout(timer)
+    }
+  }, [currentStep, steps, isOpen])
 
   if (!isOpen || steps.length === 0) return null
 

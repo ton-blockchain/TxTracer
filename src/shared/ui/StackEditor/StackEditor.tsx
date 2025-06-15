@@ -632,7 +632,7 @@ const StackEditor: React.FC<StackEditorProps> = ({stack, onStackChange}) => {
       <div className={styles.stackContainer}>
         <div className={styles.stackHeader}>
           <h4>Initial Stack</h4>
-          <div className={styles.stackHeaderActions}>
+          <div className={`${styles.stackHeaderActions} stack-header-actions`}>
             <Button
               className={styles.stackButton}
               variant="ghost"

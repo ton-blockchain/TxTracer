@@ -24,11 +24,13 @@
   z-index: calc(var(--z-index-modal) + 100);
   /*backdrop-filter: blur(var(--blur-radius-sm));*/
   animation: fadeIn var(--transition-duration-normal) ease-out;
+  pointer-events: none;
 }
 
 .centeredOverlay {
   background-color: rgba(var(--color-black-rgb), 0.4);
   backdrop-filter: blur(var(--blur-radius-sm));
+  pointer-events: auto;
 }
 
 .spotlight {
