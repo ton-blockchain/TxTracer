@@ -1,40 +1,29 @@
-import React, {useState, useEffect, Suspense, useCallback} from "react"
-import {FiGithub, FiClock, FiX, FiPlay, FiSearch} from "react-icons/fi"
+import React, {Suspense, useCallback, useEffect, useState} from "react"
+import {FiClock, FiGithub, FiPlay, FiSearch, FiX} from "react-icons/fi"
 
 import {type StackElement} from "ton-assembly-test-dev/dist/trace"
 
-import {RetraceResultView} from "@features/txTrace/ui"
 import type {RetraceResultAndCode} from "@features/txTrace/ui"
+import {RetraceResultView} from "@features/txTrace/ui"
 import TraceSidePanel from "@shared/ui/TraceSidePanel"
-import {traceTx, normalizeGas} from "@features/txTrace/lib/traceTx"
+import {normalizeGas, traceTx} from "@features/txTrace/lib/traceTx"
 import {useLineExecutionData, useTraceStepper} from "@features/txTrace/hooks"
 import SearchInput from "@shared/ui/SearchInput"
 import InlineLoader from "@shared/ui/InlineLoader"
 import {useGlobalError} from "@shared/lib/errorContext"
 import {type InstructionDetail} from "@features/txTrace/ui/StepInstructionBlock"
-import {useTxHistory, type TxHistoryEntry} from "@shared/lib/useTxHistory"
+import {type TxHistoryEntry, useTxHistory} from "@shared/lib/useTxHistory"
 import {shortenHash} from "@shared/lib/format"
 import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
 
 import {TooltipHint} from "@shared/ui/TooltipHint"
-import StackItemDetails from "@shared/ui/StackItemDetails"
+
+import {StackItemViewer} from "@app/pages/TracePage/StackItemViewer.tsx"
 
 import styles from "./TracePage.module.css"
 
 const CodeEditor = React.lazy(() => import("@shared/ui/CodeEditor"))
 const PageHeader = React.lazy(() => import("@shared/ui/PageHeader"))
-
-const StackItemViewer: React.FC<{
-  element: StackElement
-  title: string
-  onBack: () => void
-}> = ({element, title, onBack}) => {
-  return (
-    <div className={styles.stackItemViewer}>
-      <StackItemDetails itemData={element} title={title} onClose={onBack} />
-    </div>
-  )
-}
 
 function TracePage() {
   const [inputText, setInputText] = useState("")
