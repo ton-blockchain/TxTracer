@@ -121,7 +121,6 @@ function PlaygroundPage() {
 
     setLoading(true)
     clearError()
-    setResult(undefined)
 
     try {
       const result = await executeAssemblyCode(assemblyCode, initialStack)
@@ -130,6 +129,7 @@ function PlaygroundPage() {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error"
       setError(`Failed to execute assembly code: ${errorMessage}`)
+      setResult(undefined)
     } finally {
       setLoading(false)
     }
@@ -209,7 +209,7 @@ function PlaygroundPage() {
             role="toolbar"
             aria-label="Assembly code actions"
           >
-            <ExecuteButton onClick={() => void handleExecute()} disabled={loading} />
+            <ExecuteButton onClick={() => void handleExecute()} loading={loading} />
             <ShareButton value={assemblyCode} />
           </div>
         </div>

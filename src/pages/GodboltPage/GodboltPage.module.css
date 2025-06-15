@@ -62,7 +62,7 @@
 .executeButton {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-md);
   background-color: var(--color-primary);
   color: white;
@@ -85,7 +85,7 @@
 .shareButton {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-md);
   background-color: var(--share-button-bg);
   color: var(--color-text-secondary);
@@ -93,7 +93,7 @@
   font-size: var(--font-size-sm);
   border: 1px solid var(--color-border);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: border 0.2s ease;
 }
 
 .shareButton:hover {
@@ -189,7 +189,7 @@
   font-size: var(--font-size-sm);
   border: 1px solid var(--color-border);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: border 0.2s ease;
 }
 
 .settingsButton:hover {
