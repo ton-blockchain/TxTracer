@@ -18,7 +18,11 @@ export const useTutorial = ({tutorialKey, autoStart = true}: UseTutorialProps) =
 
   const startTutorial = () => setIsOpen(true)
 
-  const closeTutorial = () => setIsOpen(false)
+  const closeTutorial = () => {
+    // don't show tutorial anymore on explicit closing
+    localStorage.setItem(storageKey, "true")
+    setIsOpen(false)
+  }
 
   const completeTutorial = () => {
     localStorage.setItem(storageKey, "true")
