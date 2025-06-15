@@ -62,7 +62,7 @@
 .executeButton {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-md);
   background-color: var(--color-primary);
   color: white;
@@ -85,7 +85,7 @@
 .shareButton {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-md);
   background-color: var(--share-button-bg);
   color: var(--color-text-secondary);

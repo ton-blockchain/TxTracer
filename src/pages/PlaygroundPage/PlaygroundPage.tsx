@@ -209,7 +209,7 @@ function PlaygroundPage() {
             role="toolbar"
             aria-label="Assembly code actions"
           >
-            <ExecuteButton onClick={() => void handleExecute()} disabled={loading} />
+            <ExecuteButton onClick={() => void handleExecute()} loading={loading} />
             <ShareButton value={assemblyCode} />
           </div>
         </div>

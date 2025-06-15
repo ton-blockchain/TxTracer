@@ -9,7 +9,7 @@ export interface ButtonLoaderProps extends React.ButtonHTMLAttributes<HTMLButton
 
 const ButtonLoader: React.FC<ButtonLoaderProps> = ({children}) => {
   return (
-    <div className={styles.loaderContrainer}>
+    <div className={styles.loaderContainer}>
       <div className={styles.loader}></div>
       {children}
     </div>
