@@ -105,7 +105,7 @@ function TracePage() {
       try {
         const rr = await traceTx(textToSubmit)
         setResult(rr)
-        setSelectedStackItem(null) // Reset selected stack item when new transaction is loaded
+        setSelectedStackItem(null)
         if (!fromHeader) {
           const computeInfo = rr?.result?.emulatedTx?.computeInfo
           const exitCode = computeInfo !== "skipped" ? computeInfo?.exitCode : undefined
@@ -163,7 +163,6 @@ function TracePage() {
 
   const handleStackItemClick = useCallback(
     (element: StackElement, title: string) => {
-      // Если кликнули на тот же элемент - закрываем просмотрщик
       if (
         selectedStackItem &&
         selectedStackItem.element === element &&
