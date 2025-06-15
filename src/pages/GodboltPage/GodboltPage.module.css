@@ -284,6 +284,26 @@
   cursor: pointer;
 }
 
+.helpButton {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  color: var(--color-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-duration-fast) ease;
+  margin-top: var(--spacing-xs);
+  border-top: 1px solid var(--color-divider);
+  padding-top: var(--spacing-sm);
+}
+
+.helpButton:hover {
+  background-color: var(--settings-item-hover-bg);
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

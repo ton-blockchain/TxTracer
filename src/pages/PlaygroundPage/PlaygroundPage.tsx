@@ -12,18 +12,20 @@ import {normalizeGas} from "@features/txTrace/lib/traceTx"
 import type {InstructionDetail} from "@features/txTrace/ui/StepInstructionBlock"
 
 import PageHeader from "@shared/ui/PageHeader"
+import Tutorial, {useTutorial} from "@shared/ui/Tutorial"
 
 import ShareButton from "@shared/ui/ShareButton/ShareButton.tsx"
 import {decodeCodeFromUrl} from "@app/pages/GodboltPage/urlCodeSharing.ts"
 
 import {ExecuteButton} from "@app/pages/PlaygroundPage/components/ExecuteButton.tsx"
 
+import {TUTORIAL_STEPS} from "@app/pages/PlaygroundPage/Tutorial.ts"
+
 import styles from "./PlaygroundPage.module.css"
 
 const CodeEditor = React.lazy(() => import("@shared/ui/CodeEditor"))
 
-const DEFAULT_ASSEMBLY_CODE = `SETCP 0
-PUSHINT_8 42
+const DEFAULT_ASSEMBLY_CODE = `PUSHINT_8 42
 PUSHINT_8 100
 ADD
 PUSHINT_16 200
@@ -69,6 +71,8 @@ function PlaygroundPage() {
   })
 
   const {setError, clearError} = useGlobalError()
+
+  const tutorial = useTutorial({tutorialKey: "playground-page", autoStart: true})
 
   const trace = result?.traceInfo
 
@@ -263,6 +267,13 @@ function PlaygroundPage() {
           />
         </div>
       </main>
+
+      <Tutorial
+        steps={TUTORIAL_STEPS}
+        isOpen={tutorial.isOpen}
+        onClose={tutorial.closeTutorial}
+        onComplete={tutorial.completeTutorial}
+      />
     </div>
   )
 }

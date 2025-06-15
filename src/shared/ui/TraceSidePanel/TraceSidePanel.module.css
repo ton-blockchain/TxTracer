@@ -90,7 +90,8 @@
   display: flex;
   justify-content: space-between;
   gap: var(--spacing-sm);
-  padding: 0 0 var(--spacing-md);
+  padding: 0;
+  margin-bottom: var(--spacing-md);
 }
 
 .navButton {
