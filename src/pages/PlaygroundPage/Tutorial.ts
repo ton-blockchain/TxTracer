@@ -44,7 +44,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
   {
     title: "Execution Status",
     content:
-      "The status badge shows if the execution succeeded or failed.\n\n• Green badge - Successful execution (exit code 0)\n• Red badge - Failed execution (non-zero exit code)\n\nExit codes help identify what went wrong in code.",
+      "The status badge shows if the execution succeeded or failed.\n\n• Green badge - Successful execution (exit code 0)\n• Red badge - Failed execution (non-zero exit code)\n\nExit codes help identify what went wrong in the code.",
     target: '[role="status"]',
     placement: "bottom",
   },
