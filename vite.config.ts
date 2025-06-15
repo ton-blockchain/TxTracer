@@ -3,7 +3,6 @@ import {resolve} from "path"
 
 import {defineConfig} from "vite"
 import react from "@vitejs/plugin-react"
-import viteCompression from "vite-plugin-compression"
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -18,8 +17,6 @@ export default defineConfig({
   base: "./",
   plugins: [
     react(),
-    viteCompression(),
-    viteCompression({algorithm: "brotliCompress", ext: ".br"}),
     // Bundle analyzer
     // visualizer({
     //   filename: "dist/stats.html",
