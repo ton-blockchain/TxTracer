@@ -42,7 +42,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     },
   },
   {
-    title: "See Exit Code",
+    title: "Check Execution Status",
     content:
       "When your code executes successfully, you'll see an exit code of 0. Other exit codes indicate some kind of errors.",
     target: '[role="status"]',
