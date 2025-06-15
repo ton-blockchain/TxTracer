@@ -436,6 +436,21 @@ function TracePage() {
                   Transaction Code Viewer
                 </h2>
 
+                <div
+                  className={`${styles.codeEditorWrapper} ${selectedStackItem ? styles.codeEditorHidden : ""}`}
+                >
+                  <Suspense fallback={<InlineLoader message="Loading Editor..." loading={true} />}>
+                    <CodeEditor
+                      code={result.code}
+                      highlightLine={highlightLine}
+                      lineExecutionData={lineExecutionData}
+                      onLineClick={findStepByLine}
+                      shouldCenter={transitionType === "button"}
+                      exitCode={result.exitCode}
+                    />
+                  </Suspense>
+                </div>
+
                 {selectedStackItem && (
                   <div className={styles.stackItemOverlay}>
                     <StackItemViewer
@@ -443,23 +458,6 @@ function TracePage() {
                       title={selectedStackItem.title}
                       onBack={handleBackToCode}
                     />
-                  </div>
-                )}
-
-                {!selectedStackItem && (
-                  <div className={styles.codeEditorWrapper}>
-                    <Suspense
-                      fallback={<InlineLoader message="Loading Editor..." loading={true} />}
-                    >
-                      <CodeEditor
-                        code={result.code}
-                        highlightLine={highlightLine}
-                        lineExecutionData={lineExecutionData}
-                        onLineClick={findStepByLine}
-                        shouldCenter={transitionType === "button"}
-                        exitCode={result.exitCode}
-                      />
-                    </Suspense>
                   </div>
                 )}
               </section>

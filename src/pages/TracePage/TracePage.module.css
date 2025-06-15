@@ -59,7 +59,7 @@
   grid-template-columns: 1fr 400px;
   grid-template-rows: 1fr;
   grid-template-areas: "editor sidebar";
-  width: 100%;
+  width: calc(100% - var(--spacing-sm) * 2);
   min-height: 0;
   overflow: hidden;
   gap: var(--spacing-sm);
@@ -420,8 +420,8 @@
     position: relative;
   }
 
-  .detailsSection {
-    transition: height 0.5s ease-in-out;
+  .searchInputContainer {
+    display: none;
   }
 
   .historyItem > span[class*="status"] {
@@ -498,11 +498,13 @@
     cursor: pointer;
     flex-shrink: 0;
     position: relative;
+
+    transition: height 0.5s ease-in-out;
   }
 
   .detailsSectionExpanded {
-    height: 250px;
-    max-height: 35vh;
+    height: 50vh;
+    max-height: 50vh;
     display: flex;
     flex-direction: column;
   }
@@ -652,6 +654,10 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+.codeEditorHidden {
+  display: none;
 }
 
 .sidebarArea {

@@ -160,7 +160,7 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title, onStackItemClick
                 ? "Empty Cell"
                 : expandedItem === keyPrefix
                   ? element.boc
-                  : truncateMiddle(element.boc, 40)}
+                  : truncateMiddle(element.boc, 35)}
               <div className={styles.stackItemDetails}>
                 Bits: {cell.bits.length}, Refs: {cell.refs.length}
               </div>
@@ -222,7 +222,7 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title, onStackItemClick
                 ? "Empty Slice"
                 : expandedItem === keyPrefix
                   ? element.hex
-                  : truncateMiddle(element.hex, 40)}
+                  : truncateMiddle(element.hex, 35)}
               <CopyButton
                 className={styles.sliceItemCopyButton}
                 title="Copy slice as BoC"
@@ -253,7 +253,7 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title, onStackItemClick
                 ? "Empty Builder"
                 : expandedItem === keyPrefix
                   ? element.hex
-                  : truncateMiddle(element.hex, 40)}
+                  : truncateMiddle(element.hex, 35)}
             </div>
             <div className={styles.stackItemDetails}>
               Bits: {cell.bits.length}, Refs: {cell.refs.length}
