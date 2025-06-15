@@ -181,7 +181,7 @@ function GodboltPage() {
             className={styles.executeButton}
           />
           <ShareButton value={funcCode} />
-          <SettingsDropdown hooks={godboltSettingsHook} onHelpClick={tutorial.startTutorial} />
+          <SettingsDropdown hooks={godboltSettingsHook} />
         </div>
       </PageHeader>
 
