@@ -44,28 +44,28 @@
 }
 
 .cellInfo {
-  padding: var(--spacing-sm) var(--spacing-2xl) var(--spacing-sm) var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-xl) var(--spacing-sm) var(--spacing-sm);
   border-radius: var(--border-radius-sm);
   margin-bottom: var(--spacing-xs);
   font-size: var(--font-size-xs);
-  min-width: 280px;
   display: block;
-  width: fit-content;
   position: relative;
   margin-left: var(--spacing-sm);
   transition: background-color var(--transition-duration-fast) ease;
 }
 
 .cellTextContent {
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+.cellTextContent strong {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
 }
 
 .cellInfoClickable {
   cursor: pointer;
-}
-
-.cellInfo strong {
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary);
 }
 
 .cellRefs {

@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, {useState, useMemo} from "react"
 import {Cell} from "@ton/core"
 
 import styles from "./CellTreeView.module.css"
@@ -36,17 +36,50 @@ const CheckIcon = () => (
   </svg>
 )
 
+const collectAllBitsLengths = (cell: Cell, lengths: number[] = []): number[] => {
+  lengths.push(cell.bits.length)
+
+  for (const refCell of cell.refs) {
+    collectAllBitsLengths(refCell, lengths)
+  }
+
+  return lengths
+}
+
+const calculateCellWidth = (bitsLength: number, maxBitsLength: number): number => {
+  if (maxBitsLength === 0) return 200
+
+  const ratio = bitsLength / maxBitsLength
+  const calculatedWidth = ratio * 400
+
+  return Math.max(calculatedWidth, 60)
+}
+
 interface CellTreeViewProps {
   readonly cell: Cell
   readonly depth?: number
+  readonly maxBitsLength?: number
 }
 
-const CellTreeView: React.FC<CellTreeViewProps> = ({cell, depth = 0}) => {
+const CellTreeView: React.FC<CellTreeViewProps> = ({cell, depth = 0, maxBitsLength}) => {
   const [isExpanded, setIsExpanded] = useState(true)
   const [copied, setCopied] = useState(false)
 
-  const bits = cell.bits.toString()
+  const calculatedMaxBitsLength = useMemo(() => {
+    if (maxBitsLength !== undefined) {
+      return maxBitsLength
+    }
+
+    if (depth === 0) {
+      const allLengths = collectAllBitsLengths(cell)
+      return Math.max(...allLengths)
+    }
+
+    return 0
+  }, [cell, depth, maxBitsLength])
+
   const refsCount = cell.refs.length
+  const cellWidth = calculateCellWidth(cell.bits.length, calculatedMaxBitsLength)
 
   if (depth > 10) {
     return (
@@ -81,10 +114,11 @@ const CellTreeView: React.FC<CellTreeViewProps> = ({cell, depth = 0}) => {
   const cellInfoClassName = `${styles.cellInfo} ${refsCount > 0 ? styles.cellInfoClickable : ""}`
   const cellNodeColorClass = styles[`cellNodeColor${(depth % 5) + 1}`]
 
-  const cellNodeContent = (
+  return (
     <div className={`${styles.cellNode}`} style={{marginLeft: depth * 5}}>
       <div
         className={`${cellInfoClassName} ${cellNodeColorClass}`}
+        style={{width: cellWidth}}
         onClick={refsCount > 0 ? toggleExpand : undefined}
         onKeyDown={
           refsCount > 0
@@ -97,8 +131,7 @@ const CellTreeView: React.FC<CellTreeViewProps> = ({cell, depth = 0}) => {
         tabIndex={refsCount > 0 ? 0 : undefined}
       >
         <div className={styles.cellTextContent}>
-          <strong>Bits:</strong> {bits.length > 16 ? bits.substring(0, 16) + "..." : bits} (Length:{" "}
-          {cell.bits.length})
+          <strong>Bits:</strong> {cell.bits.length}
           <br />
           <strong>Refs:</strong>{" "}
           {refsCount > 0 ? (
@@ -124,14 +157,13 @@ const CellTreeView: React.FC<CellTreeViewProps> = ({cell, depth = 0}) => {
               key={`${cell.hash().toString("hex")}-ref-${index}`}
               cell={refCell}
               depth={depth + 1}
+              maxBitsLength={calculatedMaxBitsLength}
             />
           ))}
         </div>
       )}
     </div>
   )
-
-  return cellNodeContent
 }
 
 export default CellTreeView
