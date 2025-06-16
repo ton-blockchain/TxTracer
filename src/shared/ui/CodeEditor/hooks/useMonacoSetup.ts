@@ -2,7 +2,7 @@ import {useEffect, useState} from "react"
 import {useMonaco} from "@monaco-editor/react"
 import type * as monacoTypes from "monaco-editor"
 
-import {useTheme} from "@shared/lib/themeContext"
+import {useTheme} from "@shared/lib/useTheme"
 
 import {asmData} from "@features/tasm/lib"
 
@@ -40,7 +40,7 @@ const initializeMonaco = (monaco: typeof monacoTypes, language: SupportedLanguag
 
 export const useMonacoSetup = ({language}: UseMonacoSetupOptions): UseMonacoSetupReturn => {
   const monaco = useMonaco()
-  const {theme: appTheme} = useTheme()
+  const {theme} = useTheme()
   const [isReady, setIsReady] = useState(false)
   const [isMac, setIsMac] = useState(false)
 
@@ -65,11 +65,11 @@ export const useMonacoSetup = ({language}: UseMonacoSetupOptions): UseMonacoSetu
     if (!monaco || !isReady) return
 
     try {
-      monaco.editor.setTheme(appTheme === "dark" ? "dark-theme" : "light-theme")
+      monaco.editor.setTheme(theme === "dark" ? "dark-theme" : "light-theme")
     } catch (error) {
       console.error("Failed to set theme:", error)
     }
-  }, [appTheme, monaco, isReady])
+  }, [theme, monaco, isReady])
 
   // Preload assembly data for TASM
   useEffect(() => {

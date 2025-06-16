@@ -4,20 +4,23 @@ import Button from "@shared/ui/Button"
 import styles from "@app/pages/PlaygroundPage/PlaygroundPage.module.css"
 import ButtonLoader from "@shared/ui/ButtonLoader/ButtonLoader.tsx"
 
-export function ExecuteButton(props: {onClick: () => undefined; disabled: boolean}) {
+interface ExecuteButtonProps {
+  readonly onClick: () => undefined
+  readonly loading: boolean
+}
+
+export function ExecuteButton({onClick, loading}: ExecuteButtonProps) {
   return (
     <Button
-      onClick={props.onClick}
-      disabled={props.disabled}
+      onClick={onClick}
+      disabled={loading}
       className={styles.executeButton}
-      title={
-        props.disabled ? "Executing Assembly Code..." : "Execute Assembly Code (Ctrl/Cmd+Enter)"
-      }
-      aria-label={props.disabled ? "Executing assembly code..." : "Execute assembly code"}
+      title={loading ? "Executing Assembly Code..." : "Execute Assembly Code (Ctrl/Cmd+Enter)"}
+      aria-label={loading ? "Executing assembly code..." : "Execute assembly code"}
       aria-describedby="execution-status"
       aria-keyshortcuts="Control+Enter"
     >
-      {props.disabled ? (
+      {loading ? (
         <ButtonLoader>Execute</ButtonLoader>
       ) : (
         <>

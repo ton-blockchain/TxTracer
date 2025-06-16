@@ -94,6 +94,8 @@
   position: relative;
   height: 100%;
   overflow: hidden;
+
+  background-color: var(--color-background-primary);
 }
 
 .editorWrapperWithBorderRadius {

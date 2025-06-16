@@ -1,7 +1,9 @@
 import React, {useCallback, useEffect, useRef, useState} from "react"
-import Editor from "@monaco-editor/react"
+import Editor, {loader} from "@monaco-editor/react"
 
 import * as monaco from "monaco-editor"
+
+import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker"
 
 import type {ExitCode} from "@features/txTrace/lib/traceTx"
 import type {FuncVar} from "@features/godbolt/lib/func/variables.ts"
@@ -89,6 +91,16 @@ interface CodeEditorProps {
   readonly markers?: readonly monaco.editor.IMarkerData[]
 }
 
+// use local instance of monaco
+loader.config({monaco})
+
+self.MonacoEnvironment = {
+  getWorker() {
+    // basic worker for complex tasks
+    return new editorWorker()
+  },
+}
+
 const CodeEditor: React.FC<CodeEditorProps> = ({
   code,
   highlightLine,
@@ -139,11 +151,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 
   useTasmHoverProvider({
     monaco,
-    editorRef,
     lineExecutionData,
     getVariablesForLine,
     showVariablesDocs,
     showInstructionDocs,
+    editorReady,
     enabled: language === "tasm",
   })
 
@@ -258,7 +270,13 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
               useShadows: false,
             },
           }}
+          loading={<></>}
           onMount={editor => {
+            const model = editor.getModel()
+            if (monaco && model) {
+              model.setEOL(monaco.editor.EndOfLineSequence.LF)
+            }
+
             editorRef.current = editor
             setEditorReady(true)
             if (onEditorMount) {

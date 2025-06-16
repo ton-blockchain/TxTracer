@@ -1,13 +1,13 @@
 import {useState, useCallback} from "react"
 import type * as monaco from "monaco-editor"
 
-import {useGlobalError} from "@shared/lib/errorContext"
 import {
   compileFuncCode,
   FuncCompilationError,
   type FuncCompilationResult,
 } from "@features/godbolt/lib/func/compilation.ts"
 import {parseFuncErrors, convertErrorsToMarkers} from "@features/godbolt/lib/func/error-parser.ts"
+import {useGlobalError} from "@shared/lib/useGlobalError.tsx"
 
 export interface UseCompilationReturn {
   readonly result: FuncCompilationResult | undefined

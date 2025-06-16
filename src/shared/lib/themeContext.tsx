@@ -1,13 +1,6 @@
-import React, {createContext, useContext, useState, useEffect, useCallback} from "react"
+import React, {useState, useEffect, useCallback} from "react"
 
-type Theme = "light" | "dark"
-
-interface ThemeContextType {
-  readonly theme: Theme
-  readonly toggleTheme: () => void
-}
-
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
+import {type Theme, ThemeContext} from "./useTheme"
 
 export const ThemeProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
   const [theme, setTheme] = useState<Theme>(() => {
@@ -37,12 +30,4 @@ export const ThemeProvider: React.FC<{children: React.ReactNode}> = ({children})
   }, [])
 
   return <ThemeContext.Provider value={{theme, toggleTheme}}>{children}</ThemeContext.Provider>
-}
-
-export const useTheme = () => {
-  const context = useContext(ThemeContext)
-  if (context === undefined) {
-    throw new Error("useTheme must be used within a ThemeProvider")
-  }
-  return context
 }

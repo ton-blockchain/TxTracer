@@ -5,25 +5,28 @@ import InlineLoader from "@shared/ui/InlineLoader"
 import TraceSidePanel from "@shared/ui/TraceSidePanel"
 
 import {type AssemblyExecutionResult, executeAssemblyCode} from "@features/tasm/lib/executor.ts"
-import {useGlobalError} from "@shared/lib/errorContext"
 import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
 import {useLineExecutionData, useTraceStepper} from "@features/txTrace/hooks"
 import {normalizeGas} from "@features/txTrace/lib/traceTx"
 import type {InstructionDetail} from "@features/txTrace/ui/StepInstructionBlock"
 
 import PageHeader from "@shared/ui/PageHeader"
+import Tutorial, {useTutorial} from "@shared/ui/Tutorial"
 
 import ShareButton from "@shared/ui/ShareButton/ShareButton.tsx"
 import {decodeCodeFromUrl} from "@app/pages/GodboltPage/urlCodeSharing.ts"
 
 import {ExecuteButton} from "@app/pages/PlaygroundPage/components/ExecuteButton.tsx"
 
+import {TUTORIAL_STEPS} from "@app/pages/PlaygroundPage/Tutorial.ts"
+
+import {useGlobalError} from "@shared/lib/useGlobalError.tsx"
+
 import styles from "./PlaygroundPage.module.css"
 
 const CodeEditor = React.lazy(() => import("@shared/ui/CodeEditor"))
 
-const DEFAULT_ASSEMBLY_CODE = `SETCP 0
-PUSHINT_8 42
+const DEFAULT_ASSEMBLY_CODE = `PUSHINT_8 42
 PUSHINT_8 100
 ADD
 PUSHINT_16 200
@@ -69,6 +72,8 @@ function PlaygroundPage() {
   })
 
   const {setError, clearError} = useGlobalError()
+
+  const tutorial = useTutorial({tutorialKey: "playground-page", autoStart: true})
 
   const trace = result?.traceInfo
 
@@ -117,7 +122,6 @@ function PlaygroundPage() {
 
     setLoading(true)
     clearError()
-    setResult(undefined)
 
     try {
       const result = await executeAssemblyCode(assemblyCode, initialStack)
@@ -126,6 +130,7 @@ function PlaygroundPage() {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error"
       setError(`Failed to execute assembly code: ${errorMessage}`)
+      setResult(undefined)
     } finally {
       setLoading(false)
     }
@@ -205,7 +210,7 @@ function PlaygroundPage() {
             role="toolbar"
             aria-label="Assembly code actions"
           >
-            <ExecuteButton onClick={() => void handleExecute()} disabled={loading} />
+            <ExecuteButton onClick={() => void handleExecute()} loading={loading} />
             <ShareButton value={assemblyCode} />
           </div>
         </div>
@@ -224,7 +229,7 @@ function PlaygroundPage() {
 
       <main className={styles.appContainer} role="main" aria-label="Assembly code playground">
         <div className={styles.mainContent}>
-          <div style={{flex: "1", position: "relative"}}>
+          <div className={styles.editorContainer}>
             <h2 id="code-editor-heading" className="sr-only">
               Assembly Code Editor
             </h2>
@@ -238,6 +243,7 @@ function PlaygroundPage() {
                 shouldCenter={transitionType === "button"}
                 exitCode={result?.exitCode}
                 onLineClick={findStepByLine}
+                language={"tasm"}
               />
             </Suspense>
           </div>
@@ -260,9 +266,17 @@ function PlaygroundPage() {
             initialStack={initialStack}
             onInitialStackChange={handleStackChange}
             hasExecutionResults={!!result}
+            className={styles.sidebarArea}
           />
         </div>
       </main>
+
+      <Tutorial
+        steps={TUTORIAL_STEPS}
+        isOpen={tutorial.isOpen}
+        onClose={tutorial.closeTutorial}
+        onComplete={tutorial.completeTutorial}
+      />
     </div>
   )
 }

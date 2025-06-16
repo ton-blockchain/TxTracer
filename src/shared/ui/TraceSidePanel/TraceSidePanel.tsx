@@ -1,6 +1,6 @@
 import React from "react"
 
-import type {StackElement} from "ton-assembly-test-dev/dist/logs"
+import type {StackElement} from "ton-assembly-test-dev/dist/trace"
 
 import Button from "@shared/ui/Button"
 import StackViewer from "@shared/ui/StackViewer"
@@ -41,6 +41,8 @@ export interface TraceSidePanelProps {
   readonly initialStack?: StackElement[]
   readonly onInitialStackChange?: (stack: StackElement[]) => void
   readonly hasExecutionResults?: boolean
+  readonly onStackItemClick?: (element: StackElement, title: string) => void
+  readonly className?: string
 }
 
 const TraceSidePanel: React.FC<TraceSidePanelProps> = ({
@@ -63,12 +65,14 @@ const TraceSidePanel: React.FC<TraceSidePanelProps> = ({
   initialStack = [],
   onInitialStackChange = () => {},
   hasExecutionResults = false,
+  onStackItemClick,
+  className,
 }) => {
   const hasData = totalSteps > 0 && currentStep
   const showInitialStackEditor = showStackSetup && !hasExecutionResults
 
   return (
-    <div className={styles.sidePanel}>
+    <div className={`${styles.sidePanel} ${className || ""}`}>
       <div className={styles.stepDetails}>
         <div className={styles.stepHeader}>
           <div className={styles.stepHeaderTop}>
@@ -111,7 +115,7 @@ const TraceSidePanel: React.FC<TraceSidePanelProps> = ({
             </div>
           )}
 
-          <div className={styles.navigationControls}>
+          <div className={`${styles.navigationControls} navigation-controls`}>
             <Button
               variant="ghost"
               onClick={onFirst}
@@ -155,7 +159,7 @@ const TraceSidePanel: React.FC<TraceSidePanelProps> = ({
           </div>
         </div>
 
-        <div className={styles.stackViewerContainer}>
+        <div className={`${styles.stackViewerContainer} stack-viewer`}>
           {showInitialStackEditor ? (
             <StackEditor stack={initialStack} onStackChange={onInitialStackChange} />
           ) : (
@@ -163,7 +167,7 @@ const TraceSidePanel: React.FC<TraceSidePanelProps> = ({
               <div className={styles.stackHeader}>
                 <span>Stack</span>
               </div>
-              <StackViewer stack={currentStack} title="" />
+              <StackViewer stack={currentStack} title="" onStackItemClick={onStackItemClick} />
             </>
           )}
         </div>

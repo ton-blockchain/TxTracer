@@ -16,7 +16,6 @@ interface UseFoldingReturn {
 interface CodeBlock {
   readonly start: number
   readonly end: number
-  readonly lines: unknown[]
 }
 
 interface FoldingRange {
@@ -58,7 +57,7 @@ export const useFolding = ({
       for (let i = 0; i < closeBraces; i++) {
         if (blockStack.length > 0) {
           const startLine = blockStack.pop() ?? 0
-          codeBlocks.push({start: startLine, end: line, lines: []})
+          codeBlocks.push({start: startLine, end: line})
         }
       }
     }
@@ -83,6 +82,7 @@ export const useFolding = ({
       for (const range of foldingRanges) {
         try {
           editorRef.current?.trigger("fold", "editor.fold", {
+            levels: 1,
             selectionLines: [range.start],
           })
         } catch (_) {
