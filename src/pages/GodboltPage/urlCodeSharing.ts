@@ -52,13 +52,3 @@ export function decodeCodeFromUrl(): string | null {
     return null
   }
 }
-
-export function clearCodeFromUrl(): void {
-  try {
-    const url = new URL(window.location.href)
-    url.hash = ""
-    window.history.replaceState({}, "", url.toString())
-  } catch (error) {
-    console.error("Failed to clear code from URL:", error)
-  }
-}

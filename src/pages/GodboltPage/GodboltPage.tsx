@@ -61,6 +61,7 @@ const FUNC_EDITOR_KEY = "txtracer-godbolt-func-code"
 const ASM_EDITOR_KEY = "txtracer-godbolt-asm-code"
 
 function GodboltPage() {
+  const [initiallyCompiled, setInitiallyCompiled] = useState<boolean>(false)
   const [funcCode, setFuncCode] = useState(() => {
     const sharedCode = decodeCodeFromUrl()
     if (sharedCode) {
@@ -166,10 +167,12 @@ function GodboltPage() {
 
   // Compile code on page open
   useEffect(() => {
+    if (initiallyCompiled) return
     if (editorsReady.func && editorsReady.asm) {
       void handleExecuteCode(funcCode)
+      setInitiallyCompiled(true)
     }
-  }, [editorsReady.func, editorsReady.asm, handleExecuteCode, funcCode])
+  }, [editorsReady.func, editorsReady.asm, handleExecuteCode, funcCode, initiallyCompiled])
 
   return (
     <div className={styles.traceViewWrapper}>

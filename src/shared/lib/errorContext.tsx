@@ -1,12 +1,12 @@
-import React, {createContext, useContext, useState} from "react"
+import React, {useState} from "react"
+
+import {GlobalErrorContext} from "@shared/lib/useGlobalError.tsx"
 
 export interface GlobalErrorContextValue {
   readonly error: string | null
   readonly setError: (message: string) => void
   readonly clearError: () => void
 }
-
-const GlobalErrorContext = createContext<GlobalErrorContextValue | undefined>(undefined)
 
 export const GlobalErrorProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
   const [error, setErrorState] = useState<string | null>(null)
@@ -19,12 +19,4 @@ export const GlobalErrorProvider: React.FC<{children: React.ReactNode}> = ({chil
       {children}
     </GlobalErrorContext.Provider>
   )
-}
-
-export function useGlobalError(): GlobalErrorContextValue {
-  const ctx = useContext(GlobalErrorContext)
-  if (!ctx) {
-    throw new Error("useGlobalError must be used within GlobalErrorProvider")
-  }
-  return ctx
 }

@@ -37,6 +37,7 @@ export default defineConfig({
   ],
   build: {
     target: ["es2020"],
+    chunkSizeWarningLimit: 8 * 1024 * 1024,
     rollupOptions: {
       input: {
         main: resolve(__dirname, "index.html"),

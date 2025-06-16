@@ -5,7 +5,6 @@ import InlineLoader from "@shared/ui/InlineLoader"
 import TraceSidePanel from "@shared/ui/TraceSidePanel"
 
 import {type AssemblyExecutionResult, executeAssemblyCode} from "@features/tasm/lib/executor.ts"
-import {useGlobalError} from "@shared/lib/errorContext"
 import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
 import {useLineExecutionData, useTraceStepper} from "@features/txTrace/hooks"
 import {normalizeGas} from "@features/txTrace/lib/traceTx"
@@ -20,6 +19,8 @@ import {decodeCodeFromUrl} from "@app/pages/GodboltPage/urlCodeSharing.ts"
 import {ExecuteButton} from "@app/pages/PlaygroundPage/components/ExecuteButton.tsx"
 
 import {TUTORIAL_STEPS} from "@app/pages/PlaygroundPage/Tutorial.ts"
+
+import {useGlobalError} from "@shared/lib/useGlobalError.tsx"
 
 import styles from "./PlaygroundPage.module.css"
 
@@ -228,7 +229,7 @@ function PlaygroundPage() {
 
       <main className={styles.appContainer} role="main" aria-label="Assembly code playground">
         <div className={styles.mainContent}>
-          <div style={{flex: "1", position: "relative"}}>
+          <div className={styles.editorContainer}>
             <h2 id="code-editor-heading" className="sr-only">
               Assembly Code Editor
             </h2>
@@ -242,6 +243,7 @@ function PlaygroundPage() {
                 shouldCenter={transitionType === "button"}
                 exitCode={result?.exitCode}
                 onLineClick={findStepByLine}
+                language={"tasm"}
               />
             </Suspense>
           </div>
@@ -264,6 +266,7 @@ function PlaygroundPage() {
             initialStack={initialStack}
             onInitialStackChange={handleStackChange}
             hasExecutionResults={!!result}
+            className={styles.sidebarArea}
           />
         </div>
       </main>

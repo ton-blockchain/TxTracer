@@ -361,7 +361,7 @@
   position: absolute;
   top: var(--spacing-sm);
   right: var(--spacing-sm);
-  color: white;
+  color: var(--color-text-secondary);
   font-size: 10px;
   font-weight: var(--font-weight-medium);
   padding: 2px var(--spacing-sm);
