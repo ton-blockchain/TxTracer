@@ -151,11 +151,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 
   useTasmHoverProvider({
     monaco,
-    editorRef,
     lineExecutionData,
     getVariablesForLine,
     showVariablesDocs,
     showInstructionDocs,
+    editorReady,
     enabled: language === "tasm",
   })
 
@@ -272,6 +272,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
           }}
           loading={<></>}
           onMount={editor => {
+            const model = editor.getModel()
+            if (monaco && model) {
+              model.setEOL(monaco.editor.EndOfLineSequence.LF)
+            }
+
             editorRef.current = editor
             setEditorReady(true)
             if (onEditorMount) {

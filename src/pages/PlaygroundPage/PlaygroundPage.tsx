@@ -242,6 +242,7 @@ function PlaygroundPage() {
                 shouldCenter={transitionType === "button"}
                 exitCode={result?.exitCode}
                 onLineClick={findStepByLine}
+                language={"tasm"}
               />
             </Suspense>
           </div>

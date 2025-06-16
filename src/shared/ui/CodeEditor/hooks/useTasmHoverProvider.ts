@@ -1,4 +1,4 @@
-import {useEffect, type RefObject} from "react"
+import {useEffect} from "react"
 import type * as monacoTypes from "monaco-editor"
 import {editor, type IMarkdownString, Position} from "monaco-editor"
 
@@ -11,25 +11,25 @@ import {TASM_LANGUAGE_ID} from "../languages"
 
 interface UseTasmHoverProviderOptions {
   readonly monaco: typeof monacoTypes | null
-  readonly editorRef: RefObject<monacoTypes.editor.IStandaloneCodeEditor | null>
   readonly lineExecutionData?: LinesExecutionData
   readonly getVariablesForLine?: (line: number) => FuncVar[] | undefined
   readonly showVariablesDocs?: boolean
   readonly showInstructionDocs?: boolean
+  readonly editorReady?: boolean
   readonly enabled?: boolean
 }
 
 export const useTasmHoverProvider = ({
   monaco,
-  editorRef,
   lineExecutionData,
   getVariablesForLine,
   showVariablesDocs = true,
   showInstructionDocs = true,
+  editorReady,
   enabled,
 }: UseTasmHoverProviderOptions): void => {
   useEffect(() => {
-    if (!monaco || !editorRef.current || !enabled) return
+    if (!monaco || !editorReady || !enabled) return
 
     const provider = monaco.languages.registerHoverProvider(TASM_LANGUAGE_ID, {
       provideHover(model: editor.ITextModel, position: Position) {
@@ -120,7 +120,7 @@ export const useTasmHoverProvider = ({
     getVariablesForLine,
     showInstructionDocs,
     showVariablesDocs,
-    editorRef,
     enabled,
+    editorReady,
   ])
 }
