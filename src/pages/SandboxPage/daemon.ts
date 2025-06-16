@@ -1,6 +1,6 @@
 import {WebSocketServer, WebSocket} from "ws"
 
-const wss = new WebSocketServer({port: 8080})
+const wss = new WebSocketServer({port: 8081})
 const clients = new Set<WebSocket>()
 
 wss.on("connection", ws => {
@@ -22,4 +22,4 @@ wss.on("connection", ws => {
   })
 })
 
-console.log("WebSocket running on port 8080")
+console.log("WebSocket running on port 8081")

@@ -4428,6 +4428,15 @@ tweetnacl@1.0.3:
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-1.0.3.tgz#ac0af71680458d8a6378d0d0d050ab1407d35596"
   integrity sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==
 
+txtracer-core-test-dev@../retracer-core-new/txtracer-core-test-dev-0.1.5.tgz:
+  version "0.1.5"
+  resolved "../retracer-core-new/txtracer-core-test-dev-0.1.5.tgz#c4dfc3f3c73dbba9e06cce7d3622de45c7eb0c33"
+  dependencies:
+    "@ton/core" "^0.60.1"
+    "@ton/sandbox" "^0.31.0"
+    "@ton/ton" "^15.2.1"
+    axios "^1.6.7"
+
 txtracer-core-test-dev@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/txtracer-core-test-dev/-/txtracer-core-test-dev-0.1.4.tgz#37655e7c8ef9f0ea8cdff2a72b56ce119385058d"
