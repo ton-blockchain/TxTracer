@@ -1,11 +1,13 @@
 import React, {useState, useEffect, useRef} from "react"
 import "@xyflow/react/dist/style.css"
 import {
+  type ABIType,
   Address,
   Cell,
   type ExternalAddress,
   loadStateInit,
   loadTransaction,
+  type Slice,
   type StateInit,
   type Transaction,
 } from "@ton/core"
@@ -91,6 +93,7 @@ function parseMaybeTransactions(data: string) {
 
 type TestData = {
   readonly id: number
+  readonly testName: string | undefined
   readonly transactions: TransactionInfo[]
 }
 
@@ -119,7 +122,11 @@ function TestFlow({
   }
 
   const bigintToAddress = (addr: bigint | undefined): Address | undefined => {
-    return addr ? Address.parseRaw(`0:${addr.toString(16)}`) : undefined
+    try {
+      return addr ? Address.parseRaw(`0:${addr.toString(16)}`) : undefined
+    } catch {
+      return undefined
+    }
   }
 
   const transactions = testData.transactions.filter(it => {
@@ -131,7 +138,9 @@ function TestFlow({
 
   return (
     <>
-      <div>{testData.id}</div>
+      <div>
+        {testData.testName ?? "unknown test"}: {testData.id}
+      </div>
       {transactions.map((tx, index) => (
         <div key={index}>
           <div>lt: {tx.transaction.lt}</div>
@@ -158,13 +167,89 @@ type ContractRawData = {
 
 export type Message =
   | {readonly $: "next-test"}
-  | {readonly $: "txs"; readonly data: string}
+  | {readonly $: "txs"; readonly testName: string | undefined; readonly data: string}
   | {readonly $: "known-contracts"; readonly data: readonly ContractRawData[]}
 
 type ContractData = {
   readonly address: Address
   readonly meta: ContractMeta | undefined
   readonly stateInit: StateInit | undefined
+}
+
+function findAbiType(data: ContractData, name: string) {
+  return data.meta?.abi?.types?.find(it => it.name === `${name}$Data`)
+}
+
+function getStateInit(data: ContractData) {
+  const initData = data.stateInit?.data
+  if (initData) {
+    const copy = Cell.fromHex(initData.toBoc().toString("hex"))
+    const name = data.meta?.wrapperName
+    if (!name) return undefined
+
+    const abi = findAbiType(data, name)
+    if (abi) {
+      console.log(`found abi data for ${data.meta?.wrapperName ?? "unknown contract"}`)
+      return parseStateInit(copy.asSlice(), abi)
+    }
+
+    const otherName =
+      name === "ExtendedShardedJettonWallet"
+        ? "JettonWalletSharded"
+        : name === "ExtendedShardedJettonMinter"
+          ? "JettonMinterSharded"
+          : name
+
+    const abi2 = findAbiType(data, otherName)
+    if (abi2) {
+      console.log(`found abi data for ${data.meta?.wrapperName ?? "unknown contract"}`)
+      return parseStateInit(copy.asSlice(), abi2)
+    }
+
+    console.log(`no abi data for ${data.meta?.wrapperName ?? "unknown contract"}`)
+  }
+  return undefined
+}
+
+function ContractInfo(props: {data: ContractData; address: string}) {
+  const stateInit = getStateInit(props.data)
+
+  const assembly = props.data.stateInit?.code
+    ? print(decompileCell(props.data.stateInit?.code))
+    : ""
+
+  return (
+    <div>
+      {props.data.meta?.treasurySeed ? (
+        <p>Treasury: {props.data.meta.treasurySeed}</p>
+      ) : (
+        <p>Contract: {props.data.meta?.wrapperName ?? "unknown name"}</p>
+      )}
+      <div>
+        <AddressChip address={props.address.toString()} />
+      </div>
+      <div>Code: {props.data.stateInit?.code?.toBoc()?.toString("hex")}</div>
+      <div>Init: {props.data.stateInit?.data?.toBoc()?.toString("hex")}</div>
+
+      {stateInit && (
+        <div>
+          Init parsed:
+          {Object.entries(stateInit).map(([key, value]) => (
+            <div key={key}>
+              &nbsp;&nbsp;&nbsp;{key.toString()}
+              {": "}
+              {value instanceof Address ? (
+                <AddressChip address={value.toString()} />
+              ) : (
+                value.toString()
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+      <div>Assembly: {assembly.substring(0, Math.min(300, assembly.length - 1))}</div>
+    </div>
+  )
 }
 
 function SandboxPage() {
@@ -213,7 +298,7 @@ function SandboxPage() {
               )
             } else {
               console.log("Creating new test:", testId)
-              return [...prev, {id: testId, transactions: newTxs2}]
+              return [...prev, {id: testId, testName: message.testName, transactions: newTxs2}]
             }
           })
         }
@@ -236,6 +321,8 @@ function SandboxPage() {
     return () => ws.close()
   }, [])
 
+  console.log(contracts)
+
   return (
     <>
       <div className={styles.traceViewWrapper}>
@@ -246,20 +333,7 @@ function SandboxPage() {
           <div style={{padding: "10px", overflowY: "auto"}}>
             Contracts:
             {[...contracts.entries()].map(([address, data], i) => (
-              <div key={i}>
-                {data.meta?.treasurySeed ? (
-                  <p>Treasury: {data.meta.treasurySeed}</p>
-                ) : (
-                  <p>Contract: {data.meta?.wrapperName ?? "unknown name"}</p>
-                )}
-                <div>
-                  <AddressChip address={address.toString()} />
-                </div>
-                <div>Code: {data.stateInit?.code?.toBoc()?.toString("hex")}</div>
-                <div>
-                  Assembly: {data.stateInit?.code ? print(decompileCell(data.stateInit?.code)) : ""}
-                </div>
-              </div>
+              <ContractInfo key={i} data={data} address={address} />
             ))}
             Txs:
             {tests.map(testData => (
@@ -270,6 +344,52 @@ function SandboxPage() {
       </div>
     </>
   )
+}
+
+function parseStateInit(
+  init: Slice,
+  abi: ABIType,
+): Record<string, number | bigint | Address | Cell> | undefined {
+  const res: Record<string, number | bigint | Address | Cell> = {}
+
+  for (const [index, field] of abi.fields.entries()) {
+    try {
+      if (field.type.kind === "simple") {
+        if (field.type.type === "address") {
+          res[field.name] = init.loadAddress()
+        } else if (field.type.type === "bool") {
+          res[field.name] = init.loadUint(1)
+        } else if (field.type.type === "uint" && typeof field.type.format === "number") {
+          res[field.name] = init.loadUint(field.type.format)
+        } else if (field.type.type === "int" && typeof field.type.format === "number") {
+          res[field.name] = init.loadInt(field.type.format)
+        } else if (field.type.type === "uint" && typeof field.type.format === "string") {
+          if (field.type.format === "varuint16" || field.type.format === "coins") {
+            res[field.name] = init.loadVarUintBig(4)
+          } else if (field.type.format === "varuint32") {
+            res[field.name] = init.loadVarUintBig(8)
+          }
+        } else if (field.type.type === "int" && typeof field.type.format === "string") {
+          if (field.type.format === "varint16") {
+            res[field.name] = init.loadVarIntBig(4)
+          } else if (field.type.format === "varint32") {
+            res[field.name] = init.loadVarUintBig(8)
+          }
+        } else if (field.type.type === "cell" || field.type.type === "string") {
+          res[field.name] = init.loadRef()
+        } else if (field.type.format === "ref") {
+          res[field.name] = init.loadRef()
+        } else {
+          console.log("skip", field)
+          return undefined
+        }
+      }
+    } catch (error) {
+      console.error(`Error while parsing ${field.name} of ${abi.name} at index ${index}: ${error}`)
+    }
+  }
+
+  return res
 }
 
 export default SandboxPage
