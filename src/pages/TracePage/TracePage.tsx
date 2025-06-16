@@ -10,7 +10,6 @@ import {normalizeGas, traceTx} from "@features/txTrace/lib/traceTx"
 import {useLineExecutionData, useTraceStepper} from "@features/txTrace/hooks"
 import SearchInput from "@shared/ui/SearchInput"
 import InlineLoader from "@shared/ui/InlineLoader"
-import {useGlobalError} from "@shared/lib/errorContext"
 import {type InstructionDetail} from "@features/txTrace/ui/StepInstructionBlock"
 import {type TxHistoryEntry, useTxHistory} from "@shared/lib/useTxHistory"
 import {shortenHash} from "@shared/lib/format"
@@ -19,6 +18,8 @@ import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
 import {TooltipHint} from "@shared/ui/TooltipHint"
 
 import {StackItemViewer} from "@app/pages/TracePage/StackItemViewer.tsx"
+
+import {useGlobalError} from "@shared/lib/useGlobalError.tsx"
 
 import styles from "./TracePage.module.css"
 

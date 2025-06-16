@@ -3,8 +3,9 @@ import {Suspense, type ReactNode} from "react"
 import ErrorBanner from "@shared/ui/ErrorBanner/ErrorBanner"
 import FullScreenLoader from "@shared/ui/FullScreenLoader/FullScreenLoader"
 
-import {useGlobalError} from "@shared/lib/errorContext"
 import {ThemeToggleButton} from "@features/themeSwitcher/ui/ThemeToggleButton"
+
+import {useGlobalError} from "@shared/lib/useGlobalError.tsx"
 
 import {ErrorBoundary} from "./ErrorBoundary"
 

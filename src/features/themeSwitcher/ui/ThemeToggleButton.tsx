@@ -1,6 +1,6 @@
 import React from "react"
 
-import {useTheme} from "@shared/lib/themeContext"
+import {useTheme} from "@shared/lib/useTheme"
 import Button from "@shared/ui/Button"
 import Icon from "@shared/ui/Icon"
 import MoonIcon from "@shared/ui/Icon/MoonIcon"
