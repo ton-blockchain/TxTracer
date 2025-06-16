@@ -228,7 +228,7 @@ function PlaygroundPage() {
 
       <main className={styles.appContainer} role="main" aria-label="Assembly code playground">
         <div className={styles.mainContent}>
-          <div style={{flex: "1", position: "relative"}}>
+          <div className={styles.editorContainer}>
             <h2 id="code-editor-heading" className="sr-only">
               Assembly Code Editor
             </h2>
@@ -264,6 +264,7 @@ function PlaygroundPage() {
             initialStack={initialStack}
             onInitialStackChange={handleStackChange}
             hasExecutionResults={!!result}
+            className={styles.sidebarArea}
           />
         </div>
       </main>
