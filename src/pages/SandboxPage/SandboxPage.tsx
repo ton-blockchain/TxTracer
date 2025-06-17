@@ -6,8 +6,10 @@ import {
   Cell,
   contractAddress,
   type ExternalAddress,
+  loadShardAccount,
   loadStateInit,
   loadTransaction,
+  type ShardAccount,
   type Slice,
   type StateInit,
   type Transaction,
@@ -31,6 +33,8 @@ import AddressChip from "@shared/ui/AddressChip"
 import {type ExitCode, findExitCode} from "@features/txTrace/lib/traceTx.ts"
 
 import {bigintToAddress, findOpcodeAbi} from "@app/pages/SandboxPage/common.ts"
+
+import ContractDetails from "@shared/ui/ContractDetails"
 
 import {TransactionTree} from "./components"
 
@@ -287,6 +291,7 @@ type ContractRawData = {
   readonly address: string
   readonly meta: ContractMeta | undefined
   readonly stateInit: string | undefined
+  readonly account: string
 }
 
 export type Message =
@@ -298,6 +303,7 @@ export type ContractData = {
   readonly address: Address
   readonly meta: ContractMeta | undefined
   readonly stateInit: StateInit | undefined
+  readonly account: ShardAccount
 }
 
 function findAbiType(data: ContractData, name: string) {
@@ -521,6 +527,7 @@ function SandboxPage() {
           ...it,
           address: Address.parse(it.address),
           stateInit: it.stateInit ? loadStateInit(Cell.fromHex(it.stateInit).asSlice()) : undefined,
+          account: loadShardAccount(Cell.fromHex(it.account).asSlice()),
         }))
         setContracts(new Map(newContracts.map(it => [it.address.toString(), it])))
       }
@@ -577,6 +584,8 @@ function SandboxPage() {
 
   console.log(contracts)
 
+  const firstContract = [...contracts.values()][3]
+
   return (
     <>
       <div className={styles.traceViewWrapper}>
@@ -585,6 +594,15 @@ function SandboxPage() {
         <main className={styles.appContainer}>
           {error && <div style={{padding: "20px", color: "red"}}>{error}</div>}
           <div style={{padding: "10px", overflowY: "auto"}}>
+            {firstContract && (
+              <ContractDetails
+                contracts={contracts}
+                contract={firstContract}
+                tests={tests}
+                isDeployed={false}
+              />
+            )}
+
             <b>Contracts:</b>
             {[...contracts.entries()].map(([address, data], i) => (
               <ContractInfo

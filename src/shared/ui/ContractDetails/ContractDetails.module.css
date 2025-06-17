@@ -1,0 +1,246 @@
+.container {
+}
+
+.mainInformation {
+  background-color: var(--color-background-primary);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md) var(--spacing-lmd) var(--spacing-md) var(--spacing-lmd);
+  margin-bottom: var(--spacing-md);
+}
+
+.mainInformationRows {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  grid-row-gap: var(--spacing-sm);
+  align-items: center;
+
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+
+  margin-bottom: var(--spacing-sm);
+}
+
+.mainInformationRowTitle {
+  font-weight: var(--font-weight-semibold);
+}
+
+.mainInformationFooter {
+  margin-top: var(--spacing-xs);
+}
+
+.mainInformationStatus {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-xsm);
+  font-weight: var(--font-weight-medium);
+  text-transform: capitalize;
+}
+
+.mainInformationStatus::before {
+  content: "•";
+  font-size: var(--font-size-base);
+  font-weight: bold;
+
+  margin-top: -2px;
+}
+
+.mainInformationStatus.active {
+  color: var(--color-success);
+}
+
+.mainInformationStatus.inactive {
+  color: var(--color-text-secondary);
+}
+
+.mainInformationStatus.frozen {
+  color: var(--color-info);
+}
+
+.detailsInformation {
+  background-color: var(--color-background-primary);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md) var(--spacing-lmd) var(--spacing-md) var(--spacing-lmd);
+  margin-bottom: var(--spacing-md);
+}
+
+.header {
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.contractName {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.section {
+  margin-bottom: var(--spacing-md);
+}
+
+.sectionTitle {
+  margin: 0 0 var(--spacing-xs) 0;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.hash {
+  font-family: var(--font-family-mono), monospace;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  background-color: var(--color-background-secondary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  word-break: break-all;
+}
+
+.stateInit {
+  background-color: var(--color-background-secondary);
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-sm);
+}
+
+.stateField {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
+}
+
+.fieldName {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  min-width: 80px;
+}
+
+.fieldValue {
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
+.assembly {
+  font-family: var(--font-family-mono), monospace;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  background-color: var(--color-background-secondary);
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  white-space: pre-wrap;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.transactions {
+  background-color: var(--color-background-secondary);
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-sm);
+}
+
+.transactionCount {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.transactionItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-xs) 0;
+}
+
+.transactionItem:last-child {
+  border-bottom: none;
+}
+
+.transactionLt {
+  font-family: var(--font-family-mono), monospace;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+}
+
+.moreTransactions {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin-top: var(--spacing-sm);
+  padding-top: var(--spacing-sm);
+}
+
+.txTableHeader {
+  display: grid;
+  grid-template-columns: 2fr 3fr 1.5fr;
+  gap: var(--spacing-md);
+  padding: 0;
+  margin-bottom: var(--spacing-sm);
+}
+
+.txTableHeaderCell {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.txTableLine {
+  display: grid;
+  grid-template-columns: 2fr 3fr 1.5fr;
+  gap: var(--spacing-md);
+  align-items: center;
+  padding: var(--spacing-sm) 0;
+
+  font-size: var(--font-size-sm);
+}
+
+.txTableLine:last-child {
+  border-bottom: none;
+}
+
+.txTableCell {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+}
+
+.txTableCellOpcode {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.txTableCellValue {
+  text-align: right;
+  font-weight: var(--font-weight-medium);
+}
+
+.inMessage {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.inMessage svg {
+  font-size: 10px;
+}
+
+.addressShort {
+  font-family: var(--font-family-mono), monospace;
+  color: var(--color-primary);
+}
