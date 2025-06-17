@@ -329,7 +329,9 @@ function ContractDetails({
               <div className={styles.txTableHeader}>
                 <div className={styles.txTableHeaderCell}>Operation</div>
                 <div className={styles.txTableHeaderCell}>Message</div>
-                <div className={styles.txTableHeaderCell}>Value</div>
+                <div className={`${styles.txTableHeaderCell} ${styles.txTableHeaderCellValue}`}>
+                  Value
+                </div>
               </div>
               {ownTransactions.length > 0 ? (
                 ownTransactions

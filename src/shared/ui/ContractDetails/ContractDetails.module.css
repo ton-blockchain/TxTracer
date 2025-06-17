@@ -315,6 +315,10 @@
   font-size: var(--font-size-xs);
 }
 
+.txTableHeaderCellValue {
+  text-align: right;
+}
+
 .txTableLine {
   display: grid;
   grid-template-columns: 2fr 3fr 1.5fr;
