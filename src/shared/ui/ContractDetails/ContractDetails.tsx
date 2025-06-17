@@ -5,8 +5,6 @@ import {useState} from "react"
 
 import type {Maybe} from "@ton/core/dist/utils/maybe"
 
-import {FaArrowRight} from "react-icons/fa"
-
 import {formatCurrency} from "@shared/lib/format"
 
 import {
@@ -15,13 +13,14 @@ import {
   parseSliceWithAbiType,
 } from "@app/pages/SandboxPage/common.ts"
 
+import {ContractChip, OpcodeChip} from "@app/pages/SandboxPage/components"
+
 import type {
   ContractData,
   TestData,
   TransactionInfo,
   ContractLetter,
 } from "../../../pages/SandboxPage/SandboxPage"
-import {ContractChip} from "@app/pages/SandboxPage/components"
 
 import styles from "./ContractDetails.module.css"
 
@@ -150,21 +149,16 @@ function inMessageView(inMessage: Maybe<Message>, contractLetters?: Map<string, 
 
   if (inMessage.info.type === "internal") {
     const src = inMessage.info.src
-    const dest = inMessage.info.dest
 
     return (
       <div className={styles.inMessage}>
         {contractLetters ? (
           <>
             <ContractChip address={src.toString()} contractLetters={contractLetters} />
-            <FaArrowRight />
-            <ContractChip address={dest.toString()} contractLetters={contractLetters} />
           </>
         ) : (
           <>
             <span className={styles.addressShort}>{truncateMiddle(src.toString(), 10)}</span>
-            <FaArrowRight />
-            <span className={styles.addressShort}>{truncateMiddle(dest.toString(), 10)}</span>
           </>
         )}
       </div>
@@ -173,23 +167,18 @@ function inMessageView(inMessage: Maybe<Message>, contractLetters?: Map<string, 
 
   if (inMessage.info.type === "external-in") {
     const src = inMessage.info.src
-    const dest = inMessage.info.dest
 
     return (
       <div className={styles.inMessage}>
         {contractLetters ? (
           <>
             <ContractChip address={src?.toString()} contractLetters={contractLetters} />
-            <FaArrowRight />
-            <ContractChip address={dest.toString()} contractLetters={contractLetters} />
           </>
         ) : (
           <>
             <span className={styles.addressShort}>
               {truncateMiddle(src?.toString() ?? "unknown", 10)}
             </span>
-            <FaArrowRight />
-            <span className={styles.addressShort}>{truncateMiddle(dest.toString(), 10)}</span>
           </>
         )}
       </div>
@@ -247,11 +236,13 @@ function TxTableLine({
   const inMessage = tx.transaction.inMessage
 
   const value = inMessage?.info?.type === "internal" ? inMessage?.info.value?.coins : undefined
+  const isExternalIn = inMessage?.info?.type === "external-in"
 
   return (
     <div className={styles.txTableLine}>
       <div className={styles.txTableCellOpcode}>
-        {opcode.abiType?.name ?? (opcode.opcode ? `0x${opcode.opcode.toString(16)}` : "Empty")}
+        <OpcodeChip opcode={opcode.opcode} abiName={opcode.abiType?.name} />
+        {isExternalIn && <span className={styles.externalInLabel}> (external-in)</span>}
       </div>
       <div className={styles.txTableCell}>{inMessageView(inMessage, contractLetters)}</div>
       <div className={`${styles.txTableCell} ${styles.txTableCellValue}`}>
@@ -383,7 +374,7 @@ function ContractDetails({
             <>
               <div className={styles.txTableHeader}>
                 <div className={styles.txTableHeaderCell}>Operation</div>
-                <div className={styles.txTableHeaderCell}>Message</div>
+                <div className={styles.txTableHeaderCell}>From</div>
                 <div className={`${styles.txTableHeaderCell} ${styles.txTableHeaderCellValue}`}>
                   Value
                 </div>

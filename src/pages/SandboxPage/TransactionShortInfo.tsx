@@ -22,7 +22,7 @@ import {
   type ParsedSlice,
   parseSliceWithAbiType,
 } from "@app/pages/SandboxPage/common.ts"
-import {ContractChip} from "@app/pages/SandboxPage/components/ContractChip.tsx"
+import {ContractChip, OpcodeChip} from "@app/pages/SandboxPage/components"
 import {formatCurrency} from "@shared/lib/format"
 
 const formatAddress = (
@@ -168,13 +168,9 @@ export function TransactionShortInfo({
           <div className={styles.multiColumnRow}>
             <div className={styles.multiColumnItem}>
               <div className={styles.multiColumnItemTitle}>Opcode</div>
-              <div className={`${styles.multiColumnItemValue} ${styles.hashValue}`}>
-                {opcode ? `0x${opcode.toString(16)}` : "—"}
+              <div className={styles.multiColumnItemValue}>
+                <OpcodeChip opcode={opcode} abiName={abiType?.name} />
               </div>
-            </div>
-            <div className={styles.multiColumnItem}>
-              <div className={styles.multiColumnItemTitle}>Type</div>
-              <div className={styles.multiColumnItemValue}>{abiType?.name ?? "unknown"}</div>
             </div>
           </div>
           {inMsgBodyParsed && (

@@ -347,6 +347,14 @@
 
   text-overflow: ellipsis;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.externalInLabel {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
 }
 
 .txTableCellValue {
