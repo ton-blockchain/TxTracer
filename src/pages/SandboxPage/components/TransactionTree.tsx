@@ -118,7 +118,9 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
       const abiType = findOpcodeAbi(tx, contracts, opcode)
       const opcodeName = abiType?.name
 
-      const withInitCode = tx.transaction.inMessage?.init?.code !== undefined
+      const inMessage = tx.transaction.inMessage
+      const withInitCode = inMessage?.init?.code !== undefined
+      const isBounced = inMessage?.info?.type === "internal" ? inMessage.info.bounced : false
 
       const contractLetter = thisAddress ? contractLetters.get(thisAddress.toString()) : undefined
 
@@ -129,9 +131,10 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
           success: isSuccess ? "✓" : "✗",
           exitCode: exitCode?.toString() ?? "0",
           value: formatCurrency(value),
-          opcode: opcodeName ?? opcode?.toString() ?? "empty",
+          opcode: opcodeName ?? opcode?.toString() ?? "empty opcode",
           outMsgs: tx.transaction.outMessagesCount.toString(),
           withInitCode,
+          isBounced,
           contractLetter: contractLetter ?? "?",
         },
         children: tx.children.map(it => convertTransactionToNode(it)),
@@ -155,7 +158,13 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
     }
   }, [testData.transactions, contracts, contractLetters])
 
-  const renderCustomNodeElement = ({nodeDatum}: {nodeDatum: RawNodeDatum}) => {
+  const renderCustomNodeElement = ({
+    nodeDatum,
+    toggleNode,
+  }: {
+    nodeDatum: RawNodeDatum
+    toggleNode: () => void
+  }) => {
     if (nodeDatum.attributes?.isRoot === "true") {
       return (
         <g>
@@ -179,6 +188,20 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
         </g>
       )
     }
+
+    // [x] убрать lt
+    // [x] убрать out
+    // [x] show bounced with пунктирная
+    // [ ] при наведении на вершинку показывать gas or value in TON
+    // [ ] при наведенении на ребро показывать forward fee
+    // [ ] при наведении на exit code показывать тактовскую строку
+    // [x] показывать success если exit code != 0
+    // [ ] превращать (в отдельной вью) дерево в граф для каждой горизонтальной ...
+    // [ ] send mode 128 + 32 - уничтожает контракт после того как отравит сообщение и баланс равен 0
+    // [ ] printTransactionFees
+
+    const opcode = (nodeDatum.attributes?.opcode as string | undefined) ?? "empty opcode"
+    const isNumberOpcode = !Number.isNaN(Number.parseInt(opcode))
 
     return (
       <g>
@@ -214,7 +237,9 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
           }
           stroke="#374151"
           strokeWidth={2}
+          onClick={toggleNode}
         />
+
         <text
           fill="var(--color-text-primary)"
           strokeWidth="0"
@@ -230,15 +255,19 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
           <div className={styles.edgeText}>
             <div className={styles.topText}>
               <p className={styles.edgeTextTitle}>{nodeDatum.name}</p>
-              <p className={styles.edgeTextContent}>LT: {nodeDatum.attributes?.lt}</p>
+              {nodeDatum.attributes?.value && (
+                <p className={styles.edgeTextContent}>{nodeDatum.attributes.value}</p>
+              )}
             </div>
             <div className={styles.bottonText}>
               <p className={styles.edgeTextContent}>
-                Exit: {nodeDatum.attributes?.exitCode} | Out: {nodeDatum.attributes?.outMsgs}
+                {!isNumberOpcode ? opcode : <>Opcode: {opcode}</>}
               </p>
-              <p className={styles.edgeTextContent}>Opcode: {nodeDatum.attributes?.opcode}</p>
-              {nodeDatum.attributes?.value && (
-                <p className={styles.edgeTextContent}>{nodeDatum.attributes.value}</p>
+              {nodeDatum.attributes?.exitCode && nodeDatum.attributes?.exitCode !== "0" && (
+                <p className={styles.edgeTextContent}>
+                  Exit: {nodeDatum.attributes?.exitCode} | Success:{" "}
+                  {nodeDatum.attributes?.success === "✓" ? "true" : "false"}
+                </p>
               )}
             </div>
           </div>
@@ -251,6 +280,9 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
     const attributes = target.data.attributes
     if (attributes && attributes?.withInitCode) {
       return styles.edgeStyle + ` ${styles.edgeStyleWithInit}`
+    }
+    if (attributes && attributes?.isBounced) {
+      return styles.edgeStyle + ` ${styles.edgeStyleBounced}`
     }
 
     return styles.edgeStyle
