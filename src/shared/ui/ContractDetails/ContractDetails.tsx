@@ -1,17 +1,19 @@
-import {type ABIType, Address, type Cell, type Message, type Slice} from "@ton/core"
+import {type ABIType, Address, Cell, type Message, type Slice} from "@ton/core"
 import {decompileCell} from "ton-assembly-test-dev/dist/runtime/instr"
 import {print} from "ton-assembly-test-dev/dist/text"
+import {useState} from "react"
 
 import type {Maybe} from "@ton/core/dist/utils/maybe"
 
 import {FaArrowRight} from "react-icons/fa"
 
-import AddressChip from "@shared/ui/AddressChip"
-import Badge from "@shared/ui/Badge"
-
 import {formatCurrency} from "@shared/lib/format"
 
-import {bigintToAddress, findOpcodeAbi} from "@app/pages/SandboxPage/common.ts"
+import {
+  bigintToAddress,
+  findOpcodeAbi,
+  parseSliceWithAbiType,
+} from "@app/pages/SandboxPage/common.ts"
 
 import type {ContractData, TestData, TransactionInfo} from "../../../pages/SandboxPage/SandboxPage"
 
@@ -26,16 +28,14 @@ export interface ContractDetailsProps {
   readonly tests: TestData[]
   /** Whether contract was deployed during tests */
   readonly isDeployed: boolean
-  /** Parsed state init data */
-  readonly stateInit?: Record<string, ParsedSlice>
 }
 
-function findContractWithMatchingCode(contracts: Map<string, ContractData>, code: Cell) {
-  if (!code) return undefined
-  return [...contracts.values()].find(
-    it => it.stateInit?.code?.toBoc()?.toString("hex") === code?.toBoc()?.toString("hex"),
-  )
-}
+// function findContractWithMatchingCode(contracts: Map<string, ContractData>, code: Cell) {
+//   if (!code) return undefined
+//   return [...contracts.values()].find(
+//     it => it.stateInit?.code?.toBoc()?.toString("hex") === code?.toBoc()?.toString("hex"),
+//   )
+// }
 
 // eslint-disable-next-line functional/type-declaration-immutability
 type ParsedSlice =
@@ -47,25 +47,28 @@ type ParsedSlice =
   | null
   | {readonly $: "sub-object"; readonly value: Record<string, ParsedSlice> | undefined}
 
-function showRecordValues(data: Record<string, ParsedSlice>) {
+function showRecordValues(
+  data: Record<string, ParsedSlice>,
+  fieldNameClass?: string,
+  fieldValueClass?: string,
+) {
   return (
     <>
       {Object.entries(data).map(([key, value]) => (
         <div key={key}>
-          &nbsp;&nbsp;&nbsp;{key.toString()}
-          {": "}
-          {value instanceof Address ? (
-            <AddressChip address={value.toString()} />
-          ) : value &&
-            typeof value === "object" &&
-            "$" in value &&
-            value.$ === "sub-object" &&
-            value.value ? (
-            showRecordValues(value.value)
-          ) : (
-            // eslint-disable-next-line @typescript-eslint/no-base-to-string
-            value?.toString()
-          )}
+          <span className={fieldNameClass ?? "fieldName"}>{key.toString()}: </span>
+          <span className={fieldValueClass ?? "fieldValue"}>
+            {value instanceof Address
+              ? value.toString()
+              : value &&
+                  typeof value === "object" &&
+                  "$" in value &&
+                  value.$ === "sub-object" &&
+                  value.value
+                ? showRecordValues(value.value)
+                : // eslint-disable-next-line @typescript-eslint/no-base-to-string
+                  value?.toString()}
+          </span>
         </div>
       ))}
     </>
@@ -88,9 +91,16 @@ interface TxOpcode {
 }
 
 function getTxOpcode(tx: TransactionInfo, contracts: Map<string, ContractData>): TxOpcode {
+  const inMessage = tx.transaction.inMessage
+  const isBounced = inMessage?.info?.type === "internal" ? inMessage.info.bounced : false
+
   let opcode: number | undefined = undefined
-  const slice = tx.transaction.inMessage?.body?.asSlice()
+  const slice = inMessage?.body?.asSlice()
   if (slice && slice.remainingBits >= 32) {
+    if (isBounced) {
+      // skip 0xFFFF..
+      slice.loadUint(32)
+    }
     opcode = slice.loadUint(32)
   }
 
@@ -136,7 +146,57 @@ function inMessageView(inMessage: Maybe<Message>) {
     )
   }
 
+  if (inMessage.info.type === "external-in") {
+    const src = inMessage.info.src
+    const dest = inMessage.info.dest
+
+    return (
+      <div className={styles.inMessage}>
+        <span className={styles.addressShort}>
+          {truncateMiddle(src?.toString() ?? "unknown", 10)}
+        </span>
+        <FaArrowRight />
+        <span className={styles.addressShort}>{truncateMiddle(dest.toString(), 10)}</span>
+      </div>
+    )
+  }
+
   return <span className={styles.addressShort}>External</span>
+}
+
+function findAbiType(data: ContractData, name: string) {
+  return data.meta?.abi?.types?.find(it => it.name === `${name}$Data`)
+}
+
+function getStateInit(data: ContractData) {
+  const initData = data.stateInit?.data
+  if (initData) {
+    const copy = Cell.fromHex(initData.toBoc().toString("hex"))
+    const name = data.meta?.wrapperName
+    if (!name) return undefined
+
+    const abi = findAbiType(data, name)
+    if (abi) {
+      console.log(`found abi data for ${data.meta?.wrapperName ?? "unknown contract"}`)
+      return parseSliceWithAbiType(copy.asSlice(), abi, data.meta?.abi?.types ?? [])
+    }
+
+    const otherName =
+      name === "ExtendedShardedJettonWallet"
+        ? "JettonWalletSharded"
+        : name === "ExtendedShardedJettonMinter"
+          ? "JettonMinterSharded"
+          : name
+
+    const abi2 = findAbiType(data, otherName)
+    if (abi2) {
+      console.log(`found abi data for ${data.meta?.wrapperName ?? "unknown contract"}`)
+      return parseSliceWithAbiType(copy.asSlice(), abi2, data.meta?.abi?.types ?? [])
+    }
+
+    console.log(`no abi data for ${data.meta?.wrapperName ?? "unknown contract"}`)
+  }
+  return undefined
 }
 
 function TxTableLine({tx, contracts}: {tx: TransactionInfo; contracts: Map<string, ContractData>}) {
@@ -162,13 +222,14 @@ function ContractDetails({
   contract,
   contracts,
   tests,
-  isDeployed,
-  stateInit,
+  isDeployed: _isDeployed,
 }: ContractDetailsProps) {
+  const [activeTab, setActiveTab] = useState<"history" | "code" | "state-init">("history")
+
   const address = contract.address.toString()
   const balance = formatCurrency(contract.account.account?.storage?.balance?.coins)
   const contractType =
-    (contract.meta?.treasurySeed ? "Treasury" : contract.meta?.wrapperName) ?? undefined
+    (contract.meta?.treasurySeed ? "Treasury" : contract.meta?.wrapperName) ?? "Unknown contract"
 
   const state = contract.account.account?.storage?.state?.type ?? "unknown"
 
@@ -185,19 +246,18 @@ function ContractDetails({
     }
   }
 
+  const stateInit = getStateInit(contract)
+
   const ownTransactions = findTransactions(tests, contract)
 
-  const code = contract?.stateInit?.code
-  const contractName =
-    contract.meta?.wrapperName ??
-    (code ? findContractWithMatchingCode(contracts, code)?.meta?.wrapperName : undefined) ??
-    "Unknown Contract"
-
   const assembly = contract.stateInit?.code ? print(decompileCell(contract.stateInit?.code)) : ""
+  const codeHex = contract.stateInit?.code?.toBoc()?.toString("hex") ?? ""
+  const stateInitHex = contract.stateInit?.data?.toBoc()?.toString("hex") ?? ""
+  const stateInitCell = contract.stateInit?.data?.toString() ?? ""
 
   const renderStateInit = () => {
     if (!stateInit) return null
-    return showRecordValues(stateInit)
+    return showRecordValues(stateInit, styles.stateInitFieldName, styles.stateInitFieldValue)
   }
 
   return (
@@ -218,109 +278,128 @@ function ContractDetails({
       </div>
 
       <div className={styles.detailsInformation}>
-        <div className={styles.txTableHeader}>
-          <div className={styles.txTableHeaderCell}>Operation</div>
-          <div className={styles.txTableHeaderCell}>Message</div>
-          <div className={styles.txTableHeaderCell}>Value</div>
-        </div>
-        {ownTransactions.length > 0 ? (
-          ownTransactions
-            .slice(0, 10)
-            .map((tx, index) => <TxTableLine key={index} tx={tx} contracts={contracts} />)
-        ) : (
-          <div className={styles.txTableLine}>
-            <div
-              className={styles.txTableCell}
-              style={{
-                gridColumn: "1 / -1",
-                textAlign: "center",
-                color: "var(--color-text-secondary)",
-              }}
-            >
-              No transactions found
-            </div>
+        <div className={styles.tabsContainer}>
+          <div
+            className={`${styles.tab} ${activeTab === "history" ? styles.active : ""}`}
+            onClick={() => setActiveTab("history")}
+            onKeyDown={e => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault()
+                setActiveTab("history")
+              }
+            }}
+            role="button"
+            tabIndex={0}
+          >
+            History
           </div>
-        )}
-        {ownTransactions.length > 10 && (
-          <div className={styles.txTableLine}>
-            <div
-              className={styles.txTableCell}
-              style={{
-                gridColumn: "1 / -1",
-                textAlign: "center",
-                color: "var(--color-text-secondary)",
-              }}
-            >
-              +{ownTransactions.length - 10} more transactions
-            </div>
+          <div
+            className={`${styles.tab} ${activeTab === "code" ? styles.active : ""}`}
+            onClick={() => setActiveTab("code")}
+            onKeyDown={e => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault()
+                setActiveTab("code")
+              }
+            }}
+            role="button"
+            tabIndex={0}
+          >
+            Code
           </div>
-        )}
-      </div>
-
-      <div className={styles.header}>
-        <div className={styles.titleRow}>
-          <h3 className={styles.title}>{contract.meta?.treasurySeed ? "Treasury" : "Contract"}</h3>
-          {isDeployed && <Badge color="green">Deployed</Badge>}
+          <div
+            className={`${styles.tab} ${activeTab === "state-init" ? styles.active : ""}`}
+            onClick={() => setActiveTab("state-init")}
+            onKeyDown={e => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault()
+                setActiveTab("state-init")
+              }
+            }}
+            role="button"
+            tabIndex={0}
+          >
+            State Init
+          </div>
         </div>
-        <div className={styles.contractName}>{contract.meta?.treasurySeed ?? contractName}</div>
-      </div>
 
-      <div className={styles.section}>
-        <h4 className={styles.sectionTitle}>Code Hash</h4>
-        <div className={styles.hash}>
-          {contract.stateInit?.code?.toBoc()?.toString("hex")?.slice(0, 32)}...
-        </div>
-      </div>
+        <div className={styles.tabContent}>
+          {activeTab === "history" && (
+            <>
+              <div className={styles.txTableHeader}>
+                <div className={styles.txTableHeaderCell}>Operation</div>
+                <div className={styles.txTableHeaderCell}>Message</div>
+                <div className={styles.txTableHeaderCell}>Value</div>
+              </div>
+              {ownTransactions.length > 0 ? (
+                ownTransactions
+                  .slice(0, 10)
+                  .map((tx, index) => <TxTableLine key={index} tx={tx} contracts={contracts} />)
+              ) : (
+                <div className={styles.txTableLine}>
+                  <div
+                    className={styles.txTableCell}
+                    style={{
+                      gridColumn: "1 / -1",
+                      textAlign: "center",
+                      color: "var(--color-text-secondary)",
+                    }}
+                  >
+                    No transactions found
+                  </div>
+                </div>
+              )}
+              {ownTransactions.length > 10 && (
+                <div className={styles.txTableLine}>
+                  <div
+                    className={styles.txTableCell}
+                    style={{
+                      gridColumn: "1 / -1",
+                      textAlign: "center",
+                      color: "var(--color-text-secondary)",
+                    }}
+                  >
+                    +{ownTransactions.length - 10} more transactions
+                  </div>
+                </div>
+              )}
+            </>
+          )}
 
-      <div className={styles.section}>
-        <h4 className={styles.sectionTitle}>Init Data Hash</h4>
-        <div className={styles.hash}>
-          {contract.stateInit?.data?.toBoc()?.toString("hex")?.slice(0, 32)}...
-        </div>
-      </div>
+          {activeTab === "code" && (
+            <div className={styles.codeSection}>
+              <div className={styles.codeBlock}>
+                <div className={styles.codeBlockTitle}>Assembly Code</div>
+                <div className={styles.assemblyCode}>
+                  {assembly ?? "No assembly code available"}
+                </div>
+              </div>
 
-      {stateInit && (
-        <div className={styles.section}>
-          <h4 className={styles.sectionTitle}>Parsed Init Data</h4>
-          <div className={styles.stateInit}>{renderStateInit()}</div>
-        </div>
-      )}
-
-      <div className={styles.section}>
-        <h4 className={styles.sectionTitle}>Assembly Preview</h4>
-        <div className={styles.assembly}>
-          {assembly.substring(0, 200)}
-          {assembly.length > 200 && "..."}
-        </div>
-      </div>
-
-      <div className={styles.section}>
-        <h4 className={styles.sectionTitle}>Transactions</h4>
-        <div className={styles.transactions}>
-          <div className={styles.transactionCount}>Total: {ownTransactions.length}</div>
-          {ownTransactions.slice(0, 5).map((tx, index) => (
-            <div key={index} className={styles.transactionItem}>
-              <span className={styles.transactionLt}>LT: {tx.transaction.lt}</span>
-              <Badge
-                color={
-                  tx.transaction.description.type === "generic" &&
-                  tx.transaction.description.computePhase?.type === "vm" &&
-                  tx.transaction.description.computePhase.success
-                    ? "green"
-                    : "red"
-                }
-              >
-                {tx.transaction.description.type === "generic" &&
-                tx.transaction.description.computePhase?.type === "vm" &&
-                tx.transaction.description.computePhase.success
-                  ? "Success"
-                  : "Failed"}
-              </Badge>
+              <div className={styles.codeBlock}>
+                <div className={styles.codeBlockTitle}>Hex</div>
+                <div className={styles.hexCode}>{codeHex ?? "No hex code available"}</div>
+              </div>
             </div>
-          ))}
-          {ownTransactions.length > 5 && (
-            <div className={styles.moreTransactions}>
-              +{ownTransactions.length - 5} more transactions
+          )}
+
+          {activeTab === "state-init" && (
+            <div className={styles.stateSection}>
+              {stateInit && (
+                <div>
+                  <div className={styles.parsedStateInitHeader}>Parsed State Init</div>
+                  <div className={styles.parsedStateInit}>{renderStateInit()}</div>
+                </div>
+              )}
+
+              <div className={styles.codeBlock}>
+                <div className={styles.codeBlockTitle}>Hex</div>
+                <div className={styles.hexCode}>{stateInitHex ?? "No init data available"}</div>
+              </div>
+
+              <div className={styles.codeBlock}>
+                <div className={styles.codeBlockTitle}>Cells</div>
+                <div className={styles.hexCode}>{stateInitCell ?? "No init data available"}</div>
+              </div>
             </div>
           )}
         </div>

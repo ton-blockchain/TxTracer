@@ -6,6 +6,10 @@
   border-radius: var(--border-radius-md);
   padding: var(--spacing-md) var(--spacing-lmd) var(--spacing-md) var(--spacing-lmd);
   margin-bottom: var(--spacing-md);
+
+  max-width: 800px;
+
+  box-sizing: border-box;
 }
 
 .mainInformationRows {
@@ -60,8 +64,120 @@
 .detailsInformation {
   background-color: var(--color-background-primary);
   border-radius: var(--border-radius-md);
-  padding: var(--spacing-md) var(--spacing-lmd) var(--spacing-md) var(--spacing-lmd);
+  padding: 0;
   margin-bottom: var(--spacing-md);
+
+  max-width: 800px;
+  box-sizing: border-box;
+}
+
+.tabsContainer {
+  display: flex;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.tab {
+  padding: var(--spacing-mds) var(--spacing-md);
+  cursor: pointer;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-duration-fast) ease;
+}
+
+.tab:hover {
+  color: var(--color-text-primary);
+}
+
+.tab.active {
+  color: var(--color-text);
+  border-bottom-color: var(--color-text);
+}
+
+.tabContent {
+  padding: var(--spacing-md) var(--spacing-lmd);
+}
+
+.codeSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.stateSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.codeBlock {
+  background-color: var(--color-background-secondary);
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-sm);
+  overflow: auto;
+  white-space: pre-wrap;
+}
+
+.codeBlockTitle {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--spacing-xs);
+}
+
+.parsedStateInitHeader {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.parsedStateInit {
+  background-color: var(--color-background-primary);
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  line-height: 1;
+}
+
+.parsedStateInit > div {
+  margin-bottom: var(--spacing-xs);
+  padding: var(--spacing-xs) 0;
+}
+
+.parsedStateInit > div:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.stateInitFieldName {
+  font-weight: var(--font-weight-medium);
+  margin-right: var(--spacing-sm);
+}
+
+.stateInitFieldValue {
+  color: var(--color-text-primary);
+}
+
+.assemblyCode {
+  font-family: var(--font-family-mono), monospace;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-primary);
+  white-space: pre-wrap;
+  line-height: 1.4;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.hexCode {
+  font-family: var(--font-family-mono), monospace;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  word-break: break-all;
+  line-height: 1.4;
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 .header {

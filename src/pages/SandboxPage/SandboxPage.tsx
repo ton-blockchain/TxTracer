@@ -1,16 +1,13 @@
 import React, {useEffect, useRef, useState} from "react"
 import "@xyflow/react/dist/style.css"
 import {
-  type ABIType,
   Address,
   Cell,
-  contractAddress,
   type ExternalAddress,
   loadShardAccount,
   loadStateInit,
   loadTransaction,
   type ShardAccount,
-  type Slice,
   type StateInit,
   type Transaction,
 } from "@ton/core"
@@ -32,7 +29,12 @@ import AddressChip from "@shared/ui/AddressChip"
 
 import {type ExitCode, findExitCode} from "@features/txTrace/lib/traceTx.ts"
 
-import {bigintToAddress, findOpcodeAbi} from "@app/pages/SandboxPage/common.ts"
+import {
+  bigintToAddress,
+  findOpcodeAbi,
+  type ParsedSlice,
+  parseSliceWithAbiType,
+} from "@app/pages/SandboxPage/common.ts"
 
 import ContractDetails from "@shared/ui/ContractDetails"
 
@@ -306,47 +308,14 @@ export type ContractData = {
   readonly account: ShardAccount
 }
 
-function findAbiType(data: ContractData, name: string) {
-  return data.meta?.abi?.types?.find(it => it.name === `${name}$Data`)
-}
-
-function getStateInit(data: ContractData) {
-  const initData = data.stateInit?.data
-  if (initData) {
-    const copy = Cell.fromHex(initData.toBoc().toString("hex"))
-    const name = data.meta?.wrapperName
-    if (!name) return undefined
-
-    const abi = findAbiType(data, name)
-    if (abi) {
-      console.log(`found abi data for ${data.meta?.wrapperName ?? "unknown contract"}`)
-      return parseSliceWithAbiType(copy.asSlice(), abi, data.meta?.abi?.types ?? [])
-    }
-
-    const otherName =
-      name === "ExtendedShardedJettonWallet"
-        ? "JettonWalletSharded"
-        : name === "ExtendedShardedJettonMinter"
-          ? "JettonMinterSharded"
-          : name
-
-    const abi2 = findAbiType(data, otherName)
-    if (abi2) {
-      console.log(`found abi data for ${data.meta?.wrapperName ?? "unknown contract"}`)
-      return parseSliceWithAbiType(copy.asSlice(), abi2, data.meta?.abi?.types ?? [])
-    }
-
-    console.log(`no abi data for ${data.meta?.wrapperName ?? "unknown contract"}`)
-  }
-  return undefined
-}
-
 function findContractWithMatchingCode(contracts: Map<string, ContractData>, code: Maybe<Cell>) {
   return [...contracts.values()].find(
     it => it.stateInit?.code?.toBoc()?.toString("hex") === code?.toBoc()?.toString("hex"),
   )
 }
 
+// @ts-expect-error todo
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function isContractDeployedInside(
   tests: TestData[],
   contracts: Map<string, ContractData>,
@@ -405,73 +374,9 @@ function showRecordValues(data: Record<string, ParsedSlice>) {
   )
 }
 
-function ContractInfo(props: {
-  contracts: Map<string, ContractData>
-  data: ContractData
-  tests: TestData[]
-  address: string
-}) {
-  const stateInit = getStateInit(props.data)
-
-  const assembly = props.data.stateInit?.code
-    ? print(decompileCell(props.data.stateInit?.code))
-    : ""
-
-  const ownTransactions = props.tests.flatMap(it => {
-    return it.transactions.filter(transaction => {
-      const ownerAddress = bigintToAddress(transaction.transaction.address)
-      if (!ownerAddress) return false
-      return ownerAddress.toString() === props.data.address.toString()
-    })
-  })
-
-  const contractName =
-    props.data.meta?.wrapperName ??
-    findContractWithMatchingCode(props.contracts, props.data?.stateInit?.code)?.meta?.wrapperName ??
-    "unknown contract"
-
-  const deployed = isContractDeployedInside(props.tests, props.contracts)
-
-  return (
-    <div>
-      {props.data.meta?.treasurySeed ? (
-        <p>Treasury: {props.data.meta.treasurySeed}</p>
-      ) : (
-        <p>
-          Contract: {contractName}
-          {deployed && <p> Deployed</p>}
-        </p>
-      )}
-      <div>
-        <AddressChip address={props.address.toString()} />
-      </div>
-      <div>Code: {props.data.stateInit?.code?.toBoc()?.toString("hex")}</div>
-      <div>Init: {props.data.stateInit?.data?.toBoc()?.toString("hex")}</div>
-
-      {stateInit && (
-        <div>
-          Init parsed:
-          {showRecordValues(stateInit)}
-        </div>
-      )}
-      <div>Assembly: {assembly.substring(0, Math.min(300, assembly.length - 1))}</div>
-
-      <div>
-        Own transactions:
-        <ul>
-          {ownTransactions.map((it, index) => (
-            <li key={index}>{it.transaction.lt}</li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  )
-}
-
 function SandboxPage() {
   const [tests, setTests] = useState<TestData[]>([])
   const [contracts, setContracts] = useState<Map<string, ContractData>>(new Map())
-  const [syntheticContracts, setSyntheticContracts] = useState<Map<string, ContractData>>(new Map())
   const [error, setError] = useState<string>("")
   const currentTestIdRef = useRef(0)
 
@@ -542,49 +447,7 @@ function SandboxPage() {
     }
   }, [])
 
-  useEffect(() => {
-    for (const test of tests) {
-      for (const tx of test.transactions) {
-        for (const [_, value] of tx.transaction.outMessages) {
-          const init = value.init
-          if (!init) continue // not a deployment
-
-          const src = tx.transaction?.inMessage?.info?.src
-          if (!src) continue
-
-          const thisContract = contracts.get(src.toString())
-          if (thisContract?.meta?.treasurySeed) {
-            continue
-          }
-
-          // search for contract with the same code
-          const contract = [...contracts.values()].find(
-            it =>
-              it.stateInit?.code?.toBoc()?.toString("hex") === init?.code?.toBoc()?.toString("hex"),
-          )
-
-          if (contract) {
-            if (contracts.has(contract.address.toString())) {
-              // already in contracts
-              continue
-            }
-
-            setSyntheticContracts(old => {
-              const all = new Map<string, ContractData>()
-              old.forEach((v, k) => all.set(k, v))
-              const address = contractAddress(0, init)
-              all.set(address.toString(), contract)
-              return all
-            })
-          }
-        }
-      }
-    }
-  }, [contracts, tests])
-
   console.log(contracts)
-
-  const firstContract = [...contracts.values()][3]
 
   return (
     <>
@@ -594,33 +457,13 @@ function SandboxPage() {
         <main className={styles.appContainer}>
           {error && <div style={{padding: "20px", color: "red"}}>{error}</div>}
           <div style={{padding: "10px", overflowY: "auto"}}>
-            {firstContract && (
+            {[...contracts.entries()].map(([, data], i) => (
               <ContractDetails
+                key={i}
                 contracts={contracts}
-                contract={firstContract}
+                contract={data}
                 tests={tests}
                 isDeployed={false}
-              />
-            )}
-
-            <b>Contracts:</b>
-            {[...contracts.entries()].map(([address, data], i) => (
-              <ContractInfo
-                key={i}
-                contracts={contracts}
-                tests={tests}
-                data={data}
-                address={address}
-              />
-            ))}
-            <b>Synthetic Contracts:</b>
-            {[...syntheticContracts.entries()].map(([address, data], i) => (
-              <ContractInfo
-                key={i}
-                contracts={contracts}
-                tests={tests}
-                data={data}
-                address={address}
               />
             ))}
             <br />
@@ -642,103 +485,6 @@ function SandboxPage() {
       </div>
     </>
   )
-}
-
-// eslint-disable-next-line functional/type-declaration-immutability
-type ParsedSlice =
-  | number
-  | bigint
-  | Address
-  | Cell
-  | Slice
-  | null
-  | {readonly $: "sub-object"; readonly value: Record<string, ParsedSlice> | undefined}
-
-function parseSliceWithAbiType(
-  init: Slice,
-  abi: ABIType,
-  allAbi: ABIType[],
-): Record<string, ParsedSlice> | undefined {
-  const res: Record<string, ParsedSlice> = {}
-
-  for (const [index, field] of abi.fields.entries()) {
-    try {
-      if (field.type.kind === "simple") {
-        if (field.type.type === "address") {
-          if (field.type.optional) {
-            res[field.name] = init.loadMaybeAddress()
-          } else {
-            res[field.name] = init.loadAddress()
-          }
-        } else if (field.type.type === "bool") {
-          res[field.name] = init.loadUintBig(1)
-        } else if (field.type.type === "uint" && typeof field.type.format === "number") {
-          res[field.name] = init.loadUintBig(field.type.format)
-        } else if (field.type.type === "int" && typeof field.type.format === "number") {
-          res[field.name] = init.loadIntBig(field.type.format)
-        } else if (field.type.type === "uint" && typeof field.type.format === "string") {
-          if (field.type.format === "varuint16") {
-            res[field.name] = init.loadVarUintBig(4)
-          } else if (field.type.format === "varuint32") {
-            res[field.name] = init.loadVarUintBig(8)
-          } else if (field.type.format === "coins") {
-            res[field.name] = init.loadCoins()
-          }
-        } else if (field.type.type === "int" && typeof field.type.format === "string") {
-          if (field.type.format === "varint16") {
-            res[field.name] = init.loadVarIntBig(4)
-          } else if (field.type.format === "varint32") {
-            res[field.name] = init.loadVarUintBig(8)
-          }
-        } else if (field.type.type === "cell" || field.type.type === "string") {
-          if (field.type.optional) {
-            const hasValue = init.loadUint(1)
-            if (hasValue) {
-              res[field.name] = init.loadRef()
-            }
-          } else {
-            res[field.name] = init.loadRef()
-          }
-        } else if (field.type.format === "ref") {
-          res[field.name] = init.loadRef()
-        } else if (field.type.type === "slice" && field.type.format === "remainder") {
-          res[field.name] = init.asCell().asSlice()
-        } else {
-          const name = field.type.type
-          if (field.type.optional) {
-            const hasValue = init.loadUint(1)
-            if (hasValue) {
-              const otherType = allAbi.find(it => it.name === name)
-              if (otherType) {
-                res[field.name] = {
-                  $: "sub-object",
-                  value: parseSliceWithAbiType(init.loadRef().asSlice(), otherType, allAbi),
-                }
-              }
-            } else {
-              res[field.name] = null
-            }
-            continue
-          } else {
-            const otherType = allAbi.find(it => it.name === name)
-            if (otherType) {
-              res[field.name] = {
-                $: "sub-object",
-                value: parseSliceWithAbiType(init.loadRef().asSlice(), otherType, allAbi),
-              }
-            }
-          }
-
-          console.log("skip", field)
-          return undefined
-        }
-      }
-    } catch (error) {
-      console.error(`Error while parsing ${field.name} of ${abi.name} at index ${index}: ${error}`)
-    }
-  }
-
-  return res
 }
 
 function extractCodeAndTrace(
