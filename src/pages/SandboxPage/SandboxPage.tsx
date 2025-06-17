@@ -30,6 +30,10 @@ import AddressChip from "@shared/ui/AddressChip"
 
 import {type ExitCode, findExitCode} from "@features/txTrace/lib/traceTx.ts"
 
+import {bigintToAddress, findOpcodeAbi} from "@app/pages/SandboxPage/common.ts"
+
+import {TransactionTree} from "./components"
+
 import styles from "./SandboxPage.module.css"
 
 export type TransactionRawInfo = {
@@ -97,18 +101,10 @@ function parseMaybeTransactions(data: string) {
   }
 }
 
-type TestData = {
+export type TestData = {
   readonly id: number
   readonly testName: string | undefined
   readonly transactions: TransactionInfo[]
-}
-
-const bigintToAddress = (addr: bigint | undefined): Address | undefined => {
-  try {
-    return addr ? Address.parseRaw(`0:${addr.toString(16)}`) : undefined
-  } catch {
-    return undefined
-  }
 }
 
 const formatAddress = (
@@ -204,13 +200,13 @@ function TransactionShortInfo({
     opcode = slice.loadUint(32)
   }
 
-  let abiType: ABIType | undefined = undefined
   let inMsgBodyParsed: Record<string, ParsedSlice> | undefined = undefined
+
+  const abiType = findOpcodeAbi(tx, contracts, opcode)
+
   if (thisAddress) {
     const contract = contracts.get(thisAddress.toString())
     if (contract?.meta?.abi) {
-      abiType = contract?.meta?.abi.types?.find(it => it.header === opcode)
-
       if (slice && abiType) {
         inMsgBodyParsed = parseSliceWithAbiType(slice, abiType, contract?.meta?.abi.types ?? [])
       }
@@ -272,11 +268,17 @@ function TestFlow({
   return (
     <>
       <div>
-        {testData.testName ?? "unknown test"}: {testData.id}
+        <h3>
+          {testData.testName ?? "unknown test"}: {testData.id}
+        </h3>
       </div>
-      {transactions.map((tx, index) => (
-        <TransactionShortInfo key={index} tx={tx} contracts={contracts} />
-      ))}
+
+      <div style={{marginTop: "20px"}}>
+        <h4>Transaction Details:</h4>
+        {transactions.map((tx, index) => (
+          <TransactionShortInfo key={index} tx={tx} contracts={contracts} />
+        ))}
+      </div>
     </>
   )
 }
@@ -292,7 +294,7 @@ export type Message =
   | {readonly $: "txs"; readonly testName: string | undefined; readonly data: string}
   | {readonly $: "known-contracts"; readonly data: readonly ContractRawData[]}
 
-type ContractData = {
+export type ContractData = {
   readonly address: Address
   readonly meta: ContractMeta | undefined
   readonly stateInit: StateInit | undefined
@@ -604,7 +606,16 @@ function SandboxPage() {
               />
             ))}
             <br />
-            <b>Txs:</b>
+            <b>Transaction Trees:</b>
+            {tests.map(testData => (
+              <TransactionTree
+                key={`tree-${testData.id}`}
+                testData={testData}
+                contracts={contracts}
+              />
+            ))}
+            <br />
+            <b>Transaction Details:</b>
             {tests.map(testData => (
               <TestFlow key={testData.id} contracts={contracts} testData={testData} />
             ))}

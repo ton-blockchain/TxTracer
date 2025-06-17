@@ -1,0 +1,127 @@
+.container {
+  width: 100%;
+  margin: 20px 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+.header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+}
+
+.header h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.stats {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.treeContainer {
+  width: 100%;
+  height: 600px;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+.treeWrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.treeContainer :global(.rd3t-tree-container) {
+  width: 100%;
+  height: 100%;
+}
+
+.treeContainer :global(.rd3t-node) {
+  cursor: pointer;
+}
+
+.treeContainer :global(.rd3t-node circle) {
+  transition: all 0.3s ease;
+}
+
+.treeContainer :global(.rd3t-node:hover circle) {
+}
+
+.treeContainer :global(.rd3t-node text) {
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Скрываем линии от корневого узла если он невидимый */
+.treeContainer :global(.rd3t-node):first-child :global(.rd3t-link) {
+  opacity: 0;
+}
+
+.edgeStyle {
+  stroke: var(--color-text-secondary);
+  stroke-width: 1px;
+}
+
+.edgeStyleWithInit {
+  stroke-width: 2px;
+}
+
+.edgeTextTitle {
+  font-size: 12px;
+  font-weight: bold;
+  margin: 0;
+
+  text-align: end;
+}
+
+.edgeText {
+  font-size: 10px;
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  text-align: end;
+}
+
+.edgeTextContent {
+  margin: 0;
+}
+
+/* Темная тема */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background-color: #1f2937;
+    border-color: #374151;
+  }
+
+  .header {
+    background-color: #374151;
+    border-bottom-color: #4b5563;
+  }
+
+  .header h3 {
+    color: #f9fafb;
+  }
+
+  .stats {
+    color: #d1d5db;
+  }
+
+  .treeContainer {
+    background-color: #1f2937;
+  }
+
+  .treeContainer :global(.rd3t-link) {
+    stroke: #9ca3af;
+  }
+}

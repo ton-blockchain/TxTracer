@@ -1,0 +1,265 @@
+import {useMemo} from "react"
+import type {Orientation, RawNodeDatum, TreeLinkDatum} from "react-d3-tree"
+import Tree from "react-d3-tree"
+import {Address, beginCell, type Cell} from "@ton/core"
+
+import {findOpcodeAbi} from "@app/pages/SandboxPage/common.ts"
+
+import {formatCurrency} from "@shared/lib/format"
+
+import type {ContractData, TestData, TransactionInfo} from "../SandboxPage"
+
+import styles from "./TransactionTree.module.css"
+
+interface TransactionTreeProps {
+  readonly testData: TestData
+  readonly contracts: Map<string, ContractData>
+}
+
+const bigintToAddress = (addr: bigint | undefined): Address | undefined => {
+  if (!addr) return undefined
+
+  try {
+    const addr2 = beginCell().storeUint(4, 3).storeUint(0, 8).storeUint(addr, 256).endCell()
+    return addr2.asSlice().loadAddress()
+  } catch {
+    return undefined
+  }
+}
+
+const formatAddress = (
+  address: Address | undefined,
+  contracts: Map<string, ContractData>,
+): string => {
+  if (!address) {
+    return "unknown"
+  }
+
+  const meta = contracts.get(address.toString())
+  if (meta) {
+    const code = meta.stateInit?.code
+    const name =
+      meta.meta?.treasurySeed ??
+      meta.meta?.wrapperName ??
+      (code ? findContractWithMatchingCode(contracts, code)?.meta?.wrapperName : undefined)
+    if (name) {
+      return `${name}`
+    }
+  }
+
+  return address.toString().slice(0, 8) + "..."
+}
+
+function findContractWithMatchingCode(contracts: Map<string, ContractData>, code: Cell) {
+  return [...contracts.values()].find(
+    it => it.stateInit?.code?.toBoc()?.toString("hex") === code?.toBoc()?.toString("hex"),
+  )
+}
+
+export function TransactionTree({testData, contracts}: TransactionTreeProps) {
+  const treeData = useMemo(() => {
+    const rootTransactions = testData.transactions.filter(tx => !tx.parent)
+
+    const convertTransactionToNode = (tx: TransactionInfo): RawNodeDatum => {
+      const thisAddress = bigintToAddress(tx.transaction.address)
+      const addressName = formatAddress(thisAddress, contracts)
+
+      const computePhase =
+        tx.transaction.description.type === "generic"
+          ? tx.transaction.description.computePhase
+          : null
+
+      const isSuccess = computePhase?.type === "vm" ? computePhase.success : true
+      const exitCode =
+        computePhase?.type === "vm"
+          ? computePhase.exitCode === 0
+            ? tx.transaction.description.type === "generic"
+              ? (tx.transaction.description.actionPhase?.resultCode ?? 0)
+              : 0
+            : computePhase.exitCode
+          : undefined
+
+      const value =
+        tx.transaction.inMessage?.info?.type === "internal"
+          ? tx.transaction.inMessage?.info.value?.coins
+          : undefined
+
+      let opcode: number | undefined = undefined
+      const slice = tx.transaction.inMessage?.body?.asSlice()
+      if (slice && slice.remainingBits >= 32) {
+        try {
+          opcode = slice.loadUint(32)
+        } catch {
+          // ignore
+        }
+      }
+
+      const abiType = findOpcodeAbi(tx, contracts, opcode)
+      const opcodeName = abiType?.name
+
+      const withInitCode = tx.transaction.inMessage?.init?.code !== undefined
+
+      return {
+        name: `${addressName}`,
+        attributes: {
+          lt: tx.transaction.lt.toString(),
+          success: isSuccess ? "✓" : "✗",
+          exitCode: exitCode?.toString() ?? "0",
+          value: formatCurrency(value),
+          opcode: opcodeName ?? opcode?.toString() ?? "empty",
+          outMsgs: tx.transaction.outMessagesCount.toString(),
+          withInitCode,
+        },
+        children: tx.children.map(it => convertTransactionToNode(it)),
+      }
+    }
+
+    if (rootTransactions.length > 0) {
+      return {
+        name: "",
+        attributes: {
+          isRoot: "true",
+        },
+        children: rootTransactions.map(convertTransactionToNode),
+      }
+    }
+
+    return {
+      name: "No transactions",
+      attributes: {},
+      children: [],
+    }
+  }, [testData, contracts])
+
+  const renderCustomNodeElement = ({nodeDatum}: {nodeDatum: RawNodeDatum}) => {
+    if (nodeDatum.attributes?.isRoot === "true") {
+      return (
+        <g>
+          <circle
+            r={20}
+            fill={"var(--color-background-primary)"}
+            stroke="#374151"
+            strokeWidth={2}
+          />
+        </g>
+      )
+    }
+
+    return (
+      <g>
+        <foreignObject
+          width="4"
+          height="6"
+          x="-25"
+          y="-3"
+          style={{
+            pointerEvents: "none",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <svg
+            width="4"
+            height="6"
+            viewBox="0 0 4 5"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{display: "block", stroke: "none"}}
+          >
+            <path
+              d="M0.400044 0.549983C0.648572 0.218612 1.11867 0.151455 1.45004 0.399983L3.45004 1.89998C3.6389 2.04162 3.75004 2.26392 3.75004 2.49998C3.75004 2.73605 3.6389 2.95834 3.45004 3.09998L1.45004 4.59998C1.11867 4.84851 0.648572 4.78135 0.400044 4.44998C0.151516 4.11861 0.218673 3.64851 0.550044 3.39998L1.75004 2.49998L0.550044 1.59998C0.218673 1.35145 0.151516 0.881354 0.400044 0.549983Z"
+              fill="var(--foregroundTertiary)"
+            ></path>
+          </svg>
+        </foreignObject>
+        <circle
+          r={20}
+          fill={
+            nodeDatum.attributes?.success === "✓" ? "var(--color-background-primary)" : "#ef4444"
+          }
+          stroke="#374151"
+          strokeWidth={2}
+        />
+        <foreignObject width="200" height="100" x="-230" y="-37">
+          <div className={styles.edgeText}>
+            <div className={styles.topText}>
+              <p className={styles.edgeTextTitle}>{nodeDatum.name}</p>
+              <p className={styles.edgeTextContent}>LT: {nodeDatum.attributes?.lt}</p>
+            </div>
+            <div className={styles.bottonText}>
+              <p className={styles.edgeTextContent}>
+                Exit: {nodeDatum.attributes?.exitCode} | Out: {nodeDatum.attributes?.outMsgs}
+              </p>
+              <p className={styles.edgeTextContent}>Opcode: {nodeDatum.attributes?.opcode}</p>
+              {nodeDatum.attributes?.value && (
+                <p className={styles.edgeTextContent}>{nodeDatum.attributes.value}</p>
+              )}
+            </div>
+          </div>
+        </foreignObject>
+      </g>
+    )
+  }
+
+  const getDynamicPathClass = ({target}: TreeLinkDatum, _orientation: Orientation): string => {
+    const attributes = target.data.attributes
+    if (attributes && attributes?.withInitCode) {
+      return styles.edgeStyle + ` ${styles.edgeStyleWithInit}`
+    }
+
+    return styles.edgeStyle
+  }
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h3>
+          Test {testData.id}: {testData.testName ?? "Unknown Test"}
+        </h3>
+        <p className={styles.stats}>
+          Total transactions: {testData.transactions.length}
+          {testData.transactions.filter(tx => !tx.parent).length > 1 &&
+            ` (${testData.transactions.filter(tx => !tx.parent).length} root transactions)`}
+        </p>
+      </div>
+
+      <div className={styles.treeContainer}>
+        <div className={styles.treeWrapper}>
+          <Tree
+            // @ts-expect-error todo
+            data={treeData}
+            orientation="horizontal"
+            pathFunc={e => {
+              const t = e.target.data.attributes ?? {}
+              return t.isFirst
+                ? "M"
+                    .concat(e.source.y.toString(), ",")
+                    .concat(e.source.x.toString(), "V")
+                    .concat((e.target.x + 10).toString(), "a10 10 0 0 1 10 -10H")
+                    .concat((e.target.y - 18).toString())
+                : t.isLast
+                  ? "M"
+                      .concat(e.source.y.toString(), ",")
+                      .concat(e.source.x.toString(), "V")
+                      .concat((e.target.x - 10).toString(), "a10 10 0 0 0 10 10H")
+                      .concat((e.target.y - 18).toString())
+                  : "M"
+                      .concat(e.source.y.toString(), ",")
+                      .concat(e.source.x.toString(), "V")
+                      .concat(e.target.x.toString(), "H")
+                      .concat((e.target.y - 18).toString())
+            }}
+            nodeSize={{x: 200, y: 120}}
+            separation={{siblings: 0.8, nonSiblings: 1}}
+            renderCustomNodeElement={renderCustomNodeElement}
+            pathClassFunc={getDynamicPathClass}
+            translate={{x: 50, y: 300}}
+            zoom={1}
+            enableLegacyTransitions={true}
+            collapsible={false}
+          />
+        </div>
+      </div>
+    </div>
+  )
+}

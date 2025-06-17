@@ -9,8 +9,8 @@ export const formatCurrency = (value: bigint | undefined) => {
 
   const formatted = displayValue
     .toFixed(9)
-    .replace(/(\\.[0-9]*[1-9])0+$/, "$1")
-    .replace(/\\.0+$/, "")
+    .replace(/(\.[0-9]*[1-9])0+$/, "$1")
+    .replace(/\.0+$/, "")
 
   return `${formatted} TON`
 }
