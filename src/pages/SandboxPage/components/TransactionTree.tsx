@@ -128,6 +128,7 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
 
       const contractLetter = thisAddress ? contractLetters.get(thisAddress.toString()) : undefined
 
+      const opcodeHex = opcode?.toString(16)
       return {
         name: `${addressName}`,
         attributes: {
@@ -135,7 +136,7 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
           success: isSuccess ? "✓" : "✗",
           exitCode: exitCode?.toString() ?? "0",
           value: formatCurrency(value),
-          opcode: opcodeName ?? opcode?.toString() ?? "empty opcode",
+          opcode: opcodeName ?? (opcodeHex ? `0x${opcodeHex}` : undefined) ?? "empty opcode",
           outMsgs: tx.transaction.outMessagesCount.toString(),
           withInitCode,
           isBounced,
