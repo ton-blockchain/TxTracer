@@ -118,6 +118,9 @@ function TestFlow({
         </h3>
       </div>
 
+      <h4>Transaction Tree:</h4>
+      <TransactionTree key={`tree-${testData.id}`} testData={testData} contracts={contracts} />
+
       <div style={{marginTop: "20px"}}>
         <h4>Transaction Details:</h4>
         {transactions.map((tx, index) => (
@@ -303,16 +306,6 @@ function SandboxPage() {
               />
             ))}
             <br />
-            <b>Transaction Trees:</b>
-            {tests.map(testData => (
-              <TransactionTree
-                key={`tree-${testData.id}`}
-                testData={testData}
-                contracts={contracts}
-              />
-            ))}
-            <br />
-            <b>Transaction Details:</b>
             {tests.map(testData => (
               <TestFlow
                 key={testData.id}

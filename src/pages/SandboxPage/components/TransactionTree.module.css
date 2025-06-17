@@ -49,7 +49,6 @@
 }
 
 .treeContainer :global(.rd3t-node circle) {
-  transition: all var(--transition-duration-normal) ease;
 }
 
 .treeContainer :global(.rd3t-node:hover circle) {

@@ -60,20 +60,20 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
   const contractLetters = useMemo(() => {
     const addressSet = new Set<string>()
 
-    testData.transactions.forEach(tx => {
+    for (const tx of testData.transactions) {
       const address = bigintToAddress(tx.transaction.address)
       if (address) {
         addressSet.add(address.toString())
       }
-    })
+    }
 
     const sortedAddresses = Array.from(addressSet).sort()
     const letterMap = new Map<string, string>()
 
-    sortedAddresses.forEach((address, index) => {
+    for (const [index, address] of sortedAddresses.entries()) {
       const letter = String.fromCharCode(65 + (index % 26))
       letterMap.set(address, letter)
-    })
+    }
 
     return letterMap
   }, [testData.transactions])
@@ -296,9 +296,6 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h3>
-          Test {testData.id}: {testData.testName ?? "Unknown Test"}
-        </h3>
         <p className={styles.stats}>
           Total transactions: {testData.transactions.length}
           {testData.transactions.filter(tx => !tx.parent).length > 1 &&
