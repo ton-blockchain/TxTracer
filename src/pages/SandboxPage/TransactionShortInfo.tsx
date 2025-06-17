@@ -9,9 +9,12 @@ import {createTraceInfoPerTransaction} from "ton-assembly-test-dev/dist/trace/tr
 import React from "react"
 import type {Maybe} from "@ton/core/dist/utils/maybe"
 
-import AddressChip from "@shared/ui/AddressChip"
 import {type ExitCode, findExitCode} from "@features/txTrace/lib/traceTx.ts"
-import type {ContractData, TransactionInfo} from "@app/pages/SandboxPage/SandboxPage.tsx"
+import type {
+  ContractData,
+  TransactionInfo,
+  ContractLetter,
+} from "@app/pages/SandboxPage/SandboxPage.tsx"
 import styles from "@app/pages/SandboxPage/SandboxPage.module.css"
 import {
   bigintToAddress,
@@ -19,42 +22,28 @@ import {
   type ParsedSlice,
   parseSliceWithAbiType,
 } from "@app/pages/SandboxPage/common.ts"
-
-function findContractWithMatchingCode(contracts: Map<string, ContractData>, code: Maybe<Cell>) {
-  return [...contracts.values()].find(
-    it => it.stateInit?.code?.toBoc()?.toString("hex") === code?.toBoc()?.toString("hex"),
-  )
-}
+import {ContractChip} from "@app/pages/SandboxPage/components/ContractChip.tsx"
+import {formatCurrency} from "@shared/lib/format"
 
 const formatAddress = (
   address: Address | Maybe<ExternalAddress> | undefined,
-  contracts: Map<string, ContractData>,
+  contractLetters: Map<string, ContractLetter>,
 ): React.ReactNode => {
   if (!address) {
-    return <AddressChip address={"unknown"} />
+    return <ContractChip address={undefined} contractLetters={contractLetters} />
   }
 
-  const meta = contracts.get(address.toString())
-  if (meta) {
-    const name =
-      meta.meta?.treasurySeed ??
-      meta.meta?.wrapperName ??
-      findContractWithMatchingCode(contracts, contracts.get(address.toString())?.stateInit?.code)
-        ?.meta?.wrapperName
-    if (name) {
-      return <AddressChip address={address.toString() + ` (${name})`} />
-    }
-  }
-
-  return <AddressChip address={address.toString()} />
+  return <ContractChip address={address.toString()} contractLetters={contractLetters} />
 }
 
 export function TransactionShortInfo({
   tx,
   contracts,
+  contractLetters,
 }: {
   tx: TransactionInfo
   contracts: Map<string, ContractData>
+  contractLetters: Map<string, ContractLetter>
 }) {
   if (tx.transaction.description.type !== "generic") {
     throw new Error(
@@ -134,11 +123,6 @@ export function TransactionShortInfo({
     <span className={v ? styles.booleanTrue : styles.booleanFalse}>{v ? "Yes" : "No"}</span>
   )
 
-  const formatCurrency = (amount: bigint | undefined) => {
-    if (!amount) return "—"
-    return <span className={styles.currencyValue}>{(Number(amount) / 1e9).toFixed(4)} TON</span>
-  }
-
   return (
     <div className={styles.transactionDetailsContainer}>
       <div className={styles.transactionHeader}>
@@ -147,24 +131,15 @@ export function TransactionShortInfo({
 
       <div className={styles.detailRow}>
         <div className={styles.detailLabel}>Contract</div>
-        <div className={styles.detailValue}>
-          {formatAddress(thisAddress, contracts) ?? "unknown"}
-        </div>
-      </div>
-
-      <div className={styles.detailRow}>
-        <div className={styles.detailLabel}>Parent TX</div>
-        <div className={styles.detailValue}>
-          <span className={styles.numberValue}>{tx.parent?.transaction?.lt ?? "—"}</span>
-        </div>
+        <div className={styles.detailValue}>{formatAddress(thisAddress, contractLetters)}</div>
       </div>
 
       <div className={styles.detailRow}>
         <div className={styles.detailLabel}>Message Route</div>
         <div className={styles.detailValue}>
-          {formatAddress(tx.transaction.inMessage?.info?.src, contracts)}
+          {formatAddress(tx.transaction.inMessage?.info?.src, contractLetters)}
           {" → "}
-          {formatAddress(tx.transaction.inMessage?.info?.dest, contracts)}
+          {formatAddress(tx.transaction.inMessage?.info?.dest, contractLetters)}
         </div>
       </div>
 
@@ -206,7 +181,7 @@ export function TransactionShortInfo({
             <div style={{marginTop: "var(--spacing-sm)"}}>
               <div className={styles.multiColumnItemTitle}>Parsed Data:</div>
               <div style={{marginLeft: "var(--spacing-sm)"}}>
-                {showRecordValues(inMsgBodyParsed)}
+                {showRecordValues(inMsgBodyParsed, contractLetters)}
               </div>
             </div>
           )}
@@ -302,7 +277,10 @@ function extractCodeAndTrace(
   return {code, exitCode, traceInfo}
 }
 
-function showRecordValues(data: Record<string, ParsedSlice>) {
+function showRecordValues(
+  data: Record<string, ParsedSlice>,
+  contractLetters: Map<string, ContractLetter>,
+) {
   return (
     <>
       {Object.entries(data).map(([key, value]) => (
@@ -310,13 +288,13 @@ function showRecordValues(data: Record<string, ParsedSlice>) {
           &nbsp;&nbsp;&nbsp;{key.toString()}
           {": "}
           {value instanceof Address ? (
-            <AddressChip address={value.toString()} />
+            <ContractChip address={value.toString()} contractLetters={contractLetters} />
           ) : value &&
             typeof value === "object" &&
             "$" in value &&
             value.$ === "sub-object" &&
             value.value ? (
-            showRecordValues(value.value)
+            showRecordValues(value.value, contractLetters)
           ) : (
             // eslint-disable-next-line @typescript-eslint/no-base-to-string
             value?.toString()

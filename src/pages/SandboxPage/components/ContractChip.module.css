@@ -1,0 +1,73 @@
+.contractChip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  position: relative;
+  padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) var(--spacing-xs);
+  border-radius: var(--border-radius-sm);
+  transition: background-color var(--transition-duration-fast) ease;
+}
+
+.contractChip:hover {
+  background-color: var(--color-background-secondary);
+}
+
+.contractChip:hover .contractChipCopyButton {
+  opacity: 1;
+}
+
+.contractLetter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--color-text-secondary);
+  color: var(--color-background-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  flex-shrink: 0;
+}
+
+.contractName {
+  font-weight: var(--font-weight-medium);
+  color: var(--table-td-text-color);
+}
+
+.contractAddress {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-family: var(--font-family-mono), monospace;
+}
+
+.contractChipCopyButton {
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  right: var(--spacing-xs);
+  transform: translateY(-50%);
+  padding: 2px;
+  border: none;
+  background-color: var(--color-background-primary);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition:
+    opacity var(--transition-duration-fast) ease,
+    background-color var(--transition-duration-fast) ease;
+  color: var(--color-text-secondary);
+  line-height: 1;
+}
+
+.contractChipCopyButton:hover {
+  background-color: var(--color-background-tertiary);
+  color: var(--color-text-primary);
+}
+
+.contractChipCopyButton svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+  stroke: currentColor;
+}

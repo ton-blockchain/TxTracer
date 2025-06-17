@@ -15,7 +15,13 @@ import {
   parseSliceWithAbiType,
 } from "@app/pages/SandboxPage/common.ts"
 
-import type {ContractData, TestData, TransactionInfo} from "../../../pages/SandboxPage/SandboxPage"
+import type {
+  ContractData,
+  TestData,
+  TransactionInfo,
+  ContractLetter,
+} from "../../../pages/SandboxPage/SandboxPage"
+import {ContractChip} from "@app/pages/SandboxPage/components"
 
 import styles from "./ContractDetails.module.css"
 
@@ -24,6 +30,8 @@ export interface ContractDetailsProps {
   readonly contract: ContractData
   /** All contracts map for cross-referencing */
   readonly contracts: Map<string, ContractData>
+  /** Contract letters mapping for display */
+  readonly contractLetters?: Map<string, ContractLetter>
   /** Test data containing transactions */
   readonly tests: TestData[]
   /** Whether contract was deployed during tests */
@@ -51,6 +59,7 @@ function showRecordValues(
   data: Record<string, ParsedSlice>,
   fieldNameClass?: string,
   fieldValueClass?: string,
+  contractLetters?: Map<string, ContractLetter>,
 ) {
   return (
     <>
@@ -58,16 +67,22 @@ function showRecordValues(
         <div key={key}>
           <span className={fieldNameClass ?? "fieldName"}>{key.toString()}: </span>
           <span className={fieldValueClass ?? "fieldValue"}>
-            {value instanceof Address
-              ? value.toString()
-              : value &&
-                  typeof value === "object" &&
-                  "$" in value &&
-                  value.$ === "sub-object" &&
-                  value.value
-                ? showRecordValues(value.value)
-                : // eslint-disable-next-line @typescript-eslint/no-base-to-string
-                  value?.toString()}
+            {value instanceof Address ? (
+              contractLetters ? (
+                <ContractChip address={value.toString()} contractLetters={contractLetters} />
+              ) : (
+                value.toString()
+              )
+            ) : value &&
+              typeof value === "object" &&
+              "$" in value &&
+              value.$ === "sub-object" &&
+              value.value ? (
+              showRecordValues(value.value, fieldNameClass, fieldValueClass, contractLetters)
+            ) : (
+              // eslint-disable-next-line @typescript-eslint/no-base-to-string
+              value?.toString()
+            )}
           </span>
         </div>
       ))}
@@ -128,7 +143,7 @@ const truncateMiddle = (text: string, maxLength: number = 30) => {
   )
 }
 
-function inMessageView(inMessage: Maybe<Message>) {
+function inMessageView(inMessage: Maybe<Message>, contractLetters?: Map<string, ContractLetter>) {
   if (!inMessage) {
     return <span className={styles.addressShort}>—</span>
   }
@@ -139,9 +154,19 @@ function inMessageView(inMessage: Maybe<Message>) {
 
     return (
       <div className={styles.inMessage}>
-        <span className={styles.addressShort}>{truncateMiddle(src.toString(), 10)}</span>
-        <FaArrowRight />
-        <span className={styles.addressShort}>{truncateMiddle(dest.toString(), 10)}</span>
+        {contractLetters ? (
+          <>
+            <ContractChip address={src.toString()} contractLetters={contractLetters} />
+            <FaArrowRight />
+            <ContractChip address={dest.toString()} contractLetters={contractLetters} />
+          </>
+        ) : (
+          <>
+            <span className={styles.addressShort}>{truncateMiddle(src.toString(), 10)}</span>
+            <FaArrowRight />
+            <span className={styles.addressShort}>{truncateMiddle(dest.toString(), 10)}</span>
+          </>
+        )}
       </div>
     )
   }
@@ -152,11 +177,21 @@ function inMessageView(inMessage: Maybe<Message>) {
 
     return (
       <div className={styles.inMessage}>
-        <span className={styles.addressShort}>
-          {truncateMiddle(src?.toString() ?? "unknown", 10)}
-        </span>
-        <FaArrowRight />
-        <span className={styles.addressShort}>{truncateMiddle(dest.toString(), 10)}</span>
+        {contractLetters ? (
+          <>
+            <ContractChip address={src?.toString()} contractLetters={contractLetters} />
+            <FaArrowRight />
+            <ContractChip address={dest.toString()} contractLetters={contractLetters} />
+          </>
+        ) : (
+          <>
+            <span className={styles.addressShort}>
+              {truncateMiddle(src?.toString() ?? "unknown", 10)}
+            </span>
+            <FaArrowRight />
+            <span className={styles.addressShort}>{truncateMiddle(dest.toString(), 10)}</span>
+          </>
+        )}
       </div>
     )
   }
@@ -199,7 +234,15 @@ function getStateInit(data: ContractData) {
   return undefined
 }
 
-function TxTableLine({tx, contracts}: {tx: TransactionInfo; contracts: Map<string, ContractData>}) {
+function TxTableLine({
+  tx,
+  contracts,
+  contractLetters,
+}: {
+  tx: TransactionInfo
+  contracts: Map<string, ContractData>
+  contractLetters?: Map<string, ContractLetter>
+}) {
   const opcode = getTxOpcode(tx, contracts)
   const inMessage = tx.transaction.inMessage
 
@@ -210,7 +253,7 @@ function TxTableLine({tx, contracts}: {tx: TransactionInfo; contracts: Map<strin
       <div className={styles.txTableCellOpcode}>
         {opcode.abiType?.name ?? (opcode.opcode ? `0x${opcode.opcode.toString(16)}` : "Empty")}
       </div>
-      <div className={styles.txTableCell}>{inMessageView(inMessage)}</div>
+      <div className={styles.txTableCell}>{inMessageView(inMessage, contractLetters)}</div>
       <div className={`${styles.txTableCell} ${styles.txTableCellValue}`}>
         {formatCurrency(value)}
       </div>
@@ -221,6 +264,7 @@ function TxTableLine({tx, contracts}: {tx: TransactionInfo; contracts: Map<strin
 function ContractDetails({
   contract,
   contracts,
+  contractLetters,
   tests,
   isDeployed: _isDeployed,
 }: ContractDetailsProps) {
@@ -257,12 +301,23 @@ function ContractDetails({
 
   const renderStateInit = () => {
     if (!stateInit) return null
-    return showRecordValues(stateInit, styles.stateInitFieldName, styles.stateInitFieldValue)
+    return showRecordValues(
+      stateInit,
+      styles.stateInitFieldName,
+      styles.stateInitFieldValue,
+      contractLetters,
+    )
   }
 
   return (
     <div className={styles.container}>
       <div className={styles.mainInformation}>
+        {contractLetters && (
+          <div className={styles.contractChipHeader}>
+            <ContractChip address={address} contractLetters={contractLetters} />
+          </div>
+        )}
+
         <div className={styles.mainInformationRows}>
           <div className={styles.mainInformationRowTitle}>Address</div>
           <div>{address}</div>
@@ -334,9 +389,14 @@ function ContractDetails({
                 </div>
               </div>
               {ownTransactions.length > 0 ? (
-                ownTransactions
-                  .slice(0, 10)
-                  .map((tx, index) => <TxTableLine key={index} tx={tx} contracts={contracts} />)
+                ownTransactions.map((tx, index) => (
+                  <TxTableLine
+                    key={index}
+                    tx={tx}
+                    contracts={contracts}
+                    contractLetters={contractLetters}
+                  />
+                ))
               ) : (
                 <div className={styles.txTableLine}>
                   <div

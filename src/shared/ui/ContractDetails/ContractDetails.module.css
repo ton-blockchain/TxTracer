@@ -7,14 +7,18 @@
   padding: var(--spacing-md) var(--spacing-lmd) var(--spacing-md) var(--spacing-lmd);
   margin-bottom: var(--spacing-md);
 
-  max-width: 800px;
+  max-width: 1200px;
 
   box-sizing: border-box;
 }
 
+.contractChipHeader {
+  margin-bottom: var(--spacing-sm);
+}
+
 .mainInformationRows {
   display: grid;
-  grid-template-columns: 1fr 4fr;
+  grid-template-columns: 1fr 5fr;
   grid-row-gap: var(--spacing-sm);
   align-items: center;
 
@@ -67,7 +71,7 @@
   padding: 0;
   margin-bottom: var(--spacing-md);
 
-  max-width: 800px;
+  max-width: 1200px;
   box-sizing: border-box;
 }
 
@@ -215,7 +219,6 @@
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .hash {
@@ -303,7 +306,7 @@
 
 .txTableHeader {
   display: grid;
-  grid-template-columns: 2fr 3fr 1.5fr;
+  grid-template-columns: 1fr 3fr 150px;
   gap: var(--spacing-md);
   padding: 0;
   margin-bottom: var(--spacing-sm);
@@ -321,7 +324,7 @@
 
 .txTableLine {
   display: grid;
-  grid-template-columns: 2fr 3fr 1.5fr;
+  grid-template-columns: 1fr 3fr 150px;
   gap: var(--spacing-md);
   align-items: center;
   padding: var(--spacing-sm) 0;
@@ -341,6 +344,9 @@
 .txTableCellOpcode {
   font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
+
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .txTableCellValue {

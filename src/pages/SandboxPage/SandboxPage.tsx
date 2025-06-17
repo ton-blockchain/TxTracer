@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react"
+import {useEffect, useMemo, useRef, useState} from "react"
 import "@xyflow/react/dist/style.css"
 import {
   Address,
@@ -96,9 +96,11 @@ export type TestData = {
 
 function TestFlow({
   contracts,
+  contractLetters,
   testData,
 }: {
   contracts: Map<string, ContractData>
+  contractLetters: Map<string, ContractLetter>
   testData: TestData
 }) {
   const transactions = testData.transactions.filter(it => {
@@ -119,7 +121,12 @@ function TestFlow({
       <div style={{marginTop: "20px"}}>
         <h4>Transaction Details:</h4>
         {transactions.map((tx, index) => (
-          <TransactionShortInfo key={index} tx={tx} contracts={contracts} />
+          <TransactionShortInfo
+            key={index}
+            tx={tx}
+            contracts={contracts}
+            contractLetters={contractLetters}
+          />
         ))}
       </div>
     </>
@@ -143,6 +150,12 @@ export type ContractData = {
   readonly meta: ContractMeta | undefined
   readonly stateInit: StateInit | undefined
   readonly account: ShardAccount
+}
+
+export type ContractLetter = {
+  readonly letter: string
+  readonly address: string
+  readonly name: string
 }
 
 // @ts-expect-error todo
@@ -185,6 +198,22 @@ function SandboxPage() {
   const [contracts, setContracts] = useState<Map<string, ContractData>>(new Map())
   const [error, setError] = useState<string>("")
   const currentTestIdRef = useRef(0)
+
+  const contractLetters = useMemo(() => {
+    const letters = Array.from(contracts.entries()).map(([address, contract], index) => {
+      const letter = String.fromCharCode(65 + (index % 26))
+      const name = contract.meta?.treasurySeed
+        ? contract.meta?.treasurySeed
+        : (contract.meta?.wrapperName ?? "Unknown Contract")
+
+      return {
+        letter,
+        address,
+        name,
+      }
+    })
+    return new Map(letters.map(item => [item.address, item]))
+  }, [contracts])
 
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:8081")
@@ -267,6 +296,7 @@ function SandboxPage() {
               <ContractDetails
                 key={i}
                 contracts={contracts}
+                contractLetters={contractLetters}
                 contract={data}
                 tests={tests}
                 isDeployed={false}
@@ -284,7 +314,12 @@ function SandboxPage() {
             <br />
             <b>Transaction Details:</b>
             {tests.map(testData => (
-              <TestFlow key={testData.id} contracts={contracts} testData={testData} />
+              <TestFlow
+                key={testData.id}
+                contracts={contracts}
+                contractLetters={contractLetters}
+                testData={testData}
+              />
             ))}
           </div>
         </main>
