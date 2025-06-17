@@ -57,6 +57,27 @@ function findContractWithMatchingCode(contracts: Map<string, ContractData>, code
 }
 
 export function TransactionTree({testData, contracts}: TransactionTreeProps) {
+  const contractLetters = useMemo(() => {
+    const addressSet = new Set<string>()
+
+    testData.transactions.forEach(tx => {
+      const address = bigintToAddress(tx.transaction.address)
+      if (address) {
+        addressSet.add(address.toString())
+      }
+    })
+
+    const sortedAddresses = Array.from(addressSet).sort()
+    const letterMap = new Map<string, string>()
+
+    sortedAddresses.forEach((address, index) => {
+      const letter = String.fromCharCode(65 + (index % 26))
+      letterMap.set(address, letter)
+    })
+
+    return letterMap
+  }, [testData.transactions])
+
   const treeData = useMemo(() => {
     const rootTransactions = testData.transactions.filter(tx => !tx.parent)
 
@@ -99,6 +120,8 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
 
       const withInitCode = tx.transaction.inMessage?.init?.code !== undefined
 
+      const contractLetter = thisAddress ? contractLetters.get(thisAddress.toString()) : undefined
+
       return {
         name: `${addressName}`,
         attributes: {
@@ -109,6 +132,7 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
           opcode: opcodeName ?? opcode?.toString() ?? "empty",
           outMsgs: tx.transaction.outMessagesCount.toString(),
           withInitCode,
+          contractLetter: contractLetter ?? "?",
         },
         children: tx.children.map(it => convertTransactionToNode(it)),
       }
@@ -129,7 +153,7 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
       attributes: {},
       children: [],
     }
-  }, [testData, contracts])
+  }, [testData.transactions, contracts, contractLetters])
 
   const renderCustomNodeElement = ({nodeDatum}: {nodeDatum: RawNodeDatum}) => {
     if (nodeDatum.attributes?.isRoot === "true") {
@@ -141,6 +165,17 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
             stroke="#374151"
             strokeWidth={2}
           />
+          <text
+            fill="var(--color-text-primary)"
+            strokeWidth="0"
+            x="0"
+            y="5"
+            fontSize="14"
+            fontWeight="bold"
+            textAnchor="middle"
+          >
+            BL
+          </text>
         </g>
       )
     }
@@ -180,6 +215,17 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
           stroke="#374151"
           strokeWidth={2}
         />
+        <text
+          fill="var(--color-text-primary)"
+          strokeWidth="0"
+          x="0"
+          y="5"
+          fontSize="14"
+          fontWeight="bold"
+          textAnchor="middle"
+        >
+          {nodeDatum.attributes?.contractLetter}
+        </text>
         <foreignObject width="200" height="100" x="-230" y="-37">
           <div className={styles.edgeText}>
             <div className={styles.topText}>
@@ -220,6 +266,7 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
           Total transactions: {testData.transactions.length}
           {testData.transactions.filter(tx => !tx.parent).length > 1 &&
             ` (${testData.transactions.filter(tx => !tx.parent).length} root transactions)`}
+          {` | Contracts: ${contractLetters.size}`}
         </p>
       </div>
 
