@@ -90,6 +90,10 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
           ? tx.transaction.description.computePhase
           : null
 
+      const inMessage = tx.transaction.inMessage
+      const withInitCode = inMessage?.init?.code !== undefined
+      const isBounced = inMessage?.info?.type === "internal" ? inMessage.info.bounced : false
+
       const isSuccess = computePhase?.type === "vm" ? computePhase.success : true
       const exitCode =
         computePhase?.type === "vm"
@@ -109,6 +113,10 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
       const slice = tx.transaction.inMessage?.body?.asSlice()
       if (slice && slice.remainingBits >= 32) {
         try {
+          if (isBounced) {
+            // skip 0xFFFF..
+            slice.loadUint(32)
+          }
           opcode = slice.loadUint(32)
         } catch {
           // ignore
@@ -117,10 +125,6 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
 
       const abiType = findOpcodeAbi(tx, contracts, opcode)
       const opcodeName = abiType?.name
-
-      const inMessage = tx.transaction.inMessage
-      const withInitCode = inMessage?.init?.code !== undefined
-      const isBounced = inMessage?.info?.type === "internal" ? inMessage.info.bounced : false
 
       const contractLetter = thisAddress ? contractLetters.get(thisAddress.toString()) : undefined
 
