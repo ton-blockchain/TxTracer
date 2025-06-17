@@ -132,9 +132,10 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title, onStackItemClick
         )
       case "Integer": {
         const value = element.value.toString()
+        const valueHex = element.value.toString(16)
         return (
           <div className={styles.integerItem} key={keyPrefix}>
-            {value}
+            {value} <span className={styles.integerItemHexValue}>(0x{valueHex})</span>
             <CopyButton
               className={styles.integerItemCopyButton}
               title="Copy integer value"
