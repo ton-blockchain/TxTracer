@@ -176,7 +176,7 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
           <circle
             r={20}
             fill={"var(--color-background-primary)"}
-            stroke="#374151"
+            stroke="var(--color-text-primary)"
             strokeWidth={2}
           />
           <text
@@ -240,7 +240,7 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
           fill={
             nodeDatum.attributes?.success === "✓" ? "var(--color-background-primary)" : "#ef4444"
           }
-          stroke="#374151"
+          stroke="var(--color-text-primary)"
           strokeWidth={2}
           onClick={toggleNode}
         />

@@ -1,35 +1,35 @@
 .container {
   width: 100%;
-  margin: 20px 0;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  background-color: #ffffff;
+  margin: var(--spacing-lg) 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-background-primary);
   overflow: hidden;
 }
 
 .header {
-  padding: 16px 20px;
-  border-bottom: 1px solid #e5e7eb;
-  background-color: #f9fafb;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--color-divider);
+  background-color: var(--color-background-secondary);
 }
 
 .header h3 {
-  margin: 0 0 8px 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #111827;
+  margin: 0 0 var(--spacing-xs) 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
 }
 
 .stats {
   margin: 0;
-  font-size: 14px;
-  color: #6b7280;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
 }
 
 .treeContainer {
   width: 100%;
   height: 600px;
-  background-color: #ffffff;
+  background-color: var(--color-background-primary);
   overflow: hidden;
 }
 
@@ -49,7 +49,7 @@
 }
 
 .treeContainer :global(.rd3t-node circle) {
-  transition: all 0.3s ease;
+  transition: all var(--transition-duration-normal) ease;
 }
 
 .treeContainer :global(.rd3t-node:hover circle) {
@@ -58,6 +58,7 @@
 .treeContainer :global(.rd3t-node text) {
   pointer-events: none;
   user-select: none;
+  fill: var(--color-text-primary);
 }
 
 /* Скрываем линии от корневого узла если он невидимый */
@@ -79,53 +80,28 @@
 }
 
 .edgeTextTitle {
-  font-size: 12px;
-  font-weight: bold;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
   margin: 0;
-
+  color: var(--color-text-primary);
   text-align: end;
 }
 
 .edgeText {
-  font-size: 10px;
+  font-size: var(--font-size-xss);
   margin: 0;
-
+  color: var(--color-text-secondary);
   display: flex;
   flex-direction: column;
   gap: 8px;
-
   text-align: end;
 }
 
 .edgeTextContent {
   margin: 0;
+  color: var(--color-text-secondary);
 }
 
-/* Темная тема */
-@media (prefers-color-scheme: dark) {
-  .container {
-    background-color: #1f2937;
-    border-color: #374151;
-  }
-
-  .header {
-    background-color: #374151;
-    border-bottom-color: #4b5563;
-  }
-
-  .header h3 {
-    color: #f9fafb;
-  }
-
-  .stats {
-    color: #d1d5db;
-  }
-
-  .treeContainer {
-    background-color: #1f2937;
-  }
-
-  .treeContainer :global(.rd3t-link) {
-    stroke: #9ca3af;
-  }
+.treeContainer :global(.rd3t-link) {
+  stroke: var(--color-text-secondary);
 }
