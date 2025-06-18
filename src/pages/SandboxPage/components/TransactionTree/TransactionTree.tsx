@@ -33,7 +33,6 @@ interface TooltipData {
 
 interface TransactionTreeProps {
   readonly testData: TestData
-  readonly contracts: Map<string, ContractData>
 }
 
 const formatAddress = (
@@ -65,10 +64,12 @@ const formatAddressShort = (address: Address | undefined): string => {
   return addressStr.slice(0, 6) + "..." + addressStr.slice(addressStr.length - 6)
 }
 
-export function TransactionTree({testData, contracts}: TransactionTreeProps) {
+export function TransactionTree({testData}: TransactionTreeProps) {
   const [tooltip, setTooltip] = useState<TooltipData | null>(null)
   const [selectedTransaction, setSelectedTransaction] = useState<TransactionInfo | null>(null)
   const [selectedContract, setSelectedContract] = useState<ContractData | null>(null)
+
+  const contracts = testData.contracts
 
   const calculateTreeDimensions = (data: {
     children?: unknown[]
@@ -96,7 +97,7 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
     const depth = getDepth(data)
 
     return {
-      height: Math.max(300, totalNodes * 70 + 200),
+      height: Math.max(300, totalNodes * 80 + 100),
       width: Math.max(800, depth * 200 + 200),
     }
   }

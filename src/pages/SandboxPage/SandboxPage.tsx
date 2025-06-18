@@ -7,7 +7,7 @@ import {TestInfo, ConnectionGuide, LoadingState} from "@app/pages/SandboxPage/co
 import styles from "./SandboxPage.module.css"
 
 function SandboxPage() {
-  const {tests, contracts, error, isConnected} = useSandboxData()
+  const {tests, error, isConnected} = useSandboxData()
 
   const header = (
     <PageHeader pageTitle={"sandbox"}>
@@ -26,7 +26,7 @@ function SandboxPage() {
     )
   }
 
-  if (isConnected && tests.length === 0 && contracts.size === 0 && !error) {
+  if (isConnected && tests.length === 0 && !error) {
     return (
       <div className={styles.traceViewWrapper}>
         {header}
@@ -57,7 +57,7 @@ function SandboxPage() {
           {/*))}*/}
           {/*<br />*/}
           {tests.map(testData => (
-            <TestInfo key={testData.id} contracts={contracts} testData={testData} />
+            <TestInfo key={testData.id} testData={testData} />
           ))}
         </div>
       </main>

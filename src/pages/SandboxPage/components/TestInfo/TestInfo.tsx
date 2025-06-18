@@ -1,15 +1,13 @@
-import type {ContractData} from "@features/sandbox/lib/contract.ts"
 import type {TestData} from "@features/sandbox/lib/test-data.ts"
 import {TransactionTree} from "@app/pages/SandboxPage/components"
 
 import styles from "./TestInfo.module.css"
 
 export interface TestInfoProps {
-  readonly contracts: Map<string, ContractData>
   readonly testData: TestData
 }
 
-export function TestInfo({contracts, testData}: TestInfoProps) {
+export function TestInfo({testData}: TestInfoProps) {
   // const transactions = testData.transactions.filter(it => {
   //   return (
   //     it.transaction.inMessage?.info?.src?.toString() !==
@@ -55,12 +53,12 @@ export function TestInfo({contracts, testData}: TestInfoProps) {
             </span>
           )}
           <span className={styles.statItem}>
-            <span className={styles.statLabel}>Contracts:</span> {contracts.size}
+            <span className={styles.statLabel}>Contracts:</span> {testData.contracts.size}
           </span>
         </div>
       </div>
 
-      <TransactionTree key={`tree-${testData.id}`} testData={testData} contracts={contracts} />
+      <TransactionTree key={`tree-${testData.id}`} testData={testData} />
 
       {/*<div className={styles.transactionDetails}>*/}
       {/*  <h4 className={styles.sectionTitle}>Transaction Details:</h4>*/}

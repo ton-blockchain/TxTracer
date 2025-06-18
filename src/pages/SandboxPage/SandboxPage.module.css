@@ -10,7 +10,7 @@
   flex-direction: column;
 
   min-height: calc(100vh - 43px - 2 * var(--spacing-md));
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: var(--spacing-sm) var(--spacing-lg);
 }
 
 /* header */

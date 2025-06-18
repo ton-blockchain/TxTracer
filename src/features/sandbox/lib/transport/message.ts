@@ -12,6 +12,7 @@ export type MessageNextTest = {
 
 export type MessageContracts = {
   readonly $: "known-contracts"
+  readonly testName: string | undefined
   readonly data: readonly ContractRawData[]
 }
 

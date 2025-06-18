@@ -15,7 +15,6 @@ interface UseSandboxDataOptions {
 
 interface UseSandboxDataReturn {
   readonly tests: TestData[]
-  readonly contracts: Map<string, ContractData>
   readonly error: string
   readonly isConnected: boolean
 }
@@ -78,37 +77,38 @@ export function useSandboxData(options: UseSandboxDataOptions = {}): UseSandboxD
 
       const transactions = processRawTransactions(parsedTransactions)
 
+      const testName = rawTest.testName ?? "unknown"
+      const testContracts = rawData.contractsByTest.get(testName) ?? []
+
+      const convertedContracts = testContracts.map((it, index): ContractData => {
+        const address = Address.parse(it.address)
+        const letter = String.fromCharCode(65 + (index % 26))
+        const displayName = findContractName(it, testContracts)
+
+        return {
+          ...it,
+          address,
+          stateInit: it.stateInit ? loadStateInit(Cell.fromHex(it.stateInit).asSlice()) : undefined,
+          account: loadShardAccount(Cell.fromHex(it.account).asSlice()),
+          letter,
+          displayName,
+        }
+      })
+
+      const contracts = new Map(convertedContracts.map(it => [it.address.toString(), it]))
+
       return {
         id: rawTest.id,
         testName: rawTest.testName,
         transactions,
         timestamp: rawTest.timestamp,
+        contracts,
       }
     })
-  }, [rawData.tests])
-
-  const contracts = useMemo((): Map<string, ContractData> => {
-    const convertedContracts = rawData.contracts.map((it, index): ContractData => {
-      const address = Address.parse(it.address)
-      const letter = String.fromCharCode(65 + (index % 26))
-      const displayName = findContractName(it, rawData.contracts)
-
-      return {
-        ...it,
-        address,
-        stateInit: it.stateInit ? loadStateInit(Cell.fromHex(it.stateInit).asSlice()) : undefined,
-        account: loadShardAccount(Cell.fromHex(it.account).asSlice()),
-        letter,
-        displayName,
-      }
-    })
-
-    return new Map(convertedContracts.map(it => [it.address.toString(), it]))
-  }, [rawData.contracts])
+  }, [rawData.tests, rawData.contractsByTest])
 
   return {
     tests,
-    contracts,
     error: rawData.error,
     isConnected: rawData.isConnected,
   }

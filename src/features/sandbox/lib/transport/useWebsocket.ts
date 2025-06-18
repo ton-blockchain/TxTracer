@@ -13,7 +13,7 @@ type TestData = {
 
 export interface RawWebsocketData {
   readonly tests: TestData[]
-  readonly contracts: readonly ContractRawData[]
+  readonly contractsByTest: Map<string, readonly ContractRawData[]>
   readonly error: string
   readonly isConnected: boolean
 }
@@ -28,7 +28,9 @@ export function useWebsocket({
   onError,
 }: UseWebsocketOptions = {}): RawWebsocketData {
   const [tests, setTests] = useState<TestData[]>([])
-  const [contracts, setContracts] = useState<readonly ContractRawData[]>([])
+  const [contractsByTest, setContractsByTest] = useState<Map<string, readonly ContractRawData[]>>(
+    new Map(),
+  )
   const [error, setError] = useState<string>("")
   const [isConnected, setIsConnected] = useState<boolean>(false)
   const currentTestIdRef = useRef(0)
@@ -88,7 +90,12 @@ export function useWebsocket({
   }, [])
 
   const handleKnownContracts = useCallback((message: MessageContracts) => {
-    setContracts(message.data)
+    const testName = message.testName ?? "unknown"
+    setContractsByTest(prev => {
+      const newMap = new Map(prev)
+      newMap.set(testName, message.data)
+      return newMap
+    })
   }, [])
 
   const handleMessage = useCallback(
@@ -140,7 +147,7 @@ export function useWebsocket({
 
   return {
     tests,
-    contracts,
+    contractsByTest,
     error,
     isConnected,
   }
