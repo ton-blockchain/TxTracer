@@ -1,0 +1,129 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-color: var(--color-background-secondary);
+  overflow-y: auto;
+}
+
+.content {
+  max-width: 600px;
+  width: 100%;
+  background-color: var(--color-background-primary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.title {
+  margin: 0 0 var(--spacing-md) 0;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  text-align: center;
+}
+
+.description {
+  margin: 0 0 var(--spacing-lg) 0;
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.step {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: flex-start;
+}
+
+.stepNumber {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background-color: var(--color-primary);
+  color: var(--color-background-primary);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+}
+
+.stepContent {
+  flex: 1;
+}
+
+.stepTitle {
+  margin: 0 0 var(--spacing-xs) 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.stepDescription {
+  margin: 0 0 var(--spacing-sm) 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+.codeBlock {
+  display: block;
+  background-color: var(--color-background-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-sm) var(--spacing-mds);
+  font-family: var(--font-family-mono), monospace;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  white-space: pre-wrap;
+  overflow-x: auto;
+  margin-top: var(--spacing-xs);
+}
+
+.inlineCode {
+  background-color: var(--color-background-secondary);
+  border-radius: var(--border-radius-sm);
+  padding: 2px var(--spacing-xs);
+  font-family: var(--font-family-mono), monospace;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: var(--spacing-md);
+  }
+
+  .content {
+    padding: var(--spacing-lg);
+  }
+
+  .step {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    align-items: center;
+    text-align: center;
+  }
+
+  .stepNumber {
+    margin-bottom: var(--spacing-xs);
+  }
+}

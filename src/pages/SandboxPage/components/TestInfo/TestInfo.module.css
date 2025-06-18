@@ -1,0 +1,21 @@
+.container {
+  margin-bottom: var(--spacing-lg);
+}
+
+.testTitle {
+  margin: 0 0 var(--spacing-md) 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.sectionTitle {
+  margin: var(--spacing-lg) 0 var(--spacing-md) 0;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.transactionDetails {
+  margin-top: var(--spacing-lg);
+}

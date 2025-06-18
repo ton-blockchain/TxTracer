@@ -12,6 +12,13 @@
   padding: var(--spacing-md);
 }
 
+/* header */
+.headerContent {
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-end;
+}
+
 .daemonMessage {
   display: flex;
   align-items: flex-start;
@@ -108,4 +115,9 @@
 .errorMessage {
   padding: var(--spacing-lg);
   color: red;
+}
+
+.fullPageState {
+  height: calc(100vh - 45px);
+  overflow: hidden;
 }
