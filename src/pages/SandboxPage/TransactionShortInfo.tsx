@@ -1,21 +1,16 @@
-import {Address, Cell, type ExternalAddress} from "@ton/core"
-
-import type {TraceInfo} from "ton-assembly-test-dev/dist/trace"
-import {compileCellWithMapping, decompileCell} from "ton-assembly-test-dev/dist/runtime/instr"
-import {parse, print} from "ton-assembly-test-dev/dist/text"
-import {createMappingInfo} from "ton-assembly-test-dev/dist/trace/mapping"
-import {createTraceInfoPerTransaction} from "ton-assembly-test-dev/dist/trace/trace"
+import {Address, type ExternalAddress} from "@ton/core"
 
 import React from "react"
 import type {Maybe} from "@ton/core/dist/utils/maybe"
 
-import {type ExitCode, findExitCode} from "@features/txTrace/lib/traceTx.ts"
-import styles from "@app/pages/SandboxPage/SandboxPage.module.css"
 import {ContractChip, OpcodeChip} from "@app/pages/SandboxPage/components"
 import {formatCurrency} from "@shared/lib/format"
 import {findOpcodeABI, type TransactionInfo} from "@features/sandbox/lib/transaction.ts"
 import type {ContractData} from "@features/sandbox/lib/contract.ts"
-import {type ParsedSlice, parseSliceWithAbiType} from "@features/sandbox/lib/abi/parser.ts"
+import {type ParsedObjectByABI, parseSliceWithAbiType} from "@features/sandbox/lib/abi/parser.ts"
+import {showRecordValues} from "@features/sandbox/ui/abi/parsed.tsx"
+
+import styles from "./TransactionShortInfo.module.css"
 
 const formatAddress = (
   address: Address | Maybe<ExternalAddress> | undefined,
@@ -28,13 +23,12 @@ const formatAddress = (
   return <ContractChip address={address.toString()} contracts={contracts} />
 }
 
-export function TransactionShortInfo({
-  tx,
-  contracts,
-}: {
-  tx: TransactionInfo
-  contracts: Map<string, ContractData>
-}) {
+export interface TransactionShortInfoProps {
+  readonly tx: TransactionInfo
+  readonly contracts: Map<string, ContractData>
+}
+
+export function TransactionShortInfo({tx, contracts}: TransactionShortInfoProps) {
   if (tx.transaction.description.type !== "generic") {
     throw new Error(
       "TxTracer doesn't support non-generic transaction. Given type: " +
@@ -42,69 +36,17 @@ export function TransactionShortInfo({
     )
   }
 
-  const computePhase = tx.transaction.description.computePhase
-  const computeInfo =
-    computePhase.type === "skipped"
-      ? "skipped"
-      : {
-          success: computePhase.success,
-          exitCode:
-            computePhase.exitCode === 0
-              ? (tx.transaction.description.actionPhase?.resultCode ?? 0)
-              : computePhase.exitCode,
-          vmSteps: computePhase.vmSteps,
-          gasUsed: computePhase.gasUsed,
-          gasFees: computePhase.gasFees,
-        }
-
-  const vmLogs = tx.fields["vmLogs"] as string
-
-  let steps = ""
-  const thisAddress = tx.address
-  if (thisAddress) {
-    const contract = contracts.get(thisAddress.toString())
-    if (contract?.stateInit?.code) {
-      const {traceInfo} = extractCodeAndTrace(contract?.stateInit?.code, vmLogs)
-
-      steps = traceInfo?.steps?.map(it => it.instructionName).join(" ")
-    }
-  }
-
-  // for (const [, value] of tx.transaction.outMessages) {
-  //   if (value.init) {
-  //     const contract = [...contracts.values()].find(
-  //       it =>
-  //         it.stateInit?.code?.toBoc()?.toString("hex") ===
-  //         value.init?.code?.toBoc()?.toString("hex"),
-  //     )
-  //
-  //     const address = contractAddress(0, value.init)
-  //     console.log(value)
-  //     console.log(address.toString())
-  //     console.log(contract?.meta?.wrapperName)
-  //   }
-  // }
-
-  const value =
-    tx.transaction.inMessage?.info?.type === "internal"
-      ? tx.transaction.inMessage?.info.value?.coins
-      : undefined
-
-  const opcode = tx.opcode
+  const computeInfo = tx.computeInfo
   const abiType = findOpcodeABI(tx, contracts)
 
-  let inMsgBodyParsed: Record<string, ParsedSlice> | undefined = undefined
-  if (thisAddress) {
-    const contract = contracts.get(thisAddress.toString())
-    if (contract?.meta?.abi) {
-      const slice = tx.transaction.inMessage?.body?.asSlice()
-      if (slice && abiType) {
-        if (slice.remainingBits >= 32) {
-          slice.loadUint(32) // skip opcode
-        }
-        inMsgBodyParsed = parseSliceWithAbiType(slice, abiType, contract?.meta?.abi.types ?? [])
-      }
+  let inMsgBodyParsed: ParsedObjectByABI | undefined = undefined
+  const contract = contracts.get(tx.address?.toString() ?? "")
+  const slice = tx.transaction.inMessage?.body?.asSlice()
+  if (slice && abiType) {
+    if (slice.remainingBits >= 32) {
+      slice.loadUint(32) // skip opcode
     }
+    inMsgBodyParsed = parseSliceWithAbiType(slice, abiType, contract?.meta?.abi?.types ?? [])
   }
 
   const formatBoolean = (v: boolean) => (
@@ -119,7 +61,7 @@ export function TransactionShortInfo({
 
       <div className={styles.detailRow}>
         <div className={styles.detailLabel}>Contract</div>
-        <div className={styles.detailValue}>{formatAddress(thisAddress, contracts)}</div>
+        <div className={styles.detailValue}>{formatAddress(tx.address, contracts)}</div>
       </div>
 
       <div className={styles.detailRow}>
@@ -136,10 +78,10 @@ export function TransactionShortInfo({
         <div className={styles.detailValue}>{formatBoolean(!!tx.transaction.inMessage?.init)}</div>
       </div>
 
-      {value && (
+      {tx.amount && (
         <div className={styles.detailRow}>
           <div className={styles.detailLabel}>Value</div>
-          <div className={styles.detailValue}>{formatCurrency(value)}</div>
+          <div className={styles.detailValue}>{formatCurrency(tx.amount)}</div>
         </div>
       )}
 
@@ -157,7 +99,7 @@ export function TransactionShortInfo({
             <div className={styles.multiColumnItem}>
               <div className={styles.multiColumnItemTitle}>Opcode</div>
               <div className={styles.multiColumnItemValue}>
-                <OpcodeChip opcode={opcode} abiName={abiType?.name} />
+                <OpcodeChip opcode={tx.opcode} abiName={abiType?.name} />
               </div>
             </div>
           </div>
@@ -213,75 +155,6 @@ export function TransactionShortInfo({
           )}
         </div>
       </div>
-
-      {steps && (
-        <div className={styles.detailRow}>
-          <div className={styles.detailLabel}>Execution Steps</div>
-          <div className={styles.detailValue}>
-            <div className={styles.codeBlock}>
-              {steps.slice(0, Math.min(200, steps.length))}
-              {steps.length > 200 && "..."}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
-  )
-}
-
-function extractCodeAndTrace(
-  codeCell: Cell | undefined,
-  vmLogs: string,
-): {
-  code: string
-  exitCode?: ExitCode
-  traceInfo: TraceInfo
-} {
-  if (!codeCell) {
-    return {code: "// No executable code found", traceInfo: {steps: []}}
-  }
-
-  const instructions = decompileCell(codeCell)
-  const code = print(instructions)
-
-  const instructionsWithPositions = parse("out.tasm", code)
-  if (instructionsWithPositions.$ === "ParseFailure") {
-    return {code: code, traceInfo: {steps: []}, exitCode: undefined}
-  }
-
-  const [, mapping] = compileCellWithMapping(instructionsWithPositions.instructions)
-  const mappingInfo = createMappingInfo(mapping)
-  const traceInfo = createTraceInfoPerTransaction(vmLogs, mappingInfo, undefined)[0]
-
-  const exitCode = findExitCode(vmLogs, mappingInfo)
-  if (exitCode === undefined) {
-    return {code, exitCode: undefined, traceInfo}
-  }
-
-  return {code, exitCode, traceInfo}
-}
-
-function showRecordValues(data: Record<string, ParsedSlice>, contracts: Map<string, ContractData>) {
-  return (
-    <>
-      {Object.entries(data).map(([key, value]) => (
-        <div key={key}>
-          &nbsp;&nbsp;&nbsp;{key.toString()}
-          {": "}
-          {value instanceof Address ? (
-            <ContractChip address={value.toString()} contracts={contracts} />
-          ) : value &&
-            typeof value === "object" &&
-            "$" in value &&
-            value.$ === "sub-object" &&
-            value.value ? (
-            showRecordValues(value.value, contracts)
-          ) : (
-            // eslint-disable-next-line @typescript-eslint/no-base-to-string
-            value?.toString()
-          )}
-        </div>
-      ))}
-    </>
   )
 }

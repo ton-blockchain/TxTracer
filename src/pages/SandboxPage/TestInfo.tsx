@@ -3,13 +3,12 @@ import type {TestData} from "@features/sandbox/lib/test-data.ts"
 import {TransactionTree} from "@app/pages/SandboxPage/components"
 import {TransactionShortInfo} from "@app/pages/SandboxPage/TransactionShortInfo.tsx"
 
-export function TestInfo({
-  contracts,
-  testData,
-}: {
-  contracts: Map<string, ContractData>
-  testData: TestData
-}) {
+export interface TestInfoProps {
+  readonly contracts: Map<string, ContractData>
+  readonly testData: TestData
+}
+
+export function TestInfo({contracts, testData}: TestInfoProps) {
   const transactions = testData.transactions.filter(it => {
     return (
       it.transaction.inMessage?.info?.src?.toString() !==

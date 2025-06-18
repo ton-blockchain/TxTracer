@@ -1,8 +1,10 @@
 import {Address, Cell, loadTransaction, type Transaction} from "@ton/core"
 
 import {
+  type ComputeInfo,
   type ExternalTransactionInfoData,
   type InternalTransactionInfoData,
+  type TransactionMoney,
   type TransactionInfo,
   type TransactionInfoData,
 } from "@features/sandbox/lib/transaction.ts"
@@ -32,6 +34,9 @@ interface MutableTransactionInfo {
   readonly transaction: Transaction
   readonly fields: Record<string, unknown>
   readonly opcode: number | undefined
+  readonly computeInfo: ComputeInfo
+  readonly money: TransactionMoney
+  readonly amount: bigint | undefined
   readonly data: TransactionInfoData
   parent: TransactionInfo | undefined
   children: TransactionInfo[]
@@ -84,12 +89,17 @@ const processRawTx = (
   const parsedTx = tx.parsedTransaction ?? loadTransaction(Cell.fromHex(tx.transaction).asSlice())
   const address = bigintToAddress(parsedTx.address)
 
+  const {computeInfo, amount, money} = computeFinalData(tx)
+
   const result: MutableTransactionInfo = {
     address,
     transaction: parsedTx,
     fields: tx.fields,
     parent: undefined,
     opcode: txOpcode(parsedTx),
+    computeInfo,
+    money,
+    amount,
     data: txData(parsedTx),
     children: [],
   }
@@ -105,6 +115,72 @@ const processRawTx = (
     .map(tx => processRawTx(tx, txs, visited))
 
   return result
+}
+
+/**
+ * Sum the value (`coins`) of every *internal* outgoing message
+ * produced by a transaction. External messages are ignored since its
+ * value is always 0.
+ *
+ * @param tx  Parsed {@link Transaction}.
+ * @returns   Total toncoins sent out by the contract in this tx.
+ */
+const calculateSentTotal = (tx: Transaction): bigint => {
+  let total = 0n
+  for (const msg of tx.outMessages.values()) {
+    if (msg.info.type === "internal") {
+      total += msg.info.value.coins
+    }
+  }
+  return total
+}
+
+const computeFinalData = (res: RawTransactionInfo) => {
+  const emulatedTx = loadTransaction(Cell.fromHex(res.transaction).asSlice())
+  if (!emulatedTx.inMessage) {
+    throw new Error("No in_message was found in result tx")
+  }
+
+  const amount =
+    emulatedTx.inMessage.info.type === "internal"
+      ? emulatedTx.inMessage.info.value.coins
+      : undefined
+
+  const sentTotal = calculateSentTotal(emulatedTx)
+  const totalFees = emulatedTx.totalFees.coins
+
+  if (emulatedTx.description.type !== "generic") {
+    throw new Error(
+      "TxTracer doesn't support non-generic transaction. Given type: " +
+        emulatedTx.description.type,
+    )
+  }
+
+  const computePhase = emulatedTx.description.computePhase
+  const computeInfo: ComputeInfo =
+    computePhase.type === "skipped"
+      ? "skipped"
+      : {
+          success: computePhase.success,
+          exitCode:
+            computePhase.exitCode === 0
+              ? (emulatedTx.description.actionPhase?.resultCode ?? 0)
+              : computePhase.exitCode,
+          vmSteps: computePhase.vmSteps,
+          gasUsed: computePhase.gasUsed,
+          gasFees: computePhase.gasFees,
+        }
+
+  const money: TransactionMoney = {
+    sentTotal,
+    totalFees,
+  }
+
+  return {
+    money,
+    amount,
+    computeInfo,
+  }
 }
 
 /**

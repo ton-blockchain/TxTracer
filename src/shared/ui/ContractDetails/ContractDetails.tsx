@@ -1,21 +1,17 @@
-import {Address, Cell, type Message, type Slice} from "@ton/core"
+import {Cell, type Message} from "@ton/core"
 import {decompileCell} from "ton-assembly-test-dev/dist/runtime/instr"
 import {print} from "ton-assembly-test-dev/dist/text"
 import {useState} from "react"
-
 import type {Maybe} from "@ton/core/dist/utils/maybe"
 
 import {formatCurrency} from "@shared/lib/format"
-
 import {ContractChip, OpcodeChip} from "@app/pages/SandboxPage/components"
-
 import type {TestData} from "@features/sandbox/lib/test-data.ts"
-
 import {findOpcodeABI, type TransactionInfo} from "@features/sandbox/lib/transaction.ts"
-
 import type {ContractData} from "@features/sandbox/lib/contract"
-
 import {parseSliceWithAbiType} from "@features/sandbox/lib/abi/parser.ts"
+
+import {showRecordValues} from "@features/sandbox/ui/abi/parsed.tsx"
 
 import styles from "./ContractDetails.module.css"
 
@@ -28,58 +24,6 @@ export interface ContractDetailsProps {
   readonly tests: TestData[]
   /** Whether contract was deployed during tests */
   readonly isDeployed: boolean
-}
-
-// function findContractWithMatchingCode(contracts: Map<string, ContractData>, code: Cell) {
-//   if (!code) return undefined
-//   return [...contracts.values()].find(
-//     it => it.stateInit?.code?.toBoc()?.toString("hex") === code?.toBoc()?.toString("hex"),
-//   )
-// }
-
-// eslint-disable-next-line functional/type-declaration-immutability
-type ParsedSlice =
-  | number
-  | bigint
-  | Address
-  | Cell
-  | Slice
-  | null
-  | {readonly $: "sub-object"; readonly value: Record<string, ParsedSlice> | undefined}
-
-function showRecordValues(
-  data: Record<string, ParsedSlice>,
-  fieldNameClass?: string,
-  fieldValueClass?: string,
-  contracts?: Map<string, ContractData>,
-) {
-  return (
-    <>
-      {Object.entries(data).map(([key, value]) => (
-        <div key={key}>
-          <span className={fieldNameClass ?? "fieldName"}>{key.toString()}: </span>
-          <span className={fieldValueClass ?? "fieldValue"}>
-            {value instanceof Address ? (
-              contracts ? (
-                <ContractChip address={value.toString()} contracts={contracts} />
-              ) : (
-                value.toString()
-              )
-            ) : value &&
-              typeof value === "object" &&
-              "$" in value &&
-              value.$ === "sub-object" &&
-              value.value ? (
-              showRecordValues(value.value, fieldNameClass, fieldValueClass, contracts)
-            ) : (
-              // eslint-disable-next-line @typescript-eslint/no-base-to-string
-              value?.toString()
-            )}
-          </span>
-        </div>
-      ))}
-    </>
-  )
 }
 
 function findTransactions(tests: TestData[], contract: ContractData) {
@@ -251,9 +195,9 @@ function ContractDetails({
     if (!stateInit) return null
     return showRecordValues(
       stateInit,
+      contracts,
       styles.stateInitFieldName,
       styles.stateInitFieldValue,
-      contracts,
     )
   }
 

@@ -10,6 +10,9 @@ export interface TransactionInfo {
   readonly transaction: Transaction
   readonly fields: Record<string, unknown>
   readonly opcode: number | undefined
+  readonly computeInfo: ComputeInfo
+  readonly money: TransactionMoney
+  readonly amount: bigint | undefined
   readonly data: TransactionInfoData
   readonly parent: TransactionInfo | undefined
   readonly children: readonly TransactionInfo[]
@@ -23,6 +26,43 @@ export interface InternalTransactionInfoData {
 
 export interface ExternalTransactionInfoData {
   readonly dummy?: number
+}
+
+export type ComputeInfo =
+  | "skipped"
+  | {
+      /**
+       * If the phase is successful
+       */
+      readonly success: boolean
+      /**
+       * Exit code of this phase
+       */
+      readonly exitCode: number
+      /**
+       * Count of steps that VM executes until the end
+       */
+      readonly vmSteps: number
+      /**
+       * Gas used for this phase
+       */
+      readonly gasUsed: bigint
+      /**
+       * Gas fees for this phase
+       */
+      readonly gasFees: bigint
+    }
+
+export interface TransactionMoney {
+  /**
+   * Sum of all out internal messages values
+   */
+  readonly sentTotal: bigint
+  /**
+   * The total fees collected during the transaction execution,
+   * including TON coin and potentially some extra-currencies.
+   */
+  readonly totalFees: bigint
 }
 
 /**
