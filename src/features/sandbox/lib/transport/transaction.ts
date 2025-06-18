@@ -1,6 +1,11 @@
-import {Cell, loadTransaction, type Transaction} from "@ton/core"
+import {Address, Cell, loadTransaction, type Transaction} from "@ton/core"
 
-import type {TransactionInfo} from "@features/sandbox/lib/transaction.ts"
+import {
+  type ExternalTransactionInfoData,
+  type InternalTransactionInfoData,
+  type TransactionInfo,
+  type TransactionInfoData,
+} from "@features/sandbox/lib/transaction.ts"
 
 /**
  * Bucket of transactions from sandbox
@@ -23,10 +28,47 @@ export type RawTransactionInfo = {
 // temp type only for building
 // eslint-disable-next-line functional/type-declaration-immutability
 interface MutableTransactionInfo {
+  readonly address: Address | undefined
   readonly transaction: Transaction
   readonly fields: Record<string, unknown>
+  readonly opcode: number | undefined
+  readonly data: TransactionInfoData
   parent: TransactionInfo | undefined
   children: TransactionInfo[]
+}
+
+const bigintToAddress = (addr: bigint | undefined): Address | undefined => {
+  try {
+    return addr ? Address.parseRaw(`0:${addr.toString(16)}`) : undefined
+  } catch {
+    return undefined
+  }
+}
+
+function txOpcode(transaction: Transaction): number | undefined {
+  const inMessage = transaction.inMessage
+  const isBounced = inMessage?.info?.type === "internal" ? inMessage.info.bounced : false
+
+  let opcode: number | undefined = undefined
+  const slice = inMessage?.body?.asSlice()
+  if (slice && slice.remainingBits >= 32) {
+    if (isBounced) {
+      // skip 0xFFFF..
+      slice.loadUint(32)
+    }
+    opcode = slice.loadUint(32)
+  }
+
+  return opcode
+}
+
+function txData(transaction: Transaction): TransactionInfoData {
+  const inMessage = transaction.inMessage
+  if (inMessage?.info?.type === "internal") {
+    return {} satisfies InternalTransactionInfoData
+  }
+
+  return {} satisfies ExternalTransactionInfoData
 }
 
 const processRawTx = (
@@ -39,10 +81,16 @@ const processRawTx = (
     return cached
   }
 
+  const parsedTx = tx.parsedTransaction ?? loadTransaction(Cell.fromHex(tx.transaction).asSlice())
+  const address = bigintToAddress(parsedTx.address)
+
   const result: MutableTransactionInfo = {
-    transaction: tx.parsedTransaction ?? loadTransaction(Cell.fromHex(tx.transaction).asSlice()),
+    address,
+    transaction: parsedTx,
     fields: tx.fields,
     parent: undefined,
+    opcode: txOpcode(parsedTx),
+    data: txData(parsedTx),
     children: [],
   }
   visited.set(tx, result)

@@ -8,6 +8,8 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+
+  padding: var(--spacing-md);
 }
 
 .daemonMessage {
@@ -95,6 +97,8 @@
   background-color: var(--color-background-primary);
   margin-bottom: var(--spacing-md);
   border: 1px solid var(--table-border-color);
+
+  overflow-x: hidden;
 }
 
 .transactionHeader {
@@ -180,6 +184,8 @@
   flex: 0 1 auto;
   min-width: 0;
   padding: 0 var(--spacing-lg);
+
+  word-break: break-all;
 }
 
 .multiColumnItem:first-child {

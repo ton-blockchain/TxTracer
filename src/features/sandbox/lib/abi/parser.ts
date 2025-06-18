@@ -1,53 +1,21 @@
 import {type ABIType, Address, Cell, type Slice} from "@ton/core"
 
-import type {TransactionInfo} from "@features/sandbox/lib/transaction.ts"
-import type {ContractData} from "@features/sandbox/lib/contract.ts"
+export type ParsedObjectByABI = Record<string, ParsedSlice>
 
-export const bigintToAddress = (addr: bigint | undefined): Address | undefined => {
-  try {
-    return addr ? Address.parseRaw(`0:${addr.toString(16)}`) : undefined
-  } catch {
-    return undefined
-  }
-}
-
-export function findOpcodeAbi(
-  tx: TransactionInfo,
-  contracts: Map<string, ContractData>,
-  opcode: number | undefined,
-) {
-  const thisAddress = bigintToAddress(tx?.transaction?.address)
-  if (thisAddress) {
-    const contract = contracts.get(thisAddress.toString())
-    if (contract?.meta?.abi) {
-      const found = contract?.meta?.abi.types?.find(it => it.header === opcode)
-      if (found) return found
-    }
-
-    for (const contract of [...contracts.values()]) {
-      const found = contract?.meta?.abi?.types?.find(it => it.header === opcode)
-      if (found) return found
-    }
-  }
-  return undefined
+export type SubObject = {
+  readonly $: "sub-object"
+  readonly value: ParsedObjectByABI | undefined
 }
 
 // eslint-disable-next-line functional/type-declaration-immutability
-export type ParsedSlice =
-  | number
-  | bigint
-  | Address
-  | Cell
-  | Slice
-  | null
-  | {readonly $: "sub-object"; readonly value: Record<string, ParsedSlice> | undefined}
+export type ParsedSlice = number | bigint | Address | Cell | Slice | SubObject | null
 
 export function parseSliceWithAbiType(
   init: Slice,
   abi: ABIType,
   allAbi: ABIType[],
-): Record<string, ParsedSlice> | undefined {
-  const res: Record<string, ParsedSlice> = {}
+): ParsedObjectByABI | undefined {
+  const res: ParsedObjectByABI = {}
 
   for (const [index, field] of abi.fields.entries()) {
     try {

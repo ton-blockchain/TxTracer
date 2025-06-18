@@ -16,6 +16,7 @@ interface PageHeaderProps {
 const PageHeaderFc: React.FC<PageHeaderProps> = ({pageTitle, network, children}) => {
   const isPlayground = pageTitle === "playground"
   const isExplorer = pageTitle === "explorer"
+  const isSandbox = pageTitle === "sandbox"
 
   return (
     <header className={styles.header} role="banner">
@@ -26,6 +27,7 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({pageTitle, network, children})
         </a>
         {isPlayground && <span className={styles.pageTitle}>Playground</span>}
         {isExplorer && <span className={styles.pageTitle}>Code Explorer</span>}
+        {isSandbox && <span className={styles.pageTitle}>Sandbox</span>}
         {network === "testnet" && <Badge color="red">Testnet</Badge>}
       </div>
 

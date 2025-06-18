@@ -11,16 +11,11 @@ import type {Maybe} from "@ton/core/dist/utils/maybe"
 
 import {type ExitCode, findExitCode} from "@features/txTrace/lib/traceTx.ts"
 import styles from "@app/pages/SandboxPage/SandboxPage.module.css"
-import {
-  bigintToAddress,
-  findOpcodeAbi,
-  type ParsedSlice,
-  parseSliceWithAbiType,
-} from "@app/pages/SandboxPage/common.ts"
 import {ContractChip, OpcodeChip} from "@app/pages/SandboxPage/components"
 import {formatCurrency} from "@shared/lib/format"
-import type {TransactionInfo} from "@features/sandbox/lib/transaction.ts"
+import {findOpcodeABI, type TransactionInfo} from "@features/sandbox/lib/transaction.ts"
 import type {ContractData} from "@features/sandbox/lib/contract.ts"
+import {type ParsedSlice, parseSliceWithAbiType} from "@features/sandbox/lib/abi/parser.ts"
 
 const formatAddress = (
   address: Address | Maybe<ExternalAddress> | undefined,
@@ -65,7 +60,7 @@ export function TransactionShortInfo({
   const vmLogs = tx.fields["vmLogs"] as string
 
   let steps = ""
-  const thisAddress = bigintToAddress(tx?.transaction?.address)
+  const thisAddress = tx.address
   if (thisAddress) {
     const contract = contracts.get(thisAddress.toString())
     if (contract?.stateInit?.code) {
@@ -95,20 +90,18 @@ export function TransactionShortInfo({
       ? tx.transaction.inMessage?.info.value?.coins
       : undefined
 
-  let opcode: number | undefined = undefined
-  const slice = tx.transaction.inMessage?.body?.asSlice()
-  if (slice && slice.remainingBits >= 32) {
-    opcode = slice.loadUint(32)
-  }
+  const opcode = tx.opcode
+  const abiType = findOpcodeABI(tx, contracts)
 
   let inMsgBodyParsed: Record<string, ParsedSlice> | undefined = undefined
-
-  const abiType = findOpcodeAbi(tx, contracts, opcode)
-
   if (thisAddress) {
     const contract = contracts.get(thisAddress.toString())
     if (contract?.meta?.abi) {
+      const slice = tx.transaction.inMessage?.body?.asSlice()
       if (slice && abiType) {
+        if (slice.remainingBits >= 32) {
+          slice.loadUint(32) // skip opcode
+        }
         inMsgBodyParsed = parseSliceWithAbiType(slice, abiType, contract?.meta?.abi.types ?? [])
       }
     }
@@ -169,7 +162,7 @@ export function TransactionShortInfo({
             </div>
           </div>
           {inMsgBodyParsed && (
-            <div style={{marginTop: "var(--spacing-sm)"}}>
+            <div className={styles.multiColumnItemValue}>
               <div className={styles.multiColumnItemTitle}>Parsed Data:</div>
               <div style={{marginLeft: "var(--spacing-sm)"}}>
                 {showRecordValues(inMsgBodyParsed, contracts)}

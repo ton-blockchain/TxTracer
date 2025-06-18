@@ -1,4 +1,4 @@
-import {type ABIType, Address, Cell, type Message, type Slice} from "@ton/core"
+import {Address, Cell, type Message, type Slice} from "@ton/core"
 import {decompileCell} from "ton-assembly-test-dev/dist/runtime/instr"
 import {print} from "ton-assembly-test-dev/dist/text"
 import {useState} from "react"
@@ -7,19 +7,15 @@ import type {Maybe} from "@ton/core/dist/utils/maybe"
 
 import {formatCurrency} from "@shared/lib/format"
 
-import {
-  bigintToAddress,
-  findOpcodeAbi,
-  parseSliceWithAbiType,
-} from "@app/pages/SandboxPage/common.ts"
-
 import {ContractChip, OpcodeChip} from "@app/pages/SandboxPage/components"
 
 import type {TestData} from "@features/sandbox/lib/test-data.ts"
 
-import type {TransactionInfo} from "@features/sandbox/lib/transaction.ts"
+import {findOpcodeABI, type TransactionInfo} from "@features/sandbox/lib/transaction.ts"
 
 import type {ContractData} from "@features/sandbox/lib/contract"
+
+import {parseSliceWithAbiType} from "@features/sandbox/lib/abi/parser.ts"
 
 import styles from "./ContractDetails.module.css"
 
@@ -89,38 +85,10 @@ function showRecordValues(
 function findTransactions(tests: TestData[], contract: ContractData) {
   return tests.flatMap(it => {
     return it.transactions.filter(transaction => {
-      const ownerAddress = bigintToAddress(transaction.transaction.address)
-      if (!ownerAddress) return false
-      return ownerAddress.toString() === contract.address.toString()
+      if (!transaction.address) return false
+      return transaction.address.toString() === contract.address.toString()
     })
   })
-}
-
-interface TxOpcode {
-  readonly opcode: number | undefined
-  readonly abiType: ABIType | undefined
-}
-
-function getTxOpcode(tx: TransactionInfo, contracts: Map<string, ContractData>): TxOpcode {
-  const inMessage = tx.transaction.inMessage
-  const isBounced = inMessage?.info?.type === "internal" ? inMessage.info.bounced : false
-
-  let opcode: number | undefined = undefined
-  const slice = inMessage?.body?.asSlice()
-  if (slice && slice.remainingBits >= 32) {
-    if (isBounced) {
-      // skip 0xFFFF..
-      slice.loadUint(32)
-    }
-    opcode = slice.loadUint(32)
-  }
-
-  const abiType = findOpcodeAbi(tx, contracts, opcode)
-
-  return {
-    opcode,
-    abiType,
-  }
 }
 
 const truncateMiddle = (text: string, maxLength: number = 30) => {
@@ -185,7 +153,7 @@ function inMessageView(inMessage: Maybe<Message>, contracts?: Map<string, Contra
   return <span className={styles.addressShort}>External</span>
 }
 
-function findAbiType(data: ContractData, name: string) {
+function findConstructorAbiType(data: ContractData, name: string) {
   return data.meta?.abi?.types?.find(it => it.name === `${name}$Data`)
 }
 
@@ -196,7 +164,7 @@ function getStateInit(data: ContractData) {
     const name = data.meta?.wrapperName
     if (!name) return undefined
 
-    const abi = findAbiType(data, name)
+    const abi = findConstructorAbiType(data, name)
     if (abi) {
       console.log(`found abi data for ${data.meta?.wrapperName ?? "unknown contract"}`)
       return parseSliceWithAbiType(copy.asSlice(), abi, data.meta?.abi?.types ?? [])
@@ -209,7 +177,7 @@ function getStateInit(data: ContractData) {
           ? "JettonMinterSharded"
           : name
 
-    const abi2 = findAbiType(data, otherName)
+    const abi2 = findConstructorAbiType(data, otherName)
     if (abi2) {
       console.log(`found abi data for ${data.meta?.wrapperName ?? "unknown contract"}`)
       return parseSliceWithAbiType(copy.asSlice(), abi2, data.meta?.abi?.types ?? [])
@@ -221,7 +189,8 @@ function getStateInit(data: ContractData) {
 }
 
 function TxTableLine({tx, contracts}: {tx: TransactionInfo; contracts: Map<string, ContractData>}) {
-  const opcode = getTxOpcode(tx, contracts)
+  const opcode = tx.opcode
+  const abiType = findOpcodeABI(tx, contracts)
   const inMessage = tx.transaction.inMessage
 
   const value = inMessage?.info?.type === "internal" ? inMessage?.info.value?.coins : undefined
@@ -230,7 +199,7 @@ function TxTableLine({tx, contracts}: {tx: TransactionInfo; contracts: Map<strin
   return (
     <div className={styles.txTableLine}>
       <div className={styles.txTableCellOpcode}>
-        <OpcodeChip opcode={opcode.opcode} abiName={opcode.abiType?.name} />
+        <OpcodeChip opcode={opcode} abiName={abiType?.name} />
         {isExternalIn && <span className={styles.externalInLabel}> (external-in)</span>}
       </div>
       <div className={styles.txTableCell}>{inMessageView(inMessage, contracts)}</div>

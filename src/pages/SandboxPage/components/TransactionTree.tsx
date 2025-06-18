@@ -1,14 +1,12 @@
 import {useMemo, useState} from "react"
 import type {Orientation, RawNodeDatum, TreeLinkDatum} from "react-d3-tree"
 import {Tree} from "react-d3-tree"
-import {Address, beginCell, type Cell} from "@ton/core"
-
-import {findOpcodeAbi} from "@app/pages/SandboxPage/common.ts"
+import {Address, type Cell} from "@ton/core"
 
 import {formatCurrency} from "@shared/lib/format"
 
 import type {TestData} from "@features/sandbox/lib/test-data.ts"
-import type {TransactionInfo} from "@features/sandbox/lib/transaction.ts"
+import {findOpcodeABI, type TransactionInfo} from "@features/sandbox/lib/transaction.ts"
 import type {ContractData} from "@features/sandbox/lib/contract"
 
 import styles from "./TransactionTree.module.css"
@@ -27,17 +25,6 @@ interface TooltipData {
 interface TransactionTreeProps {
   readonly testData: TestData
   readonly contracts: Map<string, ContractData>
-}
-
-const bigintToAddress = (addr: bigint | undefined): Address | undefined => {
-  if (!addr) return undefined
-
-  try {
-    const addr2 = beginCell().storeUint(4, 3).storeUint(0, 8).storeUint(addr, 256).endCell()
-    return addr2.asSlice().loadAddress()
-  } catch {
-    return undefined
-  }
 }
 
 const formatAddress = (
@@ -76,7 +63,7 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
     const rootTransactions = testData.transactions.filter(tx => !tx.parent)
 
     const convertTransactionToNode = (tx: TransactionInfo): RawNodeDatum => {
-      const thisAddress = bigintToAddress(tx.transaction.address)
+      const thisAddress = tx.address
       const addressName = formatAddress(thisAddress, contracts)
 
       const computePhase =
@@ -103,28 +90,15 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
           ? tx.transaction.inMessage?.info.value?.coins
           : undefined
 
-      let opcode: number | undefined = undefined
-      const slice = tx.transaction.inMessage?.body?.asSlice()
-      if (slice && slice.remainingBits >= 32) {
-        try {
-          if (isBounced) {
-            // skip 0xFFFF..
-            slice.loadUint(32)
-          }
-          opcode = slice.loadUint(32)
-        } catch {
-          // ignore
-        }
-      }
-
-      const abiType = findOpcodeAbi(tx, contracts, opcode)
+      const opcode = tx.opcode
+      const opcodeHex = opcode?.toString(16)
+      const abiType = findOpcodeABI(tx, contracts)
       const opcodeName = abiType?.name
 
       const contractLetter = thisAddress
         ? (contracts.get(thisAddress.toString())?.letter ?? "?")
         : "?"
 
-      const opcodeHex = opcode?.toString(16)
       return {
         name: `${addressName}`,
         attributes: {
