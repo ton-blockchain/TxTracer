@@ -96,7 +96,7 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
     const depth = getDepth(data)
 
     return {
-      height: Math.max(300, Math.min(700, totalNodes * 70 + 200)),
+      height: Math.max(300, totalNodes * 70 + 200),
       width: Math.max(800, depth * 200 + 200),
     }
   }
