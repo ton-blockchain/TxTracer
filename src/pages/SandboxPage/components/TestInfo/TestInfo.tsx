@@ -20,10 +20,9 @@ export function TestInfo({contracts, testData}: TestInfoProps) {
   return (
     <div className={styles.container}>
       <h3 className={styles.testTitle}>
-        {testData.testName ?? "unknown test"}: {testData.id}
+        #{testData.id} {testData.testName ?? "unknown test"}
       </h3>
 
-      <h4 className={styles.sectionTitle}>Transaction Tree:</h4>
       <TransactionTree key={`tree-${testData.id}`} testData={testData} contracts={contracts} />
 
       <div className={styles.transactionDetails}>

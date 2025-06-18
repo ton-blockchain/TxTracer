@@ -277,15 +277,6 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <p className={styles.stats}>
-          Total transactions: {testData.transactions.length}
-          {testData.transactions.filter(tx => !tx.parent).length > 1 &&
-            ` (${testData.transactions.filter(tx => !tx.parent).length} root transactions)`}
-          {` | Contracts: ${contracts.size}`}
-        </p>
-      </div>
-
       <div className={styles.treeContainer}>
         <div className={styles.treeWrapper}>
           <Tree
@@ -344,6 +335,15 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
             </div>
           )}
         </div>
+      </div>
+
+      <div className={styles.header}>
+        <p className={styles.stats}>
+          Total transactions: {testData.transactions.length}
+          {testData.transactions.filter(tx => !tx.parent).length > 1 &&
+            ` (${testData.transactions.filter(tx => !tx.parent).length} root transactions)`}
+          {` | Contracts: ${contracts.size}`}
+        </p>
       </div>
     </div>
   )

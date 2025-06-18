@@ -56,6 +56,10 @@
   border-bottom: 1px solid var(--table-border-color);
 }
 
+.labeledSectionRow:last-child {
+  border-bottom: none;
+}
+
 .labeledSectionTitle {
   text-align: left;
   font-weight: var(--font-weight-semibold);
@@ -89,7 +93,7 @@
   align-items: flex-start;
   flex: 0 1 auto;
   min-width: 0;
-  padding: 0 var(--spacing-lg);
+  padding: var(--spacing-sm) var(--spacing-lg);
 
   word-break: break-all;
 }
