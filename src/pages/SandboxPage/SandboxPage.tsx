@@ -8,7 +8,6 @@ import {
   loadTransaction,
   type ShardAccount,
   type StateInit,
-  type Transaction,
 } from "@ton/core"
 
 import type {ContractMeta} from "@ton/sandbox/dist/meta/ContractsMeta"
@@ -19,79 +18,24 @@ import ContractDetails from "@shared/ui/ContractDetails"
 
 import {TransactionShortInfo} from "@app/pages/SandboxPage/TransactionShortInfo.tsx"
 
+import type {TestData} from "@features/sandbox/lib/test-data.ts"
+
+import {
+  processRawTransactions,
+  type RawTransactionInfo,
+  type RawTransactions,
+} from "@features/sandbox/lib/data/transaction.ts"
+
 import {TransactionTree} from "./components"
 
 import styles from "./SandboxPage.module.css"
 
-export type TransactionRawInfo = {
-  readonly transaction: string
-  readonly fields: Record<string, unknown>
-  readonly parentId: string
-  readonly childrenIds: string[]
-}
-
-export type TransactionsInfo = {
-  readonly transactions: TransactionRawInfo[]
-}
-
-export type TransactionInfoRaw = {
-  readonly transaction: Transaction
-  readonly fields: Record<string, unknown>
-  readonly parentId: string
-  readonly childrenIds: string[]
-}
-
-export type TransactionInfo = {
-  readonly transaction: Transaction
-  readonly fields: Record<string, unknown>
-  readonly parent: TransactionInfo | undefined
-  readonly children: TransactionInfo[]
-}
-
-const txToTx = (
-  tx: TransactionInfoRaw,
-  txs: TransactionInfoRaw[],
-  visited: Map<TransactionInfoRaw, TransactionInfo>,
-): TransactionInfo => {
-  const cached = visited.get(tx)
-  if (cached) {
-    return cached
-  }
-
-  const result: Partial<TransactionInfo> = {
-    ...tx,
-  }
-  visited.set(tx, result as TransactionInfo)
-
-  const parent = txs.find(it => it.transaction.lt.toString() === tx.parentId)
-
-  // @ts-expect-error for now
-  result.parent = parent ? txToTx(parent, txs, visited) : undefined
-  // @ts-expect-error for now
-  result.children = tx.childrenIds
-    .map(child => txs.find(it => it.transaction.lt.toString() === child))
-    .filter(it => it !== undefined)
-    .map(tx => txToTx(tx, txs, visited))
-
-  return result as TransactionInfo
-}
-
-const toTxs = (txs: TransactionInfoRaw[]): TransactionInfo[] => {
-  return txs.map(tx => txToTx(tx, txs, new Map()))
-}
-
 function parseMaybeTransactions(data: string) {
   try {
-    return JSON.parse(data) as TransactionsInfo
+    return JSON.parse(data) as RawTransactions
   } catch {
     return undefined
   }
-}
-
-export type TestData = {
-  readonly id: number
-  readonly testName: string | undefined
-  readonly transactions: TransactionInfo[]
 }
 
 function TestFlow({
@@ -238,15 +182,18 @@ function SandboxPage() {
 
         console.log("length", transactions?.transactions?.length)
         if (transactions) {
-          const newTxs = transactions.transactions.map(it => ({
-            ...it,
-            transaction: loadTransaction(Cell.fromHex(it.transaction).asSlice()),
-          }))
+          const newTxs: RawTransactionInfo[] = transactions.transactions.map(
+            (it): RawTransactionInfo => ({
+              ...it,
+              transaction: it.transaction,
+              parsedTransaction: loadTransaction(Cell.fromHex(it.transaction).asSlice()),
+            }),
+          )
 
           const testId = currentTestIdRef.current
           console.log("Adding transactions to test:", testId, "transactions:", newTxs.length)
 
-          const newTxs2 = toTxs(newTxs)
+          const newTxs2 = processRawTransactions(newTxs)
 
           setTests(prev => {
             const existing = prev.find(test => test.id === testId)

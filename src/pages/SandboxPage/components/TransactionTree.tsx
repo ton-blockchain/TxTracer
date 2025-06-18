@@ -7,9 +7,11 @@ import {findOpcodeAbi} from "@app/pages/SandboxPage/common.ts"
 
 import {formatCurrency} from "@shared/lib/format"
 
-import type {ContractData, TestData, TransactionInfo} from "../SandboxPage"
+import type {ContractData} from "../SandboxPage"
 
 import styles from "./TransactionTree.module.css"
+import type {TestData} from "@features/sandbox/lib/test-data.ts"
+import type {TransactionInfo} from "@features/sandbox/lib/transaction.ts"
 
 interface TooltipData {
   readonly x: number

@@ -17,12 +17,12 @@ import {ContractChip, OpcodeChip} from "@app/pages/SandboxPage/components"
 
 import type {
   ContractData,
-  TestData,
-  TransactionInfo,
   ContractLetter,
 } from "../../../pages/SandboxPage/SandboxPage"
 
 import styles from "./ContractDetails.module.css"
+import type {TestData} from "@features/sandbox/lib/test-data.ts"
+import type {TransactionInfo} from "@features/sandbox/lib/transaction.ts"
 
 export interface ContractDetailsProps {
   /** Contract data including address, state init and metadata */
