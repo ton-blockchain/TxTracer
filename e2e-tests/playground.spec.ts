@@ -21,32 +21,32 @@ test.describe("TxTracer Playground", () => {
       await page.waitForTimeout(200)
     }
 
-    const tutorial = await playgroundPage.getTutorialText()
+    const tutorial = playgroundPage.getTutorialText()
     await expect(tutorial).not.toBeVisible()
 
     const hasTutorialFlag = await playgroundPage.isTutorialCompletedInStorage()
     expect(hasTutorialFlag).toBe(true)
 
     await page.reload()
-    const tutorialAfterReload = await playgroundPage.getTutorialText()
+    const tutorialAfterReload = playgroundPage.getTutorialText()
     await expect(tutorialAfterReload).not.toBeVisible()
   })
 
   test("should skip tutorial via Escape key", async ({page, playgroundPage}) => {
     await playgroundPage.goto()
 
-    const tutorial = await playgroundPage.getTutorialText()
+    const tutorial = playgroundPage.getTutorialText()
     await expect(tutorial).toBeVisible()
 
     await page.keyboard.press("Escape")
-    const tutorialAfterEscape = await playgroundPage.getTutorialText()
+    const tutorialAfterEscape = playgroundPage.getTutorialText()
     await expect(tutorialAfterEscape).not.toBeVisible()
 
     const hasTutorialFlag = await playgroundPage.isTutorialCompletedInStorage()
     expect(hasTutorialFlag).toBe(true)
 
     await page.reload()
-    const tutorialAfterReload = await playgroundPage.getTutorialText()
+    const tutorialAfterReload = playgroundPage.getTutorialText()
     await expect(tutorialAfterReload).not.toBeVisible()
   })
 
