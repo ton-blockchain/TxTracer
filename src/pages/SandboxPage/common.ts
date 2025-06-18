@@ -1,7 +1,7 @@
 import {type ABIType, Address, Cell, type Slice} from "@ton/core"
 
-import type {ContractData} from "@app/pages/SandboxPage/SandboxPage.tsx"
 import type {TransactionInfo} from "@features/sandbox/lib/transaction.ts"
+import type {ContractData} from "@features/sandbox/lib/contract.ts"
 
 export const bigintToAddress = (addr: bigint | undefined): Address | undefined => {
   try {

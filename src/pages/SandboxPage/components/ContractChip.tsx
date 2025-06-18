@@ -1,7 +1,7 @@
 import {useState, useCallback, useEffect} from "react"
 
-import type {ContractLetter} from "@app/pages/SandboxPage/SandboxPage.tsx"
 import styles from "@app/pages/SandboxPage/components/ContractChip.module.css"
+import type {ContractLetter} from "@features/sandbox/lib/contract.ts"
 
 export function ContractChip({
   address,

@@ -1,42 +1,19 @@
-import {useEffect, useMemo, useRef, useState} from "react"
+import {useMemo} from "react"
 import "@xyflow/react/dist/style.css"
-import {
-  Address,
-  Cell,
-  loadShardAccount,
-  loadStateInit,
-  loadTransaction,
-  type ShardAccount,
-  type StateInit,
-} from "@ton/core"
-
-import type {ContractMeta} from "@ton/sandbox/dist/meta/ContractsMeta"
 
 import PageHeader from "@shared/ui/PageHeader"
-
 import ContractDetails from "@shared/ui/ContractDetails"
 
 import {TransactionShortInfo} from "@app/pages/SandboxPage/TransactionShortInfo.tsx"
+import {useWebsocketRawData} from "@features/sandbox/lib/transport/useWebsocketRawData.ts"
+
+import type {ContractData, ContractLetter} from "@features/sandbox/lib/contract.ts"
 
 import type {TestData} from "@features/sandbox/lib/test-data.ts"
-
-import {
-  processRawTransactions,
-  type RawTransactionInfo,
-  type RawTransactions,
-} from "@features/sandbox/lib/data/transaction.ts"
 
 import {TransactionTree} from "./components"
 
 import styles from "./SandboxPage.module.css"
-
-function parseMaybeTransactions(data: string) {
-  try {
-    return JSON.parse(data) as RawTransactions
-  } catch {
-    return undefined
-  }
-}
 
 function TestFlow({
   contracts,
@@ -80,31 +57,6 @@ function TestFlow({
   )
 }
 
-type ContractRawData = {
-  readonly address: string
-  readonly meta: ContractMeta | undefined
-  readonly stateInit: string | undefined
-  readonly account: string
-}
-
-export type Message =
-  | {readonly $: "next-test"}
-  | {readonly $: "txs"; readonly testName: string | undefined; readonly data: string}
-  | {readonly $: "known-contracts"; readonly data: readonly ContractRawData[]}
-
-export type ContractData = {
-  readonly address: Address
-  readonly meta: ContractMeta | undefined
-  readonly stateInit: StateInit | undefined
-  readonly account: ShardAccount
-}
-
-export type ContractLetter = {
-  readonly letter: string
-  readonly address: string
-  readonly name: string
-}
-
 // @ts-expect-error todo
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function isContractDeployedInside(
@@ -141,10 +93,7 @@ function isContractDeployedInside(
 }
 
 function SandboxPage() {
-  const [tests, setTests] = useState<TestData[]>([])
-  const [contracts, setContracts] = useState<Map<string, ContractData>>(new Map())
-  const [error, setError] = useState<string>("")
-  const currentTestIdRef = useRef(0)
+  const {tests, contracts, error} = useWebsocketRawData({})
 
   const contractLetters = useMemo(() => {
     const letters = Array.from(contracts.entries()).map(([address, contract], index) => {
@@ -161,76 +110,6 @@ function SandboxPage() {
     })
     return new Map(letters.map(item => [item.address, item]))
   }, [contracts])
-
-  useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8081")
-
-    ws.onopen = () => {
-      setError("")
-    }
-
-    ws.onmessage = (event: MessageEvent<string>) => {
-      const message: Message = JSON.parse(event.data) as Message
-      if (message.$ === "next-test") {
-        currentTestIdRef.current += 1
-        console.log("New test case:", currentTestIdRef.current)
-        return
-      }
-
-      if (message.$ === "txs") {
-        const transactions = parseMaybeTransactions(message.data)
-
-        console.log("length", transactions?.transactions?.length)
-        if (transactions) {
-          const newTxs: RawTransactionInfo[] = transactions.transactions.map(
-            (it): RawTransactionInfo => ({
-              ...it,
-              transaction: it.transaction,
-              parsedTransaction: loadTransaction(Cell.fromHex(it.transaction).asSlice()),
-            }),
-          )
-
-          const testId = currentTestIdRef.current
-          console.log("Adding transactions to test:", testId, "transactions:", newTxs.length)
-
-          const newTxs2 = processRawTransactions(newTxs)
-
-          setTests(prev => {
-            const existing = prev.find(test => test.id === testId)
-            if (existing) {
-              console.log("Updating existing test:", testId)
-              return prev.map(test =>
-                test.id === testId
-                  ? {...test, transactions: [...test.transactions, ...newTxs2]}
-                  : test,
-              )
-            } else {
-              console.log("Creating new test:", testId)
-              return [...prev, {id: testId, testName: message.testName, transactions: newTxs2}]
-            }
-          })
-        }
-      }
-
-      if (message.$ === "known-contracts") {
-        const newContracts: ContractData[] = message.data.map(it => ({
-          ...it,
-          address: Address.parse(it.address),
-          stateInit: it.stateInit ? loadStateInit(Cell.fromHex(it.stateInit).asSlice()) : undefined,
-          account: loadShardAccount(Cell.fromHex(it.account).asSlice()),
-        }))
-        setContracts(new Map(newContracts.map(it => [it.address.toString(), it])))
-      }
-    }
-
-    ws.onerror = () => {
-      setError("Cannot connect to the daemon. Run: yarn daemon")
-    }
-
-    return () => {
-      ws.close()
-    }
-  }, [])
 
   console.log(contracts)
 

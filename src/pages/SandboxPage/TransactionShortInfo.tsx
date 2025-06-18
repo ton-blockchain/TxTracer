@@ -10,10 +10,6 @@ import React from "react"
 import type {Maybe} from "@ton/core/dist/utils/maybe"
 
 import {type ExitCode, findExitCode} from "@features/txTrace/lib/traceTx.ts"
-import type {
-  ContractData,
-  ContractLetter,
-} from "@app/pages/SandboxPage/SandboxPage.tsx"
 import styles from "@app/pages/SandboxPage/SandboxPage.module.css"
 import {
   bigintToAddress,
@@ -24,6 +20,7 @@ import {
 import {ContractChip, OpcodeChip} from "@app/pages/SandboxPage/components"
 import {formatCurrency} from "@shared/lib/format"
 import type {TransactionInfo} from "@features/sandbox/lib/transaction.ts"
+import type {ContractData, ContractLetter} from "@features/sandbox/lib/contract.ts"
 
 const formatAddress = (
   address: Address | Maybe<ExternalAddress> | undefined,

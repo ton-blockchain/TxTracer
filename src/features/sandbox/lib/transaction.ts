@@ -1,7 +1,7 @@
 import type {Transaction} from "@ton/core"
 
 /**
- * Processed transaction info with all necessary data.
+ * Processed transaction info with all necessary transport.
  */
 export type TransactionInfo = {
   readonly transaction: Transaction
