@@ -154,7 +154,7 @@ function TxTableLine({tx, contracts}: {tx: TransactionInfo; contracts: Map<strin
   )
 }
 
-function ContractDetails({
+export function ContractDetails({
   contract,
   contracts,
   tests,
@@ -354,5 +354,3 @@ function ContractDetails({
     </div>
   )
 }
-
-export default ContractDetails

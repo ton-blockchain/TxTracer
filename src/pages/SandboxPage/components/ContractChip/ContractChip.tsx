@@ -1,7 +1,8 @@
 import {useState, useCallback, useEffect} from "react"
 
-import styles from "@app/pages/SandboxPage/components/ContractChip.module.css"
 import type {ContractData} from "@features/sandbox/lib/contract.ts"
+
+import styles from "./ContractChip.module.css"
 
 export function ContractChip({
   address,

@@ -1,7 +1,6 @@
 import type {ContractData} from "@features/sandbox/lib/contract.ts"
 import type {TestData} from "@features/sandbox/lib/test-data.ts"
-import {TransactionTree} from "@app/pages/SandboxPage/components"
-import {TransactionShortInfo} from "@app/pages/SandboxPage/TransactionShortInfo.tsx"
+import {TransactionTree, TransactionShortInfo} from "@app/pages/SandboxPage/components"
 
 export interface TestInfoProps {
   readonly contracts: Map<string, ContractData>

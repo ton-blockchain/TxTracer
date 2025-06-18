@@ -1,10 +1,8 @@
 import "@xyflow/react/dist/style.css"
 
 import PageHeader from "@shared/ui/PageHeader"
-import ContractDetails from "@shared/ui/ContractDetails"
 import {useSandboxData} from "@features/sandbox/lib/useSandboxData"
-
-import {TestInfo} from "@app/pages/SandboxPage/TestInfo.tsx"
+import {ContractDetails, TestInfo} from "@app/pages/SandboxPage/components"
 
 import styles from "./SandboxPage.module.css"
 
