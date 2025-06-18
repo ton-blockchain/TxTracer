@@ -18,38 +18,6 @@ export const getGasInfo = (text: string | null): number | null => {
   return null
 }
 
-export async function getStepCounterText(page: Page) {
-  return await page.getByTestId("step-counter-info").textContent()
-}
-
-/**
- * Skip all available tutorials
- * @param page
- */
-export const skipTutorialsOnLoad = async (page: Page) => {
-  await page.addInitScript(() => {
-    localStorage.setItem("tutorial-completed-playground-page", "true")
-    localStorage.setItem("tutorial-completed-godbolt-page", "true")
-  })
-}
-
-export const focusEditor = async (page: Page) => {
-  const editor = page.locator(".view-lines")
-  await editor.click()
-}
-
-/**
- * Clear editor from all text content
- * @param page
- */
-export const clearEditor = async (page: Page) => {
-  const editor = page.locator(".view-lines")
-  await editor.click()
-  const modifier = process.platform === "darwin" ? "Meta" : "Control"
-  await page.keyboard.press(`${modifier}+A`)
-  await page.keyboard.press("Delete")
-}
-
 /**
  * Write code in editor
  * @param page

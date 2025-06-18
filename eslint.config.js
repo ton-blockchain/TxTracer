@@ -97,5 +97,16 @@ export default tseslint.config(
       },
     },
   },
+  {
+    files: ["e2e-tests/**/*.{ts,js}"],
+    rules: {
+      "react-hooks/rules-of-hooks": "off",
+      "react-hooks/exhaustive-deps": "off",
+      "react/prop-types": "off",
+      "react/react-in-jsx-scope": "off",
+      "react/jsx-uses-react": "off",
+      "react/jsx-uses-vars": "off",
+    },
+  },
   eslintConfigPrettier,
 )

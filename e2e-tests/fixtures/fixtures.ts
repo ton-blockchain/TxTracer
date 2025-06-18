@@ -1,4 +1,5 @@
 import {test as base} from "@playwright/test"
+
 import {PlaygroundPage} from "../pages/playground-page"
 
 type Fixtures = {
@@ -6,8 +7,8 @@ type Fixtures = {
 }
 
 export const test = base.extend<Fixtures>({
-  playgroundPage: async ({page}, use) => {
+  playgroundPage: async ({page}, useFixture) => {
     const playgroundPage = new PlaygroundPage(page)
-    await use(playgroundPage)
+    await useFixture(playgroundPage)
   },
 })

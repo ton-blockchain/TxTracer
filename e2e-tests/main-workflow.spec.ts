@@ -1,4 +1,5 @@
 import {test, expect, type Page} from "@playwright/test"
+
 import {getGasInfo, getStepInfo} from "./utils"
 
 const VALID_TEST_HASH_PLACEHOLDER =

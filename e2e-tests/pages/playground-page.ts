@@ -49,19 +49,19 @@ export class PlaygroundPage {
     return await this.stepCounter.textContent()
   }
 
-  async getTutorialPopup() {
+  getTutorialPopup() {
     return this.page
       .getByRole("heading", {name: "Welcome to Assembly Playground"})
       .locator("..")
       .locator("..")
   }
 
-  async getTutorialText() {
+  getTutorialText() {
     return this.page.getByText("Welcome to Assembly Playground")
   }
 
   async getTutorialTotalSteps() {
-    const popup = await this.getTutorialPopup()
+    const popup = this.getTutorialPopup()
     const stepText = await popup.locator("text=of").innerText()
     return parseInt(stepText.match(/of (\d+)/)?.[1] || "0", 10)
   }
