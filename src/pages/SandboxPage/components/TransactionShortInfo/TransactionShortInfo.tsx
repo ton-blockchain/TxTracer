@@ -106,7 +106,7 @@ export function TransactionShortInfo({tx, contracts}: TransactionShortInfoProps)
           {inMsgBodyParsed && (
             <div className={styles.multiColumnItemValue}>
               <div className={styles.multiColumnItemTitle}>Parsed Data:</div>
-              <div style={{marginLeft: "var(--spacing-sm)"}}>
+              <div className={styles.parsedDataContent}>
                 {showRecordValues(inMsgBodyParsed, contracts)}
               </div>
             </div>

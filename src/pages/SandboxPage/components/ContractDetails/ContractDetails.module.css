@@ -378,3 +378,15 @@
   font-family: var(--font-family-mono), monospace;
   color: var(--color-primary);
 }
+
+.noTransactionsMessage {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.moreTransactionsMessage {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--color-text-secondary);
+}

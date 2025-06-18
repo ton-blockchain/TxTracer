@@ -284,28 +284,14 @@ export function ContractDetails({
                 ))
               ) : (
                 <div className={styles.txTableLine}>
-                  <div
-                    className={styles.txTableCell}
-                    style={{
-                      gridColumn: "1 / -1",
-                      textAlign: "center",
-                      color: "var(--color-text-secondary)",
-                    }}
-                  >
+                  <div className={`${styles.txTableCell} ${styles.noTransactionsMessage}`}>
                     No transactions found
                   </div>
                 </div>
               )}
               {ownTransactions.length > 10 && (
                 <div className={styles.txTableLine}>
-                  <div
-                    className={styles.txTableCell}
-                    style={{
-                      gridColumn: "1 / -1",
-                      textAlign: "center",
-                      color: "var(--color-text-secondary)",
-                    }}
-                  >
+                  <div className={`${styles.txTableCell} ${styles.moreTransactionsMessage}`}>
                     +{ownTransactions.length - 10} more transactions
                   </div>
                 </div>

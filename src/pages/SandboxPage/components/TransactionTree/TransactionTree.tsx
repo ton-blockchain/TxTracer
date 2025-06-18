@@ -179,19 +179,14 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
           height="6"
           x="-25"
           y="-3"
-          style={{
-            pointerEvents: "none",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
+          className={styles.foreignObjectContainer}
         >
           <svg
             width="4"
             height="6"
             viewBox="0 0 4 5"
             xmlns="http://www.w3.org/2000/svg"
-            style={{display: "block", stroke: "none"}}
+            className={styles.iconSvg}
           >
             <path
               d="M0.400044 0.549983C0.648572 0.218612 1.11867 0.151455 1.45004 0.399983L3.45004 1.89998C3.6389 2.04162 3.75004 2.26392 3.75004 2.49998C3.75004 2.73605 3.6389 2.95834 3.45004 3.09998L1.45004 4.59998C1.11867 4.84851 0.648572 4.78135 0.400044 4.44998C0.151516 4.11861 0.218673 3.64851 0.550044 3.39998L1.75004 2.49998L0.550044 1.59998C0.218673 1.35145 0.151516 0.881354 0.400044 0.549983Z"
@@ -328,14 +323,10 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
           />
           {tooltip && (
             <div
+              className={styles.tooltipContainer}
               style={{
-                position: "fixed",
                 left: Math.max(10, Math.min(tooltip.x - 50, window.innerWidth - 220)),
                 top: Math.max(10, tooltip.y - 160),
-                width: "200px",
-                height: "auto",
-                zIndex: 1000,
-                pointerEvents: "none",
               }}
             >
               <div className={styles.tooltip}>

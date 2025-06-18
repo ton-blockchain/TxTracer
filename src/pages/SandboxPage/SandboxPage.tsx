@@ -14,7 +14,7 @@ function SandboxPage() {
       <PageHeader pageTitle={"sandbox"}></PageHeader>
 
       <main className={styles.appContainer}>
-        {error && <div style={{padding: "20px", color: "red"}}>{error}</div>}
+        {error && <div className={styles.errorMessage}>{error}</div>}
         <div>
           {[...contracts.entries()].map(([, data], i) => (
             <ContractDetails

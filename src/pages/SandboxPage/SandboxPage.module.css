@@ -104,3 +104,8 @@
   max-height: 100px;
   overflow-y: auto;
 }
+
+.errorMessage {
+  padding: var(--spacing-lg);
+  color: red;
+}

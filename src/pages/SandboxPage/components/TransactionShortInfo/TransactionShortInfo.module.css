@@ -179,3 +179,7 @@
     white-space: normal;
   }
 }
+
+.parsedDataContent {
+  margin-left: var(--spacing-sm);
+}
