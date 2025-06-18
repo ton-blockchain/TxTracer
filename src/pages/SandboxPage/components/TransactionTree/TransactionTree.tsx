@@ -68,8 +68,50 @@ export function TransactionTree({testData}: TransactionTreeProps) {
   const [tooltip, setTooltip] = useState<TooltipData | null>(null)
   const [selectedTransaction, setSelectedTransaction] = useState<TransactionInfo | null>(null)
   const [selectedContract, setSelectedContract] = useState<ContractData | null>(null)
+  const [selectedRootLt, setSelectedRootLt] = useState<string | null>(null)
 
   const contracts = testData.contracts
+
+  const rootTransactions = useMemo(() => {
+    return testData.transactions
+      .filter(tx => !tx.parent)
+      .sort((a, b) => Number(a.transaction.lt - b.transaction.lt))
+  }, [testData.transactions])
+
+  const getSubtreeTransactions = (rootTx: TransactionInfo): TransactionInfo[] => {
+    const result: TransactionInfo[] = [rootTx]
+
+    const addChildren = (tx: TransactionInfo) => {
+      tx.children.forEach(child => {
+        result.push(child)
+        addChildren(child)
+      })
+    }
+
+    addChildren(rootTx)
+    return result
+  }
+
+  const filteredTransactions = useMemo(() => {
+    if (!selectedRootLt) {
+      return testData.transactions
+    }
+
+    const selectedRoot = rootTransactions.find(
+      tx => tx.transaction.lt.toString() === selectedRootLt,
+    )
+    if (!selectedRoot) {
+      return testData.transactions
+    }
+
+    return getSubtreeTransactions(selectedRoot)
+  }, [testData.transactions, selectedRootLt, rootTransactions])
+
+  const handleRootChange = (rootLt: string | null) => {
+    setSelectedRootLt(rootLt)
+    setSelectedTransaction(null)
+    setSelectedContract(null)
+  }
 
   const calculateTreeDimensions = (data: {
     children?: unknown[]
@@ -104,12 +146,12 @@ export function TransactionTree({testData}: TransactionTreeProps) {
 
   const transactionMap = useMemo(() => {
     const map = new Map<string, TransactionInfo>()
-    for (let i = 0; i < testData.transactions.length; i++) {
-      const tx = testData.transactions[i]
+    for (let i = 0; i < filteredTransactions.length; i++) {
+      const tx = filteredTransactions[i]
       map.set(tx.transaction.lt.toString(), tx)
     }
     return map
-  }, [testData.transactions])
+  }, [filteredTransactions])
 
   const handleNodeClick = (lt: string) => {
     const transaction = transactionMap.get(lt)
@@ -136,7 +178,9 @@ export function TransactionTree({testData}: TransactionTreeProps) {
   }
 
   const treeData = useMemo(() => {
-    const rootTransactions = testData.transactions.filter(tx => !tx.parent)
+    const displayedRoots = selectedRootLt
+      ? rootTransactions.filter(tx => tx.transaction.lt.toString() === selectedRootLt)
+      : rootTransactions
 
     const convertTransactionToNode = (tx: TransactionInfo): RawNodeDatum => {
       const thisAddress = tx.address
@@ -198,13 +242,13 @@ export function TransactionTree({testData}: TransactionTreeProps) {
       }
     }
 
-    if (rootTransactions.length > 0) {
+    if (displayedRoots.length > 0) {
       return {
         name: "",
         attributes: {
           isRoot: "true",
         },
-        children: rootTransactions.map(it => convertTransactionToNode(it)),
+        children: displayedRoots.map(it => convertTransactionToNode(it)),
       }
     }
 
@@ -213,7 +257,7 @@ export function TransactionTree({testData}: TransactionTreeProps) {
       attributes: {},
       children: [],
     }
-  }, [testData.transactions, contracts, selectedTransaction])
+  }, [rootTransactions, contracts, selectedTransaction, selectedRootLt])
 
   const renderCustomNodeElement = ({
     nodeDatum,
@@ -379,6 +423,29 @@ export function TransactionTree({testData}: TransactionTreeProps) {
 
   return (
     <div className={styles.container}>
+      {rootTransactions.length > 1 && (
+        <div className={styles.tabsContainer}>
+          <button
+            className={`${styles.tab} ${!selectedRootLt ? styles.tabActive : ""}`}
+            onClick={() => handleRootChange(null)}
+          >
+            All
+          </button>
+          {rootTransactions.map((rootTx, index) => {
+            const addressName = formatAddress(rootTx.address, contracts)
+            const isActive = selectedRootLt === rootTx.transaction.lt.toString()
+            return (
+              <button
+                key={rootTx.transaction.lt.toString()}
+                className={`${styles.tab} ${isActive ? styles.tabActive : ""}`}
+                onClick={() => handleRootChange(rootTx.transaction.lt.toString())}
+              >
+                #{index + 1}: {addressName}
+              </button>
+            )
+          })}
+        </div>
+      )}
       <div className={styles.treeContainer} style={{height: `${treeDimensions.height}px`}}>
         <div className={styles.treeWrapper} style={{width: `${treeDimensions.width}px`}}>
           <Tree

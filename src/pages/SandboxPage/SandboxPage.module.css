@@ -9,7 +9,7 @@
   display: flex;
   flex-direction: column;
 
-  min-height: calc(100vh - 43px - 2 * var(--spacing-md));
+  min-height: calc(100vh - 43px - 2 * var(--spacing-sm));
   padding: var(--spacing-sm) var(--spacing-lg);
 }
 
