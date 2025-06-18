@@ -411,7 +411,7 @@ export function TransactionTree({testData}: TransactionTreeProps) {
             pathClassFunc={getDynamicPathClass}
             translate={{x: 50, y: treeDimensions.height / 2}}
             zoom={1}
-            enableLegacyTransitions={true}
+            enableLegacyTransitions={false}
             collapsible={false}
             zoomable={false}
             draggable={false}

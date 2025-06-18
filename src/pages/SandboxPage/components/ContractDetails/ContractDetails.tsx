@@ -11,7 +11,7 @@ import {findOpcodeABI, type TransactionInfo} from "@features/sandbox/lib/transac
 import type {ContractData} from "@features/sandbox/lib/contract"
 import {parseSliceWithAbiType} from "@features/sandbox/lib/abi/parser.ts"
 
-import {showRecordValues} from "@features/sandbox/ui/abi/parsed.tsx"
+import {ParsedDataView} from "@features/sandbox/ui/abi"
 
 import styles from "./ContractDetails.module.css"
 
@@ -193,12 +193,7 @@ export function ContractDetails({
 
   const renderStateInit = () => {
     if (!stateInit) return null
-    return showRecordValues(
-      stateInit,
-      contracts,
-      styles.stateInitFieldName,
-      styles.stateInitFieldValue,
-    )
+    return <ParsedDataView data={stateInit} contracts={contracts} />
   }
 
   return (

@@ -8,7 +8,7 @@ import {formatCurrency} from "@shared/lib/format"
 import {findOpcodeABI, type TransactionInfo} from "@features/sandbox/lib/transaction.ts"
 import type {ContractData} from "@features/sandbox/lib/contract.ts"
 import {type ParsedObjectByABI, parseSliceWithAbiType} from "@features/sandbox/lib/abi/parser.ts"
-import {showRecordValues} from "@features/sandbox/ui/abi/parsed.tsx"
+import {ParsedDataView} from "@features/sandbox/ui/abi"
 
 import styles from "./TransactionShortInfo.module.css"
 
@@ -81,11 +81,6 @@ export function TransactionShortInfo({tx, contracts, onContractClick}: Transacti
         </div>
       </div>
 
-      <div className={styles.detailRow}>
-        <div className={styles.detailLabel}>With Init</div>
-        <div className={styles.detailValue}>{formatBoolean(!!tx.transaction.inMessage?.init)}</div>
-      </div>
-
       {tx.amount && (
         <div className={styles.detailRow}>
           <div className={styles.detailLabel}>Value</div>
@@ -115,7 +110,7 @@ export function TransactionShortInfo({tx, contracts, onContractClick}: Transacti
             <div className={styles.multiColumnItemValue}>
               <div className={styles.multiColumnItemTitle}>Parsed Data:</div>
               <div className={styles.parsedDataContent}>
-                {showRecordValues(inMsgBodyParsed, contracts)}
+                <ParsedDataView data={inMsgBodyParsed} contracts={contracts} />
               </div>
             </div>
           )}
