@@ -1,7 +1,7 @@
 import {useMemo, useState} from "react"
 import type {Orientation, RawNodeDatum, TreeLinkDatum} from "react-d3-tree"
 import {Tree} from "react-d3-tree"
-import {Address, type Cell} from "@ton/core"
+import {Address} from "@ton/core"
 
 import {formatCurrency} from "@shared/lib/format"
 
@@ -35,25 +35,16 @@ const formatAddress = (
     return "unknown"
   }
 
-  const meta = contracts.get(address.toString())
+  const addressStr = address.toString()
+  const meta = contracts.get(addressStr)
   if (meta) {
-    const code = meta.stateInit?.code
-    const name =
-      meta.meta?.treasurySeed ??
-      meta.meta?.wrapperName ??
-      (code ? findContractWithMatchingCode(contracts, code)?.meta?.wrapperName : undefined)
-    if (name) {
-      return `${name}`
+    const name = meta.displayName
+    if (name !== "Unknown Contract") {
+      return name
     }
   }
 
-  return address.toString().slice(0, 8) + "..."
-}
-
-function findContractWithMatchingCode(contracts: Map<string, ContractData>, code: Cell) {
-  return [...contracts.values()].find(
-    it => it.stateInit?.code?.toBoc()?.toString("hex") === code?.toBoc()?.toString("hex"),
-  )
+  return addressStr.slice(0, 4) + "..." + addressStr.slice(addressStr.length - 4)
 }
 
 export function TransactionTree({testData, contracts}: TransactionTreeProps) {
@@ -124,7 +115,7 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
         attributes: {
           isRoot: "true",
         },
-        children: rootTransactions.map(convertTransactionToNode),
+        children: rootTransactions.map(it => convertTransactionToNode(it)),
       }
     }
 

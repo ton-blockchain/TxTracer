@@ -1,6 +1,8 @@
 import {useMemo} from "react"
 import {Address, Cell, loadShardAccount, loadStateInit, loadTransaction} from "@ton/core"
 
+import type {ContractRawData} from "@features/sandbox/lib/transport/contract.ts"
+
 import {useWebsocket} from "./transport/useWebsocket"
 import {processRawTransactions, type RawTransactionInfo} from "./transport/transaction"
 import type {ContractData} from "./contract"
@@ -16,6 +18,49 @@ interface UseSandboxDataReturn {
   readonly contracts: Map<string, ContractData>
   readonly error: string
   readonly isConnected: boolean
+}
+
+function getStateInit(contract: ContractRawData) {
+  return contract.stateInit ? loadStateInit(Cell.fromHex(contract.stateInit).asSlice()) : undefined
+}
+
+function findContractWithMatchingCode(contracts: readonly ContractRawData[], code: Cell) {
+  return contracts.find(it => {
+    const stateInit = getStateInit(it)
+    return stateInit?.code?.toBoc()?.toString("hex") === code?.toBoc()?.toString("hex")
+  })
+}
+
+function findContractNameSimple(contract: ContractRawData) {
+  if (contract.meta?.treasurySeed) {
+    return contract.meta?.treasurySeed
+  }
+
+  if (contract.meta?.wrapperName) {
+    return contract.meta?.wrapperName
+  }
+
+  return undefined
+}
+
+function findContractName(
+  contract: ContractRawData,
+  contracts: readonly ContractRawData[],
+): string {
+  const name = findContractNameSimple(contract)
+  if (name) return name
+
+  const stateInit = getStateInit(contract)
+  const code = stateInit?.code
+  if (code) {
+    const contract = findContractWithMatchingCode(contracts, code)
+    if (contract) {
+      const name = findContractNameSimple(contract)
+      if (name) return name
+    }
+  }
+
+  return "Unknown Contract"
 }
 
 export function useSandboxData(options: UseSandboxDataOptions = {}): UseSandboxDataReturn {
@@ -45,9 +90,7 @@ export function useSandboxData(options: UseSandboxDataOptions = {}): UseSandboxD
     const convertedContracts = rawData.contracts.map((it, index): ContractData => {
       const address = Address.parse(it.address)
       const letter = String.fromCharCode(65 + (index % 26))
-      const displayName = it.meta?.treasurySeed
-        ? it.meta.treasurySeed
-        : (it.meta?.wrapperName ?? "Unknown Contract")
+      const displayName = findContractName(it, rawData.contracts)
 
       return {
         ...it,
