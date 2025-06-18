@@ -6,10 +6,6 @@ export type ContractData = {
   readonly meta: ContractMeta | undefined
   readonly stateInit: StateInit | undefined
   readonly account: ShardAccount
-}
-
-export type ContractLetter = {
   readonly letter: string
-  readonly address: string
-  readonly name: string
+  readonly displayName: string
 }

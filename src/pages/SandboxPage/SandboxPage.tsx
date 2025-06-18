@@ -1,4 +1,3 @@
-import {useMemo} from "react"
 import "@xyflow/react/dist/style.css"
 
 import PageHeader from "@shared/ui/PageHeader"
@@ -7,7 +6,7 @@ import ContractDetails from "@shared/ui/ContractDetails"
 import {TransactionShortInfo} from "@app/pages/SandboxPage/TransactionShortInfo.tsx"
 import {useSandboxData} from "@features/sandbox/lib/useSandboxData"
 
-import type {ContractData, ContractLetter} from "@features/sandbox/lib/contract.ts"
+import type {ContractData} from "@features/sandbox/lib/contract.ts"
 import type {TestData} from "@features/sandbox/lib/test-data.ts"
 
 import {TransactionTree} from "./components"
@@ -16,11 +15,9 @@ import styles from "./SandboxPage.module.css"
 
 function TestFlow({
   contracts,
-  contractLetters,
   testData,
 }: {
   contracts: Map<string, ContractData>
-  contractLetters: Map<string, ContractLetter>
   testData: TestData
 }) {
   const transactions = testData.transactions.filter(it => {
@@ -44,12 +41,7 @@ function TestFlow({
       <div style={{marginTop: "20px"}}>
         <h4>Transaction Details:</h4>
         {transactions.map((tx, index) => (
-          <TransactionShortInfo
-            key={index}
-            tx={tx}
-            contracts={contracts}
-            contractLetters={contractLetters}
-          />
+          <TransactionShortInfo key={index} tx={tx} contracts={contracts} />
         ))}
       </div>
     </>
@@ -94,24 +86,6 @@ function isContractDeployedInside(
 function SandboxPage() {
   const {tests, contracts, error} = useSandboxData()
 
-  const contractLetters = useMemo(() => {
-    const letters = Array.from(contracts.entries()).map(([address, contract], index) => {
-      const letter = String.fromCharCode(65 + (index % 26))
-      const name = contract.meta?.treasurySeed
-        ? contract.meta?.treasurySeed
-        : (contract.meta?.wrapperName ?? "Unknown Contract")
-
-      return {
-        letter,
-        address,
-        name,
-      }
-    })
-    return new Map(letters.map(item => [item.address, item]))
-  }, [contracts])
-
-  console.log(contracts)
-
   return (
     <>
       <div className={styles.traceViewWrapper}>
@@ -124,7 +98,6 @@ function SandboxPage() {
               <ContractDetails
                 key={i}
                 contracts={contracts}
-                contractLetters={contractLetters}
                 contract={data}
                 tests={tests}
                 isDeployed={false}
@@ -132,12 +105,7 @@ function SandboxPage() {
             ))}
             <br />
             {tests.map(testData => (
-              <TestFlow
-                key={testData.id}
-                contracts={contracts}
-                contractLetters={contractLetters}
-                testData={testData}
-              />
+              <TestFlow key={testData.id} contracts={contracts} testData={testData} />
             ))}
           </div>
         </main>

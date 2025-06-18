@@ -1,14 +1,14 @@
 import {useState, useCallback, useEffect} from "react"
 
 import styles from "@app/pages/SandboxPage/components/ContractChip.module.css"
-import type {ContractLetter} from "@features/sandbox/lib/contract.ts"
+import type {ContractData} from "@features/sandbox/lib/contract.ts"
 
 export function ContractChip({
   address,
-  contractLetters,
+  contracts,
 }: {
   address: string | undefined
-  contractLetters: Map<string, ContractLetter>
+  contracts: Map<string, ContractData>
 }) {
   const [isCopied, setIsCopied] = useState(false)
 
@@ -69,14 +69,14 @@ export function ContractChip({
     return <span className={styles.contractChip}>Unknown</span>
   }
 
-  const contractInfo = contractLetters.get(address)
+  const contractInfo = contracts.get(address)
 
   return (
     <span className={styles.contractChip}>
       {contractInfo ? (
         <>
           <span className={styles.contractLetter}>{contractInfo.letter}</span>
-          <span className={styles.contractName}>{contractInfo.name}</span>
+          <span className={styles.contractName}>{contractInfo.displayName}</span>
           <span className={styles.contractAddress}>
             ({address.slice(0, 6)}…{address.slice(-6)})
           </span>

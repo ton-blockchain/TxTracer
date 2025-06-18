@@ -19,7 +19,7 @@ import type {TestData} from "@features/sandbox/lib/test-data.ts"
 
 import type {TransactionInfo} from "@features/sandbox/lib/transaction.ts"
 
-import type {ContractData, ContractLetter} from "@features/sandbox/lib/contract"
+import type {ContractData} from "@features/sandbox/lib/contract"
 
 import styles from "./ContractDetails.module.css"
 
@@ -28,8 +28,6 @@ export interface ContractDetailsProps {
   readonly contract: ContractData
   /** All contracts map for cross-referencing */
   readonly contracts: Map<string, ContractData>
-  /** Contract letters mapping for display */
-  readonly contractLetters?: Map<string, ContractLetter>
   /** Test data containing transactions */
   readonly tests: TestData[]
   /** Whether contract was deployed during tests */
@@ -57,7 +55,7 @@ function showRecordValues(
   data: Record<string, ParsedSlice>,
   fieldNameClass?: string,
   fieldValueClass?: string,
-  contractLetters?: Map<string, ContractLetter>,
+  contracts?: Map<string, ContractData>,
 ) {
   return (
     <>
@@ -66,8 +64,8 @@ function showRecordValues(
           <span className={fieldNameClass ?? "fieldName"}>{key.toString()}: </span>
           <span className={fieldValueClass ?? "fieldValue"}>
             {value instanceof Address ? (
-              contractLetters ? (
-                <ContractChip address={value.toString()} contractLetters={contractLetters} />
+              contracts ? (
+                <ContractChip address={value.toString()} contracts={contracts} />
               ) : (
                 value.toString()
               )
@@ -76,7 +74,7 @@ function showRecordValues(
               "$" in value &&
               value.$ === "sub-object" &&
               value.value ? (
-              showRecordValues(value.value, fieldNameClass, fieldValueClass, contractLetters)
+              showRecordValues(value.value, fieldNameClass, fieldValueClass, contracts)
             ) : (
               // eslint-disable-next-line @typescript-eslint/no-base-to-string
               value?.toString()
@@ -141,7 +139,7 @@ const truncateMiddle = (text: string, maxLength: number = 30) => {
   )
 }
 
-function inMessageView(inMessage: Maybe<Message>, contractLetters?: Map<string, ContractLetter>) {
+function inMessageView(inMessage: Maybe<Message>, contracts?: Map<string, ContractData>) {
   if (!inMessage) {
     return <span className={styles.addressShort}>—</span>
   }
@@ -151,9 +149,9 @@ function inMessageView(inMessage: Maybe<Message>, contractLetters?: Map<string, 
 
     return (
       <div className={styles.inMessage}>
-        {contractLetters ? (
+        {contracts ? (
           <>
-            <ContractChip address={src.toString()} contractLetters={contractLetters} />
+            <ContractChip address={src.toString()} contracts={contracts} />
           </>
         ) : (
           <>
@@ -169,9 +167,9 @@ function inMessageView(inMessage: Maybe<Message>, contractLetters?: Map<string, 
 
     return (
       <div className={styles.inMessage}>
-        {contractLetters ? (
+        {contracts ? (
           <>
-            <ContractChip address={src?.toString()} contractLetters={contractLetters} />
+            <ContractChip address={src?.toString()} contracts={contracts} />
           </>
         ) : (
           <>
@@ -222,15 +220,7 @@ function getStateInit(data: ContractData) {
   return undefined
 }
 
-function TxTableLine({
-  tx,
-  contracts,
-  contractLetters,
-}: {
-  tx: TransactionInfo
-  contracts: Map<string, ContractData>
-  contractLetters?: Map<string, ContractLetter>
-}) {
+function TxTableLine({tx, contracts}: {tx: TransactionInfo; contracts: Map<string, ContractData>}) {
   const opcode = getTxOpcode(tx, contracts)
   const inMessage = tx.transaction.inMessage
 
@@ -243,7 +233,7 @@ function TxTableLine({
         <OpcodeChip opcode={opcode.opcode} abiName={opcode.abiType?.name} />
         {isExternalIn && <span className={styles.externalInLabel}> (external-in)</span>}
       </div>
-      <div className={styles.txTableCell}>{inMessageView(inMessage, contractLetters)}</div>
+      <div className={styles.txTableCell}>{inMessageView(inMessage, contracts)}</div>
       <div className={`${styles.txTableCell} ${styles.txTableCellValue}`}>
         {formatCurrency(value)}
       </div>
@@ -254,7 +244,6 @@ function TxTableLine({
 function ContractDetails({
   contract,
   contracts,
-  contractLetters,
   tests,
   isDeployed: _isDeployed,
 }: ContractDetailsProps) {
@@ -295,18 +284,16 @@ function ContractDetails({
       stateInit,
       styles.stateInitFieldName,
       styles.stateInitFieldValue,
-      contractLetters,
+      contracts,
     )
   }
 
   return (
     <div className={styles.container}>
       <div className={styles.mainInformation}>
-        {contractLetters && (
-          <div className={styles.contractChipHeader}>
-            <ContractChip address={address} contractLetters={contractLetters} />
-          </div>
-        )}
+        <div className={styles.contractChipHeader}>
+          <ContractChip address={address} contracts={contracts} />
+        </div>
 
         <div className={styles.mainInformationRows}>
           <div className={styles.mainInformationRowTitle}>Address</div>
@@ -380,12 +367,7 @@ function ContractDetails({
               </div>
               {ownTransactions.length > 0 ? (
                 ownTransactions.map((tx, index) => (
-                  <TxTableLine
-                    key={index}
-                    tx={tx}
-                    contracts={contracts}
-                    contractLetters={contractLetters}
-                  />
+                  <TxTableLine key={index} tx={tx} contracts={contracts} />
                 ))
               ) : (
                 <div className={styles.txTableLine}>

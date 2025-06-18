@@ -20,27 +20,25 @@ import {
 import {ContractChip, OpcodeChip} from "@app/pages/SandboxPage/components"
 import {formatCurrency} from "@shared/lib/format"
 import type {TransactionInfo} from "@features/sandbox/lib/transaction.ts"
-import type {ContractData, ContractLetter} from "@features/sandbox/lib/contract.ts"
+import type {ContractData} from "@features/sandbox/lib/contract.ts"
 
 const formatAddress = (
   address: Address | Maybe<ExternalAddress> | undefined,
-  contractLetters: Map<string, ContractLetter>,
+  contracts: Map<string, ContractData>,
 ): React.ReactNode => {
   if (!address) {
-    return <ContractChip address={undefined} contractLetters={contractLetters} />
+    return <ContractChip address={undefined} contracts={contracts} />
   }
 
-  return <ContractChip address={address.toString()} contractLetters={contractLetters} />
+  return <ContractChip address={address.toString()} contracts={contracts} />
 }
 
 export function TransactionShortInfo({
   tx,
   contracts,
-  contractLetters,
 }: {
   tx: TransactionInfo
   contracts: Map<string, ContractData>
-  contractLetters: Map<string, ContractLetter>
 }) {
   if (tx.transaction.description.type !== "generic") {
     throw new Error(
@@ -128,15 +126,15 @@ export function TransactionShortInfo({
 
       <div className={styles.detailRow}>
         <div className={styles.detailLabel}>Contract</div>
-        <div className={styles.detailValue}>{formatAddress(thisAddress, contractLetters)}</div>
+        <div className={styles.detailValue}>{formatAddress(thisAddress, contracts)}</div>
       </div>
 
       <div className={styles.detailRow}>
         <div className={styles.detailLabel}>Message Route</div>
         <div className={styles.detailValue}>
-          {formatAddress(tx.transaction.inMessage?.info?.src, contractLetters)}
+          {formatAddress(tx.transaction.inMessage?.info?.src, contracts)}
           {" → "}
-          {formatAddress(tx.transaction.inMessage?.info?.dest, contractLetters)}
+          {formatAddress(tx.transaction.inMessage?.info?.dest, contracts)}
         </div>
       </div>
 
@@ -174,7 +172,7 @@ export function TransactionShortInfo({
             <div style={{marginTop: "var(--spacing-sm)"}}>
               <div className={styles.multiColumnItemTitle}>Parsed Data:</div>
               <div style={{marginLeft: "var(--spacing-sm)"}}>
-                {showRecordValues(inMsgBodyParsed, contractLetters)}
+                {showRecordValues(inMsgBodyParsed, contracts)}
               </div>
             </div>
           )}
@@ -270,10 +268,7 @@ function extractCodeAndTrace(
   return {code, exitCode, traceInfo}
 }
 
-function showRecordValues(
-  data: Record<string, ParsedSlice>,
-  contractLetters: Map<string, ContractLetter>,
-) {
+function showRecordValues(data: Record<string, ParsedSlice>, contracts: Map<string, ContractData>) {
   return (
     <>
       {Object.entries(data).map(([key, value]) => (
@@ -281,13 +276,13 @@ function showRecordValues(
           &nbsp;&nbsp;&nbsp;{key.toString()}
           {": "}
           {value instanceof Address ? (
-            <ContractChip address={value.toString()} contractLetters={contractLetters} />
+            <ContractChip address={value.toString()} contracts={contracts} />
           ) : value &&
             typeof value === "object" &&
             "$" in value &&
             value.$ === "sub-object" &&
             value.value ? (
-            showRecordValues(value.value, contractLetters)
+            showRecordValues(value.value, contracts)
           ) : (
             // eslint-disable-next-line @typescript-eslint/no-base-to-string
             value?.toString()

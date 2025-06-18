@@ -72,27 +72,6 @@ function findContractWithMatchingCode(contracts: Map<string, ContractData>, code
 export function TransactionTree({testData, contracts}: TransactionTreeProps) {
   const [tooltip, setTooltip] = useState<TooltipData | null>(null)
 
-  const contractLetters = useMemo(() => {
-    const addressSet = new Set<string>()
-
-    for (const tx of testData.transactions) {
-      const address = bigintToAddress(tx.transaction.address)
-      if (address) {
-        addressSet.add(address.toString())
-      }
-    }
-
-    const sortedAddresses = Array.from(addressSet).sort()
-    const letterMap = new Map<string, string>()
-
-    for (const [index, address] of sortedAddresses.entries()) {
-      const letter = String.fromCharCode(65 + (index % 26))
-      letterMap.set(address, letter)
-    }
-
-    return letterMap
-  }, [testData.transactions])
-
   const treeData = useMemo(() => {
     const rootTransactions = testData.transactions.filter(tx => !tx.parent)
 
@@ -141,7 +120,9 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
       const abiType = findOpcodeAbi(tx, contracts, opcode)
       const opcodeName = abiType?.name
 
-      const contractLetter = thisAddress ? contractLetters.get(thisAddress.toString()) : undefined
+      const contractLetter = thisAddress
+        ? (contracts.get(thisAddress.toString())?.letter ?? "?")
+        : "?"
 
       const opcodeHex = opcode?.toString(16)
       return {
@@ -157,7 +138,7 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
           outMsgs: tx.transaction.outMessagesCount.toString(),
           withInitCode,
           isBounced,
-          contractLetter: contractLetter ?? "?",
+          contractLetter,
         },
         children: tx.children.map(it => convertTransactionToNode(it)),
       }
@@ -178,7 +159,7 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
       attributes: {},
       children: [],
     }
-  }, [testData.transactions, contracts, contractLetters])
+  }, [testData.transactions, contracts])
 
   const renderCustomNodeElement = ({
     nodeDatum,
@@ -341,7 +322,7 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
           Total transactions: {testData.transactions.length}
           {testData.transactions.filter(tx => !tx.parent).length > 1 &&
             ` (${testData.transactions.filter(tx => !tx.parent).length} root transactions)`}
-          {` | Contracts: ${contractLetters.size}`}
+          {` | Contracts: ${contracts.size}`}
         </p>
       </div>
 

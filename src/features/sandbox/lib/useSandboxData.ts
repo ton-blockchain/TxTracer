@@ -42,14 +42,22 @@ export function useSandboxData(options: UseSandboxDataOptions = {}): UseSandboxD
   }, [rawData.tests])
 
   const contracts = useMemo((): Map<string, ContractData> => {
-    const convertedContracts = rawData.contracts.map(
-      (it): ContractData => ({
+    const convertedContracts = rawData.contracts.map((it, index): ContractData => {
+      const address = Address.parse(it.address)
+      const letter = String.fromCharCode(65 + (index % 26))
+      const displayName = it.meta?.treasurySeed
+        ? it.meta.treasurySeed
+        : (it.meta?.wrapperName ?? "Unknown Contract")
+
+      return {
         ...it,
-        address: Address.parse(it.address),
+        address,
         stateInit: it.stateInit ? loadStateInit(Cell.fromHex(it.stateInit).asSlice()) : undefined,
         account: loadShardAccount(Cell.fromHex(it.account).asSlice()),
-      }),
-    )
+        letter,
+        displayName,
+      }
+    })
 
     return new Map(convertedContracts.map(it => [it.address.toString(), it]))
   }, [rawData.contracts])
