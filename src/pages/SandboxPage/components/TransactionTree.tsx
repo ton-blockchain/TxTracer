@@ -1,6 +1,6 @@
-import {useMemo} from "react"
+import {useMemo, useState} from "react"
 import type {Orientation, RawNodeDatum, TreeLinkDatum} from "react-d3-tree"
-import Tree from "react-d3-tree"
+import {Tree} from "react-d3-tree"
 import {Address, beginCell, type Cell} from "@ton/core"
 
 import {findOpcodeAbi} from "@app/pages/SandboxPage/common.ts"
@@ -10,6 +10,17 @@ import {formatCurrency} from "@shared/lib/format"
 import type {ContractData, TestData, TransactionInfo} from "../SandboxPage"
 
 import styles from "./TransactionTree.module.css"
+
+interface TooltipData {
+  readonly x: number
+  readonly y: number
+  readonly fromAddress: string
+  readonly toAddress: string
+  readonly value?: string
+  readonly opcode?: string
+  readonly success: boolean
+  readonly exitCode?: string
+}
 
 interface TransactionTreeProps {
   readonly testData: TestData
@@ -57,6 +68,8 @@ function findContractWithMatchingCode(contracts: Map<string, ContractData>, code
 }
 
 export function TransactionTree({testData, contracts}: TransactionTreeProps) {
+  const [tooltip, setTooltip] = useState<TooltipData | null>(null)
+
   const contractLetters = useMemo(() => {
     const addressSet = new Set<string>()
 
@@ -132,6 +145,8 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
       return {
         name: `${addressName}`,
         attributes: {
+          from: tx.transaction.inMessage?.info?.src?.toString() ?? "unknown",
+          to: tx.transaction.inMessage?.info?.dest?.toString() ?? "unknown",
           lt: tx.transaction.lt.toString(),
           success: isSuccess ? "✓" : "✗",
           exitCode: exitCode?.toString() ?? "0",
@@ -204,6 +219,7 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
     // [ ] превращать (в отдельной вью) дерево в граф для каждой горизонтальной ...
     // [ ] send mode 128 + 32 - уничтожает контракт после того как отравит сообщение и баланс равен 0
     // [ ] printTransactionFees
+    // [ ] Transaction fees
 
     const opcode = (nodeDatum.attributes?.opcode as string | undefined) ?? "empty opcode"
     const isNumberOpcode = !Number.isNaN(Number.parseInt(opcode))
@@ -257,7 +273,30 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
           {nodeDatum.attributes?.contractLetter}
         </text>
         <foreignObject width="200" height="100" x="-230" y="-37">
-          <div className={styles.edgeText}>
+          <div
+            className={styles.edgeText}
+            onMouseEnter={event => {
+              const attributes = nodeDatum.attributes
+              if (!attributes) return
+
+              const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
+
+              setTooltip({
+                x: rect.left + rect.width / 2,
+                y: rect.top,
+                fromAddress: attributes.from as string,
+                toAddress: attributes.to as string,
+                value: attributes.value as string,
+                opcode: attributes.opcode as string,
+                success: attributes.success === "✓",
+                exitCode: attributes.exitCode as string,
+              })
+            }}
+            onMouseLeave={() => {
+              console.log("leave")
+              setTooltip(null)
+            }}
+          >
             <div className={styles.topText}>
               <p className={styles.edgeTextTitle}>{nodeDatum.name}</p>
               {nodeDatum.attributes?.value && (
@@ -339,6 +378,32 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
             enableLegacyTransitions={true}
             collapsible={false}
           />
+          {tooltip && (
+            <div
+              style={{
+                position: "fixed",
+                left: Math.max(10, Math.min(tooltip.x - 50, window.innerWidth - 220)),
+                top: Math.max(10, tooltip.y - 160),
+                width: "200px",
+                height: "auto",
+                zIndex: 1000,
+                pointerEvents: "none",
+              }}
+            >
+              <div className={styles.tooltip}>
+                <div className={styles.tooltipContent}>
+                  <p className={styles.tooltipText}>From: {tooltip.fromAddress}</p>
+                  <p className={styles.tooltipText}>To: {tooltip.toAddress}</p>
+                  {tooltip.value && <p className={styles.tooltipText}>Value: {tooltip.value}</p>}
+                  {tooltip.opcode && <p className={styles.tooltipText}>Opcode: {tooltip.opcode}</p>}
+                  <p className={styles.tooltipText}>Success: {tooltip.success ? "✓" : "✗"}</p>
+                  {tooltip.exitCode && tooltip.exitCode !== "0" && (
+                    <p className={styles.tooltipText}>Exit Code: {tooltip.exitCode}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

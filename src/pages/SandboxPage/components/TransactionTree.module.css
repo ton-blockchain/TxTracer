@@ -94,6 +94,11 @@
   flex-direction: column;
   gap: 8px;
   text-align: end;
+  cursor: pointer;
+}
+
+.edgeText * {
+  pointer-events: none;
 }
 
 .edgeTextContent {
@@ -103,4 +108,27 @@
 
 .treeContainer :global(.rd3t-link) {
   stroke: var(--color-text-secondary);
+}
+
+.tooltip {
+  background-color: var(--color-background-primary);
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: var(--spacing-sm);
+  font-size: var(--font-size-xs);
+  max-width: 200px;
+  z-index: 1000;
+}
+
+.tooltipContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.tooltipText {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: 1.3;
 }
