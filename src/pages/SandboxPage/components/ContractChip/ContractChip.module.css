@@ -1,7 +1,7 @@
 .contractChip {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
   font-size: var(--font-size-sm);
   position: relative;
   padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) var(--spacing-xs);

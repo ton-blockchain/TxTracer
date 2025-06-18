@@ -1,4 +1,4 @@
-import {useState, useCallback, useEffect} from "react"
+import React, {useState, useCallback, useEffect} from "react"
 
 import type {ContractData} from "@features/sandbox/lib/contract.ts"
 

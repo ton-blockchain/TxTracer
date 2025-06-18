@@ -138,8 +138,10 @@ export function TransactionTree({testData}: TransactionTreeProps) {
     const totalNodes = countNodes(data)
     const depth = getDepth(data)
 
+    const height = totalNodes <= 2 ? totalNodes * 80 + 20 : totalNodes * 80 + 100
+
     return {
-      height: Math.max(300, totalNodes * 80 + 100),
+      height: Math.max(100, height),
       width: Math.max(800, depth * 200 + 200),
     }
   }

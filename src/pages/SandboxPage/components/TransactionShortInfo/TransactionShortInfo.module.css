@@ -125,7 +125,6 @@
 }
 
 .numberValue {
-  font-family: var(--font-family-mono), monospace;
   font-size: var(--font-size-sm);
 }
 

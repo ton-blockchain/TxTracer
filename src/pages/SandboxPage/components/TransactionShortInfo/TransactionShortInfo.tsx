@@ -66,13 +66,6 @@ export function TransactionShortInfo({tx, contracts, onContractClick}: Transacti
   return (
     <div className={styles.transactionDetailsContainer}>
       <div className={styles.detailRow}>
-        <div className={styles.detailLabel}>Contract</div>
-        <div className={styles.detailValue}>
-          {formatAddress(tx.address, contracts, onContractClick)}
-        </div>
-      </div>
-
-      <div className={styles.detailRow}>
         <div className={styles.detailLabel}>Message Route</div>
         <div className={styles.detailValue}>
           {formatAddress(tx.transaction.inMessage?.info?.src, contracts, onContractClick)}
