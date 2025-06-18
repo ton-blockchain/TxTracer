@@ -1,39 +1,33 @@
 import {useEffect, useRef, useState, useCallback} from "react"
-import {Address, Cell, loadShardAccount, loadStateInit, loadTransaction} from "@ton/core"
 
-import type {ContractData} from "../contract"
-
-import type {TestData} from "../test-data"
-
-import {processRawTransactions, type RawTransactionInfo, type RawTransactions} from "./transaction"
 import type {Message, MessageContracts, MessageTransactions} from "./message"
+import type {RawTransactions} from "./transaction"
+import type {ContractRawData} from "./contract"
+
+type TestData = {
+  readonly id: number
+  readonly testName: string | undefined
+  readonly transactions: RawTransactions
+}
+
+export interface RawWebsocketData {
+  readonly tests: TestData[]
+  readonly contracts: readonly ContractRawData[]
+  readonly error: string
+  readonly isConnected: boolean
+}
 
 interface UseWebsocketOptions {
   readonly url?: string
   readonly onError?: (error: string) => void
 }
 
-interface UseWebsocketReturn {
-  readonly tests: TestData[]
-  readonly contracts: Map<string, ContractData>
-  readonly error: string
-  readonly isConnected: boolean
-}
-
-function parseMaybeTransactions(data: string): RawTransactions | undefined {
-  try {
-    return JSON.parse(data) as RawTransactions
-  } catch {
-    return undefined
-  }
-}
-
-export function useWebsocketRawData({
+export function useWebsocket({
   url = "ws://localhost:8081",
   onError,
-}: UseWebsocketOptions): UseWebsocketReturn {
+}: UseWebsocketOptions = {}): RawWebsocketData {
   const [tests, setTests] = useState<TestData[]>([])
-  const [contracts, setContracts] = useState<Map<string, ContractData>>(new Map())
+  const [contracts, setContracts] = useState<readonly ContractRawData[]>([])
   const [error, setError] = useState<string>("")
   const [isConnected, setIsConnected] = useState<boolean>(false)
   const currentTestIdRef = useRef(0)
@@ -43,24 +37,22 @@ export function useWebsocketRawData({
     console.log("New test case:", currentTestIdRef.current)
   }, [])
 
+  function parseMaybeTransactions(data: string): RawTransactions | undefined {
+    try {
+      return JSON.parse(data) as RawTransactions
+    } catch {
+      return undefined
+    }
+  }
+
   const handleTransactions = useCallback((message: MessageTransactions) => {
     const rawTransactions = parseMaybeTransactions(message.data)
     if (!rawTransactions) {
       console.error("Cannot parse transactions:", message)
-      return // something went wrong
+      return
     }
 
-    const parsedTransactions = rawTransactions.transactions.map(
-      (it): RawTransactionInfo => ({
-        ...it,
-        transaction: it.transaction,
-        parsedTransaction: loadTransaction(Cell.fromHex(it.transaction).asSlice()),
-      }),
-    )
-
     const testId = currentTestIdRef.current
-
-    const transactions = processRawTransactions(parsedTransactions)
 
     setTests(prev => {
       const existing = prev.find(test => test.id === testId)
@@ -68,26 +60,33 @@ export function useWebsocketRawData({
         console.log("Updating existing test:", testId)
         return prev.map(test =>
           test.id === testId
-            ? {...test, transactions: [...test.transactions, ...transactions]}
+            ? {
+                ...test,
+                transactions: {
+                  transactions: [
+                    ...test.transactions.transactions,
+                    ...rawTransactions.transactions,
+                  ],
+                },
+              }
             : test,
         )
       } else {
         console.log("Creating new test:", testId)
-        return [...prev, {id: testId, testName: message.testName, transactions: transactions}]
+        return [
+          ...prev,
+          {
+            id: testId,
+            testName: message.testName,
+            transactions: rawTransactions,
+          },
+        ]
       }
     })
   }, [])
 
   const handleKnownContracts = useCallback((message: MessageContracts) => {
-    const newContracts = message.data.map(
-      (it): ContractData => ({
-        ...it,
-        address: Address.parse(it.address),
-        stateInit: it.stateInit ? loadStateInit(Cell.fromHex(it.stateInit).asSlice()) : undefined,
-        account: loadShardAccount(Cell.fromHex(it.account).asSlice()),
-      }),
-    )
-    setContracts(new Map(newContracts.map(it => [it.address.toString(), it])))
+    setContracts(message.data)
   }, [])
 
   const handleMessage = useCallback(

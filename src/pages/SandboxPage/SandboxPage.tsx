@@ -5,10 +5,9 @@ import PageHeader from "@shared/ui/PageHeader"
 import ContractDetails from "@shared/ui/ContractDetails"
 
 import {TransactionShortInfo} from "@app/pages/SandboxPage/TransactionShortInfo.tsx"
-import {useWebsocketRawData} from "@features/sandbox/lib/transport/useWebsocketRawData.ts"
+import {useSandboxData} from "@features/sandbox/lib/useSandboxData"
 
 import type {ContractData, ContractLetter} from "@features/sandbox/lib/contract.ts"
-
 import type {TestData} from "@features/sandbox/lib/test-data.ts"
 
 import {TransactionTree} from "./components"
@@ -93,7 +92,7 @@ function isContractDeployedInside(
 }
 
 function SandboxPage() {
-  const {tests, contracts, error} = useWebsocketRawData({})
+  const {tests, contracts, error} = useSandboxData()
 
   const contractLetters = useMemo(() => {
     const letters = Array.from(contracts.entries()).map(([address, contract], index) => {
