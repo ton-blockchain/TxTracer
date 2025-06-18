@@ -7,4 +7,5 @@ export type TestData = {
   readonly id: number
   readonly testName: string | undefined
   readonly transactions: TransactionInfo[]
+  readonly timestamp?: number
 }

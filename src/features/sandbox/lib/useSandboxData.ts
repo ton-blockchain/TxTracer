@@ -82,6 +82,7 @@ export function useSandboxData(options: UseSandboxDataOptions = {}): UseSandboxD
         id: rawTest.id,
         testName: rawTest.testName,
         transactions,
+        timestamp: rawTest.timestamp,
       }
     })
   }, [rawData.tests])

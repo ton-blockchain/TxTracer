@@ -17,11 +17,48 @@ export function TestInfo({contracts, testData}: TestInfoProps) {
   //   )
   // })
 
+  const formatTimestamp = (timestamp?: number): string => {
+    if (!timestamp) return ""
+    const date = new Date(timestamp)
+    return date.toLocaleString("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    })
+  }
+
+  const countTxs = testData.transactions.length
+  const rootTxs = testData.transactions.filter(tx => !tx.parent)
+  const countRootTxs = rootTxs.length
+
   return (
     <div className={styles.container}>
-      <h3 className={styles.testTitle}>
-        #{testData.id} {testData.testName ?? "unknown test"}
-      </h3>
+      <div className={styles.header}>
+        <h2 className={styles.testTitle}>
+          #{testData.id} {testData.testName ?? "unknown test"}
+        </h2>
+        {testData.timestamp && (
+          <p className={styles.timestamp}>Executed at: {formatTimestamp(testData.timestamp)}</p>
+        )}
+
+        <div className={styles.stats}>
+          <span className={styles.statItem}>
+            <span className={styles.statLabel}>Total transactions:</span> {countTxs}
+          </span>
+          {countRootTxs > 1 && (
+            <span className={styles.statItem}>
+              <span className={styles.statLabel}>Transaction sequences:</span> {countRootTxs}
+            </span>
+          )}
+          <span className={styles.statItem}>
+            <span className={styles.statLabel}>Contracts:</span> {contracts.size}
+          </span>
+        </div>
+      </div>
 
       <TransactionTree key={`tree-${testData.id}`} testData={testData} contracts={contracts} />
 

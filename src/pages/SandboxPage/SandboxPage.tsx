@@ -39,7 +39,9 @@ function SandboxPage() {
 
   return (
     <div className={styles.traceViewWrapper}>
-      {header}
+      <PageHeader pageTitle={"sandbox"}>
+        <div className={styles.headerContent}></div>
+      </PageHeader>
 
       <main className={styles.appContainer}>
         {error && <div className={styles.errorMessage}>{error}</div>}

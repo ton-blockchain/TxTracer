@@ -47,6 +47,7 @@
 
   --color-text-primary: #1c1c1e;
   --color-text-secondary: #636366;
+  --color-text-tertiary: #a0a6ad;
   --color-text-secondary-hex: #636366;
   --color-text-placeholder: #a0a0a5;
   --color-text-disabled: #bcbbc0;
@@ -281,6 +282,7 @@
 
   --color-text-primary: #ffffff;
   --color-text-secondary: #aeaeb2;
+  --color-text-tertiary: #aeaeb2;
   --color-text-secondary-hex: #aeaeb2;
   --color-text-placeholder: #8e8e93;
   --color-text-disabled: #505054;

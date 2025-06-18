@@ -1,12 +1,11 @@
 .container {
   width: 100%;
-  margin: var(--spacing-lg) 0;
   border-radius: var(--border-radius-md);
   overflow: hidden;
 }
 
 .header {
-  padding: var(--spacing-sm) var(--spacing-mds);
+  padding: var(--spacing-sm) 0;
   background-color: var(--color-background-secondary);
 }
 
@@ -17,21 +16,16 @@
   color: var(--color-text-primary);
 }
 
-.stats {
-  margin: 0;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-}
-
 .treeContainer {
   width: 100%;
-  height: 600px;
-  background-color: var(--color-background-primary);
-  overflow: hidden;
+  height: auto;
+  min-height: 400px;
+  max-height: 800px;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .treeWrapper {
-  width: 100%;
   height: 100%;
   position: relative;
 }
@@ -45,29 +39,18 @@
   cursor: pointer;
 }
 
-.treeContainer :global(.rd3t-node circle) {
-}
-
-.treeContainer :global(.rd3t-node:hover circle) {
-}
-
 .treeContainer :global(.rd3t-node text) {
   pointer-events: none;
   user-select: none;
 }
 
-/* Скрываем линии от корневого узла если он невидимый */
-.treeContainer :global(.rd3t-node):first-child :global(.rd3t-link) {
-  opacity: 0;
-}
-
 .edgeStyle {
-  stroke: var(--color-text-secondary);
+  stroke: var(--color-text-tertiary);
   stroke-width: 1px;
 }
 
 .edgeStyleWithInit {
-  stroke-width: 2px;
+  /*stroke-width: 2px;*/
 }
 
 .edgeStyleBounced {
@@ -85,7 +68,7 @@
 .edgeText {
   font-size: var(--font-size-xss);
   margin: 0;
-  color: var(--color-text-secondary);
+  color: var(--color-text-tertiary);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -103,7 +86,7 @@
 }
 
 .treeContainer :global(.rd3t-link) {
-  stroke: var(--color-text-secondary);
+  stroke: var(--color-text-tertiary);
 }
 
 .tooltip {
@@ -199,7 +182,6 @@
 }
 
 .transactionDetails {
-  padding: var(--spacing-lg);
   border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
 }
 

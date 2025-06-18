@@ -70,6 +70,37 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
   const [selectedTransaction, setSelectedTransaction] = useState<TransactionInfo | null>(null)
   const [selectedContract, setSelectedContract] = useState<ContractData | null>(null)
 
+  const calculateTreeDimensions = (data: {
+    children?: unknown[]
+  }): {height: number; width: number} => {
+    const getDepth = (node: {children?: unknown[]}, currentDepth = 0): number => {
+      if (!node.children || node.children.length === 0) {
+        return currentDepth
+      }
+      return Math.max(
+        ...node.children.map(child => getDepth(child as {children?: unknown[]}, currentDepth + 1)),
+      )
+    }
+
+    const countNodes = (node: {children?: unknown[]}): number => {
+      if (!node.children || node.children.length === 0) {
+        return 1
+      }
+      return node.children.reduce(
+        (sum: number, child) => sum + countNodes(child as {children?: unknown[]}),
+        0,
+      )
+    }
+
+    const totalNodes = countNodes(data)
+    const depth = getDepth(data)
+
+    return {
+      height: Math.max(300, Math.min(700, totalNodes * 70 + 200)),
+      width: Math.max(800, depth * 200 + 200),
+    }
+  }
+
   const transactionMap = useMemo(() => {
     const map = new Map<string, TransactionInfo>()
     for (let i = 0; i < testData.transactions.length; i++) {
@@ -194,10 +225,10 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
       return (
         <g>
           <circle
-            r={20}
-            fill={"var(--color-background-primary)"}
+            r={15}
+            fill={"var(--color-background-secondary)"}
             stroke="var(--color-text-primary)"
-            strokeWidth={2}
+            strokeWidth={1.5}
           />
           <text
             fill="var(--color-text-primary)"
@@ -225,7 +256,7 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
         <foreignObject
           width="4"
           height="6"
-          x="-25"
+          x="-20"
           y="-3"
           className={styles.foreignObjectContainer}
         >
@@ -238,21 +269,21 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
           >
             <path
               d="M0.400044 0.549983C0.648572 0.218612 1.11867 0.151455 1.45004 0.399983L3.45004 1.89998C3.6389 2.04162 3.75004 2.26392 3.75004 2.49998C3.75004 2.73605 3.6389 2.95834 3.45004 3.09998L1.45004 4.59998C1.11867 4.84851 0.648572 4.78135 0.400044 4.44998C0.151516 4.11861 0.218673 3.64851 0.550044 3.39998L1.75004 2.49998L0.550044 1.59998C0.218673 1.35145 0.151516 0.881354 0.400044 0.549983Z"
-              fill="var(--foregroundTertiary)"
+              fill="var(--color-text-tertiary)"
             ></path>
           </svg>
         </foreignObject>
         <circle
-          r={20}
+          r={15}
           fill={
             isSelected
               ? "var(--color-text-primary)"
               : nodeDatum.attributes?.success === "✓"
-                ? "var(--color-background-primary)"
+                ? "var(--color-background-secondary)"
                 : "#ef4444"
           }
           stroke={"var(--color-text-primary)"}
-          strokeWidth={2}
+          strokeWidth={1.5}
           onClick={() => handleNodeClick(lt)}
           style={{cursor: "pointer"}}
         />
@@ -269,7 +300,7 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
         >
           {nodeDatum.attributes?.contractLetter}
         </text>
-        <foreignObject width="200" height="100" x="-230" y="-40">
+        <foreignObject width="150" height="100" x="-180" y="-40">
           <div
             className={styles.edgeText}
             onMouseEnter={event => {
@@ -343,10 +374,12 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
     return styles.edgeStyle
   }
 
+  const treeDimensions = calculateTreeDimensions(treeData)
+
   return (
     <div className={styles.container}>
-      <div className={styles.treeContainer}>
-        <div className={styles.treeWrapper}>
+      <div className={styles.treeContainer} style={{height: `${treeDimensions.height}px`}}>
+        <div className={styles.treeWrapper} style={{width: `${treeDimensions.width}px`}}>
           <Tree
             // @ts-expect-error todo
             data={treeData}
@@ -372,13 +405,17 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
                       .concat((e.target.y - 18).toString())
             }}
             nodeSize={{x: 200, y: 120}}
-            separation={{siblings: 0.8, nonSiblings: 1}}
+            separation={{siblings: 0.7, nonSiblings: 1}}
             renderCustomNodeElement={renderCustomNodeElement}
             pathClassFunc={getDynamicPathClass}
-            translate={{x: 50, y: 300}}
+            translate={{x: 50, y: treeDimensions.height / 2}}
             zoom={1}
             enableLegacyTransitions={true}
             collapsible={false}
+            zoomable={false}
+            draggable={false}
+            pannable={false}
+            scaleExtent={{min: 1, max: 1}}
           />
           {tooltip && (
             <div
@@ -438,16 +475,6 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
             </div>
           )}
         </div>
-      </div>
-
-      <div className={styles.header}>
-        <p className={styles.stats}>
-          Total transactions: {testData.transactions.length}
-          {testData.transactions.filter(tx => !tx.parent).length > 1 &&
-            ` (${testData.transactions.filter(tx => !tx.parent).length} 
-            root transactions)`}
-          {` | Contracts: ${contracts.size}`}
-        </p>
       </div>
 
       {selectedTransaction && (

@@ -8,6 +8,7 @@ type TestData = {
   readonly id: number
   readonly testName: string | undefined
   readonly transactions: RawTransactions
+  readonly timestamp?: number
 }
 
 export interface RawWebsocketData {
@@ -79,6 +80,7 @@ export function useWebsocket({
             id: testId,
             testName: message.testName,
             transactions: rawTransactions,
+            timestamp: Date.now(),
           },
         ]
       }
