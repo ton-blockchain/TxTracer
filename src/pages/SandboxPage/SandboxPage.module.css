@@ -118,6 +118,18 @@
 }
 
 .fullPageState {
-  height: calc(100vh - 45px);
-  overflow: hidden;
+  height: 100vh;
+  margin-top: -43px;
+}
+
+@media (max-width: 1024px) {
+  .fullPageState {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .fullPageState {
+    margin-top: 0;
+  }
 }

@@ -1,5 +1,3 @@
-import InlineLoader from "@shared/ui/InlineLoader"
-
 import styles from "./ConnectionGuide.module.css"
 
 export function ConnectionGuide() {
@@ -7,24 +5,21 @@ export function ConnectionGuide() {
     <div className={styles.container}>
       <div className={styles.content}>
         <div className={styles.leftColumn}>
-          <div className={styles.loaderContainer}>
-            <InlineLoader loading={true} message="" />
-          </div>
-          <h2 className={styles.title}>Sandbox Not Connected</h2>
+          <h1 className={styles.title}>Sandbox Not Connected</h1>
           <p className={styles.description}>
             To work with Sandbox, please follow the setup instructions on the right.
           </p>
           <div className={styles.infoSection}>
-            <h3 className={styles.infoTitle}>What is TracingSandbox?</h3>
+            <h3 className={styles.infoTitle}>What is Web Sandbox?</h3>
             <p className={styles.infoText}>
-              TracingSandbox extends the standard TON Sandbox with transaction tracing capabilities,
-              allowing you to visualize and debug smart contract interactions in real-time.
+              Web Sandbox extends the standard TON Sandbox with transaction tracing capabilities,
+              allowing you to visualize and debug smart contract interactions in web interface.
             </p>
           </div>
         </div>
 
         <div className={styles.rightColumn}>
-          <h3 className={styles.stepsTitle}>Setup Instructions</h3>
+          <h2 className={styles.stepsTitle}>Setup Instructions</h2>
           <div className={styles.steps}>
             <div className={styles.step}>
               <div className={styles.stepNumber}>1</div>

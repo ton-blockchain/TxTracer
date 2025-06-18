@@ -1,83 +1,83 @@
 .container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  background-color: var(--color-background-secondary);
-  overflow-y: auto;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--color-background-primary);
 }
 
 .content {
-  max-width: 1200px;
   width: 100%;
-  background-color: var(--color-background-primary);
-  border-radius: var(--border-radius-lg);
-  padding: 0;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  max-height: calc(100vh - 120px);
-  overflow: hidden;
   display: flex;
+  flex: 1;
 }
 
 .leftColumn {
   flex: 1;
-  padding: var(--spacing-xl);
-  border-right: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  padding: 0 4rem;
+  background-color: var(--color-background-secondary);
+
+  padding-top: 20px;
 }
 
 .rightColumn {
-  flex: 1;
-  padding: var(--spacing-xl);
+  flex: 1.5;
+  padding: 0 4rem;
   overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .loaderContainer {
   display: flex;
-  justify-content: center;
-  margin-bottom: var(--spacing-md);
+  justify-content: flex-start;
+  margin-bottom: var(--spacing-lg);
 }
 
 .title {
-  margin: 0 0 var(--spacing-md) 0;
-  font-size: var(--font-size-xl);
+  margin: 0 0 var(--spacing-lg) 0;
+  font-size: 2.5rem;
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
-  text-align: center;
+  line-height: 1.2;
 }
 
 .description {
-  margin: 0 0 var(--spacing-lg) 0;
-  font-size: var(--font-size-base);
+  margin: 0 0 var(--spacing-xl) 0;
+  font-size: var(--font-size-lg);
   color: var(--color-text-secondary);
-  line-height: 1.5;
+  line-height: 1.6;
+  max-width: 400px;
 }
 
 .infoSection {
-  padding: var(--spacing-md);
-  background-color: var(--color-background-secondary);
+  padding: var(--spacing-lg);
+  background-color: var(--color-background-primary);
   border-radius: var(--border-radius-md);
-  margin-top: auto;
+  margin-top: var(--spacing-xl);
 }
 
 .infoTitle {
   margin: 0 0 var(--spacing-sm) 0;
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
 }
 
 .infoText {
   margin: 0;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   color: var(--color-text-secondary);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .stepsTitle {
-  margin: 0 0 var(--spacing-lg) 0;
-  font-size: var(--font-size-lg);
+  margin: 0 0 var(--spacing-xl) 0;
+  font-size: var(--font-size-xl);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
 }
@@ -85,104 +85,135 @@
 .steps {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
+  position: relative;
+  gap: var(--spacing-xl);
+}
+
+.steps::before {
+  content: "";
+  position: absolute;
+  left: 20px;
+  top: 40px;
+  bottom: 40px;
+  width: 1px;
+  background-color: var(--color-border);
+  transform: translateX(-50%);
 }
 
 .step {
   display: flex;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
   align-items: flex-start;
+  position: relative;
 }
 
 .stepNumber {
   flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-  background-color: var(--color-primary);
-  color: var(--color-background-primary);
+  width: 40px;
+  height: 40px;
+  background-color: var(--color-background-primary);
+  color: var(--color-text-secondary);
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
+  border: 1px solid var(--color-border);
+  z-index: 1;
 }
 
 .stepContent {
   flex: 1;
+  padding-top: var(--spacing-xs);
 }
 
 .stepTitle {
-  margin: 0 0 var(--spacing-xs) 0;
+  margin: 0 0 var(--spacing-sm) 0;
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
 }
 
 .stepDescription {
-  margin: 0 0 var(--spacing-sm) 0;
-  font-size: var(--font-size-sm);
+  margin: 0 0 var(--spacing-md) 0;
+  font-size: var(--font-size-base);
   color: var(--color-text-secondary);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .codeBlock {
   display: block;
   background-color: var(--color-background-secondary);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-sm);
-  padding: var(--spacing-sm) var(--spacing-mds);
+  color: var(--color-text-primary);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
   font-family: var(--font-family-mono), monospace;
   font-size: var(--font-size-sm);
-  color: var(--color-text-primary);
   white-space: pre-wrap;
   overflow-x: auto;
-  margin-top: var(--spacing-xs);
+  margin-top: var(--spacing-sm);
+  border: 1px solid var(--color-border);
 }
 
 .inlineCode {
   background-color: var(--color-background-secondary);
+  color: var(--color-text-primary);
   border-radius: var(--border-radius-sm);
-  padding: 2px var(--spacing-xs);
+  padding: 3px var(--spacing-xs);
   font-family: var(--font-family-mono), monospace;
   font-size: var(--font-size-sm);
-  color: var(--color-text-primary);
+}
+
+@media (max-width: 1024px) {
+  .content {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .leftColumn,
+  .rightColumn {
+    flex: none;
+    padding: 2rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .description {
+    max-width: none;
+  }
 }
 
 @media (max-width: 768px) {
   .container {
-    padding: var(--spacing-md);
+    padding: 0;
+    min-height: auto;
+    align-items: initial;
   }
 
-  .content {
-    flex-direction: column;
-    max-height: none;
-    overflow-y: auto;
-  }
-
-  .leftColumn {
-    border-right: none;
-    border-bottom: 1px solid var(--color-border);
-    padding: var(--spacing-lg);
-  }
-
+  .leftColumn,
   .rightColumn {
-    padding: var(--spacing-lg);
-    overflow-y: visible;
+    padding: 5rem 1.5rem 5rem;
   }
 
   .step {
-    flex-direction: column;
-    gap: var(--spacing-sm);
-    align-items: center;
-    text-align: center;
+    flex-direction: row;
+    gap: var(--spacing-lg);
+    align-items: flex-start;
+    text-align: left;
   }
 
   .stepNumber {
-    margin-bottom: var(--spacing-xs);
+    margin-bottom: 0;
   }
 
   .infoSection {
-    margin-top: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+  }
+
+  .title {
+    font-size: 1.75rem;
   }
 }

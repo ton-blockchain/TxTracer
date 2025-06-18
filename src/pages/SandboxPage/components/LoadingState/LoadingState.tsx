@@ -1,4 +1,5 @@
 import InlineLoader from "@shared/ui/InlineLoader"
+import Icon, {CheckIcon, LightBulbIcon, RocketIcon, RefreshIcon, CodeIcon} from "@shared/ui/Icon"
 
 import styles from "./LoadingState.module.css"
 
@@ -7,9 +8,6 @@ export function LoadingState() {
     <div className={styles.container}>
       <div className={styles.content}>
         <div className={styles.leftColumn}>
-          <div className={styles.iconContainer}>
-            <InlineLoader loading={true} message="" />
-          </div>
           <h2 className={styles.title}>Waiting for Data</h2>
           <p className={styles.description}>
             Connection established. Waiting for data from running tests...
@@ -17,23 +15,24 @@ export function LoadingState() {
           <div className={styles.statusSection}>
             <h3 className={styles.statusTitle}>Connection Status</h3>
             <div className={styles.statusItem}>
-              <span className={styles.statusIndicator}>✅</span>
+              <Icon svg={<CheckIcon />} size={32} className={styles.statusIcon} />
               <span>WebSocket connected</span>
             </div>
             <div className={styles.statusItem}>
-              <span className={styles.statusIndicator}>⏳</span>
+              <div className={styles.statusIcon}>
+                <InlineLoader loading={true} message="" />
+              </div>
               <span>Waiting for test data</span>
             </div>
           </div>
         </div>
 
         <div className={styles.rightColumn}>
-          <h3 className={styles.tipsTitle}>Quick Tips</h3>
           <div className={styles.tips}>
             <div className={styles.tip}>
-              <div className={styles.tipIcon}>💡</div>
+              <Icon svg={<LightBulbIcon />} size={24} className={styles.tipIcon} />
               <div className={styles.tipContent}>
-                <h4 className={styles.tipTitle}>Use TracingBlockchain</h4>
+                <h3 className={styles.tipTitle}>Use TracingBlockchain</h3>
                 <p className={styles.tipText}>
                   Make sure your tests use{" "}
                   <code className={styles.inlineCode}>TracingBlockchain</code> instead of regular
@@ -42,20 +41,30 @@ export function LoadingState() {
               </div>
             </div>
             <div className={styles.tip}>
-              <div className={styles.tipIcon}>🚀</div>
+              <Icon svg={<RocketIcon />} size={24} className={styles.tipIcon} />
               <div className={styles.tipContent}>
-                <h4 className={styles.tipTitle}>Run Your Tests</h4>
+                <h3 className={styles.tipTitle}>Run Your Tests</h3>
                 <p className={styles.tipText}>
                   Execute your test suite and data will appear automatically in real-time
                 </p>
               </div>
             </div>
             <div className={styles.tip}>
-              <div className={styles.tipIcon}>🔄</div>
+              <Icon svg={<RefreshIcon />} size={24} className={styles.tipIcon} />
               <div className={styles.tipContent}>
-                <h4 className={styles.tipTitle}>Live Updates</h4>
+                <h3 className={styles.tipTitle}>Live Updates</h3>
                 <p className={styles.tipText}>
                   No need to refresh - new transactions will appear as they are executed
+                </p>
+              </div>
+            </div>
+            <div className={styles.tip}>
+              <Icon svg={<CodeIcon />} size={24} className={styles.tipIcon} />
+              <div className={styles.tipContent}>
+                <h3 className={styles.tipTitle}>Debug Smart Contracts</h3>
+                <p className={styles.tipText}>
+                  Trace transactions step-by-step to understand contract execution flow and debug
+                  issues
                 </p>
               </div>
             </div>

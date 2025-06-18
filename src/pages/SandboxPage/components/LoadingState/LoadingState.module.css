@@ -1,71 +1,65 @@
 .container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  padding: var(--spacing-lg);
-  background-color: var(--color-background-secondary);
+  min-height: 100vh;
+  width: 100%;
+  padding: 0;
+  background-color: var(--color-background-primary);
 }
 
 .content {
-  max-width: 1200px;
   width: 100%;
-  background-color: var(--color-background-primary);
-  border-radius: var(--border-radius-lg);
-  padding: 0;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  border: 1px solid var(--color-border);
   display: flex;
-  max-height: calc(100vh - 120px);
-  overflow: hidden;
+  flex: 1;
+  height: 100vh;
 }
 
 .leftColumn {
   flex: 1;
-  padding: var(--spacing-xl);
-  border-right: 1px solid var(--color-border);
+  padding: 4rem;
   display: flex;
   flex-direction: column;
-  text-align: center;
+  justify-content: center;
+  background-color: var(--color-background-secondary);
+  overflow: hidden;
 }
 
 .rightColumn {
-  flex: 1;
-  padding: var(--spacing-xl);
-  overflow-y: auto;
-}
-
-.iconContainer {
-  margin-bottom: var(--spacing-lg);
+  flex: 1.5;
+  padding: 4rem;
+  background-color: var(--color-background-primary);
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  overflow: hidden;
 }
 
 .title {
-  margin: 0 0 var(--spacing-md) 0;
-  font-size: var(--font-size-xl);
+  margin: 0 0 var(--spacing-lg) 0;
+  font-size: 2.5rem;
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
+  line-height: 1.2;
 }
 
 .description {
-  margin: 0 0 var(--spacing-lg) 0;
-  font-size: var(--font-size-base);
+  margin: 0 0 var(--spacing-xl) 0;
+  font-size: var(--font-size-lg);
   color: var(--color-text-secondary);
-  line-height: 1.5;
+  line-height: 1.6;
+  max-width: 400px;
 }
 
 .statusSection {
-  padding: var(--spacing-md);
-  background-color: var(--color-background-secondary);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  background-color: transparent;
   border-radius: var(--border-radius-md);
-  margin-top: auto;
-  text-align: left;
+  margin-top: var(--spacing-xl);
 }
 
 .statusTitle {
-  margin: 0 0 var(--spacing-sm) 0;
-  font-size: var(--font-size-base);
+  margin: 0 0 var(--spacing-md) 0;
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
 }
@@ -73,41 +67,64 @@
 .statusItem {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
-  margin-bottom: var(--spacing-xs);
-  font-size: var(--font-size-sm);
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  font-size: var(--font-size-base);
   color: var(--color-text-secondary);
 }
 
-.statusIndicator {
-  font-size: var(--font-size-sm);
+.statusItem:last-child {
+  margin-bottom: 0;
 }
 
-.tipsTitle {
-  margin: 0 0 var(--spacing-lg) 0;
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
+.statusIcon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.statusIcon[class] {
+  color: var(--color-success);
+}
+
+.statusIcon > div {
+  margin-top: 0 !important;
+  gap: 0 !important;
 }
 
 .tips {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+  overflow-y: auto;
+
+  align-self: center;
+  max-width: 500px;
 }
 
 .tip {
   display: flex;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-sm);
-  background-color: var(--color-background-secondary);
-  border-radius: var(--border-radius-sm);
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
   align-items: flex-start;
+  transition: all 0.2s ease;
+  background-color: var(--color-background-secondary);
+}
+
+.tip:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .tipIcon {
-  font-size: var(--font-size-lg);
+  color: var(--color-primary);
   flex-shrink: 0;
+  margin-top: var(--spacing-xs);
 }
 
 .tipContent {
@@ -116,56 +133,84 @@
 
 .tipTitle {
   margin: 0 0 var(--spacing-xs) 0;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
 }
 
 .tipText {
   margin: 0;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   color: var(--color-text-secondary);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .inlineCode {
-  background-color: var(--color-background-secondary);
+  background-color: var(--color-background-primary);
+  color: var(--color-text-primary);
   border-radius: var(--border-radius-sm);
-  padding: 2px var(--spacing-xs);
+  padding: 3px var(--spacing-xs);
   font-family: var(--font-family-mono), monospace;
   font-size: var(--font-size-sm);
-  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+}
+
+@media (max-width: 1200px) {
+  .tips {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  .content {
+    flex-direction: column;
+    gap: 0;
+    height: auto;
+  }
+
+  .leftColumn,
+  .rightColumn {
+    flex: none;
+    padding: 2rem;
+    overflow: visible;
+  }
+
+  .rightColumn {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .tips {
+    overflow: visible;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
 }
 
 @media (max-width: 768px) {
   .container {
-    padding: var(--spacing-md);
+    padding: 0;
+    min-height: auto;
+    align-items: initial;
   }
 
-  .content {
-    flex-direction: column;
-    max-height: none;
-    overflow-y: auto;
-  }
-
-  .leftColumn {
-    border-right: none;
-    border-bottom: 1px solid var(--color-border);
-    padding: var(--spacing-lg);
-  }
-
+  .leftColumn,
   .rightColumn {
-    padding: var(--spacing-lg);
-    overflow-y: visible;
+    padding: 1.5rem;
   }
 
   .statusSection {
-    margin-top: var(--spacing-md);
+    margin-top: var(--spacing-lg);
   }
 
   .tip {
-    flex-direction: column;
-    text-align: center;
-    gap: var(--spacing-xs);
+    flex-direction: row;
+    text-align: left;
+    gap: var(--spacing-md);
+  }
+
+  .title {
+    font-size: 1.75rem;
   }
 }
