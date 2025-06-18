@@ -7,24 +7,40 @@ import styles from "./ContractChip.module.css"
 export function ContractChip({
   address,
   contracts,
+  onContractClick,
 }: {
   address: string | undefined
   contracts: Map<string, ContractData>
+  onContractClick?: (address: string) => void
 }) {
   const [isCopied, setIsCopied] = useState(false)
 
-  const handleCopy = useCallback(() => {
-    if (address) {
-      navigator.clipboard
-        .writeText(address)
-        .then(() => {
-          setIsCopied(true)
-        })
-        .catch(err => {
-          console.error("Failed to copy: ", err)
-        })
-    }
-  }, [address])
+  const handleCopy = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation()
+      if (address) {
+        navigator.clipboard
+          .writeText(address)
+          .then(() => {
+            setIsCopied(true)
+          })
+          .catch(err => {
+            console.error("Failed to copy: ", err)
+          })
+      }
+    },
+    [address],
+  )
+
+  const handleChipClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation()
+      if (address && onContractClick) {
+        onContractClick(address)
+      }
+    },
+    [address, onContractClick],
+  )
 
   useEffect(() => {
     if (isCopied) {
@@ -71,9 +87,10 @@ export function ContractChip({
   }
 
   const contractInfo = contracts.get(address)
+  const isClickable = !!onContractClick
 
-  return (
-    <span className={styles.contractChip}>
+  const chipContent = (
+    <>
       {contractInfo ? (
         <>
           <span className={styles.contractLetter}>{contractInfo.letter}</span>
@@ -88,10 +105,7 @@ export function ContractChip({
         </span>
       )}
       <button
-        onClick={e => {
-          e.stopPropagation()
-          handleCopy()
-        }}
+        onClick={handleCopy}
         className={styles.contractChipCopyButton}
         title={isCopied ? "Copied!" : "Copy address"}
         aria-label={isCopied ? "Copied to clipboard" : "Copy address"}
@@ -100,6 +114,21 @@ export function ContractChip({
       >
         {isCopied ? checkIconSvg : copyIconSvg}
       </button>
-    </span>
+    </>
   )
+
+  if (isClickable) {
+    return (
+      <button
+        className={`${styles.contractChip} ${styles.clickable}`}
+        onClick={handleChipClick}
+        title="Click to view contract details"
+        type="button"
+      >
+        {chipContent}
+      </button>
+    )
+  }
+
+  return <span className={styles.contractChip}>{chipContent}</span>
 }

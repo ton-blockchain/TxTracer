@@ -8,6 +8,9 @@ import {formatCurrency} from "@shared/lib/format"
 import type {TestData} from "@features/sandbox/lib/test-data.ts"
 import {findOpcodeABI, type TransactionInfo} from "@features/sandbox/lib/transaction.ts"
 import type {ContractData} from "@features/sandbox/lib/contract"
+import {TransactionShortInfo} from "@app/pages/SandboxPage/components"
+
+import {ContractDetails} from "@app/pages/SandboxPage/components"
 
 import styles from "./TransactionTree.module.css"
 
@@ -15,11 +18,17 @@ interface TooltipData {
   readonly x: number
   readonly y: number
   readonly fromAddress: string
-  readonly toAddress: string
-  readonly value?: string
-  readonly opcode?: string
-  readonly success: boolean
-  readonly exitCode?: string
+  readonly computePhase: {
+    readonly success: boolean
+    readonly exitCode?: number
+    readonly gasUsed?: bigint
+    readonly vmSteps?: number
+  }
+  readonly fees: {
+    readonly gasFees?: bigint
+    readonly totalFees: bigint
+  }
+  readonly sentTotal: bigint
 }
 
 interface TransactionTreeProps {
@@ -47,8 +56,52 @@ const formatAddress = (
   return addressStr.slice(0, 4) + "..." + addressStr.slice(addressStr.length - 4)
 }
 
+const formatAddressShort = (address: Address | undefined): string => {
+  if (!address) {
+    return "unknown"
+  }
+
+  const addressStr = address.toString()
+  return addressStr.slice(0, 6) + "..." + addressStr.slice(addressStr.length - 6)
+}
+
 export function TransactionTree({testData, contracts}: TransactionTreeProps) {
   const [tooltip, setTooltip] = useState<TooltipData | null>(null)
+  const [selectedTransaction, setSelectedTransaction] = useState<TransactionInfo | null>(null)
+  const [selectedContract, setSelectedContract] = useState<ContractData | null>(null)
+
+  const transactionMap = useMemo(() => {
+    const map = new Map<string, TransactionInfo>()
+    for (let i = 0; i < testData.transactions.length; i++) {
+      const tx = testData.transactions[i]
+      map.set(tx.transaction.lt.toString(), tx)
+    }
+    return map
+  }, [testData.transactions])
+
+  const handleNodeClick = (lt: string) => {
+    const transaction = transactionMap.get(lt)
+    if (!transaction) return
+
+    if (selectedTransaction?.transaction.lt.toString() === lt) {
+      setSelectedTransaction(null)
+      setSelectedContract(null)
+    } else {
+      setSelectedTransaction(transaction)
+      setSelectedContract(null)
+    }
+  }
+
+  const handleContractClick = (contractAddress: string) => {
+    const contract = contracts.get(contractAddress)
+    if (!contract) return
+
+    if (selectedContract?.address.toString() === contractAddress) {
+      setSelectedContract(null)
+    } else {
+      setSelectedContract(contract)
+    }
+  }
 
   const treeData = useMemo(() => {
     const rootTransactions = testData.transactions.filter(tx => !tx.parent)
@@ -90,12 +143,15 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
         ? (contracts.get(thisAddress.toString())?.letter ?? "?")
         : "?"
 
+      const lt = tx.transaction.lt.toString()
+      const isSelected = selectedTransaction?.transaction.lt.toString() === lt
+
       return {
         name: `${addressName}`,
         attributes: {
           from: tx.transaction.inMessage?.info?.src?.toString() ?? "unknown",
           to: tx.transaction.inMessage?.info?.dest?.toString() ?? "unknown",
-          lt: tx.transaction.lt.toString(),
+          lt,
           success: isSuccess ? "✓" : "✗",
           exitCode: exitCode?.toString() ?? "0",
           value: formatCurrency(value),
@@ -104,6 +160,7 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
           withInitCode,
           isBounced,
           contractLetter,
+          isSelected,
         },
         children: tx.children.map(it => convertTransactionToNode(it)),
       }
@@ -124,11 +181,11 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
       attributes: {},
       children: [],
     }
-  }, [testData.transactions, contracts])
+  }, [testData.transactions, contracts, selectedTransaction])
 
   const renderCustomNodeElement = ({
     nodeDatum,
-    toggleNode,
+    toggleNode: _toggleNode,
   }: {
     nodeDatum: RawNodeDatum
     toggleNode: () => void
@@ -157,20 +214,11 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
       )
     }
 
-    // [x] убрать lt
-    // [x] убрать out
-    // [x] show bounced with пунктирная
-    // [ ] при наведении на вершинку показывать gas or value in TON
-    // [ ] при наведенении на ребро показывать forward fee
-    // [ ] при наведении на exit code показывать тактовскую строку
-    // [x] показывать success если exit code != 0
-    // [ ] превращать (в отдельной вью) дерево в граф для каждой горизонтальной ...
-    // [ ] send mode 128 + 32 - уничтожает контракт после того как отравит сообщение и баланс равен 0
-    // [ ] printTransactionFees
-    // [ ] Transaction fees
-
     const opcode = (nodeDatum.attributes?.opcode as string | undefined) ?? "empty opcode"
     const isNumberOpcode = !Number.isNaN(Number.parseInt(opcode))
+    const isSelected = nodeDatum.attributes?.isSelected as boolean
+    const lt = nodeDatum.attributes?.lt as string
+    const tx = transactionMap.get(lt)
 
     return (
       <g>
@@ -197,46 +245,66 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
         <circle
           r={20}
           fill={
-            nodeDatum.attributes?.success === "✓" ? "var(--color-background-primary)" : "#ef4444"
+            isSelected
+              ? "var(--color-text-primary)"
+              : nodeDatum.attributes?.success === "✓"
+                ? "var(--color-background-primary)"
+                : "#ef4444"
           }
-          stroke="var(--color-text-primary)"
+          stroke={"var(--color-text-primary)"}
           strokeWidth={2}
-          onClick={toggleNode}
+          onClick={() => handleNodeClick(lt)}
+          style={{cursor: "pointer"}}
         />
 
         <text
-          fill="var(--color-text-primary)"
+          fill={isSelected ? "var(--color-background-primary)" : "var(--color-text-primary)"}
           strokeWidth="0"
           x="0"
           y="5"
           fontSize="14"
           fontWeight="bold"
           textAnchor="middle"
+          style={{pointerEvents: "none"}}
         >
           {nodeDatum.attributes?.contractLetter}
         </text>
-        <foreignObject width="200" height="100" x="-230" y="-37">
+        <foreignObject width="200" height="100" x="-230" y="-40">
           <div
             className={styles.edgeText}
             onMouseEnter={event => {
-              const attributes = nodeDatum.attributes
-              if (!attributes) return
+              if (!tx) return
 
               const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
+
+              const computeInfo = tx.computeInfo
+              const computePhase = {
+                success: computeInfo !== "skipped" ? computeInfo.success : true,
+                exitCode: computeInfo !== "skipped" ? computeInfo.exitCode : undefined,
+                gasUsed: computeInfo !== "skipped" ? computeInfo.gasUsed : undefined,
+                vmSteps: computeInfo !== "skipped" ? computeInfo.vmSteps : undefined,
+              }
+
+              const fees = {
+                gasFees: computeInfo !== "skipped" ? computeInfo.gasFees : undefined,
+                totalFees: tx.money.totalFees,
+              }
+
+              const srcAddress = tx.transaction.inMessage?.info?.src
+              const fromAddressStr = srcAddress
+                ? formatAddressShort(srcAddress as Address)
+                : "unknown"
 
               setTooltip({
                 x: rect.left + rect.width / 2,
                 y: rect.top,
-                fromAddress: attributes.from as string,
-                toAddress: attributes.to as string,
-                value: attributes.value as string,
-                opcode: attributes.opcode as string,
-                success: attributes.success === "✓",
-                exitCode: attributes.exitCode as string,
+                fromAddress: fromAddressStr,
+                computePhase,
+                fees,
+                sentTotal: tx.money.sentTotal,
               })
             }}
             onMouseLeave={() => {
-              console.log("leave")
               setTooltip(null)
             }}
           >
@@ -316,20 +384,55 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
             <div
               className={styles.tooltipContainer}
               style={{
-                left: Math.max(10, Math.min(tooltip.x - 50, window.innerWidth - 220)),
-                top: Math.max(10, tooltip.y - 160),
+                left: Math.max(10, Math.min(tooltip.x - 80, window.innerWidth - 280)),
+                top: Math.max(10, tooltip.y - 265),
               }}
             >
               <div className={styles.tooltip}>
                 <div className={styles.tooltipContent}>
-                  <p className={styles.tooltipText}>From: {tooltip.fromAddress}</p>
-                  <p className={styles.tooltipText}>To: {tooltip.toAddress}</p>
-                  {tooltip.value && <p className={styles.tooltipText}>Value: {tooltip.value}</p>}
-                  {tooltip.opcode && <p className={styles.tooltipText}>Opcode: {tooltip.opcode}</p>}
-                  <p className={styles.tooltipText}>Success: {tooltip.success ? "✓" : "✗"}</p>
-                  {tooltip.exitCode && tooltip.exitCode !== "0" && (
-                    <p className={styles.tooltipText}>Exit Code: {tooltip.exitCode}</p>
-                  )}
+                  <div className={styles.tooltipField}>
+                    <div className={styles.tooltipFieldLabel}>From Address</div>
+                    <div className={styles.tooltipFieldValue}>{tooltip.fromAddress}</div>
+                  </div>
+
+                  <div className={styles.tooltipField}>
+                    <div className={styles.tooltipFieldLabel}>Compute Phase</div>
+                    <div className={styles.tooltipFieldValue}>
+                      {tooltip.computePhase.success ? "Success" : "Failed"}
+                      {tooltip.computePhase.exitCode !== undefined &&
+                        tooltip.computePhase.exitCode !== 0 && (
+                          <span>
+                            {" "}
+                            {"(Exit:"} {tooltip.computePhase.exitCode})
+                          </span>
+                        )}
+                      {tooltip.computePhase.gasUsed && (
+                        <div className={styles.tooltipSubValue}>
+                          Gas Used: {tooltip.computePhase.gasUsed.toString()}
+                        </div>
+                      )}
+                      {tooltip.computePhase.vmSteps !== undefined && (
+                        <div className={styles.tooltipSubValue}>
+                          VM Steps: {tooltip.computePhase.vmSteps.toString()}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className={styles.tooltipField}>
+                    <div className={styles.tooltipFieldLabel}>Money</div>
+                    <div className={styles.tooltipFieldValue}>
+                      <div>Sent Total: {formatCurrency(tooltip.sentTotal)}</div>
+                      <div className={styles.tooltipSubValue}>
+                        Total Fees: {formatCurrency(tooltip.fees.totalFees)}
+                      </div>
+                      {tooltip.fees.gasFees && (
+                        <div className={styles.tooltipSubValue}>
+                          Gas Fees: {formatCurrency(tooltip.fees.gasFees)}
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -341,10 +444,32 @@ export function TransactionTree({testData, contracts}: TransactionTreeProps) {
         <p className={styles.stats}>
           Total transactions: {testData.transactions.length}
           {testData.transactions.filter(tx => !tx.parent).length > 1 &&
-            ` (${testData.transactions.filter(tx => !tx.parent).length} root transactions)`}
+            ` (${testData.transactions.filter(tx => !tx.parent).length} 
+            root transactions)`}
           {` | Contracts: ${contracts.size}`}
         </p>
       </div>
+
+      {selectedTransaction && (
+        <div className={styles.transactionDetails}>
+          <TransactionShortInfo
+            tx={selectedTransaction}
+            contracts={contracts}
+            onContractClick={handleContractClick}
+          />
+        </div>
+      )}
+
+      {selectedContract && (
+        <div className={styles.contractDetails}>
+          <ContractDetails
+            contract={selectedContract}
+            contracts={contracts}
+            tests={[testData]}
+            isDeployed={true}
+          />
+        </div>
+      )}
     </div>
   )
 }

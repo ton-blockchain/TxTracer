@@ -7,6 +7,11 @@
   padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) var(--spacing-xs);
   border-radius: var(--border-radius-sm);
   transition: background-color var(--transition-duration-fast) ease;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  text-align: left;
 }
 
 .contractChip:hover {
@@ -15,6 +20,18 @@
 
 .contractChip:hover .contractChipCopyButton {
   opacity: 1;
+}
+
+.contractChip.clickable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.contractChip.clickable:hover {
+  background-color: var(--color-background-secondary);
+}
+
+.contractChip.clickable:active {
 }
 
 .contractLetter {

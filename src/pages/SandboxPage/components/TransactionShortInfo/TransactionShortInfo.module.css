@@ -7,16 +7,6 @@
   overflow-x: hidden;
 }
 
-.transactionHeader {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md);
-  border-bottom: 1px solid var(--table-border-color);
-  background-color: var(--table-section-divider-bg);
-  font-weight: var(--font-weight-semibold);
-}
-
 .detailRow {
   display: flex;
   border-bottom: 1px solid var(--table-border-color);

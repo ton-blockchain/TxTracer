@@ -15,20 +15,30 @@ import styles from "./TransactionShortInfo.module.css"
 const formatAddress = (
   address: Address | Maybe<ExternalAddress> | undefined,
   contracts: Map<string, ContractData>,
+  onContractClick?: (address: string) => void,
 ): React.ReactNode => {
   if (!address) {
-    return <ContractChip address={undefined} contracts={contracts} />
+    return (
+      <ContractChip address={undefined} contracts={contracts} onContractClick={onContractClick} />
+    )
   }
 
-  return <ContractChip address={address.toString()} contracts={contracts} />
+  return (
+    <ContractChip
+      address={address.toString()}
+      contracts={contracts}
+      onContractClick={onContractClick}
+    />
+  )
 }
 
 export interface TransactionShortInfoProps {
   readonly tx: TransactionInfo
   readonly contracts: Map<string, ContractData>
+  readonly onContractClick?: (address: string) => void
 }
 
-export function TransactionShortInfo({tx, contracts}: TransactionShortInfoProps) {
+export function TransactionShortInfo({tx, contracts, onContractClick}: TransactionShortInfoProps) {
   if (tx.transaction.description.type !== "generic") {
     throw new Error(
       "TxTracer doesn't support non-generic transaction. Given type: " +
@@ -55,21 +65,19 @@ export function TransactionShortInfo({tx, contracts}: TransactionShortInfoProps)
 
   return (
     <div className={styles.transactionDetailsContainer}>
-      <div className={styles.transactionHeader}>
-        <span>Transaction LT: {tx.transaction.lt.toString()}</span>
-      </div>
-
       <div className={styles.detailRow}>
         <div className={styles.detailLabel}>Contract</div>
-        <div className={styles.detailValue}>{formatAddress(tx.address, contracts)}</div>
+        <div className={styles.detailValue}>
+          {formatAddress(tx.address, contracts, onContractClick)}
+        </div>
       </div>
 
       <div className={styles.detailRow}>
         <div className={styles.detailLabel}>Message Route</div>
         <div className={styles.detailValue}>
-          {formatAddress(tx.transaction.inMessage?.info?.src, contracts)}
+          {formatAddress(tx.transaction.inMessage?.info?.src, contracts, onContractClick)}
           {" → "}
-          {formatAddress(tx.transaction.inMessage?.info?.dest, contracts)}
+          {formatAddress(tx.transaction.inMessage?.info?.dest, contracts, onContractClick)}
         </div>
       </div>
 
