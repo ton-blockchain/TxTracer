@@ -5,9 +5,10 @@ import styles from "./TestInfo.module.css"
 
 export interface TestInfoProps {
   readonly testData: TestData
+  readonly testIndex: number
 }
 
-export function TestInfo({testData}: TestInfoProps) {
+export function TestInfo({testData, testIndex}: TestInfoProps) {
   // const transactions = testData.transactions.filter(it => {
   //   return (
   //     it.transaction.inMessage?.info?.src?.toString() !==
@@ -37,7 +38,7 @@ export function TestInfo({testData}: TestInfoProps) {
     <div className={styles.container}>
       <div className={styles.header}>
         <h2 className={styles.testTitle}>
-          #{testData.id} {testData.testName ?? "unknown test"}
+          #{testIndex} {testData.testName}
         </h2>
         {testData.timestamp && (
           <p className={styles.timestamp}>Executed at: {formatTimestamp(testData.timestamp)}</p>
@@ -58,7 +59,7 @@ export function TestInfo({testData}: TestInfoProps) {
         </div>
       </div>
 
-      <TransactionTree key={`tree-${testData.id}`} testData={testData} />
+      <TransactionTree key={`tree-${testData.testName}`} testData={testData} />
 
       {/*<div className={styles.transactionDetails}>*/}
       {/*  <h4 className={styles.sectionTitle}>Transaction Details:</h4>*/}

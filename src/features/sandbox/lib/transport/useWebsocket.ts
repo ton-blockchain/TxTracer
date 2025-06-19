@@ -1,12 +1,11 @@
-import {useEffect, useRef, useState, useCallback} from "react"
+import {useEffect, useState, useCallback} from "react"
 
-import type {Message, MessageContracts, MessageTransactions} from "./message"
+import type {Message, MessageTestData} from "./message"
 import type {RawTransactions} from "./transaction"
 import type {ContractRawData} from "./contract"
 
 type TestData = {
-  readonly id: number
-  readonly testName: string | undefined
+  readonly testName: string
   readonly transactions: RawTransactions
   readonly timestamp?: number
 }
@@ -33,12 +32,6 @@ export function useWebsocket({
   )
   const [error, setError] = useState<string>("")
   const [isConnected, setIsConnected] = useState<boolean>(false)
-  const currentTestIdRef = useRef(0)
-
-  const handleNextTest = useCallback(() => {
-    currentTestIdRef.current += 1
-    console.log("New test case:", currentTestIdRef.current)
-  }, [])
 
   function parseMaybeTransactions(data: string): RawTransactions | undefined {
     try {
@@ -48,21 +41,27 @@ export function useWebsocket({
     }
   }
 
-  const handleTransactions = useCallback((message: MessageTransactions) => {
-    const rawTransactions = parseMaybeTransactions(message.data)
+  const handleTestData = useCallback((message: MessageTestData) => {
+    const rawTransactions = parseMaybeTransactions(message.transactions)
     if (!rawTransactions) {
       console.error("Cannot parse transactions:", message)
       return
     }
 
-    const testId = currentTestIdRef.current
+    const testName = message.testName ?? `unknown #${tests.length}`
+
+    setContractsByTest(prev => {
+      const newMap = new Map(prev)
+      newMap.set(testName, message.contracts)
+      return newMap
+    })
 
     setTests(prev => {
-      const existing = prev.find(test => test.id === testId)
+      const existing = prev.find(test => test.testName === testName)
       if (existing) {
-        console.log("Updating existing test:", testId)
+        console.log("Updating existing test:", testName)
         return prev.map(test =>
-          test.id === testId
+          test.testName === testName
             ? {
                 ...test,
                 transactions: {
@@ -75,48 +74,32 @@ export function useWebsocket({
             : test,
         )
       } else {
-        console.log("Creating new test:", testId)
+        console.log("Creating new test:", testName)
         return [
           ...prev,
           {
-            id: testId,
-            testName: message.testName,
+            testName,
             transactions: rawTransactions,
             timestamp: Date.now(),
           },
         ]
       }
     })
-  }, [])
-
-  const handleKnownContracts = useCallback((message: MessageContracts) => {
-    const testName = message.testName ?? "unknown"
-    setContractsByTest(prev => {
-      const newMap = new Map(prev)
-      newMap.set(testName, message.data)
-      return newMap
-    })
-  }, [])
+  }, [tests.length])
 
   const handleMessage = useCallback(
     (event: MessageEvent<string>) => {
       const message: Message = JSON.parse(event.data) as Message
 
       switch (message.$) {
-        case "next-test":
-          handleNextTest()
-          break
-        case "txs":
-          handleTransactions(message)
-          break
-        case "known-contracts":
-          handleKnownContracts(message)
+        case "test-data":
+          handleTestData(message)
           break
         default:
           console.warn("Unknown message type:", message)
       }
     },
-    [handleNextTest, handleTransactions, handleKnownContracts],
+    [handleTestData],
   )
 
   useEffect(() => {

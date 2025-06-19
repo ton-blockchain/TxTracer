@@ -1,19 +1,10 @@
 import type {ContractRawData} from "@features/sandbox/lib/transport/contract.ts"
 
-export type MessageTransactions = {
-  readonly $: "txs"
+export type MessageTestData = {
+  readonly $: "test-data"
   readonly testName: string | undefined
-  readonly data: string
+  readonly transactions: string
+  readonly contracts: readonly ContractRawData[]
 }
 
-export type MessageNextTest = {
-  readonly $: "next-test"
-}
-
-export type MessageContracts = {
-  readonly $: "known-contracts"
-  readonly testName: string | undefined
-  readonly data: readonly ContractRawData[]
-}
-
-export type Message = MessageNextTest | MessageTransactions | MessageContracts
+export type Message = MessageTestData

@@ -98,7 +98,6 @@ export function useSandboxData(options: UseSandboxDataOptions = {}): UseSandboxD
       const contracts = new Map(convertedContracts.map(it => [it.address.toString(), it]))
 
       return {
-        id: rawTest.id,
         testName: rawTest.testName,
         transactions,
         timestamp: rawTest.timestamp,

@@ -56,8 +56,8 @@ function SandboxPage() {
           {/*  />*/}
           {/*))}*/}
           {/*<br />*/}
-          {tests.map(testData => (
-            <TestInfo key={testData.id} testData={testData} />
+          {tests.map((testData, index) => (
+            <TestInfo key={testData.testName} testData={testData} testIndex={index + 1} />
           ))}
         </div>
       </main>
