@@ -1,5 +1,12 @@
 .container {
   width: 100%;
+  position: relative;
+}
+
+.scrollWrapper {
+  overflow-x: auto;
+  overflow-y: visible;
+  padding-bottom: 0.5rem;
 }
 
 .emptyState {

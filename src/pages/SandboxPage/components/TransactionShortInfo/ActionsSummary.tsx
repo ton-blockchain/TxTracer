@@ -96,7 +96,7 @@ const renderActionDetails = (
             <div className={styles.detailRow}>
               <span className={styles.detailLabel}>Mode:</span>
               <div className={styles.detailValue}>
-                <SendModeViewer mode={action.mode} rightTooltip={true}/>
+                <SendModeViewer mode={action.mode} />
               </div>
             </div>
             <div className={styles.detailRow}>
@@ -201,7 +201,7 @@ const renderActionDetails = (
             <div className={styles.detailRow}>
               <span className={styles.detailLabel}>Mode:</span>
               <div className={styles.detailValue}>
-                <SendModeViewer mode={action.mode} rightTooltip={true} />
+                <SendModeViewer mode={action.mode} />
               </div>
             </div>
             <div className={styles.detailRow}>
@@ -221,7 +221,7 @@ const renderActionDetails = (
             <div className={styles.detailRow}>
               <span className={styles.detailLabel}>Mode:</span>
               <div className={styles.detailValue}>
-                <SendModeViewer mode={action.mode} rightTooltip={true} />
+                <SendModeViewer mode={action.mode} />
               </div>
             </div>
             <div className={styles.detailRow}>
@@ -256,57 +256,58 @@ export function ActionsSummary({
 
   return (
     <div className={styles.container}>
-      <div className={styles.actionsList}>
-        {actions.map((action, index) => {
-          const summary = getActionSummary(action)
-          const isSelected = selectedActionIndex === index
+      <div className={styles.scrollWrapper}>
+        <div className={styles.actionsList}>
+          {actions.map((action, index) => {
+            const summary = getActionSummary(action)
+            const isSelected = selectedActionIndex === index
 
-          // Enhanced description with ContractChip
-          let enhancedDescription: React.ReactNode = summary.description
-          if (action.type === "sendMsg") {
-            const info = action.outMsg.info
-            if (info.type === "internal") {
-              const destAddress = formatAddress(info.dest)
-              enhancedDescription = (
-                <div className={styles.actionDescriptionWithChip}>
-                  <span>Internal → </span>
-                  <ContractChip
-                    address={destAddress}
-                    contracts={contracts}
-                    onContractClick={onContractClick}
-                  />
-                </div>
-              )
+            let enhancedDescription: React.ReactNode = summary.description
+            if (action.type === "sendMsg") {
+              const info = action.outMsg.info
+              if (info.type === "internal") {
+                const destAddress = formatAddress(info.dest)
+                enhancedDescription = (
+                  <div className={styles.actionDescriptionWithChip}>
+                    <span>Internal → </span>
+                    <ContractChip
+                      address={destAddress}
+                      contracts={contracts}
+                      onContractClick={onContractClick}
+                    />
+                  </div>
+                )
+              }
             }
-          }
 
-          return (
-            <div
-              key={index}
-              className={`${styles.actionCard} ${isSelected ? styles.actionCardSelected : ""}`}
-              onClick={() => setSelectedActionIndex(isSelected ? null : index)}
-              onKeyDown={e => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault()
-                  setSelectedActionIndex(isSelected ? null : index)
-                }
-              }}
-              role="button"
-              tabIndex={0}
-              aria-expanded={isSelected}
-              aria-label={`${summary.title} action details`}
-            >
-              <div className={styles.actionContent}>
-                <div className={styles.actionTitle}>
-                  <div className={styles.actionIcon}>{getActionIcon(action.type)}</div>
-                  <span className={styles.actionTitleText}>{summary.title}</span>
+            return (
+              <div
+                key={index}
+                className={`${styles.actionCard} ${isSelected ? styles.actionCardSelected : ""}`}
+                onClick={() => setSelectedActionIndex(isSelected ? null : index)}
+                onKeyDown={e => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault()
+                    setSelectedActionIndex(isSelected ? null : index)
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-expanded={isSelected}
+                aria-label={`${summary.title} action details`}
+              >
+                <div className={styles.actionContent}>
+                  <div className={styles.actionTitle}>
+                    <div className={styles.actionIcon}>{getActionIcon(action.type)}</div>
+                    <span className={styles.actionTitleText}>{summary.title}</span>
+                  </div>
+                  <div className={styles.actionDescription}>{enhancedDescription}</div>
+                  {summary.value && <div className={styles.actionValue}>{summary.value}</div>}
                 </div>
-                <div className={styles.actionDescription}>{enhancedDescription}</div>
-                {summary.value && <div className={styles.actionValue}>{summary.value}</div>}
               </div>
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
       </div>
 
       {selectedActionIndex !== null && (
