@@ -153,11 +153,3 @@
   flex: 1;
   word-break: break-all;
 }
-
-.bodyCode {
-  font-family: var(--font-family-mono), "monospace";
-  background: var(--color-background-secondary);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--border-radius-md);
-  font-size: var(--font-size-xs);
-}

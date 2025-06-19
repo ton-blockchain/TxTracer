@@ -36,16 +36,6 @@
   min-height: 1.2em;
 }
 
-.monospace {
-  font-family: var(--font-family-mono), monospace;
-  font-size: var(--font-size-xs);
-  color: var(--color-text-primary);
-  word-break: break-all;
-  background-color: var(--color-background-secondary);
-  padding: var(--spacing-sm) var(--spacing-sm);
-  border-radius: var(--border-radius-md);
-}
-
 .stringValue {
   font-family: var(--font-family-mono), monospace;
   font-size: var(--font-size-sm);
@@ -175,7 +165,6 @@
     margin-left: var(--spacing-xs);
   }
 
-  .monospace,
   .stringValue {
     font-size: var(--font-size-sm);
   }

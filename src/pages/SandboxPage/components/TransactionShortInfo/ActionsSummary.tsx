@@ -4,7 +4,7 @@ import type {OutAction} from "@entities/transaction"
 import {getActionSummary} from "@features/txTrace/lib/actions"
 import {formatCurrency, formatAddress} from "@shared/lib/format"
 import type {ContractData} from "@features/sandbox/lib/contract"
-import {ContractChip} from "@app/pages/SandboxPage/components"
+import {ContractChip, CodeBlock} from "@app/pages/SandboxPage/components"
 import {SendModeViewer} from "@features/sandbox/ui"
 
 import styles from "./ActionsSummary.module.css"
@@ -166,9 +166,11 @@ const renderActionDetails = (
             <div className={styles.detailRow}>
               <span className={styles.detailLabel}>Body:</span>
               <div className={styles.detailValue}>
-                <code className={styles.bodyCode}>
-                  {msg.body.toBoc().toString("hex").slice(0, 64)}...
-                </code>
+                <CodeBlock
+                  title="hex"
+                  content={msg.body.toBoc().toString("hex")}
+                  variant="inline"
+                />
               </div>
             </div>
           </div>
@@ -185,7 +187,11 @@ const renderActionDetails = (
             <div className={styles.detailRow}>
               <span className={styles.detailLabel}>New Code Hash:</span>
               <span className={styles.detailValue}>
-                <code>{action.newCode.hash().toString("hex").slice(0, 32)}...</code>
+                <CodeBlock
+                  title={"hex"}
+                  content={action.newCode.toBoc().toString("hex")}
+                  variant="inline"
+                />
               </span>
             </div>
           </div>
@@ -227,9 +233,15 @@ const renderActionDetails = (
             <div className={styles.detailRow}>
               <span className={styles.detailLabel}>Library:</span>
               <span className={styles.detailValue}>
-                {action.libRef.type === "hash"
-                  ? action.libRef.libHash.toString("hex").slice(0, 32) + "..."
-                  : action.libRef.library.hash().toString("hex").slice(0, 32) + "..."}
+                <CodeBlock
+                  title={"hex"}
+                  content={
+                    action.libRef.type === "hash"
+                      ? action.libRef.libHash.toString("hex")
+                      : action.libRef.library.hash().toString("hex")
+                  }
+                  variant="inline"
+                />
               </span>
             </div>
           </div>

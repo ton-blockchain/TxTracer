@@ -2,7 +2,7 @@ import {Address, Cell, Slice} from "@ton/core"
 
 import type {ParsedObjectByABI} from "@features/sandbox/lib/abi/parser.ts"
 import type {ContractData} from "@features/sandbox/lib/contract.ts"
-import {ContractChip} from "@app/pages/SandboxPage/components"
+import {CodeBlock, ContractChip} from "@app/pages/SandboxPage/components"
 
 import styles from "./ParsedDataView.module.css"
 
@@ -49,8 +49,7 @@ function ParsedValue({value, contracts, depth, maxDepth}: ParsedValueProps) {
   if (value instanceof Cell) {
     return (
       <div className={styles.cellValue}>
-        <div className={styles.cellLabel}>Cell:</div>
-        <span className={styles.monospace}>{value.toBoc().toString("hex")}</span>
+        <CodeBlock title="cell hex" content={value.toBoc().toString("hex")} />
       </div>
     )
   }
@@ -58,8 +57,7 @@ function ParsedValue({value, contracts, depth, maxDepth}: ParsedValueProps) {
   if (value instanceof Slice) {
     return (
       <div className={styles.sliceValue}>
-        <div className={styles.sliceLabel}>Slice:</div>
-        <span className={styles.monospace}>{value.asCell().toBoc().toString("hex")}</span>
+        <CodeBlock title="slice hex" content={value.asCell().toBoc().toString("hex")} />
       </div>
     )
   }

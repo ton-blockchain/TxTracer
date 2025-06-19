@@ -115,23 +115,6 @@
   gap: var(--spacing-md);
 }
 
-.codeBlock {
-  background-color: var(--color-background-secondary);
-  border-radius: var(--border-radius-sm);
-  padding: var(--spacing-sm);
-  overflow: auto;
-  white-space: pre-wrap;
-}
-
-.codeBlockTitle {
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: var(--spacing-xs);
-}
-
 .parsedStateInitHeader {
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
@@ -162,26 +145,6 @@
 
 .stateInitFieldValue {
   color: var(--color-text-primary);
-}
-
-.assemblyCode {
-  font-family: var(--font-family-mono), monospace;
-  font-size: var(--font-size-xs);
-  color: var(--color-text-primary);
-  white-space: pre-wrap;
-  line-height: 1.4;
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-.hexCode {
-  font-family: var(--font-family-mono), monospace;
-  font-size: var(--font-size-xs);
-  color: var(--color-text-secondary);
-  word-break: break-all;
-  line-height: 1.4;
-  max-height: 200px;
-  overflow-y: auto;
 }
 
 .header {

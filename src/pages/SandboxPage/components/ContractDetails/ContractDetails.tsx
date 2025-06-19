@@ -5,7 +5,7 @@ import {useState} from "react"
 import type {Maybe} from "@ton/core/dist/utils/maybe"
 
 import {formatCurrency} from "@shared/lib/format"
-import {ContractChip, OpcodeChip} from "@app/pages/SandboxPage/components"
+import {ContractChip, OpcodeChip, CodeBlock} from "@app/pages/SandboxPage/components"
 import type {TestData} from "@features/sandbox/lib/test-data.ts"
 import {findOpcodeABI, type TransactionInfo} from "@features/sandbox/lib/transaction.ts"
 import type {ContractData} from "@features/sandbox/lib/contract"
@@ -296,17 +296,19 @@ export function ContractDetails({
 
           {activeTab === "code" && (
             <div className={styles.codeSection}>
-              <div className={styles.codeBlock}>
-                <div className={styles.codeBlockTitle}>Assembly Code</div>
-                <div className={styles.assemblyCode}>
-                  {assembly ?? "No assembly code available"}
-                </div>
-              </div>
+              <CodeBlock
+                title="Assembly Code"
+                content={assembly}
+                variant="assembly"
+                placeholder="No assembly code available"
+              />
 
-              <div className={styles.codeBlock}>
-                <div className={styles.codeBlockTitle}>Hex</div>
-                <div className={styles.hexCode}>{codeHex ?? "No hex code available"}</div>
-              </div>
+              <CodeBlock
+                title="Hex"
+                content={codeHex}
+                variant="hex"
+                placeholder="No hex code available"
+              />
             </div>
           )}
 
@@ -319,15 +321,19 @@ export function ContractDetails({
                 </div>
               )}
 
-              <div className={styles.codeBlock}>
-                <div className={styles.codeBlockTitle}>Hex</div>
-                <div className={styles.hexCode}>{stateInitHex ?? "No init data available"}</div>
-              </div>
+              <CodeBlock
+                title="Hex"
+                content={stateInitHex}
+                variant="hex"
+                placeholder="No init data available"
+              />
 
-              <div className={styles.codeBlock}>
-                <div className={styles.codeBlockTitle}>Cells</div>
-                <div className={styles.hexCode}>{stateInitCell ?? "No init data available"}</div>
-              </div>
+              <CodeBlock
+                title="Cells"
+                content={stateInitCell}
+                variant="hex"
+                placeholder="No init data available"
+              />
             </div>
           )}
         </div>
