@@ -57,8 +57,8 @@ const bigintToAddress = (addr: bigint | undefined): Address | undefined => {
   if (addr === undefined) return undefined
 
   try {
-    const cell = beginCell().storeUint(4, 3).storeUint(0, 8).storeUint(addr, 256).asSlice()
-    return cell.loadAddress()
+    const slice = beginCell().storeUint(4, 3).storeUint(0, 8).storeUint(addr, 256).asSlice()
+    return slice.loadAddress()
   } catch {
     return undefined
   }
