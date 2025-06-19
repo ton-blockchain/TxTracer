@@ -19,7 +19,7 @@ import Button from "@shared/ui/Button"
 
 import type {TestData} from "@features/sandbox/lib/test-data.ts"
 
-import {SendModeViewer} from "@features/sandbox/ui"
+import {SendModeViewer, ExitCodeChip} from "@features/sandbox/ui"
 
 import styles from "./TransactionShortInfo.module.css"
 
@@ -274,8 +274,8 @@ export function TransactionShortInfo({
                 </div>
                 <div className={styles.multiColumnItem}>
                   <div className={styles.multiColumnItemTitle}>Exit Code</div>
-                  <div className={`${styles.multiColumnItemValue} ${styles.numberValue}`}>
-                    {computeInfo?.exitCode}
+                  <div className={styles.multiColumnItemValue}>
+                    <ExitCodeChip exitCode={computeInfo?.exitCode} abi={contract?.meta?.abi} />
                   </div>
                 </div>
                 <div className={styles.multiColumnItem}>

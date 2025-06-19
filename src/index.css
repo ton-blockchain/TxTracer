@@ -158,6 +158,7 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
+  --spacing-xss: 0.1rem;
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
   --spacing-mds: 0.75rem;
