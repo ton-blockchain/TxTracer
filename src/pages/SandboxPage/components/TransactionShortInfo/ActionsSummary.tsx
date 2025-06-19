@@ -166,11 +166,7 @@ const renderActionDetails = (
             <div className={styles.detailRow}>
               <span className={styles.detailLabel}>Body:</span>
               <div className={styles.detailValue}>
-                <CodeBlock
-                  title="hex"
-                  content={msg.body.toBoc().toString("hex")}
-                  variant="inline"
-                />
+                <CodeBlock title="hex" content={msg.body.toBoc().toString("hex")} />
               </div>
             </div>
           </div>
@@ -187,11 +183,7 @@ const renderActionDetails = (
             <div className={styles.detailRow}>
               <span className={styles.detailLabel}>New Code Hash:</span>
               <span className={styles.detailValue}>
-                <CodeBlock
-                  title={"hex"}
-                  content={action.newCode.toBoc().toString("hex")}
-                  variant="inline"
-                />
+                <CodeBlock title={"hex"} content={action.newCode.toBoc().toString("hex")} />
               </span>
             </div>
           </div>
@@ -240,7 +232,6 @@ const renderActionDetails = (
                       ? action.libRef.libHash.toString("hex")
                       : action.libRef.library.hash().toString("hex")
                   }
-                  variant="inline"
                 />
               </span>
             </div>
