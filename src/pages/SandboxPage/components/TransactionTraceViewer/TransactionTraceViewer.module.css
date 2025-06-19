@@ -48,7 +48,6 @@
   flex-direction: column;
   background: var(--color-background-secondary);
   border-radius: 0.5rem;
-  overflow: hidden;
 }
 
 .sidePanel {
@@ -74,7 +73,6 @@
 
 .inlineContainer {
   border-radius: var(--border-radius-md);
-  overflow: hidden;
 }
 
 .inlineContent {
@@ -87,7 +85,6 @@
   gap: var(--spacing-md);
   min-height: 500px;
   height: 80vh;
-  overflow: hidden;
 }
 
 .inlineContainer .codeEditorArea {
