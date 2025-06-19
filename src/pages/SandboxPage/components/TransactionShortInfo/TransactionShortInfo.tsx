@@ -1,7 +1,8 @@
 import {Address, type ExternalAddress} from "@ton/core"
 
-import React from "react"
+import React, {useState} from "react"
 import type {Maybe} from "@ton/core/dist/utils/maybe"
+import {FiPlay, FiX} from "react-icons/fi"
 
 import {ContractChip, OpcodeChip} from "@app/pages/SandboxPage/components"
 import {formatCurrency} from "@shared/lib/format"
@@ -9,6 +10,8 @@ import {findOpcodeABI, type TransactionInfo} from "@features/sandbox/lib/transac
 import type {ContractData} from "@features/sandbox/lib/contract.ts"
 import {type ParsedObjectByABI, parseSliceWithAbiType} from "@features/sandbox/lib/abi/parser.ts"
 import {ParsedDataView} from "@features/sandbox/ui/abi"
+import {TransactionTraceViewer} from "@app/pages/SandboxPage/components/TransactionTraceViewer"
+import Button from "@shared/ui/Button"
 
 import styles from "./TransactionShortInfo.module.css"
 
@@ -39,6 +42,8 @@ export interface TransactionShortInfoProps {
 }
 
 export function TransactionShortInfo({tx, contracts, onContractClick}: TransactionShortInfoProps) {
+  const [showTraceViewer, setShowTraceViewer] = useState(false)
+
   if (tx.transaction.description.type !== "generic") {
     throw new Error(
       "TxTracer doesn't support non-generic transaction. Given type: " +
@@ -63,94 +68,117 @@ export function TransactionShortInfo({tx, contracts, onContractClick}: Transacti
     <span className={v ? styles.booleanTrue : styles.booleanFalse}>{v ? "Yes" : "No"}</span>
   )
 
+  const canTrace = tx.computeInfo !== "skipped" && !!tx.fields.vmLogs
+
   return (
-    <div className={styles.transactionDetailsContainer}>
-      <div className={styles.detailRow}>
-        <div className={styles.detailLabel}>Message Route</div>
-        <div className={styles.detailValue}>
-          {formatAddress(tx.transaction.inMessage?.info?.src, contracts, onContractClick)}
-          {" → "}
-          {formatAddress(tx.transaction.inMessage?.info?.dest, contracts, onContractClick)}
-        </div>
-      </div>
-
-      {tx.amount && (
+    <>
+      <div className={styles.transactionDetailsContainer}>
         <div className={styles.detailRow}>
-          <div className={styles.detailLabel}>Value</div>
-          <div className={styles.detailValue}>{formatCurrency(tx.amount)}</div>
-        </div>
-      )}
-
-      <div className={styles.detailRow}>
-        <div className={styles.detailLabel}>Out Messages</div>
-        <div className={styles.detailValue}>
-          <span className={styles.numberValue}>{tx.transaction.outMessagesCount}</span>
-        </div>
-      </div>
-
-      <div className={styles.labeledSectionRow}>
-        <div className={styles.labeledSectionTitle}>Message Data</div>
-        <div className={styles.labeledSectionContent}>
-          <div className={styles.multiColumnRow}>
-            <div className={styles.multiColumnItem}>
-              <div className={styles.multiColumnItemTitle}>Opcode</div>
-              <div className={styles.multiColumnItemValue}>
-                <OpcodeChip opcode={tx.opcode} abiName={abiType?.name} />
-              </div>
-            </div>
+          <div className={styles.detailLabel}>Message Route</div>
+          <div className={styles.detailValue}>
+            {formatAddress(tx.transaction.inMessage?.info?.src, contracts, onContractClick)}
+            {" → "}
+            {formatAddress(tx.transaction.inMessage?.info?.dest, contracts, onContractClick)}
           </div>
-          {inMsgBodyParsed && (
-            <div className={styles.multiColumnItemValue}>
-              <div className={styles.multiColumnItemTitle}>Parsed Data:</div>
-              <div className={styles.parsedDataContent}>
-                <ParsedDataView data={inMsgBodyParsed} contracts={contracts} />
-              </div>
-            </div>
-          )}
         </div>
-      </div>
 
-      <div className={styles.labeledSectionRow}>
-        <div className={styles.labeledSectionTitle}>Compute Phase</div>
-        <div className={styles.labeledSectionContent}>
-          {computeInfo === "skipped" ? (
-            <div className={styles.multiColumnItemValue}>Skipped</div>
-          ) : (
+        {tx.amount && (
+          <div className={styles.detailRow}>
+            <div className={styles.detailLabel}>Value</div>
+            <div className={styles.detailValue}>{formatCurrency(tx.amount)}</div>
+          </div>
+        )}
+
+        <div className={styles.detailRow}>
+          <div className={styles.detailLabel}>Out Messages</div>
+          <div className={styles.detailValue}>
+            <span className={styles.numberValue}>{tx.transaction.outMessagesCount}</span>
+          </div>
+        </div>
+
+        <div className={styles.labeledSectionRow}>
+          <div className={styles.labeledSectionTitle}>Message Data</div>
+          <div className={styles.labeledSectionContent}>
             <div className={styles.multiColumnRow}>
               <div className={styles.multiColumnItem}>
-                <div className={styles.multiColumnItemTitle}>Success</div>
+                <div className={styles.multiColumnItemTitle}>Opcode</div>
                 <div className={styles.multiColumnItemValue}>
-                  {formatBoolean(computeInfo?.success ?? false)}
-                </div>
-              </div>
-              <div className={styles.multiColumnItem}>
-                <div className={styles.multiColumnItemTitle}>Exit Code</div>
-                <div className={`${styles.multiColumnItemValue} ${styles.numberValue}`}>
-                  {computeInfo?.exitCode}
-                </div>
-              </div>
-              <div className={styles.multiColumnItem}>
-                <div className={styles.multiColumnItemTitle}>VM Steps</div>
-                <div className={`${styles.multiColumnItemValue} ${styles.numberValue}`}>
-                  {computeInfo?.vmSteps}
-                </div>
-              </div>
-              <div className={styles.multiColumnItem}>
-                <div className={styles.multiColumnItemTitle}>Gas Used</div>
-                <div className={`${styles.multiColumnItemValue} ${styles.gasValue}`}>
-                  {computeInfo?.gasUsed}
-                </div>
-              </div>
-              <div className={styles.multiColumnItem}>
-                <div className={styles.multiColumnItemTitle}>Gas Fees</div>
-                <div className={`${styles.multiColumnItemValue} ${styles.gasValue}`}>
-                  {formatCurrency(computeInfo?.gasFees)}
+                  <OpcodeChip opcode={tx.opcode} abiName={abiType?.name} />
                 </div>
               </div>
             </div>
-          )}
+            {inMsgBodyParsed && (
+              <div className={styles.multiColumnItemValue}>
+                <div className={styles.multiColumnItemTitle}>Parsed Data:</div>
+                <div className={styles.parsedDataContent}>
+                  <ParsedDataView data={inMsgBodyParsed} contracts={contracts} />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
+
+        <div className={styles.labeledSectionRow}>
+          <div className={styles.labeledSectionTitle}>Compute Phase</div>
+          <div className={styles.labeledSectionContent}>
+            {computeInfo === "skipped" ? (
+              <div className={styles.multiColumnItemValue}>Skipped</div>
+            ) : (
+              <div className={styles.multiColumnRow}>
+                <div className={styles.multiColumnItem}>
+                  <div className={styles.multiColumnItemTitle}>Success</div>
+                  <div className={styles.multiColumnItemValue}>
+                    {formatBoolean(computeInfo?.success ?? false)}
+                  </div>
+                </div>
+                <div className={styles.multiColumnItem}>
+                  <div className={styles.multiColumnItemTitle}>Exit Code</div>
+                  <div className={`${styles.multiColumnItemValue} ${styles.numberValue}`}>
+                    {computeInfo?.exitCode}
+                  </div>
+                </div>
+                <div className={styles.multiColumnItem}>
+                  <div className={styles.multiColumnItemTitle}>VM Steps</div>
+                  <div className={`${styles.multiColumnItemValue} ${styles.numberValue}`}>
+                    {computeInfo?.vmSteps}
+                  </div>
+                </div>
+                <div className={styles.multiColumnItem}>
+                  <div className={styles.multiColumnItemTitle}>Gas Used</div>
+                  <div className={`${styles.multiColumnItemValue} ${styles.gasValue}`}>
+                    {computeInfo?.gasUsed}
+                  </div>
+                </div>
+                <div className={styles.multiColumnItem}>
+                  <div className={styles.multiColumnItemTitle}>Gas Fees</div>
+                  <div className={`${styles.multiColumnItemValue} ${styles.gasValue}`}>
+                    {formatCurrency(computeInfo?.gasFees)}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {canTrace && (
+          <div className={styles.traceButtonContainer}>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => setShowTraceViewer(!showTraceViewer)}
+              className={styles.traceButton}
+            >
+              {showTraceViewer ? <FiX size={14} /> : <FiPlay size={14} />}
+            </Button>
+          </div>
+        )}
       </div>
-    </div>
+
+      {showTraceViewer && canTrace && (
+        <div className={styles.traceViewerContainer}>
+          <TransactionTraceViewer tx={tx} contracts={contracts} inline={true} />
+        </div>
+      )}
+    </>
   )
 }

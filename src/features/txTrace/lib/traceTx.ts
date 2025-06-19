@@ -6,15 +6,18 @@ import {
   type InstructionInfo,
   type MappingInfo,
 } from "ton-assembly-test-dev/dist/trace/mapping"
-import {type Step} from "ton-assembly-test-dev/dist/trace"
+import {type Step, type TraceInfo} from "ton-assembly-test-dev/dist/trace"
 import {
   createTraceInfoPerTransaction,
   findInstructionInfo,
 } from "ton-assembly-test-dev/dist/trace/trace"
 import {parse, print} from "ton-assembly-test-dev/dist/text"
 import * as l from "ton-assembly-test-dev/dist/logs"
+import {Cell} from "@ton/core"
 
 import type {NetworkType, RetraceResultAndCode} from "@features/txTrace/ui"
+import type {TransactionInfo} from "@features/sandbox/lib/transaction"
+import type {ContractData} from "@features/sandbox/lib/contract"
 
 import {
   type ExtractionResult,
@@ -34,6 +37,12 @@ export type ExitCode = {
   readonly num: number
   readonly description: string
   readonly info: undefined | InstructionInfo
+}
+
+export interface SandboxTraceResult {
+  readonly code: string
+  readonly exitCode?: ExitCode
+  readonly traceInfo: TraceInfo
 }
 
 async function retraceAny(info: ExtractionResult): Promise<TraceResult> {
@@ -164,12 +173,19 @@ export function findExitCode(vmLogs: string, mappingInfo: MappingInfo) {
   return exitCode
 }
 
-function extractCodeAndTrace(result: TraceResult) {
-  if (!result.codeCell) {
+function extractCodeAndTrace(
+  codeCell: Cell | undefined,
+  vmLogs: string,
+): {
+  code: string
+  exitCode?: ExitCode
+  traceInfo: TraceInfo
+} {
+  if (!codeCell) {
     return {code: "// No executable code found", traceInfo: {steps: []}}
   }
 
-  const instructions = decompileCell(result.codeCell)
+  const instructions = decompileCell(codeCell)
   const code = print(instructions)
 
   const instructionsWithPositions = parse("out.tasm", code)
@@ -177,7 +193,6 @@ function extractCodeAndTrace(result: TraceResult) {
     return {code: code, traceInfo: {steps: []}, exitCode: undefined}
   }
 
-  const vmLogs = result.emulatedTx.vmLogs
   const [, mapping] = compileCellWithMapping(instructionsWithPositions.instructions)
   const mappingInfo = createMappingInfo(mapping)
   const traceInfo = createTraceInfoPerTransaction(vmLogs, mappingInfo, undefined)[0]
@@ -190,9 +205,32 @@ function extractCodeAndTrace(result: TraceResult) {
   return {code, exitCode, traceInfo}
 }
 
+export function traceSandboxTransaction(
+  tx: TransactionInfo,
+  contracts: Map<string, ContractData>,
+): SandboxTraceResult | undefined {
+  const computeInfo = tx.computeInfo
+  if (computeInfo === "skipped") {
+    return undefined
+  }
+
+  const vmLogs = tx.fields.vmLogs as string | undefined
+  if (!vmLogs) {
+    return undefined
+  }
+
+  const contract = contracts.get(tx.address?.toString() ?? "")
+  const codeCell = contract?.stateInit?.code
+  if (!codeCell) {
+    return undefined
+  }
+
+  return extractCodeAndTrace(codeCell, vmLogs)
+}
+
 export async function traceTx(link: string): Promise<RetraceResultAndCode> {
   const {result, network} = await doTrace(link)
-  const {code, traceInfo, exitCode} = extractCodeAndTrace(result)
+  const {code, traceInfo, exitCode} = extractCodeAndTrace(result.codeCell, result.emulatedTx.vmLogs)
   return {result, code, trace: traceInfo, exitCode, network}
 }
 

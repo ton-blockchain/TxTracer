@@ -3,7 +3,7 @@
   background-color: var(--color-background-primary);
   margin-bottom: var(--spacing-md);
   border: 1px solid var(--table-border-color);
-
+  position: relative;
   overflow-x: hidden;
 }
 
@@ -180,4 +180,31 @@
 
 .parsedDataContent {
   margin-left: var(--spacing-sm);
+}
+
+.traceButtonContainer {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  z-index: 10;
+}
+
+.traceButton {
+  color: white !important;
+  padding: var(--spacing-xs) !important;
+  min-width: 32px;
+  height: 32px;
+  border-radius: var(--border-radius-md) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.traceButton:hover {
+  transform: scale(1.05);
+}
+
+.traceViewerContainer {
+  margin-top: var(--spacing-md);
 }
