@@ -1,5 +1,6 @@
 import {
   Address,
+  beginCell,
   Cell,
   loadOutList,
   loadTransaction,
@@ -53,8 +54,11 @@ interface MutableTransactionInfo {
 }
 
 const bigintToAddress = (addr: bigint | undefined): Address | undefined => {
+  if (addr === undefined) return undefined
+
   try {
-    return addr ? Address.parseRaw(`0:${addr.toString(16)}`) : undefined
+    const cell = beginCell().storeUint(4, 3).storeUint(0, 8).storeUint(addr, 256).asSlice()
+    return cell.loadAddress()
   } catch {
     return undefined
   }
