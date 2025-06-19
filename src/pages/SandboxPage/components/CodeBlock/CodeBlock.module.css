@@ -17,6 +17,8 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--spacing-xs);
+  line-height: 1;
+  margin-top: -5px;
 }
 
 .title {
