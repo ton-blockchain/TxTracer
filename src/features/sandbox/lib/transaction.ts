@@ -123,3 +123,80 @@ export function computeSendMode(tx: TransactionInfo, test: TestData) {
 
   return undefined
 }
+
+export const SEND_MODE_CONSTANTS = {
+  0: {
+    name: "SendDefaultMode",
+    description:
+      "Ordinary message (default).\n\nSee: <https://docs.tact-lang.org/book/message-mode#base-modes>",
+  },
+  64: {
+    name: "SendRemainingValue",
+    description:
+      "Carry all the remaining value of the inbound message in addition to the value initially indicated in the new message.\n\nSee: <https://docs.tact-lang.org/book/message-mode#base-modes>",
+  },
+  128: {
+    name: "SendRemainingBalance",
+    description:
+      "Carry **all the remaining balance** of the current smart contract instead of the value originally indicated in the message.\n\nSee: <https://docs.tact-lang.org/book/message-mode#base-modes>",
+  },
+  1024: {
+    name: "SendOnlyEstimateFee",
+    description:
+      "Doesn't send the message, only estimates the forward fees if the message-sending function computes those.\n\nSee:\n* <https://docs.tact-lang.org/book/message-mode#base-modes>\n* <https://docs.tact-lang.org/book/send#message-sending-functions>",
+  },
+  1: {
+    name: "SendPayFwdFeesSeparately",
+    description:
+      "Pay forward fees separately from the message value.\n\nSee: <https://docs.tact-lang.org/book/message-mode#optional-flags>",
+  },
+  2: {
+    name: "SendIgnoreErrors",
+    description:
+      "Ignore any errors arising while processing this message during the action phase.\n\nSee: <https://docs.tact-lang.org/book/message-mode#optional-flags>",
+  },
+  16: {
+    name: "SendBounceIfActionFail",
+    description:
+      "Bounce transaction in case of any errors during action phase. Has no effect if flag +2, `SendIgnoreErrors` is used.\n\nSee: <https://docs.tact-lang.org/book/message-mode#optional-flags>",
+  },
+  32: {
+    name: "SendDestroyIfZero",
+    description:
+      "Current account (contract) will be destroyed if its resulting balance is zero. This flag is often used with mode 128, `SendRemainingBalance`.\n\nSee: <https://docs.tact-lang.org/book/message-mode#optional-flags>",
+  },
+} as const
+
+export interface SendModeInfo {
+  readonly name: string
+  readonly value: number
+  readonly description: string
+}
+
+/**
+ * Parse sends mode number into an array of constants
+ */
+export function parseSendMode(mode: number): SendModeInfo[] {
+  const flags: SendModeInfo[] = []
+
+  for (const [value, constant] of Object.entries(SEND_MODE_CONSTANTS)) {
+    const flagValue = parseInt(value)
+    if (mode & flagValue) {
+      flags.push({
+        name: constant.name,
+        value: flagValue,
+        description: constant.description,
+      })
+    }
+  }
+
+  if (flags.length === 0 && mode === 0) {
+    flags.push({
+      name: SEND_MODE_CONSTANTS[0].name,
+      value: 0,
+      description: SEND_MODE_CONSTANTS[0].description,
+    })
+  }
+
+  return flags
+}

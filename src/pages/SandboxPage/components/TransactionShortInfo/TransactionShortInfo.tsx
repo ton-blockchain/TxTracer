@@ -19,6 +19,8 @@ import Button from "@shared/ui/Button"
 
 import type {TestData} from "@features/sandbox/lib/test-data.ts"
 
+import {SendModeViewer} from "@features/sandbox/ui"
+
 import styles from "./TransactionShortInfo.module.css"
 
 const formatAddress = (
@@ -159,7 +161,7 @@ export function TransactionShortInfo({
                 <div className={styles.multiColumnItem}>
                   <div className={styles.multiColumnItemTitle}>Send Mode</div>
                   <div className={`${styles.multiColumnItemValue} ${styles.numberValue}`}>
-                    {sendMode}
+                    <SendModeViewer mode={sendMode} />
                   </div>
                 </div>
                 <div className={styles.multiColumnItem}>

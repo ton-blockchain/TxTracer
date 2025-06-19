@@ -4,7 +4,6 @@
   margin-bottom: var(--spacing-md);
   border: 1px solid var(--table-border-color);
   position: relative;
-  overflow-x: hidden;
 }
 
 .detailRow {
@@ -86,19 +85,20 @@
 .multiColumnRow {
   display: flex;
   flex-wrap: nowrap;
-  align-items: flex-start;
-
+  align-items: center;
   gap: var(--spacing-lg);
 }
 
 .multiColumnItem {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: flex-start;
   flex: 0 1 auto;
   min-width: 0;
-
+  min-height: 48px;
   word-break: break-all;
+  gap: var(--spacing-xs);
 }
 
 .multiColumnItem:first-child {
@@ -112,8 +112,8 @@
 .multiColumnItemTitle {
   font-size: var(--font-size-xsm);
   color: var(--color-text-secondary);
-  margin-bottom: var(--spacing-xs);
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .multiColumnItemValue {
