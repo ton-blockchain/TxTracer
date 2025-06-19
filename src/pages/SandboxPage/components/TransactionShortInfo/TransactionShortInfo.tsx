@@ -37,6 +37,7 @@ const formatAddress = (
 
 const formatDetailedTimestamp = (
   timestampInput: number | string | undefined,
+  showShort: boolean = true,
 ): JSX.Element | string => {
   if (timestampInput === undefined) return "—"
 
@@ -73,7 +74,7 @@ const formatDetailedTimestamp = (
   return (
     <>
       {fullPart}
-      <span className={styles.timestampDetailSecondary}> — {shortPart}</span>
+      {showShort && <span className={styles.timestampDetailSecondary}> — {shortPart}</span>}
     </>
   )
 }
@@ -114,6 +115,9 @@ export function TransactionShortInfo({tx, contracts, onContractClick}: Transacti
   const canTrace = tx.computeInfo !== "skipped" && !!tx.fields.vmLogs
   const isSuccess = tx.computeInfo !== "skipped" && tx.computeInfo.success
 
+  const inMessage = tx.transaction.inMessage
+  const money = tx.money
+
   return (
     <>
       <div className={styles.transactionDetailsContainer}>
@@ -126,26 +130,52 @@ export function TransactionShortInfo({tx, contracts, onContractClick}: Transacti
           </div>
         </div>
 
-        {tx.amount && (
-          <div className={styles.detailRow}>
-            <div className={styles.detailLabel}>Value</div>
-            <div className={styles.detailValue}>{formatCurrency(tx.amount)}</div>
+        {inMessage && inMessage.info.type === "internal" && (
+          <div className={styles.labeledSectionRow}>
+            <div className={styles.labeledSectionTitle}>In Message</div>
+
+            <div className={styles.labeledSectionContent}>
+              <div className={styles.multiColumnRow}>
+                <div className={styles.multiColumnItem}>
+                  <div className={styles.multiColumnItemTitle}>Value</div>
+                  <div className={`${styles.multiColumnItemValue} ${styles.currencyValue}`}>
+                    {formatCurrency(inMessage.info.value.coins)}
+                  </div>
+                </div>
+                <div className={styles.multiColumnItem}>
+                  <div className={styles.multiColumnItemTitle}>IHR Disabled</div>
+                  <div className={styles.multiColumnItemValue}>
+                    {formatBoolean(inMessage.info.ihrDisabled)}
+                  </div>
+                </div>
+                <div className={styles.multiColumnItem}>
+                  <div className={styles.multiColumnItemTitle}>Bounced</div>
+                  <div className={styles.multiColumnItemValue}>
+                    {formatBoolean(inMessage.info.bounced)}
+                  </div>
+                </div>
+                <div className={styles.multiColumnItem}>
+                  <div className={styles.multiColumnItemTitle}>Bounce</div>
+                  <div className={styles.multiColumnItemValue}>
+                    {formatBoolean(inMessage.info.bounce)}
+                  </div>
+                </div>
+                <div className={styles.multiColumnItem}>
+                  <div className={styles.multiColumnItemTitle}>Created At</div>
+                  <div className={`${styles.multiColumnItemValue} ${styles.timestampValue}`}>
+                    {formatDetailedTimestamp(inMessage.info.createdAt, false)}
+                  </div>
+                </div>
+                <div className={styles.multiColumnItem}>
+                  <div className={styles.multiColumnItemTitle}>Created Lt</div>
+                  <div className={`${styles.multiColumnItemValue} ${styles.numberValue}`}>
+                    {inMessage.info.createdLt}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
-
-        <div className={styles.detailRow}>
-          <div className={styles.detailLabel}>Time</div>
-          <div className={`${styles.detailValue} ${styles.timestampValue}`}>
-            {formatDetailedTimestamp(tx.transaction.now)}
-          </div>
-        </div>
-
-        <div className={styles.detailRow}>
-          <div className={styles.detailLabel}>Out Messages</div>
-          <div className={styles.detailValue}>
-            <span className={styles.numberValue}>{tx.transaction.outMessagesCount}</span>
-          </div>
-        </div>
 
         <div className={styles.labeledSectionRow}>
           <div className={styles.labeledSectionTitle}>Message Data</div>
@@ -166,6 +196,44 @@ export function TransactionShortInfo({tx, contracts, onContractClick}: Transacti
                 </div>
               </div>
             )}
+          </div>
+        </div>
+
+        <div className={styles.labeledSectionRow}>
+          <div className={styles.labeledSectionTitle}>Fees & Sent</div>
+          <div className={styles.labeledSectionContent}>
+            <div className={styles.multiColumnRow}>
+              <div className={styles.multiColumnItem}>
+                <div className={styles.multiColumnItemTitle}>Amount Sent (Total)</div>
+                <div className={`${styles.multiColumnItemValue} ${styles.currencyValue}`}>
+                  {formatCurrency(money.sentTotal)}
+                </div>
+              </div>
+              <div className={styles.multiColumnItem}>
+                <div className={styles.multiColumnItemTitle}>Total Fee</div>
+                <div className={`${styles.multiColumnItemValue} ${styles.currencyValue}`}>
+                  {formatCurrency(money.totalFees)}
+                </div>
+              </div>
+              <div className={styles.multiColumnItem}>
+                <div className={styles.multiColumnItemTitle}>Gas Fee</div>
+                <div
+                  className={`${styles.multiColumnItemValue} ${styles.gasValue} ${styles.currencyValue}`}
+                >
+                  {tx.computeInfo !== "skipped" ? formatCurrency(tx.computeInfo.gasFees) : "N/A"}
+                </div>
+              </div>
+              {tx.transaction.inMessage?.info?.type === "internal" && (
+                <div className={styles.multiColumnItem}>
+                  <div className={styles.multiColumnItemTitle}>Forward Fee</div>
+                  <div
+                    className={`${styles.multiColumnItemValue} ${styles.gasValue} ${styles.currencyValue}`}
+                  >
+                    {formatCurrency(money.forwardFee)}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -230,6 +298,13 @@ export function TransactionShortInfo({tx, contracts, onContractClick}: Transacti
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div className={styles.detailRow}>
+          <div className={styles.detailLabel}>Time</div>
+          <div className={`${styles.detailValue} ${styles.timestampValue}`}>
+            {formatDetailedTimestamp(tx.transaction.now)}
           </div>
         </div>
 

@@ -226,9 +226,13 @@ const computeFinalData = (res: RawTransactionInfo) => {
           gasFees: computePhase.gasFees,
         }
 
+  const forwardFee =
+    emulatedTx.inMessage.info.type === "internal" ? emulatedTx.inMessage.info.forwardFee : 0n
+
   const money: TransactionMoney = {
     sentTotal,
     totalFees,
+    forwardFee,
   }
 
   return {

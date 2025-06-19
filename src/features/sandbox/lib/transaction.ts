@@ -65,6 +65,7 @@ export interface TransactionMoney {
    * including TON coin and potentially some extra-currencies.
    */
   readonly totalFees: bigint
+  readonly forwardFee: bigint
 }
 
 /**
