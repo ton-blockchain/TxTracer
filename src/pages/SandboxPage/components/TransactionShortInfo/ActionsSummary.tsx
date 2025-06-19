@@ -76,6 +76,10 @@ const getActionIcon = (actionType: OutAction["type"]) => {
   }
 }
 
+const formatBoolean = (v: boolean) => (
+  <span className={v ? styles.booleanTrue : styles.booleanFalse}>{v ? "Yes" : "No"}</span>
+)
+
 const renderActionDetails = (
   action: OutAction,
   contractAddress: string,
@@ -131,7 +135,11 @@ const renderActionDetails = (
                 </div>
                 <div className={styles.detailRow}>
                   <span className={styles.detailLabel}>Bounce:</span>
-                  <span className={styles.detailValue}>{info.bounce ? "Yes" : "No"}</span>
+                  <span className={styles.detailValue}>{formatBoolean(info.bounce)}</span>
+                </div>
+                <div className={styles.detailRow}>
+                  <span className={styles.detailLabel}>Bounced:</span>
+                  <span className={styles.detailValue}>{formatBoolean(info.bounced)}</span>
                 </div>
               </>
             )}
