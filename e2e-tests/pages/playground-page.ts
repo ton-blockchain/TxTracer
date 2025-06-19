@@ -29,17 +29,14 @@ export class PlaygroundPage {
     return await this.exitCodeBadge.textContent()
   }
 
-  async goto() {
+  async goto(skipTutorial: boolean = false) {
+    if (skipTutorial) {
+      await this.page.addInitScript(() => {
+        localStorage.setItem("tutorial-completed-playground-page", "true")
+      })
+    }
     await this.page.goto("/play/")
-  }
-
-  /**
-   * This provides an ability to skip tutorial
-   */
-  async skipTutorial() {
-    await this.page.addInitScript(() => {
-      localStorage.setItem("tutorial-completed-playground-page", "true")
-    })
+    await this.page.waitForLoadState("networkidle")
   }
 
   async focusEditor() {

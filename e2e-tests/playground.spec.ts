@@ -51,8 +51,7 @@ test.describe("TxTracer Playground", () => {
   })
 
   test("should 'Execute' code via Ctrl+Enter", async ({page, playgroundPage}) => {
-    await playgroundPage.skipTutorial()
-    await playgroundPage.goto()
+    await playgroundPage.goto(true)
     const stepCounterText = await playgroundPage.getStepCounterText()
     expect(stepCounterText).toBe("Ready to execute")
 
@@ -63,8 +62,7 @@ test.describe("TxTracer Playground", () => {
   })
 
   test("should 'Execute' code via button", async ({playgroundPage}) => {
-    await playgroundPage.skipTutorial()
-    await playgroundPage.goto()
+    await playgroundPage.goto(true)
     const stepCounterText = await playgroundPage.getStepCounterText()
     expect(stepCounterText).toBe("Ready to execute")
 
@@ -75,8 +73,7 @@ test.describe("TxTracer Playground", () => {
   })
 
   test("should write some code, share it and open shared link", async ({page, playgroundPage}) => {
-    await playgroundPage.skipTutorial()
-    await playgroundPage.goto()
+    await playgroundPage.goto(true)
     const randomAsmCode = generateRandomAsmCode()
     await playgroundPage.clearEditor()
 
@@ -93,8 +90,7 @@ test.describe("TxTracer Playground", () => {
 
   test("should show error on invalid ASM code", async ({page, playgroundPage}) => {
     const INSTRUCTION = "INVALID"
-    await playgroundPage.skipTutorial()
-    await playgroundPage.goto()
+    await playgroundPage.goto(true)
 
     await playgroundPage.clearEditor()
     await playgroundPage.typeInEditor(INSTRUCTION)
@@ -112,8 +108,7 @@ test.describe("TxTracer Playground", () => {
     playgroundPage,
   }) => {
     const INSTRUCTION = "ADD"
-    await playgroundPage.skipTutorial()
-    await playgroundPage.goto()
+    await playgroundPage.goto(true)
 
     await playgroundPage.clearEditor()
     await playgroundPage.typeInEditor(INSTRUCTION)
@@ -131,8 +126,7 @@ test.describe("TxTracer Playground", () => {
     page,
     playgroundPage,
   }) => {
-    await playgroundPage.skipTutorial()
-    await playgroundPage.goto()
+    await playgroundPage.goto(true)
 
     // Execute the code first
     await playgroundPage.execute()
