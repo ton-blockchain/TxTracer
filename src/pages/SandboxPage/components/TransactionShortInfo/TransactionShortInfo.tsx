@@ -2,7 +2,7 @@ import {Address, type ExternalAddress} from "@ton/core"
 
 import React, {type JSX, useState} from "react"
 import type {Maybe} from "@ton/core/dist/utils/maybe"
-import {FiPlay, FiX} from "react-icons/fi"
+import {FiPlay, FiX, FiChevronDown, FiChevronUp} from "react-icons/fi"
 
 import {ContractChip, OpcodeChip} from "@app/pages/SandboxPage/components"
 import {formatCurrency, formatNumber} from "@shared/lib/format"
@@ -20,6 +20,8 @@ import Button from "@shared/ui/Button"
 import type {TestData} from "@features/sandbox/lib/test-data.ts"
 
 import {SendModeViewer, ExitCodeChip} from "@features/sandbox/ui"
+
+import {ActionsSummary} from "./ActionsSummary"
 
 import styles from "./TransactionShortInfo.module.css"
 
@@ -101,6 +103,7 @@ export function TransactionShortInfo({
   testData,
 }: TransactionShortInfoProps) {
   const [showTraceViewer, setShowTraceViewer] = useState(false)
+  const [showActions, setShowActions] = useState(false)
 
   if (tx.transaction.description.type !== "generic") {
     throw new Error(
@@ -211,7 +214,9 @@ export function TransactionShortInfo({
               </div>
             </div>
             {inMsgBodyParsed && (
-              <div className={styles.multiColumnItemValue}>
+              <div
+                className={`${styles.multiColumnItemValue} ${styles.multiColumnItemValueWithRows}`}
+              >
                 <div className={styles.multiColumnItemTitle}>Parsed Data:</div>
                 <div className={styles.parsedDataContent}>
                   <ParsedDataView data={inMsgBodyParsed} contracts={contracts} />
@@ -291,7 +296,7 @@ export function TransactionShortInfo({
                   </div>
                 </div>
                 <div className={styles.multiColumnItem}>
-                  <div className={styles.multiColumnItemTitle}>Gas Fees</div>
+                  <div className={styles.multiColumnItemTitle}>Gas Fee</div>
                   <div className={`${styles.multiColumnItemValue} ${styles.gasValue}`}>
                     {formatCurrency(computeInfo?.gasFees)}
                   </div>
@@ -317,11 +322,37 @@ export function TransactionShortInfo({
                 <div className={styles.multiColumnItemTitle}>Total Actions</div>
                 <div className={`${styles.multiColumnItemValue} ${styles.numberValue}`}>
                   {formatNumber(tx.outActions.length)}
+                  {tx.outActions.length > 0 && (
+                    <button
+                      onClick={() => setShowActions(!showActions)}
+                      className={styles.actionsToggleButton}
+                      aria-label={showActions ? "Hide actions" : "Show actions"}
+                    >
+                      {showActions ? <FiChevronUp size={14} /> : <FiChevronDown size={14} />}
+                      <span className={styles.actionsToggleText}>
+                        {showActions ? "Hide" : "Show"}
+                      </span>
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+        {showActions && tx.outActions.length > 0 && (
+          <div className={styles.labeledSectionRow}>
+            <div className={styles.labeledSectionTitle}>Actions Details</div>
+            <div className={styles.labeledSectionContent}>
+              <ActionsSummary
+                actions={tx.outActions}
+                contracts={contracts}
+                contractAddress={tx.address?.toString() ?? ""}
+                onContractClick={onContractClick}
+              />
+            </div>
+          </div>
+        )}
 
         <div className={styles.detailRow}>
           <div className={styles.detailLabel}>Time</div>

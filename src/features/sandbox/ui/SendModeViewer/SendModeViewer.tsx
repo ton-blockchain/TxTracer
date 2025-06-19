@@ -5,9 +5,10 @@ import styles from "./SendModeViewer.module.css"
 
 interface SendModeViewerProps {
   readonly mode: number | undefined
+  readonly rightTooltip?: boolean
 }
 
-export function SendModeViewer({mode}: SendModeViewerProps) {
+export function SendModeViewer({mode, rightTooltip}: SendModeViewerProps) {
   if (mode === undefined) {
     return <span className={styles.empty}>No mode</span>
   }
@@ -23,7 +24,7 @@ export function SendModeViewer({mode}: SendModeViewerProps) {
       {flags.map((flag, index) => (
         <div key={flag.value}>
           {index > 0 && <span className={styles.plus}> + </span>}
-          <Tooltip content={flag.description} enableMarkdown={true}>
+          <Tooltip content={flag.description} enableMarkdown={true} right={rightTooltip}>
             <span className={styles.constant}>
               {flag.name} ({flag.value})
             </span>

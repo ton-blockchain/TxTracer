@@ -8,6 +8,7 @@ interface TooltipProps {
   readonly content: ReactNode | string
   readonly variant?: "hover" | "positioned"
   readonly position?: {x: number; y: number}
+  readonly right?: boolean
   readonly enableMarkdown?: boolean
 }
 
@@ -37,6 +38,7 @@ export function Tooltip({
   content,
   variant = "hover",
   position,
+  right = false,
   enableMarkdown = false,
 }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false)
@@ -46,8 +48,10 @@ export function Tooltip({
       <div
         className={styles.tooltipPositioned}
         style={{
-          left: Math.max(10, Math.min(position.x - 80, window.innerWidth - 280)),
-          top: Math.max(10, position.y - 265),
+          left: right
+            ? Math.max(10, position.x + 20)
+            : Math.max(10, Math.min(position.x - 80, window.innerWidth - 280)),
+          top: right ? Math.max(10, position.y - 100) : Math.max(10, position.y - 265),
         }}
       >
         {renderContent(content, enableMarkdown)}
@@ -62,7 +66,11 @@ export function Tooltip({
       onMouseLeave={() => setIsVisible(false)}
     >
       {children}
-      {isVisible && <div className={styles.tooltip}>{renderContent(content, enableMarkdown)}</div>}
+      {isVisible && (
+        <div className={`${styles.tooltip} ${right ? styles.right : ``}`}>
+          {renderContent(content, enableMarkdown)}
+        </div>
+      )}
     </div>
   )
 }
