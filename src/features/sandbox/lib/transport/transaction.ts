@@ -1,4 +1,12 @@
-import {Address, Cell, loadTransaction, type Transaction} from "@ton/core"
+import {
+  Address,
+  Cell,
+  loadOutList,
+  loadTransaction,
+  type OutAction,
+  type OutActionReserve,
+  type Transaction,
+} from "@ton/core"
 
 import {
   type ComputeInfo,
@@ -37,6 +45,8 @@ interface MutableTransactionInfo {
   readonly computeInfo: ComputeInfo
   readonly money: TransactionMoney
   readonly amount: bigint | undefined
+  readonly outActions: OutAction[]
+  readonly c5: Cell | undefined
   readonly data: TransactionInfoData
   parent: TransactionInfo | undefined
   children: TransactionInfo[]
@@ -91,6 +101,8 @@ const processRawTx = (
 
   const {computeInfo, amount, money} = computeFinalData(tx)
 
+  const {outActions, c5} = findFinalActions(tx.fields.vmLogs as string)
+
   const result: MutableTransactionInfo = {
     address,
     transaction: parsedTx,
@@ -100,6 +112,8 @@ const processRawTx = (
     computeInfo,
     money,
     amount,
+    outActions,
+    c5,
     data: txData(parsedTx),
     children: [],
   }
@@ -115,6 +129,47 @@ const processRawTx = (
     .map(tx => processRawTx(tx, txs, visited))
 
   return result
+}
+
+/**
+ * Parse the verbose VM log, extract the final `c5` register
+ * (action list), decode it into an array of `OutAction`s and
+ * return both the list and the original `c5` cell.
+ *
+ * @param logs  Multi‑line VM log string from sandbox.
+ * @returns     `{ finalActions, c5 }`
+ */
+export const findFinalActions = (logs: string | undefined) => {
+  let outActions: OutAction[] = []
+  let c5: Cell | undefined = undefined
+  if (!logs) {
+    return {outActions, c5}
+  }
+
+  for (const line of logs.split("\n")) {
+    if (line.startsWith("final c5:")) {
+      const [thisOutActions, thisC5] = parseC5(line)
+      outActions = thisOutActions
+      c5 = thisC5
+    }
+  }
+  return {outActions, c5}
+}
+
+/**
+ * Convert a single log line that starts with `"final c5:"` into a
+ * tuple `[actions, c5Cell]`, where `actions` is the decoded list of
+ * `OutAction`s present in the TVM register `c5`.
+ *
+ * @param line  One line of VM log containing the hex‑encoded cell.
+ * @returns     Parsed actions array and the raw `Cell`.
+ */
+export const parseC5 = (line: string): [(OutAction | OutActionReserve)[], Cell] => {
+  // final c5: C{B5EE9C7...8877FA} -> B5EE9C7...8877FA
+  const cellBoc = Buffer.from(line.slice("final c5: C{".length, -1), "hex")
+  const c5 = Cell.fromBoc(cellBoc)[0]
+  const slice = c5.beginParse()
+  return [loadOutList(slice), c5]
 }
 
 /**

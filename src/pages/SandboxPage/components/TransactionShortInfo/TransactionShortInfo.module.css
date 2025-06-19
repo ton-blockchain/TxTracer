@@ -41,6 +41,14 @@
   box-sizing: border-box;
 }
 
+.timestampValue {
+  font-size: var(--font-size-sm);
+}
+
+.timestampDetailSecondary {
+  color: var(--color-text-secondary);
+}
+
 .labeledSectionRow {
   display: flex;
   border-bottom: 1px solid var(--table-border-color);

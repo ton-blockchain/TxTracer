@@ -1,11 +1,11 @@
 import {Address, type ExternalAddress} from "@ton/core"
 
-import React, {useState} from "react"
+import React, {type JSX, useState} from "react"
 import type {Maybe} from "@ton/core/dist/utils/maybe"
 import {FiPlay, FiX} from "react-icons/fi"
 
 import {ContractChip, OpcodeChip} from "@app/pages/SandboxPage/components"
-import {formatCurrency} from "@shared/lib/format"
+import {formatCurrency, formatNumber} from "@shared/lib/format"
 import {findOpcodeABI, type TransactionInfo} from "@features/sandbox/lib/transaction.ts"
 import type {ContractData} from "@features/sandbox/lib/contract.ts"
 import {type ParsedObjectByABI, parseSliceWithAbiType} from "@features/sandbox/lib/abi/parser.ts"
@@ -32,6 +32,49 @@ const formatAddress = (
       contracts={contracts}
       onContractClick={onContractClick}
     />
+  )
+}
+
+const formatDetailedTimestamp = (
+  timestampInput: number | string | undefined,
+): JSX.Element | string => {
+  if (timestampInput === undefined) return "—"
+
+  const date =
+    typeof timestampInput === "string" ? new Date(timestampInput) : new Date(timestampInput * 1000)
+
+  const pad = (num: number) => num.toString().padStart(2, "0")
+  const monthAbbrs = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ]
+
+  const day = date.getDate()
+  const monthIndex = date.getMonth()
+  const monthNum = monthIndex + 1
+  const year = date.getFullYear()
+  const hours = date.getHours()
+  const minutes = date.getMinutes()
+  const seconds = date.getSeconds()
+
+  const fullPart = `${pad(day)}.${pad(monthNum)}.${year}, ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
+  const shortPart = `${pad(day)} ${monthAbbrs[monthIndex]}, ${pad(hours)}:${pad(minutes)}`
+
+  return (
+    <>
+      {fullPart}
+      <span className={styles.timestampDetailSecondary}> — {shortPart}</span>
+    </>
   )
 }
 
@@ -69,6 +112,7 @@ export function TransactionShortInfo({tx, contracts, onContractClick}: Transacti
   )
 
   const canTrace = tx.computeInfo !== "skipped" && !!tx.fields.vmLogs
+  const isSuccess = tx.computeInfo !== "skipped" && tx.computeInfo.success
 
   return (
     <>
@@ -88,6 +132,13 @@ export function TransactionShortInfo({tx, contracts, onContractClick}: Transacti
             <div className={styles.detailValue}>{formatCurrency(tx.amount)}</div>
           </div>
         )}
+
+        <div className={styles.detailRow}>
+          <div className={styles.detailLabel}>Time</div>
+          <div className={`${styles.detailValue} ${styles.timestampValue}`}>
+            {formatDetailedTimestamp(tx.transaction.now)}
+          </div>
+        </div>
 
         <div className={styles.detailRow}>
           <div className={styles.detailLabel}>Out Messages</div>
@@ -157,6 +208,28 @@ export function TransactionShortInfo({tx, contracts, onContractClick}: Transacti
                 </div>
               </div>
             )}
+          </div>
+        </div>
+
+        <div className={styles.labeledSectionRow}>
+          <div className={styles.labeledSectionTitle}>Action Phase</div>
+          <div className={styles.labeledSectionContent}>
+            <div className={styles.multiColumnRow}>
+              <div className={styles.multiColumnItem}>
+                <div className={styles.multiColumnItemTitle}>Success</div>
+                <div
+                  className={`${styles.multiColumnItemValue} ${isSuccess ? styles.booleanTrue : styles.booleanFalse}`}
+                >
+                  {formatBoolean(isSuccess)}
+                </div>
+              </div>
+              <div className={styles.multiColumnItem}>
+                <div className={styles.multiColumnItemTitle}>Total Actions</div>
+                <div className={`${styles.multiColumnItemValue} ${styles.numberValue}`}>
+                  {formatNumber(tx.outActions.length)}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

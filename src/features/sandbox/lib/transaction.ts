@@ -1,4 +1,4 @@
-import type {Address, Transaction} from "@ton/core"
+import {type Address, Cell, type OutAction, type Transaction} from "@ton/core"
 
 import type {ContractData} from "@features/sandbox/lib/contract.ts"
 
@@ -13,6 +13,8 @@ export interface TransactionInfo {
   readonly computeInfo: ComputeInfo
   readonly money: TransactionMoney
   readonly amount: bigint | undefined
+  readonly outActions: OutAction[]
+  readonly c5: Cell | undefined
   readonly data: TransactionInfoData
   readonly parent: TransactionInfo | undefined
   readonly children: readonly TransactionInfo[]
