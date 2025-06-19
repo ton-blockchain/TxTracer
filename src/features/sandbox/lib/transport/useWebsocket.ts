@@ -48,7 +48,7 @@ export function useWebsocket({
       return
     }
 
-    const testName = message.testName ?? `unknown #${tests.length}`
+    const testName = message.testName ?? `unknown`
 
     setContractsByTest(prev => {
       const newMap = new Map(prev)
@@ -85,7 +85,7 @@ export function useWebsocket({
         ]
       }
     })
-  }, [tests.length])
+  }, [])
 
   const handleMessage = useCallback(
     (event: MessageEvent<string>) => {
