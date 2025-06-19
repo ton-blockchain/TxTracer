@@ -118,6 +118,81 @@
   color: red;
 }
 
+.downloadButton,
+.uploadButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--share-button-bg);
+  color: var(--color-text-secondary);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-sm);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: border 0.2s ease;
+}
+
+.downloadButton:hover,
+.uploadButton:hover {
+  background-color: var(--share-button-bg) !important;
+  border-color: var(--color-border-hover) !important;
+}
+
+.downloadButton.downloaded,
+.uploadButton.uploaded {
+  background-color: var(--color-share-copied-bg) !important;
+  border-color: var(--color-share-copied-border) !important;
+  color: var(--color-share-copied-text) !important;
+  transition: all 0.3s ease;
+}
+
+.downloadButton.downloaded:hover,
+.uploadButton.uploaded:hover {
+  background-color: var(--color-share-copied-bg) !important;
+  border-color: var(--color-share-copied-border) !important;
+  color: var(--color-share-copied-text) !important;
+}
+
+.uploadButton.error {
+  background-color: var(--color-error-bg) !important;
+  border-color: var(--color-error-border) !important;
+  color: var(--color-error-text) !important;
+  transition: all 0.3s ease;
+}
+
+.uploadButton.error:hover {
+  background-color: var(--color-error-bg) !important;
+  border-color: var(--color-error-border) !important;
+  color: var(--color-error-text) !important;
+}
+
+.headerControls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.clearButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-secondary);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-sm);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clearButton:hover {
+  background-color: var(--color-background-tertiary);
+  border-color: var(--color-border-hover);
+  color: var(--color-text-primary);
+}
+
 .fullPageState {
   height: 100vh;
   margin-top: -43px;

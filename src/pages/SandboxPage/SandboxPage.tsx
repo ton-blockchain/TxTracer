@@ -3,15 +3,43 @@ import "@xyflow/react/dist/style.css"
 import PageHeader from "@shared/ui/PageHeader"
 import {useSandboxData} from "@features/sandbox/lib/useSandboxData"
 import {TestInfo, ConnectionGuide, LoadingState} from "@app/pages/SandboxPage/components"
+import DownloadTestDataButton from "@app/pages/SandboxPage/components/DownloadTestDataButton"
+import UploadTestDataButton from "@app/pages/SandboxPage/components/UploadTestDataButton"
 
 import styles from "./SandboxPage.module.css"
 
 function SandboxPage() {
-  const {tests, error, isConnected} = useSandboxData()
+  const {tests, error, isConnected, isSharedData, rawData, loadFromFile} = useSandboxData()
+
+  if (isSharedData) {
+    return (
+      <div className={styles.traceViewWrapper}>
+        <PageHeader pageTitle={"sandbox"}>
+          <div className={styles.headerContent}>
+            <div className={styles.headerControls}>
+              <UploadTestDataButton onDataLoaded={loadFromFile} />
+              {rawData && <DownloadTestDataButton rawData={rawData} />}
+            </div>
+          </div>
+        </PageHeader>
+
+        <main className={styles.appContainer}>
+          {tests.map((testData, index) => (
+            <TestInfo key={testData.testName} testData={testData} testIndex={index + 1} />
+          ))}
+        </main>
+      </div>
+    )
+  }
 
   const header = (
     <PageHeader pageTitle={"sandbox"}>
-      <div className={styles.headerContent}></div>
+      <div className={styles.headerContent}>
+        <div className={styles.headerControls}>
+          <UploadTestDataButton onDataLoaded={loadFromFile} />
+          {rawData && <DownloadTestDataButton rawData={rawData} />}
+        </div>
+      </div>
     </PageHeader>
   )
 
@@ -40,7 +68,12 @@ function SandboxPage() {
   return (
     <div className={styles.traceViewWrapper}>
       <PageHeader pageTitle={"sandbox"}>
-        <div className={styles.headerContent}></div>
+        <div className={styles.headerContent}>
+          <div className={styles.headerControls}>
+            <UploadTestDataButton onDataLoaded={loadFromFile} />
+            {rawData && <DownloadTestDataButton rawData={rawData} />}
+          </div>
+        </div>
       </PageHeader>
 
       <main className={styles.appContainer}>

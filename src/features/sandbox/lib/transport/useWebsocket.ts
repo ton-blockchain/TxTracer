@@ -15,6 +15,9 @@ export interface RawWebsocketData {
   readonly contractsByTest: Map<string, readonly ContractRawData[]>
   readonly error: string
   readonly isConnected: boolean
+  readonly rawData: MessageTestData[]
+  readonly loadFromFile: (data: MessageTestData[]) => void
+  readonly clearFileData: () => void
 }
 
 interface UseWebsocketOptions {
@@ -32,6 +35,18 @@ export function useWebsocket({
   )
   const [error, setError] = useState<string>("")
   const [isConnected, setIsConnected] = useState<boolean>(false)
+  const [fromFile, setFromFile] = useState<boolean>(false)
+
+  const loadFromFile = useCallback((data: MessageTestData[]) => {
+    setRawData(data)
+    setFromFile(true)
+  }, [])
+
+  const clearFileData = useCallback(() => {
+    setRawData([])
+  }, [])
+
+  const [rawData, setRawData] = useState<MessageTestData[]>([])
 
   function parseMaybeTransactions(data: string): RawTransactions | undefined {
     try {
@@ -41,7 +56,11 @@ export function useWebsocket({
     }
   }
 
-  const handleTestData = useCallback((message: MessageTestData) => {
+  const handleTestData = useCallback((message: MessageTestData, fromTaw: boolean) => {
+    if (!fromTaw) {
+      setRawData(prev => [...prev, message])
+    }
+
     const rawTransactions = parseMaybeTransactions(message.transactions)
     if (!rawTransactions) {
       console.error("Cannot parse transactions:", message)
@@ -93,7 +112,7 @@ export function useWebsocket({
 
       switch (message.$) {
         case "test-data":
-          handleTestData(message)
+          handleTestData(message, false)
           break
         default:
           console.warn("Unknown message type:", message)
@@ -101,6 +120,27 @@ export function useWebsocket({
     },
     [handleTestData],
   )
+
+  const handleLocalData = useCallback(
+    (message: Message) => {
+      switch (message.$) {
+        case "test-data":
+          handleTestData(message, true)
+          break
+        default:
+          console.warn("Unknown message type:", message)
+      }
+    },
+    [handleTestData],
+  )
+
+  useEffect(() => {
+    if (fromFile) {
+      for (const data of rawData) {
+        handleLocalData(data)
+      }
+    }
+  }, [handleLocalData, fromFile, rawData])
 
   useEffect(() => {
     const ws = new WebSocket(url)
@@ -133,5 +173,8 @@ export function useWebsocket({
     contractsByTest,
     error,
     isConnected,
+    rawData,
+    loadFromFile,
+    clearFileData,
   }
 }

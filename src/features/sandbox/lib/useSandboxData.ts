@@ -3,6 +3,8 @@ import {Address, Cell, loadShardAccount, loadStateInit, loadTransaction} from "@
 
 import type {ContractRawData} from "@features/sandbox/lib/transport/contract.ts"
 
+import type {MessageTestData} from "@features/sandbox/lib/transport/message.ts"
+
 import {useWebsocket} from "./transport/useWebsocket"
 import {processRawTransactions, type RawTransactionInfo} from "./transport/transaction"
 import type {ContractData} from "./contract"
@@ -17,6 +19,10 @@ interface UseSandboxDataReturn {
   readonly tests: TestData[]
   readonly error: string
   readonly isConnected: boolean
+  readonly isSharedData: boolean
+  readonly rawData: MessageTestData[]
+  readonly loadFromFile: (data: MessageTestData[]) => void
+  readonly clearFileData: () => void
 }
 
 function getStateInit(contract: ContractRawData) {
@@ -110,5 +116,9 @@ export function useSandboxData(options: UseSandboxDataOptions = {}): UseSandboxD
     tests,
     error: rawData.error,
     isConnected: rawData.isConnected,
+    isSharedData: rawData.rawData.length > 0,
+    rawData: rawData.rawData,
+    clearFileData: rawData.clearFileData,
+    loadFromFile: rawData.loadFromFile,
   }
 }
