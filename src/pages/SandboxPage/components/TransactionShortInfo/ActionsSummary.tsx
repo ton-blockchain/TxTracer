@@ -5,7 +5,7 @@ import {getActionSummary} from "@features/txTrace/lib/actions"
 import {formatCurrency, formatAddress} from "@shared/lib/format"
 import type {ContractData} from "@features/sandbox/lib/contract"
 import {ContractChip, CodeBlock} from "@app/pages/SandboxPage/components"
-import {SendModeViewer} from "@features/sandbox/ui"
+import {SendModeViewer, ReserveModeViewer} from "@features/sandbox/ui"
 
 import styles from "./ActionsSummary.module.css"
 
@@ -207,7 +207,7 @@ const renderActionDetails = (
             <div className={styles.detailRow}>
               <span className={styles.detailLabel}>Mode:</span>
               <div className={styles.detailValue}>
-                <SendModeViewer mode={action.mode} />
+                <ReserveModeViewer mode={action.mode} />
               </div>
             </div>
             <div className={styles.detailRow}>
