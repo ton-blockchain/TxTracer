@@ -1,14 +1,19 @@
 import type {TestData} from "@features/sandbox/lib/test-data.ts"
 import {TransactionTree} from "@app/pages/SandboxPage/components"
 
+import type {MessageTestData} from "@features/sandbox/lib/transport/message.ts"
+
+import DownloadTestDataButton from "@app/pages/SandboxPage/components/DownloadTestDataButton.tsx"
+
 import styles from "./TestInfo.module.css"
 
 export interface TestInfoProps {
   readonly testData: TestData
   readonly testIndex: number
+  readonly rawTestData?: MessageTestData[]
 }
 
-export function TestInfo({testData, testIndex}: TestInfoProps) {
+export function TestInfo({testData, testIndex, rawTestData}: TestInfoProps) {
   // const transactions = testData.transactions.filter(it => {
   //   return (
   //     it.transaction.inMessage?.info?.src?.toString() !==
@@ -37,9 +42,12 @@ export function TestInfo({testData, testIndex}: TestInfoProps) {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h2 className={styles.testTitle}>
-          #{testIndex} {testData.testName}
-        </h2>
+        <div className={styles.titleRow}>
+          <h2 className={styles.testTitle}>
+            #{testIndex} {testData.testName}
+          </h2>
+          <DownloadTestDataButton rawData={rawTestData ?? []} />
+        </div>
         {testData.timestamp && (
           <p className={styles.timestamp}>Executed at: {formatTimestamp(testData.timestamp)}</p>
         )}

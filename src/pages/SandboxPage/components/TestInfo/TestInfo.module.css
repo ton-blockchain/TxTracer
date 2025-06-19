@@ -8,11 +8,20 @@
   background-color: var(--color-background-primary);
 }
 
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xs);
+}
+
 .testTitle {
-  margin: 0 0 var(--spacing-xs) 0;
+  margin: 0;
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
+  flex: 1;
 }
 
 .timestamp {

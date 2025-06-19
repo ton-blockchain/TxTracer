@@ -21,6 +21,7 @@ interface UseSandboxDataReturn {
   readonly isConnected: boolean
   readonly isSharedData: boolean
   readonly rawData: MessageTestData[]
+  readonly rawDataByTest: Map<string, MessageTestData>
   readonly loadFromFile: (data: MessageTestData[]) => void
   readonly clearFileData: () => void
 }
@@ -71,6 +72,16 @@ function findContractName(
 export function useSandboxData(options: UseSandboxDataOptions = {}): UseSandboxDataReturn {
   const rawData = useWebsocket(options)
 
+  const rawDataByTest = useMemo(() => {
+    const map = new Map<string, MessageTestData>()
+    for (const testData of rawData.rawData) {
+      if (testData.testName) {
+        map.set(testData.testName, testData)
+      }
+    }
+    return map
+  }, [rawData.rawData])
+
   const tests = useMemo((): TestData[] => {
     return rawData.tests.map(rawTest => {
       const parsedTransactions = rawTest.transactions.transactions.map(
@@ -118,6 +129,7 @@ export function useSandboxData(options: UseSandboxDataOptions = {}): UseSandboxD
     isConnected: rawData.isConnected,
     isSharedData: rawData.rawData.length > 0,
     rawData: rawData.rawData,
+    rawDataByTest,
     clearFileData: rawData.clearFileData,
     loadFromFile: rawData.loadFromFile,
   }

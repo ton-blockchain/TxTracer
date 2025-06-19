@@ -48,7 +48,6 @@ export const DownloadTestDataButton: React.FC<DownloadTestDataButtonProps> = ({r
         ) : (
           <FiDownload size={16} aria-hidden="true" />
         )}
-        {isDownloaded ? "Downloaded!" : "Download"}
       </Button>
 
       <div className="sr-only" aria-live="polite" aria-atomic="true">

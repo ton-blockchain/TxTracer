@@ -3,7 +3,6 @@ import "@xyflow/react/dist/style.css"
 import PageHeader from "@shared/ui/PageHeader"
 import {useSandboxData} from "@features/sandbox/lib/useSandboxData"
 import {TestInfo, ConnectionGuide, LoadingState} from "@app/pages/SandboxPage/components"
-import DownloadTestDataButton from "@app/pages/SandboxPage/components/DownloadTestDataButton"
 import UploadTestDataButton from "@app/pages/SandboxPage/components/UploadTestDataButton"
 
 import styles from "./SandboxPage.module.css"
@@ -18,14 +17,18 @@ function SandboxPage() {
           <div className={styles.headerContent}>
             <div className={styles.headerControls}>
               <UploadTestDataButton onDataLoaded={loadFromFile} />
-              {rawData && <DownloadTestDataButton rawData={rawData} />}
             </div>
           </div>
         </PageHeader>
 
         <main className={styles.appContainer}>
           {tests.map((testData, index) => (
-            <TestInfo key={testData.testName} testData={testData} testIndex={index + 1} />
+            <TestInfo
+              key={testData.testName}
+              testData={testData}
+              testIndex={index + 1}
+              rawTestData={rawData.filter(it => it.testName === testData.testName)}
+            />
           ))}
         </main>
       </div>
@@ -37,7 +40,6 @@ function SandboxPage() {
       <div className={styles.headerContent}>
         <div className={styles.headerControls}>
           <UploadTestDataButton onDataLoaded={loadFromFile} />
-          {rawData && <DownloadTestDataButton rawData={rawData} />}
         </div>
       </div>
     </PageHeader>
@@ -71,7 +73,6 @@ function SandboxPage() {
         <div className={styles.headerContent}>
           <div className={styles.headerControls}>
             <UploadTestDataButton onDataLoaded={loadFromFile} />
-            {rawData && <DownloadTestDataButton rawData={rawData} />}
           </div>
         </div>
       </PageHeader>
@@ -90,7 +91,12 @@ function SandboxPage() {
           {/*))}*/}
           {/*<br />*/}
           {tests.map((testData, index) => (
-            <TestInfo key={testData.testName} testData={testData} testIndex={index + 1} />
+            <TestInfo
+              key={testData.testName}
+              testData={testData}
+              testIndex={index + 1}
+              rawTestData={rawData.filter(it => it.testName === testData.testName)}
+            />
           ))}
         </div>
       </main>
