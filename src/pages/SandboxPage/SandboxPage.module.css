@@ -118,7 +118,19 @@
   color: red;
 }
 
-.downloadButton,
+.downloadButton {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-sm);
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-sm);
+  border: 0;
+  cursor: pointer;
+  transition: border 0.2s ease;
+}
+
 .uploadButton {
   display: inline-flex;
   align-items: center;
@@ -155,15 +167,13 @@
 }
 
 .uploadButton.error {
-  background-color: var(--color-error-bg) !important;
-  border-color: var(--color-error-border) !important;
+  border-color: var(--color-error-bg) !important;
   color: var(--color-error-text) !important;
   transition: all 0.3s ease;
 }
 
 .uploadButton.error:hover {
-  background-color: var(--color-error-bg) !important;
-  border-color: var(--color-error-border) !important;
+  border-color: var(--color-error-bg) !important;
   color: var(--color-error-text) !important;
 }
 

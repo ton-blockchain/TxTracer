@@ -1,5 +1,8 @@
+import {useState} from "react"
+
 import type {TestData} from "@features/sandbox/lib/test-data.ts"
 import {TransactionTree} from "@app/pages/SandboxPage/components"
+import {ChevronDownIcon, ChevronUpIcon} from "@shared/ui/Icon"
 
 import type {MessageTestData} from "@features/sandbox/lib/transport/message.ts"
 
@@ -14,6 +17,8 @@ export interface TestInfoProps {
 }
 
 export function TestInfo({testData, testIndex, rawTestData}: TestInfoProps) {
+  const [collapsed, setCollapsed] = useState(false)
+
   // const transactions = testData.transactions.filter(it => {
   //   return (
   //     it.transaction.inMessage?.info?.src?.toString() !==
@@ -43,31 +48,44 @@ export function TestInfo({testData, testIndex, rawTestData}: TestInfoProps) {
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.titleRow}>
-          <h2 className={styles.testTitle}>
-            #{testIndex} {testData.testName}
-          </h2>
-          <DownloadTestDataButton rawData={rawTestData ?? []} />
+          <div className={styles.titleSection}>
+            <h2 className={styles.testTitle}>
+              #{testIndex} {testData.testName}
+            </h2>
+            <DownloadTestDataButton rawData={rawTestData ?? []} />
+          </div>
+          <button
+            className={styles.collapseButton}
+            onClick={() => setCollapsed(!collapsed)}
+            aria-label={collapsed ? "Expand test info" : "Collapse test info"}
+          >
+            {collapsed ? <ChevronDownIcon /> : <ChevronUpIcon />}
+          </button>
         </div>
-        {testData.timestamp && (
-          <p className={styles.timestamp}>Executed at: {formatTimestamp(testData.timestamp)}</p>
-        )}
+        {!collapsed && (
+          <>
+            {testData.timestamp && (
+              <p className={styles.timestamp}>Executed at: {formatTimestamp(testData.timestamp)}</p>
+            )}
 
-        <div className={styles.stats}>
-          <span className={styles.statItem}>
-            <span className={styles.statLabel}>Total transactions:</span> {countTxs}
-          </span>
-          {countRootTxs > 1 && (
-            <span className={styles.statItem}>
-              <span className={styles.statLabel}>Transaction sequences:</span> {countRootTxs}
-            </span>
-          )}
-          <span className={styles.statItem}>
-            <span className={styles.statLabel}>Contracts:</span> {testData.contracts.size}
-          </span>
-        </div>
+            <div className={styles.stats}>
+              <span className={styles.statItem}>
+                <span className={styles.statLabel}>Total transactions:</span> {countTxs}
+              </span>
+              {countRootTxs > 1 && (
+                <span className={styles.statItem}>
+                  <span className={styles.statLabel}>Transaction sequences:</span> {countRootTxs}
+                </span>
+              )}
+              <span className={styles.statItem}>
+                <span className={styles.statLabel}>Contracts:</span> {testData.contracts.size}
+              </span>
+            </div>
+          </>
+        )}
       </div>
 
-      <TransactionTree key={`tree-${testData.testName}`} testData={testData} />
+      {!collapsed && <TransactionTree key={`tree-${testData.testName}`} testData={testData} />}
 
       {/*<div className={styles.transactionDetails}>*/}
       {/*  <h4 className={styles.sectionTitle}>Transaction Details:</h4>*/}

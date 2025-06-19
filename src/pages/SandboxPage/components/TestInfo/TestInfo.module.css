@@ -11,9 +11,47 @@
 .titleRow {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--spacing-md);
-  margin-bottom: var(--spacing-xs);
+}
+
+.titleSection {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.collapseButton {
+  background: transparent;
+  border: 0;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.collapseButton:hover {
+  background-color: var(--color-background-tertiary);
+  color: var(--color-text-primary);
+}
+
+.collapseButton svg {
+  width: 32px;
+  height: 32px;
 }
 
 .testTitle {
@@ -21,11 +59,10 @@
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
-  flex: 1;
 }
 
 .timestamp {
-  margin: 0 0 var(--spacing-md) 0;
+  margin: var(--spacing-xs) 0 var(--spacing-md) 0;
   padding: 0;
   font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
