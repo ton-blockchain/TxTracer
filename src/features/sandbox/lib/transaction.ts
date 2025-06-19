@@ -1,6 +1,7 @@
 import {type Address, Cell, type OutAction, type Transaction} from "@ton/core"
 
 import type {ContractData} from "@features/sandbox/lib/contract.ts"
+import type {TestData} from "@features/sandbox/lib/test-data.ts"
 
 /**
  * Processed transaction info with all necessary transport.
@@ -89,5 +90,36 @@ export function findOpcodeABI(tx: TransactionInfo, contracts: Map<string, Contra
     const found = contract?.meta?.abi?.types?.find(it => it.header === tx.opcode)
     if (found) return found
   }
+  return undefined
+}
+
+export function computeSendMode(tx: TransactionInfo, test: TestData) {
+  // X -> Y -> Z
+  //      |  ^ for this
+  //      |
+  //      sender
+  const sender = tx.transaction.inMessage?.info?.src
+  if (!sender) return undefined
+
+  const txsToSender = test.transactions.filter(
+    it => it.transaction.inMessage?.info?.dest?.toString() === sender?.toString(),
+  )
+
+  if (txsToSender.length === 0) return undefined
+
+  for (const txToSender of txsToSender) {
+    const outActions = txToSender.outActions
+    if (outActions.length === 0) continue
+
+    const sendMessages = outActions.filter(it => it.type === "sendMsg")
+    if (sendMessages.length === 0) continue
+
+    for (const sendMessage of sendMessages) {
+      if (sendMessage.outMsg?.info?.dest?.toString() === tx.address?.toString()) {
+        return sendMessage.mode as number
+      }
+    }
+  }
+
   return undefined
 }

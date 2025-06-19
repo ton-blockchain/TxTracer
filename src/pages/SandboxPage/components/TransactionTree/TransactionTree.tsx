@@ -551,6 +551,7 @@ export function TransactionTree({testData}: TransactionTreeProps) {
         <div className={styles.transactionDetails}>
           <TransactionShortInfo
             tx={selectedTransaction}
+            testData={testData}
             contracts={contracts}
             onContractClick={handleContractClick}
           />

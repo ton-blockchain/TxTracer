@@ -6,12 +6,18 @@ import {FiPlay, FiX} from "react-icons/fi"
 
 import {ContractChip, OpcodeChip} from "@app/pages/SandboxPage/components"
 import {formatCurrency, formatNumber} from "@shared/lib/format"
-import {findOpcodeABI, type TransactionInfo} from "@features/sandbox/lib/transaction.ts"
+import {
+  computeSendMode,
+  findOpcodeABI,
+  type TransactionInfo,
+} from "@features/sandbox/lib/transaction.ts"
 import type {ContractData} from "@features/sandbox/lib/contract.ts"
 import {type ParsedObjectByABI, parseSliceWithAbiType} from "@features/sandbox/lib/abi/parser.ts"
 import {ParsedDataView} from "@features/sandbox/ui/abi"
 import {TransactionTraceViewer} from "@app/pages/SandboxPage/components/TransactionTraceViewer"
 import Button from "@shared/ui/Button"
+
+import type {TestData} from "@features/sandbox/lib/test-data.ts"
 
 import styles from "./TransactionShortInfo.module.css"
 
@@ -81,11 +87,17 @@ const formatDetailedTimestamp = (
 
 export interface TransactionShortInfoProps {
   readonly tx: TransactionInfo
+  readonly testData: TestData
   readonly contracts: Map<string, ContractData>
   readonly onContractClick?: (address: string) => void
 }
 
-export function TransactionShortInfo({tx, contracts, onContractClick}: TransactionShortInfoProps) {
+export function TransactionShortInfo({
+  tx,
+  contracts,
+  onContractClick,
+  testData,
+}: TransactionShortInfoProps) {
   const [showTraceViewer, setShowTraceViewer] = useState(false)
 
   if (tx.transaction.description.type !== "generic") {
@@ -118,6 +130,8 @@ export function TransactionShortInfo({tx, contracts, onContractClick}: Transacti
   const inMessage = tx.transaction.inMessage
   const money = tx.money
 
+  const sendMode = computeSendMode(tx, testData)
+
   return (
     <>
       <div className={styles.transactionDetailsContainer}>
@@ -140,6 +154,12 @@ export function TransactionShortInfo({tx, contracts, onContractClick}: Transacti
                   <div className={styles.multiColumnItemTitle}>Value</div>
                   <div className={`${styles.multiColumnItemValue} ${styles.currencyValue}`}>
                     {formatCurrency(inMessage.info.value.coins)}
+                  </div>
+                </div>
+                <div className={styles.multiColumnItem}>
+                  <div className={styles.multiColumnItemTitle}>Send Mode</div>
+                  <div className={`${styles.multiColumnItemValue} ${styles.numberValue}`}>
+                    {sendMode}
                   </div>
                 </div>
                 <div className={styles.multiColumnItem}>
