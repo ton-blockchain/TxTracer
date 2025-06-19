@@ -1,7 +1,5 @@
-import {useState} from "react"
-import ReactMarkdown from "react-markdown"
-
 import {parseSendMode} from "@features/sandbox/lib/transaction.ts"
+import {Tooltip} from "@shared/ui/Tooltip"
 
 import styles from "./SendModeViewer.module.css"
 
@@ -10,10 +8,8 @@ interface SendModeViewerProps {
 }
 
 export function SendModeViewer({mode}: SendModeViewerProps) {
-  const [hoveredConstant, setHoveredConstant] = useState<string | null>(null)
-
   if (mode === undefined) {
-    return <span className={styles.empty}>Unknown</span>
+    return <span className={styles.empty}>No mode</span>
   }
 
   const flags = parseSendMode(mode)
@@ -27,37 +23,11 @@ export function SendModeViewer({mode}: SendModeViewerProps) {
       {flags.map((flag, index) => (
         <div key={flag.value}>
           {index > 0 && <span className={styles.plus}> + </span>}
-          <div
-            className={styles.constantContainer}
-            onMouseEnter={() => setHoveredConstant(flag.name)}
-            onMouseLeave={() => setHoveredConstant(null)}
-          >
+          <Tooltip content={flag.description} enableMarkdown={true}>
             <span className={styles.constant}>
               {flag.name} ({flag.value})
             </span>
-            {hoveredConstant === flag.name && (
-              <div className={styles.tooltip}>
-                <ReactMarkdown
-                  components={{
-                    a: ({href, children}) => (
-                      <a
-                        href={href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles.link}
-                      >
-                        {children}
-                      </a>
-                    ),
-                    p: ({children}) => <div className={styles.paragraph}>{children}</div>,
-                    strong: ({children}) => <strong className={styles.strong}>{children}</strong>,
-                  }}
-                >
-                  {flag.description}
-                </ReactMarkdown>
-              </div>
-            )}
-          </div>
+          </Tooltip>
         </div>
       ))}
     </div>
