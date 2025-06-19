@@ -3,10 +3,30 @@ import type {Locator, Page} from "@playwright/test"
 export class PlaygroundPage {
   private stepCounter: Locator
   private editor: Locator
+  private tooltip: Locator
+  private executeButton: Locator
+  private shareButton: Locator
+  private exitCodeBadge: Locator
 
   constructor(public readonly page: Page) {
     this.stepCounter = this.page.getByTestId("step-counter-info")
     this.editor = this.page.locator(".view-lines")
+    this.tooltip = this.page.locator(".monaco-hover-content").last()
+    this.executeButton = this.page.getByRole("button", {name: "Execute"})
+    this.shareButton = this.page.getByRole("button", {name: "Share"})
+    this.exitCodeBadge = this.page.getByTestId("status-badge")
+  }
+
+  async execute() {
+    await this.executeButton.click()
+  }
+
+  async share() {
+    await this.shareButton.click()
+  }
+
+  async getExitCodeBadgeText() {
+    return await this.exitCodeBadge.textContent()
   }
 
   async goto() {
@@ -37,7 +57,9 @@ export class PlaygroundPage {
   async typeInEditor(code: string) {
     await this.editor.click()
     await this.page.keyboard.type(code)
-    await this.page.keyboard.press("Escape") // Dismiss any suggestion popups
+    await new Promise(resolve => setTimeout(resolve, 250))
+    await this.page.keyboard.press("Escape")
+    await new Promise(resolve => setTimeout(resolve, 250))
   }
 
   async getEditorText() {
@@ -70,5 +92,13 @@ export class PlaygroundPage {
     return await this.page.evaluate(() => {
       return localStorage.getItem("tutorial-completed-playground-page") !== null
     })
+  }
+
+  getTooltip() {
+    return this.tooltip
+  }
+
+  async waitForExitCodeBadge() {
+    await this.exitCodeBadge.waitFor({state: "visible"})
   }
 }
