@@ -120,6 +120,7 @@ export function useSandboxData(options: UseSandboxDataOptions = {}): UseSandboxD
         transactions,
         timestamp: rawTest.timestamp,
         contracts,
+        changes: rawTest.changes,
       }
     })
   }, [rawData.tests, rawData.contractsByTest])

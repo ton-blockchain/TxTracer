@@ -6,3 +6,10 @@ export interface ContractRawData {
   readonly stateInit: string | undefined
   readonly account: string
 }
+
+export type ContractStateChange = {
+  readonly address: string | undefined
+  readonly lt: string
+  readonly before: string | undefined
+  readonly after: string | undefined
+}

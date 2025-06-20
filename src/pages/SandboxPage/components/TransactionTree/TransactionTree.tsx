@@ -37,6 +37,7 @@ interface NodeTooltipData {
   readonly x: number
   readonly y: number
   readonly contractState?: ParsedObjectByABI
+  readonly contractStateBefore?: ParsedObjectByABI
   readonly contractData: ContractData
 }
 
@@ -133,6 +134,30 @@ const getContractStateStep = (contract: ContractData) => {
       return parseSliceWithAbiType(copy.asSlice(), abi2, contract.meta?.abi?.types ?? [])
     }
   }
+  return undefined
+}
+
+const getContractStateFromString = (stateString: string | null, contract: ContractData) => {
+  if (!stateString || contract.kind === "treasury") {
+    return undefined
+  }
+
+  try {
+    const cell = Cell.fromHex(stateString)
+    const abi = findConstructorAbiType(contract, contract.displayName)
+    if (abi) {
+      return parseSliceWithAbiType(cell.asSlice(), abi, contract.meta?.abi?.types ?? [])
+    }
+
+    const otherName = getContractOtherName(contract.displayName)
+    const abi2 = findConstructorAbiType(contract, otherName)
+    if (abi2) {
+      return parseSliceWithAbiType(cell.asSlice(), abi2, contract.meta?.abi?.types ?? [])
+    }
+  } catch (error) {
+    console.error("Error parsing contract state from string:", error)
+  }
+
   return undefined
 }
 
@@ -414,11 +439,26 @@ export function TransactionTree({testData}: TransactionTreeProps) {
 
             const contractState = getContractState(contract, contracts)
 
-            if (contractState) {
+            const contractChange = testData.changes.find(
+              change =>
+                change.address === contract.address.toString() &&
+                tx.transaction.lt.toString() === change.lt,
+            )
+
+            const contractStateBefore = contractChange?.before
+              ? getContractStateFromString(contractChange.before, contract)
+              : undefined
+
+            const contractStateAfter = contractChange?.after
+              ? getContractStateFromString(contractChange.after, contract)
+              : contractState
+
+            if (contractStateAfter || contractStateBefore) {
               setNodeTooltip({
                 x: rect.left + rect.width / 2,
                 y: rect.top,
-                contractState,
+                contractState: contractStateAfter,
+                contractStateBefore,
                 contractData: contract,
               })
             }
@@ -649,9 +689,23 @@ export function TransactionTree({testData}: TransactionTreeProps) {
             >
               <div className={styles.tooltipWithoutTriangle}>
                 <div className={styles.tooltipContent}>
+                  {nodeTooltip.contractStateBefore && (
+                    <div className={styles.tooltipField}>
+                      <div className={styles.tooltipFieldLabel}>Contract State (Before)</div>
+                      <div className={styles.tooltipFieldValue}>
+                        <div className={styles.contractStateData}>
+                          <ParsedDataView
+                            data={nodeTooltip.contractStateBefore}
+                            contracts={contracts}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {nodeTooltip.contractState && (
                     <div className={styles.tooltipField}>
-                      <div className={styles.tooltipFieldLabel}>Contract State</div>
+                      <div className={styles.tooltipFieldLabel}>Contract State (After)</div>
                       <div className={styles.tooltipFieldValue}>
                         <div className={styles.contractStateData}>
                           <ParsedDataView data={nodeTooltip.contractState} contracts={contracts} />

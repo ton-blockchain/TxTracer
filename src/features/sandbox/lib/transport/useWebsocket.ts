@@ -2,12 +2,13 @@ import {useEffect, useState, useCallback} from "react"
 
 import type {Message, MessageTestData} from "./message"
 import type {RawTransactions} from "./transaction"
-import type {ContractRawData} from "./contract"
+import type {ContractRawData, ContractStateChange} from "./contract"
 
-type TestData = {
+interface TestData {
   readonly testName: string
   readonly transactions: RawTransactions
   readonly timestamp?: number
+  readonly changes: readonly ContractStateChange[]
 }
 
 export interface RawWebsocketData {
@@ -44,6 +45,8 @@ export function useWebsocket({
 
   const clearFileData = useCallback(() => {
     setRawData([])
+    setContractsByTest(new Map())
+    setTests([])
   }, [])
 
   const [rawData, setRawData] = useState<MessageTestData[]>([])
@@ -89,6 +92,7 @@ export function useWebsocket({
                     ...rawTransactions.transactions,
                   ],
                 },
+                changes: [...test.changes, ...message.changes],
               }
             : test,
         )
@@ -100,6 +104,7 @@ export function useWebsocket({
             testName,
             transactions: rawTransactions,
             timestamp: Date.now(),
+            changes: message.changes,
           },
         ]
       }
