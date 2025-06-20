@@ -17,58 +17,63 @@ export function parseSliceWithAbiType(
 ): ParsedObjectByABI | undefined {
   const res: ParsedObjectByABI = {}
 
-  for (const [index, field] of abi.fields.entries()) {
+  let slice = init
+
+  const fields = abi.fields
+  for (let index = 0; index < fields.length; index++) {
+    const field = fields[index]
+
     try {
       if (field.type.kind === "simple") {
         if (field.type.type === "address") {
           if (field.type.optional) {
-            res[field.name] = init.loadMaybeAddress()
+            res[field.name] = slice.loadMaybeAddress()
           } else {
-            res[field.name] = init.loadAddress()
+            res[field.name] = slice.loadAddress()
           }
         } else if (field.type.type === "bool") {
-          res[field.name] = init.loadUintBig(1)
+          res[field.name] = slice.loadUintBig(1)
         } else if (field.type.type === "uint" && typeof field.type.format === "number") {
-          res[field.name] = init.loadUintBig(field.type.format)
+          res[field.name] = slice.loadUintBig(field.type.format)
         } else if (field.type.type === "int" && typeof field.type.format === "number") {
-          res[field.name] = init.loadIntBig(field.type.format)
+          res[field.name] = slice.loadIntBig(field.type.format)
         } else if (field.type.type === "uint" && typeof field.type.format === "string") {
           if (field.type.format === "varuint16") {
-            res[field.name] = init.loadVarUintBig(4)
+            res[field.name] = slice.loadVarUintBig(4)
           } else if (field.type.format === "varuint32") {
-            res[field.name] = init.loadVarUintBig(8)
+            res[field.name] = slice.loadVarUintBig(8)
           } else if (field.type.format === "coins") {
-            res[field.name] = init.loadCoins()
+            res[field.name] = slice.loadCoins()
           }
         } else if (field.type.type === "int" && typeof field.type.format === "string") {
           if (field.type.format === "varint16") {
-            res[field.name] = init.loadVarIntBig(4)
+            res[field.name] = slice.loadVarIntBig(4)
           } else if (field.type.format === "varint32") {
-            res[field.name] = init.loadVarUintBig(8)
+            res[field.name] = slice.loadVarUintBig(8)
           }
         } else if (field.type.type === "cell" || field.type.type === "string") {
           if (field.type.optional) {
-            const hasValue = init.loadUint(1)
+            const hasValue = slice.loadUint(1)
             if (hasValue) {
-              res[field.name] = init.loadRef()
+              res[field.name] = slice.loadRef()
             }
           } else {
-            res[field.name] = init.loadRef()
+            res[field.name] = slice.loadRef()
           }
         } else if (field.type.format === "ref") {
-          res[field.name] = init.loadRef()
+          res[field.name] = slice.loadRef()
         } else if (field.type.type === "slice" && field.type.format === "remainder") {
-          res[field.name] = init.asCell().asSlice()
+          res[field.name] = slice.asCell().asSlice()
         } else {
           const name = field.type.type
           if (field.type.optional) {
-            const hasValue = init.loadUint(1)
+            const hasValue = slice.loadUint(1)
             if (hasValue) {
               const otherType = allAbi.find(it => it.name === name)
               if (otherType) {
                 res[field.name] = {
                   $: "sub-object",
-                  value: parseSliceWithAbiType(init.loadRef().asSlice(), otherType, allAbi),
+                  value: parseSliceWithAbiType(slice, otherType, allAbi),
                 }
               }
             } else {
@@ -80,8 +85,9 @@ export function parseSliceWithAbiType(
             if (otherType) {
               res[field.name] = {
                 $: "sub-object",
-                value: parseSliceWithAbiType(init.loadRef().asSlice(), otherType, allAbi),
+                value: parseSliceWithAbiType(slice, otherType, allAbi),
               }
+              continue
             }
           }
 
@@ -90,6 +96,19 @@ export function parseSliceWithAbiType(
         }
       }
     } catch (error) {
+      if (
+        error instanceof Error &&
+        error.message.includes("is out of bounds") &&
+        slice.remainingRefs > 0
+      ) {
+        console.log("retry")
+
+        index--
+
+        slice = slice.loadRef().beginParse()
+        continue
+      }
+
       console.error(`Error while parsing ${field.name} of ${abi.name} at index ${index}: ${error}`)
     }
   }

@@ -10,6 +10,7 @@ export type ContractData = {
   readonly account: ShardAccount
   readonly letter: string
   readonly displayName: string
+  readonly kind: "treasury" | "user-contract"
 }
 
 function areCodeEqual(it: ContractData, init: StateInit) {

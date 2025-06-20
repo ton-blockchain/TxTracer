@@ -249,3 +249,9 @@
   font-size: 0.75rem;
   font-weight: 500;
 }
+
+@media (max-width: 768px) {
+  .transactionDetailsContainer {
+    padding: var(--spacing-mds);
+  }
+}

@@ -103,7 +103,7 @@
   width: 100%;
   padding-left: var(--spacing-md);
   border-left: 2px solid var(--color-border);
-  margin-top: var(--spacing-md);
+  margin-bottom: var(--spacing-xs);
 }
 
 .objectValue {

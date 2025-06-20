@@ -1,6 +1,6 @@
 import React from "react"
 
-import type {Address} from "@ton/core"
+import {type Address} from "@ton/core"
 
 import Modal from "@shared/ui/Modal"
 import type {MessageRelaxed, OutAction, StateInit} from "@entities/transaction"

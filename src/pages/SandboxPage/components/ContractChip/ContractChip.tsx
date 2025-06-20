@@ -87,7 +87,7 @@ export function ContractChip({
   }
 
   const contractInfo = contracts.get(address)
-  const isClickable = !!onContractClick
+  const isClickable = onContractClick !== undefined
 
   const chipContent = (
     <>
@@ -104,16 +104,22 @@ export function ContractChip({
           {address.slice(0, 6)}…{address.slice(-6)}
         </span>
       )}
-      <button
+      <div
         onClick={handleCopy}
+        onKeyDown={e => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault()
+            handleCopy(e as unknown as React.MouseEvent)
+          }
+        }}
         className={styles.contractChipCopyButton}
         title={isCopied ? "Copied!" : "Copy address"}
         aria-label={isCopied ? "Copied to clipboard" : "Copy address"}
-        disabled={isCopied}
-        type="button"
+        role="button"
+        tabIndex={0}
       >
         {isCopied ? checkIconSvg : copyIconSvg}
-      </button>
+      </div>
     </>
   )
 

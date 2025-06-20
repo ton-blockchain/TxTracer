@@ -109,6 +109,7 @@ export function useSandboxData(options: UseSandboxDataOptions = {}): UseSandboxD
           account: loadShardAccount(Cell.fromHex(it.account).asSlice()),
           letter,
           displayName,
+          kind: it.meta?.treasurySeed !== undefined ? "treasury" : "user-contract",
         }
       })
 

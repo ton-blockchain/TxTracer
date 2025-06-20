@@ -101,33 +101,65 @@ function findConstructorAbiType(data: ContractData, name: string) {
   return data.meta?.abi?.types?.find(it => it.name === `${name}$Data`)
 }
 
-function getStateInit(data: ContractData) {
-  const initData = data.stateInit?.data
+function getContractOtherName(name: string) {
+  switch (name) {
+    case "ExtendedShardedJettonWallet":
+      return "JettonWalletSharded"
+    case "ExtendedShardedJettonMinter":
+      return "JettonMinterSharded"
+    case "ExtendedJettonWallet":
+      return "JettonWallet"
+    case "ExtendedJettonMinter":
+      return "JettonMinter"
+    case "ExtendedLPJettonWallet":
+      return "LPJettonWallet"
+    case "ExtendedLPJettonMinter":
+      return "LPJettonMinter"
+  }
+  return name
+}
+
+function getStateInit(contract: ContractData, contracts: Map<string, ContractData>) {
+  if (contract.meta?.abi === undefined) {
+    // no abi for contract, likely internally deployed contract, trying to search elsewhere
+    for (const [, contract] of contracts) {
+      const stateInit = getStateInitStep(contract)
+      if (stateInit) {
+        return stateInit
+      }
+    }
+
+    return undefined
+  }
+
+  return getStateInitStep(contract)
+}
+
+function getStateInitStep(contract: ContractData) {
+  if (contract.kind === "treasury") {
+    // TODO: add ABI for treasury?
+    return undefined
+  }
+
+  const initData = contract.stateInit?.data
   if (initData) {
     const copy = Cell.fromHex(initData.toBoc().toString("hex"))
-    const name = data.meta?.wrapperName
-    if (!name) return undefined
 
-    const abi = findConstructorAbiType(data, name)
+    const abi = findConstructorAbiType(contract, contract.displayName)
     if (abi) {
-      console.log(`found abi data for ${data.meta?.wrapperName ?? "unknown contract"}`)
-      return parseSliceWithAbiType(copy.asSlice(), abi, data.meta?.abi?.types ?? [])
+      console.log(abi)
+      return parseSliceWithAbiType(copy.asSlice(), abi, contract.meta?.abi?.types ?? [])
     }
 
-    const otherName =
-      name === "ExtendedShardedJettonWallet"
-        ? "JettonWalletSharded"
-        : name === "ExtendedShardedJettonMinter"
-          ? "JettonMinterSharded"
-          : name
+    const otherName = getContractOtherName(contract.displayName)
 
-    const abi2 = findConstructorAbiType(data, otherName)
+    const abi2 = findConstructorAbiType(contract, otherName)
     if (abi2) {
-      console.log(`found abi data for ${data.meta?.wrapperName ?? "unknown contract"}`)
-      return parseSliceWithAbiType(copy.asSlice(), abi2, data.meta?.abi?.types ?? [])
+      console.log(abi2)
+      return parseSliceWithAbiType(copy.asSlice(), abi2, contract.meta?.abi?.types ?? [])
     }
 
-    console.log(`no abi data for ${data.meta?.wrapperName ?? "unknown contract"}`)
+    console.log(`no abi data for ${otherName}`, contract.meta?.abi)
   }
   return undefined
 }
@@ -165,7 +197,7 @@ export function ContractDetails({
   const address = contract.address.toString()
   const balance = formatCurrency(contract.account.account?.storage?.balance?.coins)
   const contractType =
-    (contract.meta?.treasurySeed ? "Treasury" : contract.meta?.wrapperName) ?? "Unknown contract"
+    (contract.meta?.treasurySeed ? "Treasury" : contract.displayName) ?? "Unknown contract"
 
   const state = contract.account.account?.storage?.state?.type ?? "unknown"
 
@@ -182,7 +214,7 @@ export function ContractDetails({
     }
   }
 
-  const stateInit = getStateInit(contract)
+  const stateInit = getStateInit(contract, contracts)
 
   const ownTransactions = findTransactions(tests, contract)
 
@@ -316,20 +348,20 @@ export function ContractDetails({
             <div className={styles.stateSection}>
               {stateInit && (
                 <div>
-                  <div className={styles.parsedStateInitHeader}>Parsed State Init</div>
+                  <div className={styles.parsedStateInitHeader}>Parsed Data</div>
                   <div className={styles.parsedStateInit}>{renderStateInit()}</div>
                 </div>
               )}
 
               <CodeBlock
-                title="Hex"
+                title="Data Hex"
                 content={stateInitHex}
                 variant="hex"
                 placeholder="No init data available"
               />
 
               <CodeBlock
-                title="Cells"
+                title="Data Cells"
                 content={stateInitCell}
                 variant="hex"
                 placeholder="No init data available"

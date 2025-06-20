@@ -1,14 +1,16 @@
 import {useMemo, useState} from "react"
 import type {Orientation, RawNodeDatum, TreeLinkDatum} from "react-d3-tree"
 import {Tree} from "react-d3-tree"
-import {Address} from "@ton/core"
+import {Address, Cell} from "@ton/core"
 
 import {formatCurrency} from "@shared/lib/format"
 
 import type {TestData} from "@features/sandbox/lib/test-data.ts"
 import {findOpcodeABI, type TransactionInfo} from "@features/sandbox/lib/transaction.ts"
 import type {ContractData} from "@features/sandbox/lib/contract"
+import {parseSliceWithAbiType, type ParsedObjectByABI} from "@features/sandbox/lib/abi/parser.ts"
 import {TransactionShortInfo} from "@app/pages/SandboxPage/components"
+import {ParsedDataView} from "@features/sandbox/ui/abi"
 
 import {ContractDetails} from "@app/pages/SandboxPage/components"
 
@@ -29,6 +31,13 @@ interface TooltipData {
     readonly totalFees: bigint
   }
   readonly sentTotal: bigint
+}
+
+interface NodeTooltipData {
+  readonly x: number
+  readonly y: number
+  readonly contractState?: ParsedObjectByABI
+  readonly contractData: ContractData
 }
 
 interface TransactionTreeProps {
@@ -64,8 +73,72 @@ const formatAddressShort = (address: Address | undefined): string => {
   return addressStr.slice(0, 6) + "..." + addressStr.slice(addressStr.length - 6)
 }
 
+const findConstructorAbiType = (data: ContractData, name: string) => {
+  return data.meta?.abi?.types?.find(it => it.name === `${name}$Data`)
+}
+
+const getContractOtherName = (name: string) => {
+  switch (name) {
+    case "ExtendedShardedJettonWallet":
+      return "JettonWalletSharded"
+    case "ExtendedShardedJettonMinter":
+      return "JettonMinterSharded"
+    case "ExtendedJettonWallet":
+      return "JettonWallet"
+    case "ExtendedJettonMinter":
+      return "JettonMinter"
+    case "ExtendedLPJettonWallet":
+      return "LPJettonWallet"
+    case "ExtendedLPJettonMinter":
+      return "LPJettonMinter"
+  }
+  return name
+}
+
+const getContractState = (contract: ContractData, contracts: Map<string, ContractData>) => {
+  if (contract.meta?.abi === undefined) {
+    if (contract.kind === "treasury") {
+      return undefined
+    }
+
+    for (const [, otherContract] of contracts) {
+      const state = getContractStateStep(otherContract)
+      if (state) {
+        return state
+      }
+    }
+    return undefined
+  }
+
+  return getContractStateStep(contract)
+}
+
+const getContractStateStep = (contract: ContractData) => {
+  if (contract.kind === "treasury") {
+    return undefined
+  }
+
+  const initData = contract.stateInit?.data
+  if (initData) {
+    const copy = Cell.fromHex(initData.toBoc().toString("hex"))
+
+    const abi = findConstructorAbiType(contract, contract.displayName)
+    if (abi) {
+      return parseSliceWithAbiType(copy.asSlice(), abi, contract.meta?.abi?.types ?? [])
+    }
+
+    const otherName = getContractOtherName(contract.displayName)
+    const abi2 = findConstructorAbiType(contract, otherName)
+    if (abi2) {
+      return parseSliceWithAbiType(copy.asSlice(), abi2, contract.meta?.abi?.types ?? [])
+    }
+  }
+  return undefined
+}
+
 export function TransactionTree({testData}: TransactionTreeProps) {
   const [tooltip, setTooltip] = useState<TooltipData | null>(null)
+  const [nodeTooltip, setNodeTooltip] = useState<NodeTooltipData | null>(null)
   const [selectedTransaction, setSelectedTransaction] = useState<TransactionInfo | null>(null)
   const [selectedContract, setSelectedContract] = useState<ContractData | null>(null)
   const [selectedRootLt, setSelectedRootLt] = useState<string | null>(null)
@@ -138,7 +211,7 @@ export function TransactionTree({testData}: TransactionTreeProps) {
     const totalNodes = countNodes(data)
     const depth = getDepth(data)
 
-    const height = totalNodes <= 2 ? totalNodes * 80 + 20 : totalNodes * 80 + 100
+    const height = totalNodes <= 2 ? totalNodes * 80 + 20 : totalNodes * 100 + 100
 
     return {
       height: Math.max(100, height),
@@ -332,6 +405,27 @@ export function TransactionTree({testData}: TransactionTreeProps) {
           stroke={"var(--color-text-primary)"}
           strokeWidth={1.5}
           onClick={() => handleNodeClick(lt)}
+          onMouseEnter={event => {
+            if (!tx?.address) return
+
+            const rect = (event.currentTarget as SVGElement).getBoundingClientRect()
+            const contract = contracts.get(tx.address.toString())
+            if (!contract) return
+
+            const contractState = getContractState(contract, contracts)
+
+            if (contractState) {
+              setNodeTooltip({
+                x: rect.left + rect.width / 2,
+                y: rect.top,
+                contractState,
+                contractData: contract,
+              })
+            }
+          }}
+          onMouseLeave={() => {
+            setNodeTooltip(null)
+          }}
           style={{cursor: "pointer"}}
         />
 
@@ -540,6 +634,31 @@ export function TransactionTree({testData}: TransactionTreeProps) {
                       )}
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {nodeTooltip && (
+            <div
+              className={styles.tooltipContainer}
+              style={{
+                left: Math.max(10, Math.min(nodeTooltip.x + 20, window.innerWidth - 320)),
+                top: Math.max(10, nodeTooltip.y - 150),
+              }}
+            >
+              <div className={styles.tooltipWithoutTriangle}>
+                <div className={styles.tooltipContent}>
+                  {nodeTooltip.contractState && (
+                    <div className={styles.tooltipField}>
+                      <div className={styles.tooltipFieldLabel}>Contract State</div>
+                      <div className={styles.tooltipFieldValue}>
+                        <div className={styles.contractStateData}>
+                          <ParsedDataView data={nodeTooltip.contractState} contracts={contracts} />
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
