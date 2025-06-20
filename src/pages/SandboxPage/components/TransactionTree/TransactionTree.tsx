@@ -1,4 +1,4 @@
-import {useMemo, useState} from "react"
+import React, {useMemo, useState, useRef} from "react"
 import type {Orientation, RawNodeDatum, TreeLinkDatum} from "react-d3-tree"
 import {Tree} from "react-d3-tree"
 import {Address, Cell, type ContractABI} from "@ton/core"
@@ -14,11 +14,12 @@ import {ParsedDataView} from "@features/sandbox/ui/abi"
 
 import {ContractDetails} from "@app/pages/SandboxPage/components"
 
+import {useTooltip} from "./useTooltip"
+import {SmartTooltip} from "./SmartTooltip"
+
 import styles from "./TransactionTree.module.css"
 
-interface TooltipData {
-  readonly x: number
-  readonly y: number
+interface TransactionTooltipData {
   readonly fromAddress: string
   readonly computePhase: {
     readonly success: boolean
@@ -34,8 +35,6 @@ interface TooltipData {
 }
 
 interface NodeTooltipData {
-  readonly x: number
-  readonly y: number
   readonly contractState?: ParsedObjectByABI
   readonly contractStateBefore?: ParsedObjectByABI
   readonly contractData: ContractData
@@ -165,12 +164,96 @@ const getContractStateFromString = (stateString: string | null, contract: Contra
   return undefined
 }
 
+function TransactionTooltipContent({data}: {data: TransactionTooltipData}) {
+  return (
+    <div className={styles.tooltipContent}>
+      <div className={styles.tooltipField}>
+        <div className={styles.tooltipFieldLabel}>From Address</div>
+        <div className={styles.tooltipFieldValue}>{data.fromAddress}</div>
+      </div>
+
+      <div className={styles.tooltipField}>
+        <div className={styles.tooltipFieldLabel}>Compute Phase</div>
+        <div className={styles.tooltipFieldValue}>
+          {data.computePhase.success ? "Success" : "Failed"}
+          {data.computePhase.exitCode !== undefined && data.computePhase.exitCode !== 0 && (
+            <span>
+              {" "}
+              {"(Exit:"} {data.computePhase.exitCode})
+            </span>
+          )}
+          {data.computePhase.gasUsed && (
+            <div className={styles.tooltipSubValue}>
+              Gas Used: {data.computePhase.gasUsed.toString()}
+            </div>
+          )}
+          {data.computePhase.vmSteps !== undefined && (
+            <div className={styles.tooltipSubValue}>
+              VM Steps: {data.computePhase.vmSteps.toString()}
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className={styles.tooltipField}>
+        <div className={styles.tooltipFieldLabel}>Money</div>
+        <div className={styles.tooltipFieldValue}>
+          <div>Sent Total: {formatCurrency(data.sentTotal)}</div>
+          <div className={styles.tooltipSubValue}>
+            Total Fees: {formatCurrency(data.fees.totalFees)}
+          </div>
+          {data.fees.gasFees && (
+            <div className={styles.tooltipSubValue}>
+              Gas Fees: {formatCurrency(data.fees.gasFees)}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function NodeTooltipContent({
+  data,
+  contracts,
+}: {
+  data: NodeTooltipData
+  contracts: Map<string, ContractData>
+}) {
+  return (
+    <div className={styles.tooltipContent}>
+      <div className={styles.tooltipField}>
+        <div className={styles.tooltipFieldLabel}>Contract State</div>
+        <div className={styles.tooltipFieldValue}>
+          <div className={styles.contractStateData}>
+            {data.contractState && (
+              <ParsedDataView
+                data={data.contractState}
+                dataBefore={data.contractStateBefore}
+                contracts={contracts}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function TransactionTree({testData}: TransactionTreeProps) {
-  const [tooltip, setTooltip] = useState<TooltipData | null>(null)
-  const [nodeTooltip, setNodeTooltip] = useState<NodeTooltipData | null>(null)
+  const {
+    tooltip,
+    showTooltip,
+    hideTooltip,
+    forceHideTooltip,
+    setIsTooltipHovered,
+    calculateOptimalPosition,
+  } = useTooltip()
+
   const [selectedTransaction, setSelectedTransaction] = useState<TransactionInfo | null>(null)
   const [selectedContract, setSelectedContract] = useState<ContractData | null>(null)
   const [selectedRootLt, setSelectedRootLt] = useState<string | null>(null)
+  const triggerRectRef = useRef<DOMRect | null>(null)
 
   const contracts = testData.contracts
 
@@ -278,6 +361,80 @@ export function TransactionTree({testData}: TransactionTreeProps) {
       setSelectedContract(null)
     } else {
       setSelectedContract(contract)
+    }
+  }
+
+  const showTransactionTooltip = (event: React.MouseEvent, tx: TransactionInfo) => {
+    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
+    triggerRectRef.current = rect
+
+    const computeInfo = tx.computeInfo
+    const computePhase = {
+      success: computeInfo !== "skipped" ? computeInfo.success : true,
+      exitCode: computeInfo !== "skipped" ? computeInfo.exitCode : undefined,
+      gasUsed: computeInfo !== "skipped" ? computeInfo.gasUsed : undefined,
+      vmSteps: computeInfo !== "skipped" ? computeInfo.vmSteps : undefined,
+    }
+
+    const fees = {
+      gasFees: computeInfo !== "skipped" ? computeInfo.gasFees : undefined,
+      totalFees: tx.money.totalFees,
+    }
+
+    const srcAddress = tx.transaction.inMessage?.info?.src
+    const fromAddressStr = srcAddress ? formatAddressShort(srcAddress as Address) : "unknown"
+
+    const tooltipData: TransactionTooltipData = {
+      fromAddress: fromAddressStr,
+      computePhase,
+      fees,
+      sentTotal: tx.money.sentTotal,
+    }
+
+    showTooltip({
+      x: rect.left,
+      y: rect.top,
+      content: <TransactionTooltipContent data={tooltipData} />,
+    })
+  }
+
+  const showNodeTooltip = (event: React.MouseEvent, tx: TransactionInfo) => {
+    if (!tx?.address) return
+
+    const rect = (event.currentTarget as SVGElement).getBoundingClientRect()
+    triggerRectRef.current = rect
+
+    const contract = contracts.get(tx.address.toString())
+    if (!contract) return
+
+    const contractState = getContractState(contract, contracts)
+
+    const contractChange = testData.changes.find(
+      change =>
+        change.address === contract.address.toString() &&
+        tx.transaction.lt.toString() === change.lt,
+    )
+
+    const contractStateBefore = contractChange?.before
+      ? getContractStateFromString(contractChange.before, contract)
+      : undefined
+
+    const contractStateAfter = contractChange?.after
+      ? getContractStateFromString(contractChange.after, contract)
+      : contractState
+
+    if (contractStateAfter || contractStateBefore) {
+      const nodeTooltipData: NodeTooltipData = {
+        contractState: contractStateAfter,
+        contractStateBefore,
+        contractData: contract,
+      }
+
+      showTooltip({
+        x: rect.left,
+        y: rect.top,
+        content: <NodeTooltipContent data={nodeTooltipData} contracts={contracts} />,
+      })
     }
   }
 
@@ -436,39 +593,10 @@ export function TransactionTree({testData}: TransactionTreeProps) {
           onClick={() => handleNodeClick(lt)}
           onMouseEnter={event => {
             if (!tx?.address) return
-
-            const rect = (event.currentTarget as SVGElement).getBoundingClientRect()
-            const contract = contracts.get(tx.address.toString())
-            if (!contract) return
-
-            const contractState = getContractState(contract, contracts)
-
-            const contractChange = testData.changes.find(
-              change =>
-                change.address === contract.address.toString() &&
-                tx.transaction.lt.toString() === change.lt,
-            )
-
-            const contractStateBefore = contractChange?.before
-              ? getContractStateFromString(contractChange.before, contract)
-              : undefined
-
-            const contractStateAfter = contractChange?.after
-              ? getContractStateFromString(contractChange.after, contract)
-              : contractState
-
-            if (contractStateAfter || contractStateBefore) {
-              setNodeTooltip({
-                x: rect.left + rect.width / 2,
-                y: rect.top,
-                contractState: contractStateAfter,
-                contractStateBefore,
-                contractData: contract,
-              })
-            }
+            showNodeTooltip(event, tx)
           }}
           onMouseLeave={() => {
-            setNodeTooltip(null)
+            hideTooltip()
           }}
           style={{cursor: "pointer"}}
         />
@@ -490,38 +618,10 @@ export function TransactionTree({testData}: TransactionTreeProps) {
             className={styles.edgeText}
             onMouseEnter={event => {
               if (!tx) return
-
-              const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
-
-              const computeInfo = tx.computeInfo
-              const computePhase = {
-                success: computeInfo !== "skipped" ? computeInfo.success : true,
-                exitCode: computeInfo !== "skipped" ? computeInfo.exitCode : undefined,
-                gasUsed: computeInfo !== "skipped" ? computeInfo.gasUsed : undefined,
-                vmSteps: computeInfo !== "skipped" ? computeInfo.vmSteps : undefined,
-              }
-
-              const fees = {
-                gasFees: computeInfo !== "skipped" ? computeInfo.gasFees : undefined,
-                totalFees: tx.money.totalFees,
-              }
-
-              const srcAddress = tx.transaction.inMessage?.info?.src
-              const fromAddressStr = srcAddress
-                ? formatAddressShort(srcAddress as Address)
-                : "unknown"
-
-              setTooltip({
-                x: rect.left + rect.width / 2,
-                y: rect.top,
-                fromAddress: fromAddressStr,
-                computePhase,
-                fees,
-                sentTotal: tx.money.sentTotal,
-              })
+              showTransactionTooltip(event, tx)
             }}
             onMouseLeave={() => {
-              setTooltip(null)
+              hideTooltip()
             }}
           >
             <div className={styles.topText}>
@@ -625,91 +725,15 @@ export function TransactionTree({testData}: TransactionTreeProps) {
             pannable={false}
             scaleExtent={{min: 1, max: 1}}
           />
-          {tooltip && (
-            <div
-              className={styles.tooltipContainer}
-              style={{
-                left: Math.max(10, Math.min(tooltip.x - 80, window.innerWidth - 280)),
-                top: Math.max(10, tooltip.y - 265),
-              }}
-            >
-              <div className={styles.tooltip}>
-                <div className={styles.tooltipContent}>
-                  <div className={styles.tooltipField}>
-                    <div className={styles.tooltipFieldLabel}>From Address</div>
-                    <div className={styles.tooltipFieldValue}>{tooltip.fromAddress}</div>
-                  </div>
-
-                  <div className={styles.tooltipField}>
-                    <div className={styles.tooltipFieldLabel}>Compute Phase</div>
-                    <div className={styles.tooltipFieldValue}>
-                      {tooltip.computePhase.success ? "Success" : "Failed"}
-                      {tooltip.computePhase.exitCode !== undefined &&
-                        tooltip.computePhase.exitCode !== 0 && (
-                          <span>
-                            {" "}
-                            {"(Exit:"} {tooltip.computePhase.exitCode})
-                          </span>
-                        )}
-                      {tooltip.computePhase.gasUsed && (
-                        <div className={styles.tooltipSubValue}>
-                          Gas Used: {tooltip.computePhase.gasUsed.toString()}
-                        </div>
-                      )}
-                      {tooltip.computePhase.vmSteps !== undefined && (
-                        <div className={styles.tooltipSubValue}>
-                          VM Steps: {tooltip.computePhase.vmSteps.toString()}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className={styles.tooltipField}>
-                    <div className={styles.tooltipFieldLabel}>Money</div>
-                    <div className={styles.tooltipFieldValue}>
-                      <div>Sent Total: {formatCurrency(tooltip.sentTotal)}</div>
-                      <div className={styles.tooltipSubValue}>
-                        Total Fees: {formatCurrency(tooltip.fees.totalFees)}
-                      </div>
-                      {tooltip.fees.gasFees && (
-                        <div className={styles.tooltipSubValue}>
-                          Gas Fees: {formatCurrency(tooltip.fees.gasFees)}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {nodeTooltip && (
-            <div
-              className={styles.tooltipContainer}
-              style={{
-                left: Math.max(10, Math.min(nodeTooltip.x + 20, window.innerWidth - 420)),
-                top: Math.max(10, Math.min(nodeTooltip.y - 50, window.innerHeight - 100)),
-              }}
-            >
-              <div className={styles.tooltipWithoutTriangle}>
-                <div className={styles.tooltipContent}>
-                  {nodeTooltip.contractState && (
-                    <div className={styles.tooltipField}>
-                      <div className={styles.tooltipFieldLabel}>Contract State</div>
-                      <div className={styles.tooltipFieldValue}>
-                        <div className={styles.contractStateData}>
-                          <ParsedDataView
-                            data={nodeTooltip.contractState}
-                            dataBefore={nodeTooltip.contractStateBefore}
-                            contracts={contracts}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+          {tooltip && triggerRectRef.current && (
+            <SmartTooltip
+              content={tooltip.content}
+              triggerRect={triggerRectRef.current}
+              onMouseEnter={() => setIsTooltipHovered(true)}
+              onMouseLeave={() => setIsTooltipHovered(false)}
+              onForceHide={forceHideTooltip}
+              calculateOptimalPosition={calculateOptimalPosition}
+            />
           )}
         </div>
       </div>
