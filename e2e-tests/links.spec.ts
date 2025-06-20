@@ -1,4 +1,4 @@
-import {test, expect, Page} from "@playwright/test"
+import {test, expect, type Page} from "@playwright/test"
 
 const TON_CX =
   "https://ton.cx/tx/43546193000009:eiNquL3saa5GwCpRQt/g3EW/A7MGB8X4j9+G2uuOOTs=:EQCVervJ0JDFlSdOsPos17zHdRBU-kHHl09iXOmRIW-5lwXW"

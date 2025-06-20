@@ -18,6 +18,7 @@ export default tseslint.config(
       "src/features/godbolt/lib/func/func-wasm/func-compile.ts",
       "src/features/godbolt/lib/func/func-wasm/funcfiftlib.d.ts",
       ".test-project/",
+      ".yarn",
     ],
   },
   {
@@ -94,6 +95,17 @@ export default tseslint.config(
         },
         node: true,
       },
+    },
+  },
+  {
+    files: ["e2e-tests/**/*.{ts,js}"],
+    rules: {
+      "react-hooks/rules-of-hooks": "off",
+      "react-hooks/exhaustive-deps": "off",
+      "react/prop-types": "off",
+      "react/react-in-jsx-scope": "off",
+      "react/jsx-uses-react": "off",
+      "react/jsx-uses-vars": "off",
     },
   },
   eslintConfigPrettier,

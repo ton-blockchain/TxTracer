@@ -34,6 +34,7 @@ const ErrorBanner: React.FC<Props> = ({message, onClose}) => {
       role="alert"
       aria-live="assertive"
       aria-atomic="true"
+      data-testid="error-banner-info"
     >
       <span>{message}</span>
       <Button
