@@ -51,7 +51,11 @@ export function parseSliceWithAbiType(
           } else if (field.type.format === "varint32") {
             res[field.name] = slice.loadVarUintBig(8)
           }
-        } else if (field.type.type === "cell" || field.type.type === "string") {
+        } else if (
+          field.type.type === "cell" ||
+          field.type.type === "string" ||
+          field.type.type === "builder"
+        ) {
           if (field.type.optional) {
             const hasValue = slice.loadUint(1)
             if (hasValue) {
@@ -96,6 +100,12 @@ export function parseSliceWithAbiType(
         }
       }
     } catch (error) {
+      if (error instanceof Error && error.message.includes("Invalid address: 3")) {
+        slice.loadUint(1)
+        index--
+        continue
+      }
+
       if (
         error instanceof Error &&
         error.message.includes("is out of bounds") &&

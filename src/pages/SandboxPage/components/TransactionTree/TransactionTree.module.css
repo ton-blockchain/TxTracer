@@ -139,12 +139,12 @@
 .tooltipWithoutTriangle {
   background-color: var(--color-background-primary);
   border-radius: var(--border-radius-md);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   padding: var(--spacing-md);
   font-size: var(--font-size-sm);
   min-width: 280px;
   max-width: 400px;
-  max-height: 80vh;
+  max-height: 90vh;
   overflow-y: auto;
   z-index: 1000;
   position: relative;

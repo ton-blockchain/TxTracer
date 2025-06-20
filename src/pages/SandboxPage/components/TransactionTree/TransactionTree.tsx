@@ -1,7 +1,7 @@
 import {useMemo, useState} from "react"
 import type {Orientation, RawNodeDatum, TreeLinkDatum} from "react-d3-tree"
 import {Tree} from "react-d3-tree"
-import {Address, Cell} from "@ton/core"
+import {Address, Cell, type ContractABI} from "@ton/core"
 
 import {formatCurrency} from "@shared/lib/format"
 
@@ -74,8 +74,8 @@ const formatAddressShort = (address: Address | undefined): string => {
   return addressStr.slice(0, 6) + "..." + addressStr.slice(addressStr.length - 6)
 }
 
-const findConstructorAbiType = (data: ContractData, name: string) => {
-  return data.meta?.abi?.types?.find(it => it.name === `${name}$Data`)
+const findConstructorAbiType = (abi: ContractABI | undefined, name: string) => {
+  return abi?.types?.find(it => it.name === `${name}$Data`)
 }
 
 const getContractOtherName = (name: string) => {
@@ -97,13 +97,17 @@ const getContractOtherName = (name: string) => {
 }
 
 const getContractState = (contract: ContractData, contracts: Map<string, ContractData>) => {
-  if (contract.meta?.abi === undefined) {
+  if (!contract.meta?.abi) {
     if (contract.kind === "treasury") {
       return undefined
     }
 
     for (const [, otherContract] of contracts) {
-      const state = getContractStateStep(otherContract)
+      if (!otherContract.meta?.abi) {
+        continue
+      }
+
+      const state = getContractStateStep(contract, otherContract.meta?.abi)
       if (state) {
         return state
       }
@@ -111,10 +115,10 @@ const getContractState = (contract: ContractData, contracts: Map<string, Contrac
     return undefined
   }
 
-  return getContractStateStep(contract)
+  return getContractStateStep(contract, contract.meta?.abi)
 }
 
-const getContractStateStep = (contract: ContractData) => {
+const getContractStateStep = (contract: ContractData, contractAbi: ContractABI) => {
   if (contract.kind === "treasury") {
     return undefined
   }
@@ -123,15 +127,15 @@ const getContractStateStep = (contract: ContractData) => {
   if (initData) {
     const copy = Cell.fromHex(initData.toBoc().toString("hex"))
 
-    const abi = findConstructorAbiType(contract, contract.displayName)
+    const abi = findConstructorAbiType(contractAbi, contract.displayName)
     if (abi) {
-      return parseSliceWithAbiType(copy.asSlice(), abi, contract.meta?.abi?.types ?? [])
+      return parseSliceWithAbiType(copy.asSlice(), abi, contractAbi.types ?? [])
     }
 
     const otherName = getContractOtherName(contract.displayName)
-    const abi2 = findConstructorAbiType(contract, otherName)
+    const abi2 = findConstructorAbiType(contractAbi, otherName)
     if (abi2) {
-      return parseSliceWithAbiType(copy.asSlice(), abi2, contract.meta?.abi?.types ?? [])
+      return parseSliceWithAbiType(copy.asSlice(), abi2, contractAbi.types ?? [])
     }
   }
   return undefined
@@ -144,13 +148,13 @@ const getContractStateFromString = (stateString: string | null, contract: Contra
 
   try {
     const cell = Cell.fromHex(stateString)
-    const abi = findConstructorAbiType(contract, contract.displayName)
+    const abi = findConstructorAbiType(contract.meta?.abi ?? undefined, contract.displayName)
     if (abi) {
       return parseSliceWithAbiType(cell.asSlice(), abi, contract.meta?.abi?.types ?? [])
     }
 
     const otherName = getContractOtherName(contract.displayName)
-    const abi2 = findConstructorAbiType(contract, otherName)
+    const abi2 = findConstructorAbiType(contract.meta?.abi ?? undefined, otherName)
     if (abi2) {
       return parseSliceWithAbiType(cell.asSlice(), abi2, contract.meta?.abi?.types ?? [])
     }
