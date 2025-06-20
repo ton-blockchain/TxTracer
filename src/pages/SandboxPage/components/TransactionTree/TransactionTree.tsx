@@ -683,32 +683,22 @@ export function TransactionTree({testData}: TransactionTreeProps) {
             <div
               className={styles.tooltipContainer}
               style={{
-                left: Math.max(10, Math.min(nodeTooltip.x + 20, window.innerWidth - 320)),
-                top: Math.max(10, nodeTooltip.y - 150),
+                left: Math.max(10, Math.min(nodeTooltip.x + 20, window.innerWidth - 420)),
+                top: Math.max(10, Math.min(nodeTooltip.y - 50, window.innerHeight - 100)),
               }}
             >
               <div className={styles.tooltipWithoutTriangle}>
                 <div className={styles.tooltipContent}>
-                  {nodeTooltip.contractStateBefore && (
+                  {nodeTooltip.contractState && (
                     <div className={styles.tooltipField}>
-                      <div className={styles.tooltipFieldLabel}>Contract State (Before)</div>
+                      <div className={styles.tooltipFieldLabel}>Contract State</div>
                       <div className={styles.tooltipFieldValue}>
                         <div className={styles.contractStateData}>
                           <ParsedDataView
-                            data={nodeTooltip.contractStateBefore}
+                            data={nodeTooltip.contractState}
+                            dataBefore={nodeTooltip.contractStateBefore}
                             contracts={contracts}
                           />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {nodeTooltip.contractState && (
-                    <div className={styles.tooltipField}>
-                      <div className={styles.tooltipFieldLabel}>Contract State (After)</div>
-                      <div className={styles.tooltipFieldValue}>
-                        <div className={styles.contractStateData}>
-                          <ParsedDataView data={nodeTooltip.contractState} contracts={contracts} />
                         </div>
                       </div>
                     </div>

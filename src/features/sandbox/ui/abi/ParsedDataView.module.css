@@ -169,3 +169,67 @@
     font-size: var(--font-size-sm);
   }
 }
+
+.diffContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.diffValue {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.diffOldValue {
+  color: #dc2626;
+  opacity: 0.8;
+  font-size: var(--font-size-sm);
+  background-color: var(--color-error-bg);
+  padding: var(--spacing-xs);
+  border-radius: var(--border-radius-sm);
+}
+
+.diffNewValue {
+  color: #16a34a;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  background-color: var(--color-success-bg);
+  padding: var(--spacing-xs);
+  border-radius: var(--border-radius-sm);
+}
+
+.diffOldValue .stringValue {
+  color: var(--color-error-text);
+  background-color: rgba(220, 38, 38, 0.1);
+  border-color: rgba(220, 38, 38, 0.3);
+}
+
+.diffNewValue .stringValue {
+  color: var(--color-success-text);
+  background-color: rgba(22, 163, 74, 0.1);
+  border-color: rgba(22, 163, 74, 0.3);
+}
+
+.diffOldValue .numberValue {
+  color: var(--color-error-text);
+}
+
+.diffNewValue .numberValue {
+  color: var(--color-success-text);
+}
+
+.diffOldValue .booleanTrue,
+.diffOldValue .booleanFalse {
+  color: var(--color-error-text);
+}
+
+.diffNewValue .booleanTrue,
+.diffNewValue .booleanFalse {
+  color: var(--color-success-text);
+}
+
+.unchanged {
+  opacity: 0.7;
+}

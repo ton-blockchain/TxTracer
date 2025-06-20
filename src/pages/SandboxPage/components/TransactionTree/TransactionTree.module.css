@@ -142,8 +142,10 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   padding: var(--spacing-md);
   font-size: var(--font-size-sm);
-  min-width: 200px;
-  max-width: 280px;
+  min-width: 280px;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
   z-index: 1000;
   position: relative;
 }
@@ -211,8 +213,8 @@
 }
 
 .contractStateData {
-  max-height: 120px;
-  overflow-y: auto;
+  max-height: none;
+  overflow: visible;
   padding: var(--spacing-xs);
   border-radius: var(--border-radius-sm);
   font-size: var(--font-size-xs);

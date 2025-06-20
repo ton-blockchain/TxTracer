@@ -51,6 +51,8 @@
 .contractName {
   font-weight: var(--font-weight-medium);
   color: var(--table-td-text-color);
+
+  margin-top: -3px; /* compensate */
 }
 
 .contractAddress {
