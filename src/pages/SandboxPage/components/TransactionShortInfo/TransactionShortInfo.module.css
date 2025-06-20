@@ -79,7 +79,7 @@
 
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-mds);
+  gap: var(--spacing-sm);
 
   overflow: visible;
   min-width: 0;
@@ -90,7 +90,7 @@
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
 }
 
 .multiColumnItem {
@@ -125,6 +125,7 @@
   color: var(--table-td-text-color);
   word-break: break-word;
 
+  gap: var(--spacing-xs);
   display: flex;
 }
 
