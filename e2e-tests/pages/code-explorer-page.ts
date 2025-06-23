@@ -87,8 +87,8 @@ export class CodeExplorerPage {
     await this.settingsButton.click()
   }
 
-  async checkSettingsMenuVisibility() {
-    expect(this.settingsMenu).toBeVisible()
+  checkSettingsMenuVisibility() {
+    return expect(this.settingsMenu).toBeVisible()
   }
 
   async closeSettings() {

@@ -125,19 +125,19 @@ test.describe("TxTracer Code Explorer", () => {
     await asmCodeLineEl.hover()
     const tooltip = codeExplorerPage.getTooltip()
     await page.waitForTimeout(500)
-    expect(tooltip).not.toBeVisible()
+    await expect(tooltip).not.toBeVisible()
 
     await codeExplorerPage.openSettings()
     await codeExplorerPage.checkSettingsMenuVisibility()
     const showVariablesCheckbox = page.getByText("Show instruction docs")
-    expect(showVariablesCheckbox).not.toBeChecked()
+    await expect(showVariablesCheckbox).not.toBeChecked()
     await showVariablesCheckbox.click()
-    expect(showVariablesCheckbox).toBeChecked()
+    await expect(showVariablesCheckbox).toBeChecked()
     await codeExplorerPage.closeSettings()
 
     await asmCodeLineEl.hover()
     await page.waitForTimeout(500)
-    expect(tooltip).toBeVisible()
+    await expect(tooltip).toBeVisible()
 
     const text = await codeExplorerPage.getTooltip().allInnerTexts()
     expect(text).toHaveLength(1)
@@ -160,19 +160,19 @@ test.describe("TxTracer Code Explorer", () => {
     await asmCodeLineEl.hover()
     const tooltip = codeExplorerPage.getTooltip()
     await page.waitForTimeout(500)
-    expect(tooltip).not.toBeVisible()
+    await expect(tooltip).not.toBeVisible()
 
     await codeExplorerPage.openSettings()
     await codeExplorerPage.checkSettingsMenuVisibility()
     const showVariablesCheckbox = page.getByText("Show variables on hover")
-    expect(showVariablesCheckbox).not.toBeChecked()
+    await expect(showVariablesCheckbox).not.toBeChecked()
     await showVariablesCheckbox.click()
-    expect(showVariablesCheckbox).toBeChecked()
+    await expect(showVariablesCheckbox).toBeChecked()
     await codeExplorerPage.closeSettings()
 
     await asmCodeLineEl.hover()
     await page.waitForTimeout(500)
-    expect(tooltip).toBeVisible()
+    await expect(tooltip).toBeVisible()
 
     const text = await codeExplorerPage.getTooltip().allInnerTexts()
     expect(text).toHaveLength(1)
@@ -204,7 +204,7 @@ test.describe("TxTracer Code Explorer", () => {
     await codeExplorerPage.checkSettingsMenuVisibility()
     const autoCompileCheckbox = codeExplorerPage.page.getByText("Auto-compile on change")
     await autoCompileCheckbox.click()
-    expect(autoCompileCheckbox).not.toBeChecked()
+    await expect(autoCompileCheckbox).not.toBeChecked()
 
     await codeExplorerPage.closeSettings()
 
