@@ -73,6 +73,15 @@ export const generateRandomAsmCode = () => {
   return lines.join("\n")
 }
 
+export const generateRandomFuncCode = () => {
+  const functions = [
+    `() recv_internal() {
+    throw(2024);
+}`,
+  ]
+  return functions[Math.floor(Math.random() * functions.length)]
+}
+
 export const wait = async (delay: number) => {
   return new Promise(resolve => setTimeout(resolve, delay))
 }
