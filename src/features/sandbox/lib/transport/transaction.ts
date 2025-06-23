@@ -70,12 +70,14 @@ function txOpcode(transaction: Transaction): number | undefined {
 
   let opcode: number | undefined = undefined
   const slice = inMessage?.body?.asSlice()
-  if (slice && slice.remainingBits >= 32) {
+  if (slice) {
     if (isBounced) {
       // skip 0xFFFF..
       slice.loadUint(32)
     }
-    opcode = slice.loadUint(32)
+    if (slice.remainingBits >= 32) {
+      opcode = slice.loadUint(32)
+    }
   }
 
   return opcode
