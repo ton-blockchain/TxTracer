@@ -1,7 +1,7 @@
 import React, {Suspense, useCallback, useEffect, useState} from "react"
 import {FiClock, FiGithub, FiPlay, FiSearch, FiX} from "react-icons/fi"
 
-import {type StackElement} from "ton-assembly-test-dev/dist/trace"
+import {type StackElement} from "ton-assembly/dist/trace"
 
 import type {RetraceResultAndCode} from "@features/txTrace/ui"
 import {RetraceResultView} from "@features/txTrace/ui"

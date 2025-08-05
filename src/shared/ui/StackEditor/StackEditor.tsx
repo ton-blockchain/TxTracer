@@ -1,7 +1,7 @@
 import React, {useState, useCallback, type JSX, useEffect} from "react"
 import {FiPlus, FiTrash2, FiArrowUp, FiArrowDown, FiFileText, FiCheck, FiX} from "react-icons/fi"
-import {type StackElement} from "ton-assembly-test-dev/dist/trace"
-import {logs} from "ton-assembly-test-dev/dist"
+import {type StackElement} from "ton-assembly/dist/trace"
+import {logs} from "ton-assembly/dist"
 import {Cell, Address, Builder} from "@ton/core"
 import {motion, AnimatePresence} from "framer-motion"
 

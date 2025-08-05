@@ -1,7 +1,7 @@
 import React, {useCallback, useMemo, useState} from "react"
 import type * as monaco from "monaco-editor"
 
-import {trace} from "ton-assembly-test-dev/dist"
+import {trace} from "ton-assembly/dist"
 
 import type {HighlightGroup, HighlightRange} from "@shared/ui/CodeEditor"
 

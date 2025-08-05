@@ -1,4 +1,4 @@
-import {trace} from "ton-assembly-test-dev/dist"
+import {trace} from "ton-assembly/dist"
 import {FuncFiftLibWasm} from "./funcfiftlib.wasm.ts"
 import CompilerModule from "./funcfiftlib"
 

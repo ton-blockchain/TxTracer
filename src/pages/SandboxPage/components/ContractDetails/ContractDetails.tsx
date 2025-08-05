@@ -1,6 +1,6 @@
 import {Cell, type Message} from "@ton/core"
-import {decompileCell} from "ton-assembly-test-dev/dist/runtime/instr"
-import {print} from "ton-assembly-test-dev/dist/text"
+import {decompileCell} from "ton-assembly/dist/runtime/instr"
+import {print} from "ton-assembly/dist/text"
 import {useState} from "react"
 import type {Maybe} from "@ton/core/dist/utils/maybe"
 

@@ -50,7 +50,7 @@ export default defineConfig({
           "ton-vendor": ["@ton/core", "@ton/ton"],
           "ton-sandbox": ["@ton/sandbox"],
           "monaco-editor-core": ["monaco-editor"],
-          "ton-assembly-test-dev": ["ton-assembly-test-dev"],
+          "ton-assembly": ["ton-assembly"],
         },
       },
     },
