@@ -46,7 +46,8 @@ export function ConnectionGuide() {
               <div className={styles.stepContent}>
                 <h3 className={styles.stepTitle}>Change Blockchain in tests</h3>
                 <p className={styles.stepDescription}>
-                  In your tests, use <code className={styles.inlineCode}>{`Blockchain.create({ webUI: true })`}</code>
+                  In your tests, use{" "}
+                  <code className={styles.inlineCode}>{`Blockchain.create({ webUI: true })`}</code>
                 </p>
                 <code className={styles.codeBlock}>
                   {`await Blockchain.create({ webUI: true });`}
