@@ -58,7 +58,7 @@ export function ConnectionGuide() {
               <div className={styles.stepNumber}>4</div>
               <div className={styles.stepContent}>
                 <h3 className={styles.stepTitle}>Run your test</h3>
-                <p className={styles.stepDescription}>Data will automatically appear in here</p>
+                <p className={styles.stepDescription}>Data will automatically appear here</p>
               </div>
             </div>
           </div>
