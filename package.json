@@ -6,7 +6,6 @@
   "homepage": "https://txtracer.ton.org/",
   "scripts": {
     "dev": "vite --port 5174",
-    "daemon": "ts-node src/pages/SandboxPage/daemon.ts",
     "build": "tsc -b && vite build",
     "lint": "eslint . --cache",
     "preview": "vite preview",
