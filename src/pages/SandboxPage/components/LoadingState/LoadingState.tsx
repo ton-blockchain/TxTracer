@@ -32,11 +32,10 @@ export function LoadingState() {
             <div className={styles.tip}>
               <Icon svg={<LightBulbIcon />} size={24} className={styles.tipIcon} />
               <div className={styles.tipContent}>
-                <h3 className={styles.tipTitle}>Use TracingBlockchain</h3>
+                <h3 className={styles.tipTitle}>Set webUI: true in your Blockchain.create()</h3>
                 <p className={styles.tipText}>
                   Make sure your tests use{" "}
-                  <code className={styles.inlineCode}>TracingBlockchain</code> instead of regular
-                  Blockchain
+                  <code className={styles.inlineCode}>{`Blockchain.create({ webUI: true })`}</code>
                 </p>
               </div>
             </div>
