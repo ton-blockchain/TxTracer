@@ -1,5 +1,5 @@
 import React, {Suspense, useCallback, useEffect, useState} from "react"
-import {FiClock, FiGithub, FiPlay, FiSearch, FiX} from "react-icons/fi"
+import {FiClock, FiGithub, FiPlay, FiSearch, FiX, FiZap} from "react-icons/fi"
 
 import {type StackElement} from "ton-assembly/dist/trace"
 
@@ -344,6 +344,19 @@ function TracePage() {
                     understanding how your smart contracts work under the hood.
                   </p>
                   <span className={styles.featureCardBadge}>Explorer</span>
+                </a>
+
+                <a href="/sandbox/" className={styles.featureCard}>
+                  <div className={`${styles.featureCardIcon} ${styles.sandboxIcon}`}>
+                    <FiZap aria-hidden="true" />
+                  </div>
+                  <h3 className={styles.featureCardTitle}>Sandbox</h3>
+                  <p className={styles.featureCardDescription}>
+                    Inspect transactions produced by your local tests using the @ton/sandbox
+                    package. Visualize messages, transaction info, VM logs and exit codes with an
+                    interactive UI.
+                  </p>
+                  <span className={styles.featureCardBadge}>Sandbox</span>
                 </a>
               </section>
             )}
