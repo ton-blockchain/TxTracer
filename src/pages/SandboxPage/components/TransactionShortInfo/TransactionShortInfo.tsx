@@ -140,6 +140,29 @@ export function TransactionShortInfo({
   return (
     <>
       <div className={styles.transactionDetailsContainer}>
+        {canTrace && (
+          <div className={styles.traceButtonContainer}>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => setShowTraceViewer(!showTraceViewer)}
+              className={styles.traceButton}
+            >
+              {showTraceViewer ? (
+                <>
+                  <FiX size={14} />
+                  Close
+                </>
+              ) : (
+                <>
+                  <FiPlay size={14} />
+                  Retrace
+                </>
+              )}
+            </Button>
+          </div>
+        )}
+
         <div className={styles.detailRow}>
           <div className={styles.detailLabel}>Message Route</div>
           <div className={styles.detailValue}>
@@ -360,19 +383,6 @@ export function TransactionShortInfo({
             {formatDetailedTimestamp(tx.transaction.now)}
           </div>
         </div>
-
-        {canTrace && (
-          <div className={styles.traceButtonContainer}>
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => setShowTraceViewer(!showTraceViewer)}
-              className={styles.traceButton}
-            >
-              {showTraceViewer ? <FiX size={14} /> : <FiPlay size={14} />}
-            </Button>
-          </div>
-        )}
       </div>
 
       {showTraceViewer && canTrace && (

@@ -5149,10 +5149,10 @@ to-regex-range@^5.0.1:
   dependencies:
     is-number "^7.0.0"
 
-ton-assembly@0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/ton-assembly/-/ton-assembly-0.2.0.tgz#415653ae95406a016831fd2b371c0acde96648e2"
-  integrity sha512-ReweM2y4/2NKhs+WQH4fjmLa0COeciCweaQooFrf/2fvEO0UfZzrff+VOYvAMWBlfrxQ3zQJ84D/FO8kcOezHQ==
+ton-assembly@0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/ton-assembly/-/ton-assembly-0.2.1.tgz#ed1eaeaf72b9864cc1435e9e1980a86542c8712b"
+  integrity sha512-LvaWlMIyBYaSm3QZGdtwJvflw4LiSJM8eiGN8F16WHwNFizMrLo18ttVem4n2zDBoKEpyVEbV5C1RPn1+JXpwQ==
   dependencies:
     "@ton/core" "^0.60.1"
     "@tonstudio/parser-runtime" "^0.0.1"

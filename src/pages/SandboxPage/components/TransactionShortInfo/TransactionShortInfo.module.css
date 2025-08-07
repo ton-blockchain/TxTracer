@@ -210,13 +210,15 @@
 
 .traceButton {
   color: white !important;
-  padding: var(--spacing-xs) !important;
+  padding: var(--spacing-xs) var(--spacing-sm) !important;
   min-width: 32px;
   height: 32px;
   border-radius: var(--border-radius-md) !important;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: var(--font-size-xsm);
+  gap: var(--spacing-xs);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 

@@ -7,10 +7,7 @@ import {
   type MappingInfo,
 } from "ton-assembly/dist/trace/mapping"
 import {type Step, type TraceInfo} from "ton-assembly/dist/trace"
-import {
-  createTraceInfoPerTransaction,
-  findInstructionInfo,
-} from "ton-assembly/dist/trace/trace"
+import {createTraceInfoPerTransaction, findInstructionInfo} from "ton-assembly/dist/trace/trace"
 import {parse, print} from "ton-assembly/dist/text"
 import * as l from "ton-assembly/dist/logs"
 import {Cell} from "@ton/core"
