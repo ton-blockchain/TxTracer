@@ -46,8 +46,7 @@ export function ConnectionGuide() {
               <div className={styles.stepContent}>
                 <h3 className={styles.stepTitle}>Change Blockchain in tests</h3>
                 <p className={styles.stepDescription}>
-                  In your tests, replace <code className={styles.inlineCode}>Blockchain</code> with{" "}
-                  <code className={styles.inlineCode}>TracingBlockchain</code>:
+                  In your tests, use <code className={styles.inlineCode}>{`Blockchain.create({ webUI: true })`}</code>
                 </p>
                 <code className={styles.codeBlock}>
                   {`await Blockchain.create({ webUI: true });`}
@@ -59,7 +58,7 @@ export function ConnectionGuide() {
               <div className={styles.stepNumber}>4</div>
               <div className={styles.stepContent}>
                 <h3 className={styles.stepTitle}>Run your test</h3>
-                <p className={styles.stepDescription}>Data will automatically appear in Sandbox</p>
+                <p className={styles.stepDescription}>Data will automatically appear in here</p>
               </div>
             </div>
           </div>
