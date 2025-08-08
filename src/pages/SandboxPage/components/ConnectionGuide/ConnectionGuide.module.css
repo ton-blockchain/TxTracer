@@ -157,13 +157,45 @@
   background-color: var(--color-background-secondary);
   color: var(--color-text-primary);
   border-radius: var(--border-radius-md);
-  padding: var(--spacing-md);
+  padding: var(--spacing-md) calc(var(--spacing-md) + 28px) var(--spacing-md) var(--spacing-md);
   font-family: var(--font-family-mono), monospace;
   font-size: var(--font-size-sm);
   white-space: pre-wrap;
   overflow-x: auto;
   margin-top: var(--spacing-sm);
   border: 1px solid var(--color-border);
+}
+
+.codeBlockWrapper {
+  position: relative;
+}
+
+.copyBtn {
+  position: absolute;
+  right: var(--spacing-md);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-secondary);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--transition-duration-fast) ease,
+    color var(--transition-duration-fast) ease,
+    background-color var(--transition-duration-fast) ease;
+}
+
+.copyBtn:hover {
+  color: var(--color-text-primary);
+  background-color: var(--color-neutral-bg-hover-alpha);
+}
+
+.copyBtn.copied {
+  color: var(--color-text-primary);
+}
+
+.codeBlockWrapper:hover .copyBtn {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .inlineCode {

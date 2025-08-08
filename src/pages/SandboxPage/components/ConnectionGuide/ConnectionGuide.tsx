@@ -2,6 +2,8 @@ import {FiInfo} from "react-icons/fi"
 
 import type {MessageTestData} from "@features/sandbox/lib/transport/message.ts"
 
+import {CopyButton} from "@shared/CopyButton/CopyButton"
+
 import {ExampleDataButtons} from "../ExampleDataButtons"
 import {DaemonSettings} from "../DaemonSettings/DaemonSettings"
 
@@ -51,7 +53,14 @@ export function ConnectionGuide({
               <div className={styles.stepContent}>
                 <h3 className={styles.stepTitle}>Install custom sandbox package</h3>
                 <p className={styles.stepDescription}>Install development sandbox package:</p>
-                <code className={styles.codeBlock}>yarn add ton-sandbox-dev@0.35.46</code>
+                <div className={styles.codeBlockWrapper}>
+                  <code className={styles.codeBlock}>yarn add ton-sandbox-dev@0.35.46</code>
+                  <CopyButton
+                    className={styles.copyBtn}
+                    value={"yarn add ton-sandbox-dev@0.35.46"}
+                    title={"Command"}
+                  />
+                </div>
               </div>
             </div>
 
@@ -73,9 +82,16 @@ export function ConnectionGuide({
                 <p className={styles.stepDescription}>
                   Open terminal, run the command and reload this page:
                 </p>
-                <code className={styles.codeBlock}>
-                  ./node_modules/.bin/sandbox-server -p {port}
-                </code>
+                <div className={styles.codeBlockWrapper}>
+                  <code className={styles.codeBlock}>
+                    {`./node_modules/.bin/sandbox-server -p ${port}`}
+                  </code>
+                  <CopyButton
+                    className={styles.copyBtn}
+                    value={`./node_modules/.bin/sandbox-server -p ${port}`}
+                    title={"Command"}
+                  />
+                </div>
               </div>
             </div>
 
@@ -87,9 +103,11 @@ export function ConnectionGuide({
                   In your tests, use{" "}
                   <code className={styles.inlineCode}>{`Blockchain.create({ webUI: true })`}</code>
                 </p>
-                <code className={styles.codeBlock}>
-                  {`await Blockchain.create({ webUI: true });`}
-                </code>
+                <div className={styles.codeBlockWrapper}>
+                  <code className={styles.codeBlock}>
+                    {`await Blockchain.create({ webUI: true });`}
+                  </code>
+                </div>
               </div>
             </div>
 
