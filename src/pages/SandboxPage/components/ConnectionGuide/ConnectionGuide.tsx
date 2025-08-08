@@ -52,7 +52,11 @@ export function ConnectionGuide({
               <div className={styles.stepNumber}>1</div>
               <div className={styles.stepContent}>
                 <h3 className={styles.stepTitle}>Install custom sandbox package</h3>
-                <p className={styles.stepDescription}>Install development sandbox package:</p>
+                <p className={styles.stepDescription}>
+                  Install development sandbox package and replace usages of{" "}
+                  <code className={styles.inlineCode}>@ton/sandbox</code> to{" "}
+                  <code className={styles.inlineCode}>ton-sandbox-dev</code>
+                </p>
                 <div className={styles.codeBlockWrapper}>
                   <code className={styles.codeBlock}>yarn add ton-sandbox-dev@0.35.46</code>
                   <CopyButton
