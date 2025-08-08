@@ -720,6 +720,20 @@
   resolved "https://registry.yarnpkg.com/@ton-community/func-js-bin/-/func-js-bin-0.4.6-wasmfix.0.tgz#0ece261732ad180aef4031932bc253cc92ef9019"
   integrity sha512-WZfyihhrcT+t1EyWNHOAtB1deQ1IkbCgo+qgPRaAIgpQEQnKxwbCHT8+3Ow1zRIXH/7ku4Bxh5c4pM4uOLjb2A==
 
+"@ton-community/func-js-bin@0.4.6-wasmfix.debugger.0":
+  version "0.4.6-wasmfix.debugger.0"
+  resolved "https://registry.yarnpkg.com/@ton-community/func-js-bin/-/func-js-bin-0.4.6-wasmfix.debugger.0.tgz#26af588cf4c0a10ba4d2cdfdcdc50b330edea19e"
+  integrity sha512-g23zEoaTn5Rja6TBTZxX3E4zh+PlWnt7iRJJT5mPuUvQXhWB9wkx9VNZN8KpTdICJIXTW5b5wEE/801W14xQvg==
+
+"@ton-community/func-js@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@ton-community/func-js/-/func-js-0.10.0.tgz#6f35f990255c5d1ea730d7ca9f5b4b2e2933f17a"
+  integrity sha512-YvkRTwkwc7e54Ig7oRKGercE91Fi+EuEDLO1kp/RnwslcUcgKQ+w2P7OFMNh/FWCJnU3ADhOBtfTU+dta+XHpw==
+  dependencies:
+    "@ton-community/func-js-bin" "0.4.6-wasmfix.debugger.0"
+    arg "^5.0.2"
+    fflate "^0.8.2"
+
 "@ton-community/func-js@^0.9.1":
   version "0.9.1"
   resolved "https://registry.yarnpkg.com/@ton-community/func-js/-/func-js-0.9.1.tgz#257c12fe4dd3c379a74a6fa4d821d7b7337a9676"
@@ -732,6 +746,13 @@
   version "0.60.1"
   resolved "https://registry.yarnpkg.com/@ton/core/-/core-0.60.1.tgz#cc9a62fb308d7597b1217dc8e44c7e2dcc0aceaa"
   integrity sha512-8FwybYbfkk57C3l9gvnlRhRBHbLYmeu0LbB1z9N+dhDz0Z+FJW8w0TJlks8CgHrAFxsT3FlR2LsqFnsauMp38w==
+  dependencies:
+    symbol.inspect "1.0.1"
+
+"@ton/core@^0.61.0":
+  version "0.61.0"
+  resolved "https://registry.yarnpkg.com/@ton/core/-/core-0.61.0.tgz#09b37801cb2f5a942020fcc992be1e99f4b16689"
+  integrity sha512-0qyVfP2dDue2bq80ydXggo2MlufcmzuFk6G94qRrZxvyQ3NSe4UeBTeRf1gQmN7tywgTsX2gS61e4yvJrlUu4Q==
   dependencies:
     symbol.inspect "1.0.1"
 
@@ -751,12 +772,16 @@
     jssha "3.2.0"
     tweetnacl "1.0.3"
 
-"@ton/sandbox@^0.31.0":
-  version "0.31.0"
-  resolved "https://registry.yarnpkg.com/@ton/sandbox/-/sandbox-0.31.0.tgz#571c8e7a774ba4a6e7194bdf9331ee46869a2c82"
-  integrity sha512-UdcpRwW9EIowQ10kpswj5liy9erhtvVeQ5WlyD/qJMnlKys9BzvNhb9thW3na13x4piN0b/tLkqddtKE4JXcuQ==
+"@ton/sandbox@^0.36.0":
+  version "0.36.0"
+  resolved "https://registry.yarnpkg.com/@ton/sandbox/-/sandbox-0.36.0.tgz#2bc5e2377ecf9181c943ee35bdea7364711c0880"
+  integrity sha512-YPjOgBRnUOq7kaI9sKg4HbmmPiba4j1bCHY5I3lCPfqVE+thV+G+R7doDvw6/Xkde/3E6jA8iAnRgkYOZCqH9Q==
   dependencies:
+    "@vscode/debugadapter" "^1.68.0"
+    chalk "^4.1.2"
+    fflate "^0.8.2"
     table "^6.9.0"
+    ton-assembly "0.1.0"
 
 "@ton/test-utils@^0.7.0":
   version "0.7.0"
@@ -765,10 +790,10 @@
   dependencies:
     node-inspect-extracted "^2.0.0"
 
-"@ton/ton@^15.2.1":
-  version "15.2.1"
-  resolved "https://registry.yarnpkg.com/@ton/ton/-/ton-15.2.1.tgz#be5a5b8576c4bae9e7ad52616b3092b6abcf7672"
-  integrity sha512-ICzozzATRfymkVfFVZrfVpKnCc5PLxAVeaB62mx/HsgllsjnR64UuoLuE6hqWHcA3/Hft9YLGdk2/rOHGZM6qA==
+"@ton/ton@^15.3.1":
+  version "15.3.1"
+  resolved "https://registry.yarnpkg.com/@ton/ton/-/ton-15.3.1.tgz#c20688b27eb8ce8474610843804a7599679c38a2"
+  integrity sha512-+UuvbE0o0VIU/0W90STO+emRIDr3Vs39LdbX5ySm/Ra+RQJSiH0KX6TDOFqWDmD2Wzk4/zw21KwSiZ6Xjk8zlw==
   dependencies:
     axios "^1.6.7"
     dataloader "^2.0.0"
@@ -1157,6 +1182,18 @@
     loupe "^3.1.3"
     tinyrainbow "^2.0.0"
 
+"@vscode/debugadapter@^1.68.0":
+  version "1.68.0"
+  resolved "https://registry.yarnpkg.com/@vscode/debugadapter/-/debugadapter-1.68.0.tgz#abb23463cb750ca4a6f0834c5d4db659258dc159"
+  integrity sha512-D6gk5Fw2y4FV8oYmltoXpj+VAZexxJFopN/mcZ6YcgzQE9dgq2L45Aj3GLxScJOD6GeLILcxJIaA8l3v11esGg==
+  dependencies:
+    "@vscode/debugprotocol" "1.68.0"
+
+"@vscode/debugprotocol@1.68.0":
+  version "1.68.0"
+  resolved "https://registry.yarnpkg.com/@vscode/debugprotocol/-/debugprotocol-1.68.0.tgz#e558ba6affe1be7aff4ec824599f316b61d9a69d"
+  integrity sha512-2J27dysaXmvnfuhFGhfeuxfHRXunqNPxtBoR3koiTOA9rdxWNDTa1zIFLCFMSHJ9MPTPKFcBeblsyaCJCIlQxg==
+
 acorn-jsx@^5.3.2:
   version "5.3.2"
   resolved "https://registry.yarnpkg.com/acorn-jsx/-/acorn-jsx-5.3.2.tgz#7ed5bb55908b3b2f1bc55c6af1653bada7f07937"
@@ -1505,7 +1542,7 @@ chalk@^3.0.0:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
-chalk@^4.0.0, chalk@^4.1.0:
+chalk@^4.0.0, chalk@^4.1.0, chalk@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-4.1.2.tgz#aac4e2b7734a740867aeb16bf02aad556a1e7a01"
   integrity sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==
@@ -4123,10 +4160,19 @@ to-regex-range@^5.0.1:
   dependencies:
     is-number "^7.0.0"
 
-ton-assembly-test-dev@0.0.7:
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/ton-assembly-test-dev/-/ton-assembly-test-dev-0.0.7.tgz#bdb534c6f73378e9121f48d248385899a71d92ad"
-  integrity sha512-Yc6Sb4lNvr4Q6viZHzhcny13mpBObFzFRONPqvq9ieMd25EG3Qdx4kHcsG/mtwFLaPALRAiuJzZ1y9PuLO+DwQ==
+ton-assembly@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/ton-assembly/-/ton-assembly-0.1.0.tgz#a3f1da50c2d2be1cd0f9837a9399ea80f80021eb"
+  integrity sha512-2k0vIKleGMXXu6yXV8L1eICClGZVwqfs4G0FgBCgC6Qgani6pAqoLGNBNjcdw3554Ua3E+1K4oz/oW+GhZfm+w==
+  dependencies:
+    "@ton/core" "^0.60.1"
+    "@tonstudio/parser-runtime" "^0.0.1"
+    cac "^6.7.14"
+
+ton-assembly@0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/ton-assembly/-/ton-assembly-0.2.1.tgz#ed1eaeaf72b9864cc1435e9e1980a86542c8712b"
+  integrity sha512-LvaWlMIyBYaSm3QZGdtwJvflw4LiSJM8eiGN8F16WHwNFizMrLo18ttVem4n2zDBoKEpyVEbV5C1RPn1+JXpwQ==
   dependencies:
     "@ton/core" "^0.60.1"
     "@tonstudio/parser-runtime" "^0.0.1"
@@ -4190,14 +4236,15 @@ tweetnacl@1.0.3:
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-1.0.3.tgz#ac0af71680458d8a6378d0d0d050ab1407d35596"
   integrity sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==
 
-txtracer-core-test-dev@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/txtracer-core-test-dev/-/txtracer-core-test-dev-0.1.4.tgz#37655e7c8ef9f0ea8cdff2a72b56ce119385058d"
-  integrity sha512-HZX1B4PWv63B7Yrbtj6MNnZBLHIsaHCizL6OL3KrpxDezYY4j2HEzeHBqVt+UHhWHcQpGQ03F7WVrDqqHTkYjg==
+txtracer-core-test-dev@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/txtracer-core-test-dev/-/txtracer-core-test-dev-0.1.5.tgz#2a159debcc2a8ff5a2ba03eaa05f0e4bf1e7352b"
+  integrity sha512-qZODNOJKyAW7eK2jrBFjL1ozlxhWVgwYGvNhMkgon959e36+5gyxaMQNsGL9Oh3e5YUNL2ZdZ7eGftERNeMp6w==
   dependencies:
-    "@ton/core" "^0.60.1"
-    "@ton/sandbox" "^0.31.0"
-    "@ton/ton" "^15.2.1"
+    "@ton-community/func-js" "^0.10.0"
+    "@ton/core" "^0.61.0"
+    "@ton/sandbox" "^0.36.0"
+    "@ton/ton" "^15.3.1"
     axios "^1.6.7"
 
 type-check@^0.4.0, type-check@~0.4.0:

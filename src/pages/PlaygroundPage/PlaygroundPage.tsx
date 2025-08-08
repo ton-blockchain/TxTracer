@@ -1,5 +1,5 @@
 import React, {Suspense, useCallback, useEffect, useMemo, useState} from "react"
-import type {StackElement} from "ton-assembly-test-dev/dist/trace"
+import type {StackElement} from "ton-assembly/dist/trace"
 
 import InlineLoader from "@shared/ui/InlineLoader"
 import TraceSidePanel from "@shared/ui/TraceSidePanel"

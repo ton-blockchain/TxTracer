@@ -1,5 +1,5 @@
 import React from "react"
-import type {StackElement} from "ton-assembly-test-dev/dist/trace"
+import type {StackElement} from "ton-assembly/dist/trace"
 
 import styles from "@app/pages/TracePage/StackItemViewer.module.css"
 import StackItemDetails from "@shared/ui/StackItemDetails"
