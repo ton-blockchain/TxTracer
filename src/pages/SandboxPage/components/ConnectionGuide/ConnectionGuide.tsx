@@ -3,14 +3,23 @@ import {FiInfo} from "react-icons/fi"
 import type {MessageTestData} from "@features/sandbox/lib/transport/message.ts"
 
 import {ExampleDataButtons} from "../ExampleDataButtons"
+import {DaemonSettings} from "../DaemonSettings/DaemonSettings"
 
 import styles from "./ConnectionGuide.module.css"
 
 interface ConnectionGuideProps {
   readonly onLoadExample?: (data: MessageTestData[]) => void
+  readonly host?: string
+  readonly port?: string
+  readonly onChange?: (next: {host: string; port: string}) => void
 }
 
-export function ConnectionGuide({onLoadExample}: ConnectionGuideProps) {
+export function ConnectionGuide({
+  onLoadExample,
+  host = "localhost",
+  port = "8081",
+  onChange,
+}: ConnectionGuideProps) {
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -42,23 +51,36 @@ export function ConnectionGuide({onLoadExample}: ConnectionGuideProps) {
               <div className={styles.stepContent}>
                 <h3 className={styles.stepTitle}>Install custom sandbox package</h3>
                 <p className={styles.stepDescription}>Install development sandbox package:</p>
-                <code className={styles.codeBlock}>yarn add ton-sandbox-dev@0.35.37</code>
+                <code className={styles.codeBlock}>yarn add ton-sandbox-dev@0.35.46</code>
               </div>
             </div>
 
             <div className={styles.step}>
               <div className={styles.stepNumber}>2</div>
               <div className={styles.stepContent}>
-                <h3 className={styles.stepTitle}>Start the daemon</h3>
+                <h3 className={styles.stepTitle}>Configure connection</h3>
                 <p className={styles.stepDescription}>
-                  Open terminal, run the command and reload this page:
+                  Set sandbox server host and port if needed:
                 </p>
-                <code className={styles.codeBlock}>./node_modules/.bin/sandbox-server</code>
+                <DaemonSettings host={host} port={port} onChange={onChange ?? (() => {})} />
               </div>
             </div>
 
             <div className={styles.step}>
               <div className={styles.stepNumber}>3</div>
+              <div className={styles.stepContent}>
+                <h3 className={styles.stepTitle}>Start the daemon</h3>
+                <p className={styles.stepDescription}>
+                  Open terminal, run the command and reload this page:
+                </p>
+                <code className={styles.codeBlock}>
+                  ./node_modules/.bin/sandbox-server -p {port}
+                </code>
+              </div>
+            </div>
+
+            <div className={styles.step}>
+              <div className={styles.stepNumber}>4</div>
               <div className={styles.stepContent}>
                 <h3 className={styles.stepTitle}>Change Blockchain in tests</h3>
                 <p className={styles.stepDescription}>
@@ -72,7 +94,7 @@ export function ConnectionGuide({onLoadExample}: ConnectionGuideProps) {
             </div>
 
             <div className={styles.step}>
-              <div className={styles.stepNumber}>4</div>
+              <div className={styles.stepNumber}>5</div>
               <div className={styles.stepContent}>
                 <h3 className={styles.stepTitle}>Run your test</h3>
                 <p className={styles.stepDescription}>Data will automatically appear here</p>

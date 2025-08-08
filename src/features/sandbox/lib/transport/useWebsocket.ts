@@ -27,7 +27,7 @@ interface UseWebsocketOptions {
 }
 
 export function useWebsocket({
-  url = "ws://localhost:8081",
+  url = "ws://localhost:7743",
   onError,
 }: UseWebsocketOptions = {}): RawWebsocketData {
   const [tests, setTests] = useState<TestData[]>([])

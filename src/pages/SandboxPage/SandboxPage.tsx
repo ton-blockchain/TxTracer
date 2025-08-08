@@ -1,5 +1,7 @@
 import "@xyflow/react/dist/style.css"
 
+import React from "react"
+
 import PageHeader from "@shared/ui/PageHeader"
 import {useSandboxData} from "@features/sandbox/lib/useSandboxData"
 import {TestInfo, ConnectionGuide, LoadingState} from "@app/pages/SandboxPage/components"
@@ -8,7 +10,26 @@ import UploadTestDataButton from "@app/pages/SandboxPage/components/UploadTestDa
 import styles from "./SandboxPage.module.css"
 
 function SandboxPage() {
-  const {tests, error, isConnected, isSharedData, rawData, loadFromFile} = useSandboxData()
+  const [host, setHost] = React.useState<string>(() => {
+    if (typeof window !== "undefined") {
+      const v = localStorage.getItem("sandbox-daemon-host")
+      const trimmed = (v ?? "").trim()
+      return trimmed.length ? trimmed : "localhost"
+    }
+    return "localhost"
+  })
+  const [port, setPort] = React.useState<string>(() => {
+    if (typeof window !== "undefined") {
+      const v = localStorage.getItem("sandbox-daemon-port")
+      const digits = (v ?? "").replace(/[^0-9]/g, "")
+      return digits.length ? digits : "7743"
+    }
+    return "7743"
+  })
+
+  const url = React.useMemo(() => `ws://${host}:${port}` as const, [host, port])
+
+  const {tests, error, isConnected, isSharedData, rawData, loadFromFile} = useSandboxData({url})
 
   if (isSharedData) {
     return (
@@ -50,7 +71,21 @@ function SandboxPage() {
       <div className={styles.traceViewWrapper}>
         {header}
         <div className={styles.fullPageState}>
-          <ConnectionGuide onLoadExample={loadFromFile} />
+          <ConnectionGuide
+            onLoadExample={loadFromFile}
+            host={host}
+            port={port}
+            onChange={({host: h, port: p}) => {
+              const nextHost = h.trim() ?? "localhost"
+              const nextPort = (p ?? "").replace(/[^0-9]/g, "") ?? "7743"
+              setHost(nextHost)
+              setPort(nextPort)
+              if (typeof window !== "undefined") {
+                localStorage.setItem("sandbox-daemon-host", nextHost)
+                localStorage.setItem("sandbox-daemon-port", nextPort)
+              }
+            }}
+          />
         </div>
       </div>
     )
