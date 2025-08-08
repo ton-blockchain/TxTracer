@@ -1,0 +1,33 @@
+.tooltip {
+  position: fixed;
+  z-index: 10000;
+  background-color: var(--color-background-primary);
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  padding: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  min-width: 280px;
+  max-width: 450px;
+  max-height: 90vh;
+  overflow-y: auto;
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: auto;
+}
+
+.tooltipVisible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+}
+
+.bridge {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: auto;
+  background: transparent;
+}

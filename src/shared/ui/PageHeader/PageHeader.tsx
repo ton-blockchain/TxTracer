@@ -11,11 +11,20 @@ interface PageHeaderProps {
   readonly pageTitle: string
   readonly network?: NetworkType
   readonly children?: React.ReactNode
+  readonly titleBadgeText?: string
+  readonly titleBadgeColor?: "green" | "red" | "blue" | "gray"
 }
 
-const PageHeaderFc: React.FC<PageHeaderProps> = ({pageTitle, network, children}) => {
+const PageHeaderFc: React.FC<PageHeaderProps> = ({
+  pageTitle,
+  network,
+  children,
+  titleBadgeText,
+  titleBadgeColor = "gray",
+}) => {
   const isPlayground = pageTitle === "playground"
   const isExplorer = pageTitle === "explorer"
+  const isSandbox = pageTitle === "sandbox"
 
   return (
     <header className={styles.header} role="banner">
@@ -24,8 +33,24 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({pageTitle, network, children})
           <div className={styles.logoDiamond} aria-hidden="true"></div>
           <span className={styles.logoText}>TxTracer</span>
         </a>
-        {isPlayground && <span className={styles.pageTitle}>Playground</span>}
-        {isExplorer && <span className={styles.pageTitle}>Code Explorer</span>}
+        {isPlayground && (
+          <span className={styles.pageTitle}>
+            Playground
+            {titleBadgeText && <Badge color={titleBadgeColor}>{titleBadgeText}</Badge>}
+          </span>
+        )}
+        {isExplorer && (
+          <span className={styles.pageTitle}>
+            Code Explorer
+            {titleBadgeText && <Badge color={titleBadgeColor}>{titleBadgeText}</Badge>}
+          </span>
+        )}
+        {isSandbox && (
+          <a className={styles.pageTitle} href="/sandbox/">
+            Sandbox
+            {titleBadgeText && <Badge color={titleBadgeColor}>{titleBadgeText}</Badge>}
+          </a>
+        )}
         {network === "testnet" && <Badge color="red">Testnet</Badge>}
       </div>
 

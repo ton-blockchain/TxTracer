@@ -40,7 +40,7 @@ const RetraceResultViewFc: React.FC<RetraceResultViewProps> = ({result}) => {
   return (
     <div className="retrace-result-container">
       {/* details table */}
-      <TransactionDetailsTable data={result} />
+      <TransactionDetailsTable result={result.result} />
 
       <div className="actions-section">
         <h3 className="actions-heading">Out Actions ({result.result.emulatedTx.actions.length})</h3>

@@ -50,9 +50,6 @@
   margin-left: var(--spacing-sm);
 }
 
-.mainActionContainer {
-}
-
 .mainContent {
   grid-area: main;
   display: grid;
@@ -230,8 +227,7 @@
   overflow-y: auto;
 }
 
-.historyDropdown li {
-}
+/* li styles inherit, explicit empty rule removed */
 
 .historyDropdown li:hover {
   background-color: var(--color-background-tertiary);
@@ -290,10 +286,10 @@
 
 .featureCards {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: var(--spacing-md);
   margin-top: 5rem;
-  max-width: 600px;
+  max-width: 900px;
   width: 100%;
 }
 
@@ -344,6 +340,11 @@
   color: white;
 }
 
+.sandboxIcon {
+  background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+  color: white;
+}
+
 .featureCardTitle {
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
@@ -368,6 +369,14 @@
   border-radius: var(--border-radius-full);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.featureCardColorBadge {
+  position: absolute;
+  font-size: var(--font-size-xs);
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  z-index: 1;
 }
 
 .createBy {
