@@ -1,6 +1,16 @@
+import {FiInfo} from "react-icons/fi"
+
+import type {MessageTestData} from "@features/sandbox/lib/transport/message.ts"
+
+import {ExampleDataButtons} from "../ExampleDataButtons"
+
 import styles from "./ConnectionGuide.module.css"
 
-export function ConnectionGuide() {
+interface ConnectionGuideProps {
+  readonly onLoadExample?: (data: MessageTestData[]) => void
+}
+
+export function ConnectionGuide({onLoadExample}: ConnectionGuideProps) {
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -9,10 +19,16 @@ export function ConnectionGuide() {
           <p className={styles.description}>
             To work with Sandbox, please follow the setup instructions on the right.
           </p>
+          {onLoadExample && <ExampleDataButtons onDataLoaded={onLoadExample} />}
           <div className={styles.infoSection}>
-            <h3 className={styles.infoTitle}>What is Web Sandbox?</h3>
+            <h3 className={styles.infoTitle}>
+              <span className={styles.infoIcon} aria-hidden="true">
+                <FiInfo size={18} />
+              </span>
+              What is Sandbox UI?
+            </h3>
             <p className={styles.infoText}>
-              Web Sandbox extends the standard TON Sandbox with transaction tracing capabilities,
+              Sandbox UI extends the standard TON Sandbox with transaction tracing capabilities,
               allowing you to visualize and debug smart contract interactions in web interface.
             </p>
           </div>

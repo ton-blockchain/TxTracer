@@ -50,7 +50,7 @@ function SandboxPage() {
       <div className={styles.traceViewWrapper}>
         {header}
         <div className={styles.fullPageState}>
-          <ConnectionGuide />
+          <ConnectionGuide onLoadExample={loadFromFile} />
         </div>
       </div>
     )

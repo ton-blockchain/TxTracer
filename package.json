@@ -21,9 +21,9 @@
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
     "@ton-community/func-js": "^0.9.1",
-    "@ton/core": "^0.60.1",
+    "@ton/core": "^0.61.0",
     "@ton/crypto": "^3.3.0",
-    "@ton/sandbox": "^0.33.0",
+    "@ton/sandbox": "^0.36.0",
     "@ton/test-utils": "^0.7.0",
     "@types/d3": "^7.4.3",
     "@xyflow/react": "^12.3.2",
@@ -40,7 +40,7 @@
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.6.0",
     "ton-assembly": "0.2.1",
-    "txtracer-core-test-dev": "../retracer-core-new/txtracer-core-test-dev-0.1.5.tgz"
+    "txtracer-core-test-dev": "0.1.5"
   },
   "devDependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
