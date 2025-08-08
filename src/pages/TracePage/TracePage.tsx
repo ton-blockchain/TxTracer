@@ -105,8 +105,6 @@ function TracePage() {
       setLoading(true)
       try {
         const rr = await traceTx(textToSubmit)
-        console.log(rr)
-        console.log(rr.result.codeCell?.toBoc().toString("hex"))
         setResult(rr)
         setSelectedStackItem(null)
         if (!fromHeader) {
