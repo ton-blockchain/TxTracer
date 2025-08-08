@@ -45,6 +45,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({value}) => {
         title={isCopied ? "Link copied!" : "Share code via URL"}
         className={className}
         aria-label={isCopied ? "Code link copied to clipboard" : "Share code via URL"}
+        data-testid="share-button"
       >
         {isCopied ? (
           <FiCheck size={16} aria-hidden="true" />

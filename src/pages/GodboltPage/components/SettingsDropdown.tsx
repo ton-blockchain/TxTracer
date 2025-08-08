@@ -96,6 +96,7 @@ export const SettingsDropdown: React.FC<SettingsDropdownProps> = ({hooks}) => {
         aria-expanded={isOpen}
         aria-haspopup="menu"
         aria-controls="settings-menu"
+        data-testid="settings-button"
       >
         <FiSettings size={16} aria-hidden="true" />
       </button>
