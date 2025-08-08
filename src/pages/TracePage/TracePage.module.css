@@ -371,6 +371,14 @@
   letter-spacing: 0.5px;
 }
 
+.featureCardColorBadge {
+  position: absolute;
+  font-size: var(--font-size-xs);
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  z-index: 1;
+}
+
 .createBy {
   color: var(--tracepage-create-by-text-color);
   font-size: var(--font-size-sm);

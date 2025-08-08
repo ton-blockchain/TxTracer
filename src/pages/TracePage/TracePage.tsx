@@ -16,6 +16,7 @@ import {shortenHash} from "@shared/lib/format"
 import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
 
 import {TooltipHint} from "@shared/ui/TooltipHint"
+import Badge from "@shared/ui/Badge"
 
 import {StackItemViewer} from "@app/pages/TracePage/StackItemViewer.tsx"
 
@@ -356,7 +357,9 @@ function TracePage() {
                     package. Visualize messages, transaction info, VM logs and exit codes with an
                     interactive UI.
                   </p>
-                  <span className={styles.featureCardBadge}>Sandbox</span>
+                  <Badge color="green" className={styles.featureCardColorBadge}>
+                    Alpha
+                  </Badge>
                 </a>
               </section>
             )}

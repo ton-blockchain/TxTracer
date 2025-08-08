@@ -13,7 +13,7 @@ function SandboxPage() {
   if (isSharedData) {
     return (
       <div className={styles.traceViewWrapper}>
-        <PageHeader pageTitle={"sandbox"}>
+        <PageHeader pageTitle={"sandbox"} titleBadgeText="Alpha" titleBadgeColor="green">
           <div className={styles.headerContent}>
             <div className={styles.headerControls}>
               <UploadTestDataButton onDataLoaded={loadFromFile} />
@@ -36,7 +36,7 @@ function SandboxPage() {
   }
 
   const header = (
-    <PageHeader pageTitle={"sandbox"}>
+    <PageHeader pageTitle={"sandbox"} titleBadgeText="Alpha" titleBadgeColor="green">
       <div className={styles.headerContent}>
         <div className={styles.headerControls}>
           <UploadTestDataButton onDataLoaded={loadFromFile} />
@@ -69,7 +69,7 @@ function SandboxPage() {
 
   return (
     <div className={styles.traceViewWrapper}>
-      <PageHeader pageTitle={"sandbox"}>
+      <PageHeader pageTitle={"sandbox"} titleBadgeText="Alpha" titleBadgeColor="blue">
         <div className={styles.headerContent}>
           <div className={styles.headerControls}>
             <UploadTestDataButton onDataLoaded={loadFromFile} />
@@ -80,16 +80,6 @@ function SandboxPage() {
       <main className={styles.appContainer}>
         {error && <div className={styles.errorMessage}>{error}</div>}
         <div>
-          {/*{[...contracts.entries()].map(([, data], i) => (*/}
-          {/*  <ContractDetails*/}
-          {/*    key={i}*/}
-          {/*    contracts={contracts}*/}
-          {/*    contract={data}*/}
-          {/*    tests={tests}*/}
-          {/*    isDeployed={false}*/}
-          {/*  />*/}
-          {/*))}*/}
-          {/*<br />*/}
           {tests.map((testData, index) => (
             <TestInfo
               key={testData.testName}
