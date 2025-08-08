@@ -60,9 +60,14 @@
 }
 
 .pageTitle {
+  color: var(--color-text-primary);
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-sm);
+}
+
+.pageTitle:hover {
+  text-decoration: none;
 }
 
 .headerLinks {

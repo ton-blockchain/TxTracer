@@ -46,10 +46,10 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({
           </span>
         )}
         {isSandbox && (
-          <span className={styles.pageTitle}>
+          <a className={styles.pageTitle} href="/sandbox/">
             Sandbox
             {titleBadgeText && <Badge color={titleBadgeColor}>{titleBadgeText}</Badge>}
-          </span>
+          </a>
         )}
         {network === "testnet" && <Badge color="red">Testnet</Badge>}
       </div>
