@@ -1,4 +1,4 @@
-import {trace} from "ton-assembly/dist"
+import {trace} from "ton-assembly"
 
 export type {FuncVar} from "ton-assembly/dist/trace/func-mapping"
 

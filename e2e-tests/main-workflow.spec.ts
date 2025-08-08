@@ -1,4 +1,6 @@
-import {test, expect, Page} from "@playwright/test"
+import {test, expect, type Page} from "@playwright/test"
+
+import {getGasInfo, getStepInfo} from "./utils"
 
 const VALID_TEST_HASH_PLACEHOLDER =
   "5c7d6c306ca8a6ada7716d02f63e18a5b6f91ab9851caef0d22bd26e97eff7e8"
@@ -45,24 +47,6 @@ test.describe("TxTracer Main Workflow", () => {
 })
 
 test.describe("TxTracer Stepping Logic", () => {
-  const getStepInfo = (text: string | null): {current: number; total: number} | null => {
-    if (!text) return null
-    const match = text.match(/Step (\d+) of (\d+)/)
-    if (match) {
-      return {current: parseInt(match[1], 10), total: parseInt(match[2], 10)}
-    }
-    return null
-  }
-
-  const getGasInfo = (text: string | null): number | null => {
-    if (!text) return null
-    const match = text.match(/Used gas: (\d+)/)
-    if (match) {
-      return parseInt(match[1], 10)
-    }
-    return null
-  }
-
   test("should correctly update navigation buttons, step and gas counters", async ({
     page,
   }: {

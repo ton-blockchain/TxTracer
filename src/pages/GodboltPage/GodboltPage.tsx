@@ -5,7 +5,7 @@ import "allotment/dist/style.css"
 
 import type * as monaco from "monaco-editor"
 
-import {trace} from "ton-assembly/dist"
+import {trace} from "ton-assembly"
 
 import InlineLoader from "@shared/ui/InlineLoader"
 import ErrorBanner from "@shared/ui/ErrorBanner/ErrorBanner"

@@ -26,7 +26,12 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({type, text}) => {
 
   if (type === "success") {
     return (
-      <span className={styles.statusSuccess} role="status" aria-label={getAriaLabel()}>
+      <span
+        className={styles.statusSuccess}
+        role="status"
+        aria-label={getAriaLabel()}
+        data-testid="status-badge"
+      >
         <svg
           width="16"
           height="16"
@@ -55,7 +60,12 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({type, text}) => {
     )
   } else if (type === "failed") {
     return (
-      <span className={styles.statusFailed} role="status" aria-label={getAriaLabel()}>
+      <span
+        className={styles.statusFailed}
+        role="status"
+        aria-label={getAriaLabel()}
+        data-testid="status-badge"
+      >
         <svg
           width="16"
           height="16"
@@ -91,7 +101,12 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({type, text}) => {
     )
   } else if (type === "warning") {
     return (
-      <span className={styles.statusWarning} role="status" aria-label={getAriaLabel()}>
+      <span
+        className={styles.statusWarning}
+        role="status"
+        aria-label={getAriaLabel()}
+        data-testid="status-badge"
+      >
         <svg
           width="16"
           height="16"
