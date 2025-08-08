@@ -5283,7 +5283,7 @@ tweetnacl@1.0.3:
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-1.0.3.tgz#ac0af71680458d8a6378d0d0d050ab1407d35596"
   integrity sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==
 
-txtracer-core-test-dev@0.1.5:
+txtracer-core-test-dev@^0.1.5:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/txtracer-core-test-dev/-/txtracer-core-test-dev-0.1.5.tgz#2a159debcc2a8ff5a2ba03eaa05f0e4bf1e7352b"
   integrity sha512-qZODNOJKyAW7eK2jrBFjL1ozlxhWVgwYGvNhMkgon959e36+5gyxaMQNsGL9Oh3e5YUNL2ZdZ7eGftERNeMp6w==
