@@ -1,11 +1,12 @@
 import "@xyflow/react/dist/style.css"
 
-import React from "react"
+import React, {useEffect} from "react"
 
 import PageHeader from "@shared/ui/PageHeader"
 import {useSandboxData} from "@features/sandbox/lib/useSandboxData"
 import {TestInfo, ConnectionGuide, LoadingState} from "@app/pages/SandboxPage/components"
 import UploadTestDataButton from "@app/pages/SandboxPage/components/UploadTestDataButton"
+import {loadExampleByKey} from "@app/pages/SandboxPage/components/examples"
 
 import styles from "./SandboxPage.module.css"
 
@@ -30,6 +31,17 @@ function SandboxPage() {
   const url = React.useMemo(() => `ws://${host}:${port}` as const, [host, port])
 
   const {tests, error, isConnected, isSharedData, rawData, loadFromFile} = useSandboxData({url})
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const exampleKey = params.get("example")
+    if (!exampleKey) return
+    void loadExampleByKey(exampleKey).then(data => {
+      if (data) {
+        loadFromFile(data)
+      }
+    })
+  }, [loadFromFile])
 
   if (isSharedData) {
     return (
