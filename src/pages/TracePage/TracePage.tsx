@@ -1,7 +1,7 @@
 import React, {Suspense, useCallback, useEffect, useState} from "react"
 import {FiClock, FiGithub, FiPlay, FiSearch, FiX} from "react-icons/fi"
 
-import {type StackElement} from "ton-assembly-test-dev/dist/trace"
+import {type StackElement} from "ton-assembly/dist/trace"
 
 import type {RetraceResultAndCode} from "@features/txTrace/ui"
 import {RetraceResultView} from "@features/txTrace/ui"
@@ -105,6 +105,8 @@ function TracePage() {
       setLoading(true)
       try {
         const rr = await traceTx(textToSubmit)
+        console.log(rr)
+        console.log(rr.result.codeCell?.toBoc().toString("hex"))
         setResult(rr)
         setSelectedStackItem(null)
         if (!fromHeader) {

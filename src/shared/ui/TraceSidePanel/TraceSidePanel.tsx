@@ -1,6 +1,6 @@
 import React from "react"
 
-import type {StackElement} from "ton-assembly-test-dev/dist/trace"
+import type {StackElement} from "ton-assembly/dist/trace"
 
 import Button from "@shared/ui/Button"
 import StackViewer from "@shared/ui/StackViewer"
