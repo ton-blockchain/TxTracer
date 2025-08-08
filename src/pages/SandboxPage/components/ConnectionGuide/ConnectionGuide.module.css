@@ -24,7 +24,7 @@
 
 .rightColumn {
   flex: 1.5;
-  padding: 0 4rem;
+  padding: 1rem 4rem;
   overflow-y: auto;
 
   display: flex;
