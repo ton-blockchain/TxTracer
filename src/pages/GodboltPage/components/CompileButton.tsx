@@ -26,6 +26,7 @@ export const CompileButton: React.FC<CompileButtonProps> = ({
       aria-label={loading ? "Compiling code..." : "Compile FunC code"}
       aria-describedby="compile-status"
       aria-keyshortcuts="Control+Enter"
+      data-testid="compile-button"
     >
       {loading ? (
         <ButtonLoader>Compile</ButtonLoader>
