@@ -19,6 +19,7 @@ import {
   useTasmHoverProvider,
   useTasmCodeLensProvider,
   useTasmCompletionProvider,
+  useTasmInlayProvider,
   useFuncLanguageProviders,
   useFolding,
   type SupportedLanguage,
@@ -48,6 +49,11 @@ interface CodeEditorProps {
   /* -------------------------------- Trace Features -------------------------------- */
   /** Line number to highlight (1-indexed). Used for showing the current execution step */
   readonly highlightLine?: number
+
+  /** Line to show implicit RET marker (placed under previous instruction) */
+  readonly implicitRetLine?: number
+  /** Custom label for implicit RET inlay hint */
+  readonly implicitRetLabel?: string
 
   /** Execution data for each line including gas costs and execution counts */
   readonly lineExecutionData?: LinesExecutionData
@@ -104,6 +110,8 @@ self.MonacoEnvironment = {
 const CodeEditor: React.FC<CodeEditorProps> = ({
   code,
   highlightLine,
+  implicitRetLine,
+  implicitRetLabel,
   lineExecutionData,
   onLineClick = () => {},
   onLineHover,
@@ -140,6 +148,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   const {updateDecorations} = useDecorations({
     monaco,
     highlightLine,
+    implicitRetLine,
     lineExecutionData,
     highlightGroups,
     hoveredLines,
@@ -170,6 +179,14 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   useTasmCompletionProvider({
     monaco,
     editorRef,
+    editorReady,
+    enabled: language === "tasm",
+  })
+
+  useTasmInlayProvider({
+    monaco,
+    implicitRetLine,
+    implicitRetLabel,
     editorReady,
     enabled: language === "tasm",
   })

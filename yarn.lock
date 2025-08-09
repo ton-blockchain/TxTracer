@@ -5187,10 +5187,10 @@ ton-assembly@0.1.0:
     "@tonstudio/parser-runtime" "^0.0.1"
     cac "^6.7.14"
 
-ton-assembly@0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/ton-assembly/-/ton-assembly-0.2.1.tgz#ed1eaeaf72b9864cc1435e9e1980a86542c8712b"
-  integrity sha512-LvaWlMIyBYaSm3QZGdtwJvflw4LiSJM8eiGN8F16WHwNFizMrLo18ttVem4n2zDBoKEpyVEbV5C1RPn1+JXpwQ==
+ton-assembly@0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/ton-assembly/-/ton-assembly-0.2.2.tgz#a53f8a6802efdf5fe51fae58f8442900e357a56f"
+  integrity sha512-S5e//lwCTeUsjUrP2inV6yIJx319tQqtN4Ltd7dj+pFQIp7BKGQXDrs/YSLcseXoKGLnGf1CyFZpJRgppkdR1w==
   dependencies:
     "@ton/core" "^0.60.1"
     "@tonstudio/parser-runtime" "^0.0.1"

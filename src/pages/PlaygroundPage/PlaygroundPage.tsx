@@ -184,6 +184,25 @@ function PlaygroundPage() {
     setResult(undefined)
   }, [])
 
+  const implicitRet = (() => {
+    const steps = result?.traceInfo?.steps
+    if (!steps) return {line: undefined as number | undefined, approx: false}
+    const current = steps[selectedStep]
+    if (!current || current.loc !== undefined)
+      return {line: undefined as number | undefined, approx: false}
+
+    let idx = selectedStep - 1
+    let chainLen = 1
+    while (idx >= 0 && steps[idx]?.loc === undefined) {
+      chainLen++
+      idx--
+    }
+    const anchor = idx >= 0 ? steps[idx] : undefined
+    const line = anchor?.loc?.line !== undefined ? anchor.loc.line + 1 : undefined
+    const approx = chainLen > 1
+    return {line, approx}
+  })()
+
   const txStatus: StatusType | undefined = useMemo(() => {
     if (!result) return undefined
 
@@ -242,6 +261,10 @@ function PlaygroundPage() {
                 readOnly={false}
                 highlightLine={highlightLine}
                 lineExecutionData={lineExecutionData}
+                implicitRetLine={implicitRet.line}
+                implicitRetLabel={
+                  implicitRet.approx ? "↵ implicit RET (approximate position)" : undefined
+                }
                 shouldCenter={transitionType === "button"}
                 exitCode={result?.exitCode}
                 onLineClick={findStepByLine}

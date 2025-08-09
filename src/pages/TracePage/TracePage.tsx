@@ -201,6 +201,25 @@ function TracePage() {
     setSelectedStackItem(null)
   }, [])
 
+  const implicitRet = (() => {
+    const steps = result?.trace?.steps
+    if (!steps) return {line: undefined as number | undefined, approx: false}
+    const current = steps[selectedStep]
+    if (!current || current.loc !== undefined)
+      return {line: undefined as number | undefined, approx: false}
+
+    let idx = selectedStep - 1
+    let chainLen = 1
+    while (idx >= 0 && steps[idx]?.loc === undefined) {
+      chainLen++
+      idx--
+    }
+    const anchor = idx >= 0 ? steps[idx] : undefined
+    const line = anchor?.loc?.line !== undefined ? anchor.loc.line + 1 : undefined
+    const approx = chainLen > 1
+    return {line, approx}
+  })()
+
   const exitCode =
     result?.result?.emulatedTx?.computeInfo !== "skipped"
       ? result?.result?.emulatedTx?.computeInfo?.exitCode
@@ -477,6 +496,10 @@ function TracePage() {
                     <CodeEditor
                       code={result.code}
                       highlightLine={highlightLine}
+                      implicitRetLine={implicitRet.line}
+                      implicitRetLabel={
+                        implicitRet.approx ? "↵ implicit RET (approximate position)" : undefined
+                      }
                       lineExecutionData={lineExecutionData}
                       onLineClick={findStepByLine}
                       shouldCenter={transitionType === "button"}
