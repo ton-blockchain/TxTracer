@@ -19,7 +19,8 @@ import Button from "@shared/ui/Button"
 
 import type {TestData} from "@features/sandbox/lib/test-data.ts"
 
-import {SendModeViewer, ExitCodeChip} from "@features/sandbox/ui"
+import {SendModeViewer} from "@features/sandbox/ui"
+import {ExitCodeChip} from "@features/common/ui/ExitCodeChip/ExitCodeChip"
 
 import {ActionsSummary} from "./ActionsSummary"
 

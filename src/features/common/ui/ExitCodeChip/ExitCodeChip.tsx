@@ -2,7 +2,7 @@ import type {ContractABI} from "@ton/core"
 
 import {Tooltip} from "@shared/ui/Tooltip"
 
-import {EXIT_CODE_DESCRIPTIONS} from "@features/sandbox/lib/error-codes/error-codes.ts"
+import {EXIT_CODE_DESCRIPTIONS} from "@features/common/lib/error-codes/error-codes.ts"
 
 import styles from "./ExitCodeViewer.module.css"
 

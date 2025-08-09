@@ -292,7 +292,11 @@ function TracePage() {
                           {shortenHash(entry.hash, 16, 16)}
                         </span>
                         {entry.exitCode !== undefined && (
-                          <StatusBadge type={statusType} text={`Exit code: ${entry.exitCode}`} />
+                          <StatusBadge
+                            type={statusType}
+                            exitCode={entry.exitCode}
+                            text={`Exit code: ${entry.exitCode}`}
+                          />
                         )}
                         <button
                           className={styles.historyItemDeleteButton}
@@ -411,7 +415,9 @@ function TracePage() {
 
               {shouldShowStatusContainer && (
                 <div className={styles.txStatusContainer} role="status" aria-live="polite">
-                  {txStatus && <StatusBadge type={txStatus} text={txStatusText} />}
+                  {txStatus && (
+                    <StatusBadge type={txStatus} text={txStatusText} exitCode={exitCode} />
+                  )}
                   {stateUpdateHashOk === false && (
                     <TooltipHint
                       tooltipText={

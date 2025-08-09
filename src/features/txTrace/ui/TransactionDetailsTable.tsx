@@ -6,6 +6,8 @@ import AddressChip from "@shared/ui/AddressChip"
 import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
 import {formatAddress, formatCurrency, formatNumber} from "@shared/lib/format"
 
+import {ExitCodeChip} from "@features/common/ui/ExitCodeChip/ExitCodeChip.tsx"
+
 import styles from "./TransactionDetailsTable.module.css"
 
 export interface TransactionDetailsTableProps {
@@ -63,6 +65,7 @@ const TransactionDetailsTable: React.FC<TransactionDetailsTableProps> = ({result
   const tx = result.emulatedTx
   const money = result.money
   const isSuccess = tx.computeInfo !== "skipped" && tx.computeInfo.success
+  const exitCode = tx.computeInfo !== "skipped" ? tx.computeInfo.exitCode : undefined
   const statusType: StatusType = isSuccess ? "success" : "failed"
 
   return (
@@ -70,7 +73,7 @@ const TransactionDetailsTable: React.FC<TransactionDetailsTableProps> = ({result
       <div className={styles.detailRow}>
         <div className={styles.detailLabel}>Status</div>
         <div className={styles.detailValue}>
-          <StatusBadge type={statusType} />
+          <StatusBadge type={statusType} exitCode={exitCode} />
         </div>
       </div>
       <div className={styles.detailRow}>
@@ -164,7 +167,7 @@ const TransactionDetailsTable: React.FC<TransactionDetailsTableProps> = ({result
               <div className={styles.multiColumnItem}>
                 <div className={styles.multiColumnItemTitle}>Exit code</div>
                 <div className={`${styles.multiColumnItemValue} ${styles.numberValue}`}>
-                  {formatNumber(tx.computeInfo.exitCode)}
+                  <ExitCodeChip exitCode={tx.computeInfo.exitCode} />
                 </div>
               </div>
               <div className={styles.multiColumnItem}>
