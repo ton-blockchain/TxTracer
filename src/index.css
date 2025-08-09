@@ -70,6 +70,13 @@
   --color-background-input-focus: var(--color-background-primary);
   --color-background-error: #fff1f0;
   --color-highlight-bg: #fff3cd;
+  --color-highlight-gradient: linear-gradient(
+    to right,
+    rgba(255, 243, 205, 0.56) 0%,
+    rgba(255, 243, 205, 0.6) 35%,
+    rgba(255, 243, 205, 0.55) 65%,
+    rgba(255, 243, 205, 0) 100%
+  );
 
   --color-details-header: var(--color-background-primary);
 
@@ -306,6 +313,13 @@
   --color-background-input-focus: #3a3a3c;
   --color-background-error: #2f1716;
   --color-highlight-bg: #6f3434;
+  --color-highlight-gradient: linear-gradient(
+    to right,
+    rgba(var(--color-error-rgb, 255, 0, 0), 0.16) 0%,
+    rgba(var(--color-error-rgb, 255, 0, 0), 0.1) 35%,
+    rgba(var(--color-error-rgb, 255, 0, 0), 0.05) 65%,
+    rgba(var(--color-error-rgb, 255, 0, 0), 0) 100%
+  );
 
   --color-details-header: var(--color-background-primary);
 

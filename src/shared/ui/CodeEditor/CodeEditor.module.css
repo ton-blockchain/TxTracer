@@ -2,18 +2,11 @@
   background-color: var(--color-highlight-bg) !important;
   cursor: grab !important;
 }
+
 :global(.monaco-editor .implicit-ret-line) {
   position: relative;
-  background: linear-gradient(
-    to right,
-    rgba(var(--color-error-rgb, 255, 0, 0), 0.16) 0%,
-    rgba(var(--color-error-rgb, 255, 0, 0), 0.1) 35%,
-    rgba(var(--color-error-rgb, 255, 0, 0), 0.05) 65%,
-    rgba(var(--color-error-rgb, 255, 0, 0), 0) 100%
-  ) !important;
+  background: var(--color-highlight-gradient) !important;
 }
-
-/* removed gutter glyph and label to keep width minimal */
 
 :global(.monaco-editor .faded-text) {
   opacity: 0.9 !important;

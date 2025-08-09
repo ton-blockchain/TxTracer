@@ -27,8 +27,8 @@ export const LIGHT_THEME: editor.IStandaloneThemeData = {
   ],
   colors: {
     // Inlay hints (implicit RET)
-    "editorInlayHint.typeForeground": "#D32F2F",
-    "editorInlayHint.typeBackground": "#FFE4E4",
+    "editorInlayHint.typeForeground": "#7e6820",
+    "editorInlayHint.typeBackground": "#fff3cd",
   },
 }
 
