@@ -18,11 +18,11 @@ Based on [TxTracer-core](https://github.com/tact-lang/txtracer-core).
   BoC hex.
 - **Code Viewer & Inspector:** View TVM assembly code with execution counts, gas usage, and detailed instruction
   documentation on hover.
-  - Code editor with highlighting.
-  - Hover documentation for instructions.
-  - Number of executions of a given line on hover.
-  - Exit code next to the instruction that threw it.
-  - Go to any line by Ctrl/Cmd + Click.
+    - Code editor with highlighting.
+    - Hover documentation for instructions.
+    - Number of executions of a given line on hover.
+    - Exit code next to the instruction that threw it.
+    - Go to any line by Ctrl/Cmd + Click.
 - **Stack Viewer:** View the stack with different colors for different data types.
 - **Transaction Details:** View transaction details, Out Actions, VM, and executor logs.
 - **Network Support:** Mainnet and testnet support (with a badge if the transaction is from the testnet).
@@ -57,6 +57,10 @@ If you just want to try TxTracer, here are some interesting transactions:
 ## Inspiration
 
 This project is heavily inspired by [retracer](https://retracer.ton.org/).
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for local setup, build, test, and lint instructions.
 
 ## License
 
