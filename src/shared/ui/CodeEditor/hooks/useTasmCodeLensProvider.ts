@@ -2,6 +2,7 @@ import {useEffect, type RefObject} from "react"
 import type * as monacoTypes from "monaco-editor"
 
 import type {ExitCode} from "@features/txTrace/lib/traceTx"
+import {EXIT_CODE_DESCRIPTIONS} from "@features/common/lib/error-codes/error-codes.ts"
 
 import {TASM_LANGUAGE_ID} from "../languages"
 
@@ -40,7 +41,13 @@ export const useTasmCodeLensProvider = ({
           }
         }
 
-        const description = exitCode.description ? `: ${exitCode.description}` : ``
+        const stdInfo = EXIT_CODE_DESCRIPTIONS[exitCode.num as keyof typeof EXIT_CODE_DESCRIPTIONS]
+        const description =
+          exitCode.description && exitCode.description.trim().length > 0
+            ? `: ${exitCode.description}`
+            : stdInfo?.name
+              ? `: ${stdInfo.name}`
+              : ``
         const lenses: monacoTypes.languages.CodeLens[] = [
           {
             range: new monaco.Range(line, 1, line, 1),

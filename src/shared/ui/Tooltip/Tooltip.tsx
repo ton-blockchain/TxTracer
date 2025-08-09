@@ -1,4 +1,4 @@
-import {type ReactNode, useState} from "react"
+import {type ReactNode, useMemo, useState} from "react"
 import ReactMarkdown from "react-markdown"
 
 import styles from "./Tooltip.module.css"
@@ -9,6 +9,7 @@ interface TooltipProps {
   readonly variant?: "hover" | "positioned"
   readonly position?: {x: number; y: number}
   readonly enableMarkdown?: boolean
+  readonly placement?: "top" | "bottom"
 }
 
 function renderContent(content: ReactNode | string, enableMarkdown: boolean) {
@@ -38,8 +39,14 @@ export function Tooltip({
   variant = "hover",
   position,
   enableMarkdown = false,
+  placement = "top",
 }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false)
+
+  const tooltipClassName = useMemo(() => {
+    if (placement === "bottom") return `${styles.tooltip} ${styles.bottom}`
+    return styles.tooltip
+  }, [placement])
 
   if (variant === "positioned" && position) {
     return (
@@ -62,7 +69,9 @@ export function Tooltip({
       onMouseLeave={() => setIsVisible(false)}
     >
       {children}
-      {isVisible && <div className={styles.tooltip}>{renderContent(content, enableMarkdown)}</div>}
+      {isVisible && (
+        <div className={tooltipClassName}>{renderContent(content, enableMarkdown)}</div>
+      )}
     </div>
   )
 }

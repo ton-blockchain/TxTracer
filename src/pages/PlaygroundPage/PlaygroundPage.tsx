@@ -201,7 +201,9 @@ function PlaygroundPage() {
       <PageHeader pageTitle="playground">
         {shouldShowStatusContainer && (
           <div className={styles.txStatusContainer} role="status" aria-live="polite">
-            {txStatus && <StatusBadge type={txStatus} text={txStatusText} />}
+            {txStatus && (
+              <StatusBadge type={txStatus} text={txStatusText} exitCode={result?.exitCode?.num} />
+            )}
           </div>
         )}
         <div className={styles.headerContent}>
