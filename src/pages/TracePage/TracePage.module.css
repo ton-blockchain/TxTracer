@@ -259,11 +259,23 @@
   flex-shrink: 0;
 }
 
-.historyItemText {
+.historyItemLeft {
   flex-grow: 1;
+  gap: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+}
+
+.historyItemText {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.historyItemBadges {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
 .historyItemDeleteButton {
@@ -434,6 +446,9 @@
   }
 
   .historyItem > span[class*="status"] {
+    display: none;
+  }
+  .historyItemBadges {
     display: none;
   }
 
