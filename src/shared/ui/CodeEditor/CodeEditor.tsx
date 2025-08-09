@@ -187,6 +187,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     monaco,
     implicitRetLine,
     implicitRetLabel,
+    editorRef,
     editorReady,
     enabled: language === "tasm",
   })
