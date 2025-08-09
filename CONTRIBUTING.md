@@ -43,13 +43,13 @@ Artifacts are emitted into `dist/`.
 
 ### Tests
 
-- Unit tests:
+#### Unit tests:
 
 ```bash
 yarn test
 ```
 
-- E2E tests (Playwright). The config will start the dev server automatically.
+#### E2E tests (Playwright). The config will start the dev server automatically.
 
 Install Playwright browsers once:
 
