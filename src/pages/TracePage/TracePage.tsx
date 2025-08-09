@@ -62,8 +62,27 @@ function TracePage() {
   } = useTraceStepper(result?.trace)
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    const tx = params.get("tx") ?? ""
+    const getRawQueryParam = (name: string) => {
+      const search = window.location.search
+      if (!search || search.length <= 1) return null
+      const query = search.slice(1)
+      const pairs = query.split("&")
+      for (const pair of pairs) {
+        if (!pair) continue
+        const eq = pair.indexOf("=")
+        const key = eq >= 0 ? pair.slice(0, eq) : pair
+        if (key !== name) continue
+        const raw = eq >= 0 ? pair.slice(eq + 1) : ""
+        try {
+          return decodeURIComponent(raw)
+        } catch {
+          return raw
+        }
+      }
+      return null
+    }
+
+    const tx = getRawQueryParam("tx") ?? ""
     setInputText(tx)
     setHeaderInputText(tx)
   }, [])
@@ -114,7 +133,7 @@ function TracePage() {
           addToHistory({hash: textToSubmit, exitCode, testnet: rr.network === "testnet"})
         }
         setShowHistoryDropdown(false)
-        window.history.pushState({}, "", `?tx=${textToSubmit}`)
+        window.history.pushState({}, "", `?tx=${encodeURIComponent(textToSubmit)}`)
       } catch (e) {
         console.error(e)
         if (e instanceof Error) {
