@@ -40,7 +40,7 @@
     "react-icons": "^5.5.0",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.6.0",
-    "ton-assembly": "0.2.1"
+    "ton-assembly": "0.2.2"
   },
   "devDependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",

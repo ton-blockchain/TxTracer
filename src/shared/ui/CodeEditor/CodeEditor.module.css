@@ -3,6 +3,11 @@
   cursor: grab !important;
 }
 
+:global(.monaco-editor .implicit-ret-line) {
+  position: relative;
+  background: var(--color-highlight-gradient) !important;
+}
+
 :global(.monaco-editor .faded-text) {
   opacity: 0.9 !important;
   color: var(--editor-faded-text-color) !important;

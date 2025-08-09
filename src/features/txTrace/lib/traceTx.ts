@@ -153,6 +153,7 @@ export function findExitCode(vmLogs: string, mappingInfo: MappingInfo) {
     stack: [],
     gas: 0,
     gasCost: 0,
+    implicit: false,
   })
 
   if (info === undefined) {

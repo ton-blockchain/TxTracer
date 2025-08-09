@@ -25,7 +25,11 @@ export const LIGHT_THEME: editor.IStandaloneThemeData = {
     // TASM
     {token: "instruction", foreground: "#0033B3"},
   ],
-  colors: {},
+  colors: {
+    // Inlay hints (implicit RET)
+    "editorInlayHint.typeForeground": "#7e6820",
+    "editorInlayHint.typeBackground": "#fff3cd",
+  },
 }
 
 export const DARK_THEME: editor.IStandaloneThemeData = {
@@ -55,5 +59,8 @@ export const DARK_THEME: editor.IStandaloneThemeData = {
   ],
   colors: {
     "editor.background": "#1c1c1e",
+    // Inlay hints (implicit RET)
+    "editorInlayHint.typeForeground": "#FF6B6B",
+    "editorInlayHint.typeBackground": "#3A1F1F",
   },
 }
