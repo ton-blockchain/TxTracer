@@ -80,13 +80,13 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({type, text, exitCode}) => {
         : undefined
     const description = info?.description
     const phase = info?.phase
-    const displayName = info?.name
+    const displayName = info?.name ?? "Custom error"
     const tooltipContent = (
       <div className={exitStyles.tooltipContent}>
         <div className={exitStyles.tooltipSection}>
           <div className={exitStyles.tooltipLabel}>Description:</div>
           <div className={exitStyles.tooltipDescription}>
-            {exitCode !== undefined ? `${displayName ? displayName : ""}` : "Unknown error"}
+            {exitCode !== undefined ? displayName : "Unknown error"}
             {description ? `: ${description}` : ""}
           </div>
         </div>
