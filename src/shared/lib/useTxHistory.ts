@@ -6,6 +6,7 @@ const MAX_HISTORY_LENGTH = 5
 export interface TxHistoryEntry {
   readonly hash: string
   readonly exitCode?: number
+  readonly testnet?: boolean
 }
 
 export function useTxHistory() {

@@ -111,7 +111,7 @@ function TracePage() {
         if (!fromHeader) {
           const computeInfo = rr?.result?.emulatedTx?.computeInfo
           const exitCode = computeInfo !== "skipped" ? computeInfo?.exitCode : undefined
-          addToHistory({hash: textToSubmit, exitCode})
+          addToHistory({hash: textToSubmit, exitCode, testnet: rr.network === "testnet"})
         }
         setShowHistoryDropdown(false)
         window.history.pushState({}, "", `?tx=${textToSubmit}`)
@@ -288,16 +288,21 @@ function TracePage() {
                         aria-selected={false}
                       >
                         <FiClock size={16} className={styles.historyItemIcon} aria-hidden="true" />
-                        <span className={styles.historyItemText}>
-                          {shortenHash(entry.hash, 16, 16)}
+                        <span className={styles.historyItemLeft}>
+                          <span className={styles.historyItemText}>
+                            {shortenHash(entry.hash, 16, 16)}
+                          </span>
+                          {entry.testnet && <Badge color="red">Testnet</Badge>}
                         </span>
-                        {entry.exitCode !== undefined && (
-                          <StatusBadge
-                            type={statusType}
-                            exitCode={entry.exitCode}
-                            text={`Exit code: ${entry.exitCode}`}
-                          />
-                        )}
+                        <div className={styles.historyItemBadges}>
+                          {entry.exitCode !== undefined && (
+                            <StatusBadge
+                              type={statusType}
+                              exitCode={entry.exitCode}
+                              text={`Exit code: ${entry.exitCode}`}
+                            />
+                          )}
+                        </div>
                         <button
                           className={styles.historyItemDeleteButton}
                           onClick={e => {
