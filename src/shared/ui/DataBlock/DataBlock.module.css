@@ -11,7 +11,6 @@
 
 .contentWrapper {
   position: relative;
-  width: 100%;
   border-radius: var(--border-radius-sm);
   background-color: var(--table-code-bg-color);
   border: 1px solid var(--color-border);
@@ -22,18 +21,18 @@
 }
 
 .content {
-  font-family: var(--font-family-mono), monospace;
-  font-size: var(--font-size-xs);
+  font-family: "JetBrains Mono", var(--font-family-mono), monospace;
+  font-size: var(--font-size-xss);
   color: var(--table-code-text-color);
-  padding: var(--spacing-sm);
-  margin: var(--spacing-xs) 0;
+  padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-sm) var(--spacing-mds);
+  margin-top: 0;
+  margin-bottom: 0;
   white-space: pre-wrap;
   overflow-wrap: break-word;
   overflow-x: auto;
   width: 100%;
   box-sizing: border-box;
   display: block;
-  height: 300px;
 }
 
 .copyButton {

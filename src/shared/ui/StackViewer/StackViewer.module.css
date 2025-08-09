@@ -124,6 +124,10 @@
   word-break: break-all;
 }
 
+.integerItemHexValue {
+  opacity: 0.6;
+}
+
 .integerItemCopyButton {
   composes: stackItemCopyButton;
   background-color: var(--stack-item-integer-bg);

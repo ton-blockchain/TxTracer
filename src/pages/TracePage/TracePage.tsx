@@ -1,27 +1,31 @@
-import React, {useState, useEffect, Suspense, useCallback} from "react"
-import {FiGithub, FiClock, FiX} from "react-icons/fi"
+import React, {Suspense, useCallback, useEffect, useState} from "react"
+import {FiClock, FiGithub, FiPlay, FiSearch, FiX, FiZap} from "react-icons/fi"
 
-import {RetraceResultView} from "@features/txTrace/ui"
+import {type StackElement} from "ton-assembly/dist/trace"
+
 import type {RetraceResultAndCode} from "@features/txTrace/ui"
-import StackViewer from "@shared/ui/StackViewer"
-import {traceTx, normalizeGas} from "@features/txTrace/lib/traceTx"
-import {useGasMap, useTraceStepper, useExecutionsMap} from "@features/txTrace/hooks"
+import {RetraceResultView} from "@features/txTrace/ui"
+import TraceSidePanel from "@shared/ui/TraceSidePanel"
+import {normalizeGas, traceTx} from "@features/txTrace/lib/traceTx"
+import {useLineExecutionData, useTraceStepper} from "@features/txTrace/hooks"
 import SearchInput from "@shared/ui/SearchInput"
 import InlineLoader from "@shared/ui/InlineLoader"
-import Button from "@shared/ui/Button"
-import {useGlobalError} from "@shared/lib/errorContext"
-import StepInstructionBlock, {
-  type InstructionDetail,
-} from "@features/txTrace/ui/StepInstructionBlock"
-import {useTxHistory, type TxHistoryEntry} from "@shared/lib/useTxHistory"
+import {type InstructionDetail} from "@features/txTrace/ui/StepInstructionBlock"
+import {type TxHistoryEntry, useTxHistory} from "@shared/lib/useTxHistory"
 import {shortenHash} from "@shared/lib/format"
 import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
 
-import TracePageHeader from "./TracePageHeader"
+import {TooltipHint} from "@shared/ui/TooltipHint"
+import Badge from "@shared/ui/Badge"
+
+import {StackItemViewer} from "@app/pages/TracePage/StackItemViewer.tsx"
+
+import {useGlobalError} from "@shared/lib/useGlobalError.tsx"
 
 import styles from "./TracePage.module.css"
 
 const CodeEditor = React.lazy(() => import("@shared/ui/CodeEditor"))
+const PageHeader = React.lazy(() => import("@shared/ui/PageHeader"))
 
 function TracePage() {
   const [inputText, setInputText] = useState("")
@@ -35,9 +39,12 @@ function TracePage() {
   const {history, addToHistory, removeFromHistory} = useTxHistory()
   const [showHistoryDropdown, setShowHistoryDropdown] = useState(false)
   const [isInputFocused, setIsInputFocused] = useState(false)
+  const [selectedStackItem, setSelectedStackItem] = useState<{
+    element: StackElement
+    title: string
+  } | null>(null)
 
-  const gasMap = useGasMap(result?.trace)
-  const executionsMap = useExecutionsMap(result?.trace)
+  const lineExecutionData = useLineExecutionData(result?.trace)
   const {
     selectedStep,
     highlightLine,
@@ -55,8 +62,27 @@ function TracePage() {
   } = useTraceStepper(result?.trace)
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    const tx = params.get("tx") ?? ""
+    const getRawQueryParam = (name: string) => {
+      const search = window.location.search
+      if (!search || search.length <= 1) return null
+      const query = search.slice(1)
+      const pairs = query.split("&")
+      for (const pair of pairs) {
+        if (!pair) continue
+        const eq = pair.indexOf("=")
+        const key = eq >= 0 ? pair.slice(0, eq) : pair
+        if (key !== name) continue
+        const raw = eq >= 0 ? pair.slice(eq + 1) : ""
+        try {
+          return decodeURIComponent(raw)
+        } catch {
+          return raw
+        }
+      }
+      return null
+    }
+
+    const tx = getRawQueryParam("tx") ?? ""
     setInputText(tx)
     setHeaderInputText(tx)
   }, [])
@@ -100,13 +126,14 @@ function TracePage() {
       try {
         const rr = await traceTx(textToSubmit)
         setResult(rr)
+        setSelectedStackItem(null)
         if (!fromHeader) {
           const computeInfo = rr?.result?.emulatedTx?.computeInfo
           const exitCode = computeInfo !== "skipped" ? computeInfo?.exitCode : undefined
-          addToHistory({hash: textToSubmit, exitCode})
+          addToHistory({hash: textToSubmit, exitCode, testnet: rr.network === "testnet"})
         }
         setShowHistoryDropdown(false)
-        window.history.pushState({}, "", `?tx=${textToSubmit}`)
+        window.history.pushState({}, "", `?tx=${encodeURIComponent(textToSubmit)}`)
       } catch (e) {
         console.error(e)
         if (e instanceof Error) {
@@ -125,6 +152,25 @@ function TracePage() {
     void handleSubmit(true)
   }, [handleSubmit])
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+        event.preventDefault()
+        if (!loading) {
+          void handleSubmit(false)
+        }
+      } else if (event.key === "Escape" && selectedStackItem) {
+        event.preventDefault()
+        setSelectedStackItem(null)
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown)
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [handleSubmit, loading, selectedStackItem])
+
   const toggleDetails = useCallback(() => setDetailsExpanded(prev => !prev), [])
 
   const handleDetailsKeyDown = useCallback(
@@ -136,10 +182,51 @@ function TracePage() {
     [toggleDetails],
   )
 
+  const handleStackItemClick = useCallback(
+    (element: StackElement, title: string) => {
+      if (
+        selectedStackItem &&
+        selectedStackItem.element === element &&
+        selectedStackItem.title === title
+      ) {
+        setSelectedStackItem(null)
+      } else {
+        setSelectedStackItem({element, title})
+      }
+    },
+    [selectedStackItem],
+  )
+
+  const handleBackToCode = useCallback(() => {
+    setSelectedStackItem(null)
+  }, [])
+
+  const exitCode =
+    result?.result?.emulatedTx?.computeInfo !== "skipped"
+      ? result?.result?.emulatedTx?.computeInfo?.exitCode
+      : undefined
+  const txStatus =
+    result?.result?.emulatedTx?.computeInfo !== "skipped"
+      ? result?.result?.emulatedTx?.computeInfo?.success
+        ? "success"
+        : "failed"
+      : "success"
+
+  const stateUpdateHashOk = result?.result?.stateUpdateHashOk
+  const shouldShowStatusContainer = txStatus !== undefined || stateUpdateHashOk === false
+  const txStatusText = `Exit code: ${exitCode?.toString() ?? "unknown"}`
+
   return (
     <>
       {!result && (
-        <div className={styles.inputPage}>
+        <main className={styles.inputPage}>
+          <div id="trace-status" className="sr-only" aria-live="polite" aria-atomic="true">
+            {loading && "Tracing transaction..."}
+            {result && !loading && "Transaction traced successfully"}
+          </div>
+
+          <div className="sr-only">Press Ctrl+Enter or Cmd+Enter to trace the transaction</div>
+
           <div className={styles.externalLinksContainer}>
             <a
               href="https://github.com/tact-lang/txtracer"
@@ -147,20 +234,25 @@ function TracePage() {
               rel="noopener noreferrer"
               title="GitHub Repository"
               className={styles.iconLink}
+              aria-label="View TxTracer source code on GitHub"
             >
-              <FiGithub size={24} />
+              <FiGithub size={24} aria-hidden="true" />
             </a>
           </div>
 
           <div className={styles.centeredInputContainer}>
-            <div className={styles.txtracerLogo}>
-              <div className={styles.logoDiamond}></div>
+            <header className={styles.txtracerLogo}>
+              <div className={styles.logoDiamond} aria-hidden="true"></div>
               <h1 data-testid="app-title" className={styles.txtracerLogoH1}>
                 <span>TxTracer</span>
                 <span className={styles.titleTon}>The Open Network</span>
               </h1>
-            </div>
-            <div className={styles.inputCard}>
+            </header>
+
+            <section aria-labelledby="search-heading" className={styles.inputCard}>
+              <h2 id="search-heading" className="sr-only">
+                Transaction Search
+              </h2>
               <SearchInput
                 value={inputText}
                 onChange={setInputText}
@@ -214,13 +306,22 @@ function TracePage() {
                         tabIndex={0}
                         aria-selected={false}
                       >
-                        <FiClock size={16} className={styles.historyItemIcon} />
-                        <span className={styles.historyItemText}>
-                          {shortenHash(entry.hash, 16, 16)}
+                        <FiClock size={16} className={styles.historyItemIcon} aria-hidden="true" />
+                        <span className={styles.historyItemLeft}>
+                          <span className={styles.historyItemText}>
+                            {shortenHash(entry.hash, 16, 16)}
+                          </span>
+                          {entry.testnet && <Badge color="red">Testnet</Badge>}
                         </span>
-                        {entry.exitCode !== undefined && (
-                          <StatusBadge type={statusType} text={`Exit code: ${entry.exitCode}`} />
-                        )}
+                        <div className={styles.historyItemBadges}>
+                          {entry.exitCode !== undefined && (
+                            <StatusBadge
+                              type={statusType}
+                              exitCode={entry.exitCode}
+                              text={`Exit code: ${entry.exitCode}`}
+                            />
+                          )}
+                        </div>
                         <button
                           className={styles.historyItemDeleteButton}
                           onClick={e => {
@@ -228,169 +329,194 @@ function TracePage() {
                             removeFromHistory(entry.hash)
                           }}
                           title="Remove from history"
+                          aria-label={`Remove transaction ${shortenHash(entry.hash, 8, 8)} from history`}
                         >
-                          <FiX size={16} />
+                          <FiX size={16} aria-hidden="true" />
                         </button>
                       </li>
                     )
                   })}
                 </ul>
               )}
-            </div>
-            <InlineLoader
-              message="Tracing transaction"
-              subtext="This may take a few moments"
-              loading={loading}
-            />
+            </section>
+
+            {loading ? (
+              <InlineLoader
+                message="Tracing transaction"
+                subtext="This may take a few moments"
+                loading={loading}
+              />
+            ) : (
+              <section aria-labelledby="features-heading" className={styles.featureCards}>
+                <h2 id="features-heading" className="sr-only">
+                  Available Tools
+                </h2>
+                <a href="/play/" className={styles.featureCard}>
+                  <div className={`${styles.featureCardIcon} ${styles.playgroundIcon}`}>
+                    <FiPlay aria-hidden="true" />
+                  </div>
+                  <h3 className={styles.featureCardTitle}>Assembly Playground</h3>
+                  <p className={styles.featureCardDescription}>
+                    Experiment with TVM assembly code directly in your browser. Write, test, and
+                    debug assembly instructions with real-time execution.
+                  </p>
+                  <span className={styles.featureCardBadge}>Playground</span>
+                </a>
+
+                <a href="/code-explorer/" className={styles.featureCard}>
+                  <div className={`${styles.featureCardIcon} ${styles.explorerIcon}`}>
+                    <FiSearch aria-hidden="true" />
+                  </div>
+                  <h3 className={styles.featureCardTitle}>Code Explorer</h3>
+                  <p className={styles.featureCardDescription}>
+                    Compile FunC code to assembly and explore the generated bytecode. Perfect for
+                    understanding how your smart contracts work under the hood.
+                  </p>
+                  <span className={styles.featureCardBadge}>Explorer</span>
+                </a>
+
+                <a href="/sandbox/" className={styles.featureCard}>
+                  <div className={`${styles.featureCardIcon} ${styles.sandboxIcon}`}>
+                    <FiZap aria-hidden="true" />
+                  </div>
+                  <h3 className={styles.featureCardTitle}>Sandbox</h3>
+                  <p className={styles.featureCardDescription}>
+                    Inspect transactions produced by your local tests using the @ton/sandbox
+                    package. Visualize messages, transaction info, VM logs and exit codes with an
+                    interactive UI.
+                  </p>
+                  <Badge color="green" className={styles.featureCardColorBadge}>
+                    Alpha
+                  </Badge>
+                </a>
+              </section>
+            )}
           </div>
 
-          <span className={styles.createBy}>
+          <footer className={styles.createBy}>
             Created by{" "}
             <a href="https://tonstudio.io" target="_blank" rel="noreferrer">
               TON Studio
             </a>
-          </span>
-        </div>
+          </footer>
+        </main>
       )}
 
       {loading && !result && (
-        <div className={styles.inputPage}>
+        <main className={styles.inputPage}>
           <InlineLoader
             message="Tracing transaction"
             subtext="This may take a few moments"
             loading={true}
           />
-        </div>
+        </main>
       )}
 
       {result && (
         <div className={styles.traceViewWrapper}>
-          <TracePageHeader
-            inputValue={headerInputText}
-            onInputChange={setHeaderInputText}
-            onSubmit={handleHeaderSubmit}
-            loading={loading}
-            network={result?.network ?? "mainnet"}
-            txStatus={
-              result?.result?.emulatedTx?.computeInfo !== "skipped"
-                ? result?.result?.emulatedTx?.computeInfo?.success
-                  ? "success"
-                  : "failed"
-                : "success"
-            }
-            exitCode={
-              result?.result?.emulatedTx?.computeInfo !== "skipped"
-                ? result?.result?.emulatedTx?.computeInfo?.exitCode
-                : undefined
-            }
-            stateUpdateHashOk={result?.result?.stateUpdateHashOk}
-          />
-          <div className={styles.appContainer}>
+          <div id="trace-results-status" className="sr-only" aria-live="polite" aria-atomic="true">
+            {loading && "Loading new transaction trace..."}
+            {result && !loading && "Transaction trace loaded successfully"}
+          </div>
+
+          <PageHeader pageTitle={""} network={result?.network ?? "mainnet"}>
+            <div className={styles.headerContent}>
+              <div
+                className={styles.searchInputContainer}
+                role="search"
+                aria-label="Search for another transaction"
+              >
+                <SearchInput
+                  value={headerInputText}
+                  onChange={setHeaderInputText}
+                  onSubmit={handleHeaderSubmit}
+                  placeholder="Trace another transaction hash"
+                  loading={loading}
+                  autoFocus={false}
+                  compact={true}
+                />
+              </div>
+
+              {shouldShowStatusContainer && (
+                <div className={styles.txStatusContainer} role="status" aria-live="polite">
+                  {txStatus && (
+                    <StatusBadge type={txStatus} text={txStatusText} exitCode={exitCode} />
+                  )}
+                  {stateUpdateHashOk === false && (
+                    <TooltipHint
+                      tooltipText={
+                        "Because the transaction runs in a local sandbox, we can't always reproduce it exactly. Sandbox replay was incomplete, and some values may differ from those on the real blockchain."
+                      }
+                      placement="bottom"
+                    >
+                      <StatusBadge type="warning" text="Trace Incomplete" />
+                    </TooltipHint>
+                  )}
+                </div>
+              )}
+            </div>
+          </PageHeader>
+
+          <main className={styles.appContainer}>
             <div
               className={`${styles.mainContent} ${detailsExpanded ? styles.mainContentMinimized : ""}`}
             >
-              <div data-testid="code-editor-container" style={{flex: "1", position: "relative"}}>
-                <Suspense fallback={<InlineLoader message="Loading Editor..." loading={true} />}>
-                  <CodeEditor
-                    code={result.code}
-                    highlightLine={highlightLine}
-                    lineGas={gasMap}
-                    lineExecutions={executionsMap}
-                    onLineClick={findStepByLine}
-                    shouldCenter={transitionType === "button"}
-                    exitCode={result.exitCode}
-                  />
-                </Suspense>
-              </div>
-              <div className={styles.sidePanel}>
-                {currentStep && (
-                  <div className={styles.stepDetails}>
-                    <div className={styles.stepHeader}>
-                      <div className={styles.stepHeaderTop}>
-                        <span data-testid="step-counter-info" className={styles.stepCounter}>
-                          Step {selectedStep + 1} of {totalSteps}
-                        </span>
-                        <span
-                          data-testid="cumulative-gas-counter"
-                          className={styles.cumulativeGasCounter}
-                        >
-                          Used gas: {cumulativeGasSinceBegin}
-                        </span>
-                      </div>
-                      {instructionDetails.length > 0 && (
-                        <StepInstructionBlock
-                          steps={instructionDetails}
-                          currentIndex={selectedStep}
-                          itemHeight={32}
-                        />
-                      )}
-                      {instructionDetails.length === 0 &&
-                        currentStep &&
-                        currentStep.instructionName && (
-                          <div className={styles.stepInstructionBlock}>
-                            <span
-                              data-testid="current-instruction"
-                              className={styles.stepInstruction}
-                            >
-                              {currentStep.instructionName}
-                            </span>
-                            {currentStep.gasCost && (
-                              <span className={styles.stepGas}>{currentStep.gasCost} gas</span>
-                            )}
-                          </div>
-                        )}
-                      <div className={styles.navigationControls}>
-                        <Button
-                          data-testid="go-to-first-step-button"
-                          variant="ghost"
-                          onClick={goToFirstStep}
-                          className={styles.navButton}
-                          disabled={!canGoPrev || totalSteps === 0}
-                          title="Go to First Step"
-                        >
-                          First
-                        </Button>
-                        <Button
-                          data-testid="prev-step-button"
-                          variant="ghost"
-                          onClick={handlePrev}
-                          className={styles.navButton}
-                          disabled={!canGoPrev || totalSteps === 0}
-                          title="Previous Step"
-                        >
-                          Prev
-                        </Button>
-                        <Button
-                          data-testid="next-step-button"
-                          variant="ghost"
-                          onClick={handleNext}
-                          className={styles.navButton}
-                          disabled={!canGoNext || totalSteps === 0}
-                          title="Next Step"
-                        >
-                          Next
-                        </Button>
-                        <Button
-                          data-testid="go-to-last-step-button"
-                          variant="ghost"
-                          onClick={goToLastStep}
-                          className={styles.navButton}
-                          disabled={!canGoNext || totalSteps === 0}
-                          title="Go to Last Step"
-                        >
-                          Last
-                        </Button>
-                      </div>
-                    </div>
-                    <div className={styles.stackViewerContainer}>
-                      <StackViewer stack={currentStack} title="Stack" />
-                    </div>
+              <section
+                aria-labelledby="code-viewer-heading"
+                data-testid="code-editor-container"
+                className={styles.codeEditorArea}
+              >
+                <h2 id="code-viewer-heading" className="sr-only">
+                  Transaction Code Viewer
+                </h2>
+
+                <div
+                  className={`${styles.codeEditorWrapper} ${selectedStackItem ? styles.codeEditorHidden : ""}`}
+                >
+                  <Suspense fallback={<InlineLoader message="Loading Editor..." loading={true} />}>
+                    <CodeEditor
+                      code={result.code}
+                      highlightLine={highlightLine}
+                      lineExecutionData={lineExecutionData}
+                      onLineClick={findStepByLine}
+                      shouldCenter={transitionType === "button"}
+                      exitCode={result.exitCode}
+                    />
+                  </Suspense>
+                </div>
+
+                {selectedStackItem && (
+                  <div className={styles.stackItemOverlay}>
+                    <StackItemViewer
+                      element={selectedStackItem.element}
+                      title={selectedStackItem.title}
+                      onBack={handleBackToCode}
+                    />
                   </div>
                 )}
-              </div>
+              </section>
+              <TraceSidePanel
+                selectedStep={selectedStep}
+                totalSteps={totalSteps}
+                currentStep={currentStep}
+                currentStack={currentStack}
+                canGoPrev={canGoPrev}
+                canGoNext={canGoNext}
+                onPrev={handlePrev}
+                onNext={handleNext}
+                onFirst={goToFirstStep}
+                onLast={goToLastStep}
+                showGas={true}
+                placeholderMessage="No trace steps available."
+                instructionDetails={instructionDetails}
+                cumulativeGas={cumulativeGasSinceBegin}
+                onStackItemClick={handleStackItemClick}
+                className={styles.sidebarArea}
+              />
             </div>
-            <div
+            <section
               className={`${styles.detailsSection} ${detailsExpanded ? styles.detailsSectionExpanded : ""}`}
+              aria-labelledby="transaction-details-heading"
             >
               <div
                 data-testid="details-header"
@@ -399,22 +525,28 @@ function TracePage() {
                 onKeyDown={handleDetailsKeyDown}
                 role="button"
                 tabIndex={0}
+                aria-expanded={detailsExpanded}
+                aria-controls="transaction-details-content"
               >
                 <div className={styles.detailsTitle}>
-                  <span>TRANSACTION DETAILS</span>
+                  <span id="transaction-details-heading">TRANSACTION DETAILS</span>
                 </div>
               </div>
               {detailsExpanded && (
-                <div data-testid="details-content" className={styles.detailsContent}>
+                <div
+                  id="transaction-details-content"
+                  data-testid="details-content"
+                  className={styles.detailsContent}
+                >
                   <div className={styles.transactionDetailsPanelInTracePage}>
                     <RetraceResultView result={result} />
                   </div>
                 </div>
               )}
-            </div>
-          </div>
+            </section>
+          </main>
           {loading && result && (
-            <div className={styles.loadingOverlay}>
+            <div className={styles.loadingOverlay} role="status" aria-live="polite">
               <InlineLoader
                 message="Tracing new transaction..."
                 subtext="This may take a few moments"

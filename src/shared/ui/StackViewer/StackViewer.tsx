@@ -1,9 +1,7 @@
 import React, {type JSX, useState} from "react"
-import {type StackElement} from "tact-asm/dist/trace"
+import {type StackElement} from "ton-assembly/dist/trace"
 import {Cell} from "@ton/core"
 import {motion, AnimatePresence} from "framer-motion"
-
-import StackItemDetailsModal from "@shared/ui/StackItemDetailsModal/StackItemDetailsModal"
 
 import {CopyButton} from "@shared/CopyButton/CopyButton.tsx"
 
@@ -28,6 +26,7 @@ const truncateMiddle = (text: string, maxLength: number = 30): JSX.Element => {
 interface StackViewerProps {
   readonly stack: readonly StackElement[]
   readonly title?: string
+  readonly onStackItemClick?: (element: StackElement, title: string) => void
 }
 
 const getElementKey = (element: StackElement, index: number): string => {
@@ -73,24 +72,19 @@ const safeLoadAddress = (cell: Cell) => {
   }
 }
 
-const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
+const StackViewer: React.FC<StackViewerProps> = ({stack, title, onStackItemClick}) => {
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
-  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
-  const [selectedStackItemData, setSelectedStackItemData] = useState<StackElement | null>(null)
 
   const toggleExpand = (key: string) => {
     setExpandedItem(prev => (prev === key ? null : key))
   }
 
-  const handleOpenDetailsModal = (itemData: StackElement) => {
-    setSelectedStackItemData(itemData)
-    setIsDetailsModalOpen(true)
-    setExpandedItem(null)
-  }
-
-  const handleCloseDetailsModal = () => {
-    setIsDetailsModalOpen(false)
-    setSelectedStackItemData(null)
+  const handleOpenDetailsModal = (itemData: StackElement, elementTitle: string = "Stack Item") => {
+    if (onStackItemClick) {
+      onStackItemClick(itemData, elementTitle)
+    } else {
+      setExpandedItem(null)
+    }
   }
 
   const renderStackElement = (
@@ -101,10 +95,16 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
     const handleItemClick = () => {
       switch (element.$) {
         case "Cell":
+          handleOpenDetailsModal(element, "Cell Details")
+          break
         case "Slice":
+          handleOpenDetailsModal(element, "Slice Details")
+          break
         case "Builder":
+          handleOpenDetailsModal(element, "Builder Details")
+          break
         case "Address":
-          handleOpenDetailsModal(element)
+          handleOpenDetailsModal(element, "Address Details")
           break
         default:
           toggleExpand(keyPrefix)
@@ -132,9 +132,13 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
         )
       case "Integer": {
         const value = element.value.toString()
+        const hexPresentation =
+          element.value < 0
+            ? `-0x${(-element.value).toString(16)}`
+            : `0x${element.value.toString(16)}`
         return (
           <div className={styles.integerItem} key={keyPrefix}>
-            {value}
+            {value} <span className={styles.integerItemHexValue}>({hexPresentation})</span>
             <CopyButton
               className={styles.integerItemCopyButton}
               title="Copy integer value"
@@ -160,7 +164,7 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
                 ? "Empty Cell"
                 : expandedItem === keyPrefix
                   ? element.boc
-                  : truncateMiddle(element.boc, 40)}
+                  : truncateMiddle(element.boc, 35)}
               <div className={styles.stackItemDetails}>
                 Bits: {cell.bits.length}, Refs: {cell.refs.length}
               </div>
@@ -185,16 +189,17 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
               <div
                 className={styles.addressItem}
                 key={keyPrefix}
-                onClick={() => handleOpenDetailsModal(element)}
+                onClick={() => handleOpenDetailsModal(element, "Address Details")}
                 onKeyDown={e => {
-                  if (e.key === "Enter" || e.key === " ") handleOpenDetailsModal(element)
+                  if (e.key === "Enter" || e.key === " ")
+                    handleOpenDetailsModal(element, "Address Details")
                 }}
                 role="button"
                 tabIndex={0}
               >
                 <div className={styles.stackItemLabel}>Address</div>
                 <div className={styles.stackItemValue}>
-                  {expandedItem === keyPrefix ? string : truncateMiddle(string, 40)}
+                  {expandedItem === keyPrefix ? string : truncateMiddle(string, 35)}
                 </div>
                 <CopyButton
                   className={styles.addressItemCopyButton}
@@ -221,7 +226,7 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
                 ? "Empty Slice"
                 : expandedItem === keyPrefix
                   ? element.hex
-                  : truncateMiddle(element.hex, 40)}
+                  : truncateMiddle(element.hex, 35)}
               <CopyButton
                 className={styles.sliceItemCopyButton}
                 title="Copy slice as BoC"
@@ -252,7 +257,7 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
                 ? "Empty Builder"
                 : expandedItem === keyPrefix
                   ? element.hex
-                  : truncateMiddle(element.hex, 40)}
+                  : truncateMiddle(element.hex, 35)}
             </div>
             <div className={styles.stackItemDetails}>
               Bits: {cell.bits.length}, Refs: {cell.refs.length}
@@ -279,7 +284,7 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
           >
             <div className={styles.stackItemLabel}>Continuation</div>
             <div className={styles.stackItemValue}>
-              {expandedItem === keyPrefix ? element.name : truncateMiddle(element.name, 40)}
+              {expandedItem === keyPrefix ? element.name : truncateMiddle(element.name, 35)}
             </div>
             <CopyButton
               className={styles.continuationItemCopyButton}
@@ -314,7 +319,7 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
           >
             <div className={styles.stackItemLabel}>Address</div>
             <div className={styles.stackItemValue}>
-              {expandedItem === keyPrefix ? element.value : truncateMiddle(element.value, 40)}
+              {expandedItem === keyPrefix ? element.value : truncateMiddle(element.value, 35)}
             </div>
             <CopyButton
               className={styles.addressItemCopyButton}
@@ -345,7 +350,7 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
           <div className={styles.unknownItem} key={keyPrefix} role="button" tabIndex={0}>
             <div className={styles.stackItemLabel}>Unknown</div>
             <div className={styles.stackItemValue}>
-              {expandedItem === keyPrefix ? element.value : truncateMiddle(element.value, 40)}
+              {expandedItem === keyPrefix ? element.value : truncateMiddle(element.value, 35)}
             </div>
           </div>
         )
@@ -398,11 +403,6 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title}) => {
           </div>
         )}
       </div>
-      <StackItemDetailsModal
-        isOpen={isDetailsModalOpen}
-        onClose={handleCloseDetailsModal}
-        itemData={selectedStackItemData}
-      />
     </div>
   )
 }

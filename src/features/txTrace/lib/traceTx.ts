@@ -1,17 +1,20 @@
-import {retrace, retraceBaseTx} from "@tonstudio/txtracer-core"
-import type {TraceResult} from "@tonstudio/txtracer-core/dist/types"
-import {decompileCell, compileCellWithMapping} from "tact-asm/dist/runtime/instr"
+import {retrace, retraceBaseTx} from "txtracer-core-test-dev"
+import type {TraceResult} from "txtracer-core-test-dev/dist/types"
+import {compileCellWithMapping, decompileCell} from "ton-assembly/dist/runtime/instr"
 import {
   createMappingInfo,
-  type MappingInfo,
   type InstructionInfo,
-} from "tact-asm/dist/trace/mapping"
-import {type Step} from "tact-asm/dist/trace"
-import {createTraceInfoPerTransaction, findInstructionInfo} from "tact-asm/dist/trace/trace"
-import {print, parse} from "tact-asm/dist/text"
-import * as l from "tact-asm/dist/logs"
+  type MappingInfo,
+} from "ton-assembly/dist/trace/mapping"
+import {type Step, type TraceInfo} from "ton-assembly/dist/trace"
+import {createTraceInfoPerTransaction, findInstructionInfo} from "ton-assembly/dist/trace/trace"
+import {parse, print} from "ton-assembly/dist/text"
+import * as l from "ton-assembly/dist/logs"
+import {Cell} from "@ton/core"
 
-import type {RetraceResultAndCode, NetworkType} from "@features/txTrace/ui"
+import type {NetworkType, RetraceResultAndCode} from "@features/txTrace/ui"
+import type {TransactionInfo} from "@features/sandbox/lib/transaction"
+import type {ContractData} from "@features/sandbox/lib/contract"
 
 import {
   type ExtractionResult,
@@ -20,17 +23,23 @@ import {
 } from "@features/txTrace/lib/links.ts"
 
 import {
-  TxNotFoundError,
   NetworkError,
-  TxTraceError,
   TooManyRequests,
   TxHashInvalidError,
+  TxNotFoundError,
+  TxTraceError,
 } from "./errors"
 
 export type ExitCode = {
   readonly num: number
   readonly description: string
   readonly info: undefined | InstructionInfo
+}
+
+export interface SandboxTraceResult {
+  readonly code: string
+  readonly exitCode?: ExitCode
+  readonly traceInfo: TraceInfo
 }
 
 async function retraceAny(info: ExtractionResult): Promise<TraceResult> {
@@ -53,7 +62,7 @@ async function maybeTestnet(link: string): Promise<{result: TraceResult; network
   try {
     await wait(500) // rate limit
     const result = await retraceAny(txLinkInfo ?? SingleHash(link, false))
-    return {result, network: "mainnet"}
+    return {result, network: txLinkInfo?.testnet ? "testnet" : "mainnet"}
   } catch (error: unknown) {
     if (error instanceof Error && error.message.includes("Cannot find transaction info")) {
       console.log("Cannot find in mainnet, trying to find in testnet")
@@ -97,11 +106,17 @@ async function doTrace(link: string) {
   }
 }
 
-function findException(reversedEntries: l.VmLine[]) {
+export function findException(reversedEntries: l.VmLine[]) {
   const mapped = reversedEntries.map(it => {
     if (it.$ === "VmExceptionHandler") {
       return {
         text: ``, // default case, no further explanations
+        num: it.errno,
+      }
+    }
+    if (it.$ === "VmException") {
+      return {
+        text: it.message,
         num: it.errno,
       }
     }
@@ -112,10 +127,17 @@ function findException(reversedEntries: l.VmLine[]) {
     }
     return undefined
   })
+  const exceptionWithDescription = mapped.find(it => {
+    const length = it?.text?.length ?? 0
+    return length > 0
+  })
+  if (exceptionWithDescription) {
+    return exceptionWithDescription
+  }
   return mapped.find(it => it !== undefined)
 }
 
-function findExitCode(vmLogs: string, mappingInfo: MappingInfo) {
+export function findExitCode(vmLogs: string, mappingInfo: MappingInfo) {
   const res = l.parse(vmLogs)
   const reversedEntries = [...res].reverse()
   const description = findException(reversedEntries)
@@ -148,12 +170,19 @@ function findExitCode(vmLogs: string, mappingInfo: MappingInfo) {
   return exitCode
 }
 
-function extractCodeAndTrace(result: TraceResult) {
-  if (!result.codeCell) {
+function extractCodeAndTrace(
+  codeCell: Cell | undefined,
+  vmLogs: string,
+): {
+  code: string
+  exitCode?: ExitCode
+  traceInfo: TraceInfo
+} {
+  if (!codeCell) {
     return {code: "// No executable code found", traceInfo: {steps: []}}
   }
 
-  const instructions = decompileCell(result.codeCell)
+  const instructions = decompileCell(codeCell)
   const code = print(instructions)
 
   const instructionsWithPositions = parse("out.tasm", code)
@@ -161,7 +190,6 @@ function extractCodeAndTrace(result: TraceResult) {
     return {code: code, traceInfo: {steps: []}, exitCode: undefined}
   }
 
-  const vmLogs = result.emulatedTx.vmLogs
   const [, mapping] = compileCellWithMapping(instructionsWithPositions.instructions)
   const mappingInfo = createMappingInfo(mapping)
   const traceInfo = createTraceInfoPerTransaction(vmLogs, mappingInfo, undefined)[0]
@@ -174,9 +202,32 @@ function extractCodeAndTrace(result: TraceResult) {
   return {code, exitCode, traceInfo}
 }
 
+export function traceSandboxTransaction(
+  tx: TransactionInfo,
+  contracts: Map<string, ContractData>,
+): SandboxTraceResult | undefined {
+  const computeInfo = tx.computeInfo
+  if (computeInfo === "skipped") {
+    return undefined
+  }
+
+  const vmLogs = tx.fields.vmLogs as string | undefined
+  if (!vmLogs) {
+    return undefined
+  }
+
+  const contract = contracts.get(tx.address?.toString() ?? "")
+  const codeCell = contract?.stateInit?.code
+  if (!codeCell) {
+    return undefined
+  }
+
+  return extractCodeAndTrace(codeCell, vmLogs)
+}
+
 export async function traceTx(link: string): Promise<RetraceResultAndCode> {
   const {result, network} = await doTrace(link)
-  const {code, traceInfo, exitCode} = extractCodeAndTrace(result)
+  const {code, traceInfo, exitCode} = extractCodeAndTrace(result.codeCell, result.emulatedTx.vmLogs)
   return {result, code, trace: traceInfo, exitCode, network}
 }
 

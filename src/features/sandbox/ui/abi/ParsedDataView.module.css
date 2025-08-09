@@ -1,0 +1,235 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: fit-content;
+}
+
+.fieldHeader {
+  display: flex;
+  align-items: center;
+  min-height: 1.2em;
+  width: 100%;
+}
+
+.fieldName {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  margin-right: var(--spacing-xs);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.fieldValue {
+  margin-left: var(--spacing-md);
+  margin-top: var(--spacing-xs);
+  width: calc(100% - var(--spacing-md));
+  display: flex;
+  align-items: flex-start;
+  min-height: 1.2em;
+}
+
+.stringValue {
+  font-family: var(--font-family-mono), monospace;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  background-color: var(--color-background-secondary);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--color-border);
+  word-break: break-word;
+}
+
+.numberValue {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.booleanTrue {
+  font-weight: var(--font-weight-semibold);
+  color: var(--table-boolean-true-color);
+  font-size: var(--font-size-sm);
+}
+
+.booleanFalse {
+  font-weight: var(--font-weight-semibold);
+  color: var(--table-boolean-false-color);
+  font-size: var(--font-size-sm);
+}
+
+.nullValue {
+  color: var(--color-text-tertiary);
+  font-style: italic;
+  font-size: var(--font-size-sm);
+}
+
+.unknownValue {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.errorText {
+  color: var(--color-error);
+  font-style: italic;
+  font-size: var(--font-size-sm);
+}
+
+/* Complex type styles */
+.cellValue,
+.sliceValue {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
+.cellLabel,
+.sliceLabel {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+}
+
+.subObject {
+  width: 100%;
+  padding-left: var(--spacing-md);
+  border-left: 2px solid var(--color-border);
+  margin-bottom: var(--spacing-xs);
+}
+
+.objectValue {
+  width: 100%;
+  padding-left: var(--spacing-md);
+  border-left: 1px solid var(--color-border);
+  margin-top: var(--spacing-md);
+}
+
+/* Array styles */
+.arrayValue {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
+.arrayLabel {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.arrayItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding-left: var(--spacing-md);
+  border-left: 1px solid var(--color-border);
+}
+
+.arrayIndex {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family-mono), monospace;
+}
+
+.arrayItemValue {
+  margin-left: var(--spacing-sm);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .fieldValue {
+    margin-left: var(--spacing-sm);
+    width: calc(100% - var(--spacing-sm));
+  }
+
+  .subObject,
+  .objectValue,
+  .arrayItem {
+    padding-left: var(--spacing-sm);
+  }
+
+  .arrayItemValue {
+    margin-left: var(--spacing-xs);
+  }
+
+  .stringValue {
+    font-size: var(--font-size-sm);
+  }
+}
+
+.diffContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.diffValue {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.diffOldValue {
+  color: #dc2626;
+  opacity: 0.8;
+  font-size: var(--font-size-sm);
+  background-color: var(--color-error-bg);
+  padding: var(--spacing-xs);
+  border-radius: var(--border-radius-sm);
+}
+
+.diffNewValue {
+  color: #16a34a;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  background-color: var(--color-success-bg);
+  padding: var(--spacing-xs);
+  border-radius: var(--border-radius-sm);
+}
+
+.diffOldValue .stringValue {
+  color: var(--color-error-text);
+  background-color: rgba(220, 38, 38, 0.1);
+  border-color: rgba(220, 38, 38, 0.3);
+}
+
+.diffNewValue .stringValue {
+  color: var(--color-success-text);
+  background-color: rgba(22, 163, 74, 0.1);
+  border-color: rgba(22, 163, 74, 0.3);
+}
+
+.diffOldValue .numberValue {
+  color: var(--color-error-text);
+}
+
+.diffNewValue .numberValue {
+  color: var(--color-success-text);
+}
+
+.diffOldValue .booleanTrue,
+.diffOldValue .booleanFalse {
+  color: var(--color-error-text);
+}
+
+.diffNewValue .booleanTrue,
+.diffNewValue .booleanFalse {
+  color: var(--color-success-text);
+}
+
+.unchanged {
+  opacity: 0.7;
+}

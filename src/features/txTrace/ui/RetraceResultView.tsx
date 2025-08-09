@@ -1,8 +1,8 @@
 import React, {useState} from "react"
 
-import {type TraceInfo} from "tact-asm/dist/trace"
+import {type TraceInfo} from "ton-assembly/dist/trace"
 
-import type {TraceResult} from "@tonstudio/txtracer-core/dist/types"
+import type {TraceResult} from "txtracer-core-test-dev/dist/types"
 
 import type {OutAction} from "@entities/transaction"
 
@@ -40,7 +40,7 @@ const RetraceResultViewFc: React.FC<RetraceResultViewProps> = ({result}) => {
   return (
     <div className="retrace-result-container">
       {/* details table */}
-      <TransactionDetailsTable data={result} />
+      <TransactionDetailsTable result={result.result} />
 
       <div className="actions-section">
         <h3 className="actions-heading">Out Actions ({result.result.emulatedTx.actions.length})</h3>

@@ -1,0 +1,243 @@
+.traceViewWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.appContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  background-color: var(--color-background-secondary);
+  min-height: 0;
+}
+
+/* header */
+.headerContent {
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-end;
+}
+
+.txStatusContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-left: var(--spacing-sm);
+}
+
+.mainActionContainer {
+  display: flex;
+  justify-self: flex-end;
+  gap: var(--spacing-md);
+  margin-left: auto;
+  margin-right: var(--spacing-lg);
+}
+
+.mainContent {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  grid-template-rows: 1fr;
+  grid-template-areas: "editor sidebar";
+  width: calc(100% - var(--spacing-sm) * 2);
+  min-height: 0;
+  overflow: hidden;
+  gap: var(--spacing-sm);
+  padding: 0 var(--spacing-sm) var(--spacing-sm) var(--spacing-sm);
+  flex-grow: 1;
+}
+
+.titleTon {
+  -webkit-text-fill-color: transparent;
+  background: linear-gradient(89deg, #2b82eb, #1cc8ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  font-feature-settings:
+    "clig" off,
+    "liga" off;
+}
+
+.inputCard {
+  width: 100%;
+  max-width: 720px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.editorContainer {
+  position: relative;
+  grid-area: editor;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  background-color: var(--color-background-primary);
+  display: flex;
+  flex-direction: column;
+}
+
+.executeButtonContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.executeButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-sm);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.executeButton:hover:not(:disabled) {
+  background-color: var(--color-secondary);
+}
+
+.executeButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.navButton {
+  flex: 1;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-sm);
+}
+
+.externalLinksContainer {
+  position: absolute;
+  top: var(--spacing-lg);
+  right: var(--spacing-lg);
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.iconLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  transition: color var(--transition-duration-fast) ease;
+}
+
+.iconLink:hover {
+  color: var(--color-text-primary);
+}
+
+.sidebarArea {
+  grid-area: sidebar;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+:global(.sr-only) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 768px) {
+  .appContainer {
+    position: relative;
+  }
+
+  .externalLinksContainer {
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+  }
+
+  .mainContent {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1.5fr;
+    grid-template-areas:
+      "editor"
+      "sidebar";
+    width: calc(100% - var(--spacing-xs) * 2);
+    min-height: 0;
+    padding: var(--spacing-xs);
+    gap: var(--spacing-xs);
+  }
+
+  .editorContainer {
+    height: 100%;
+    min-height: 250px;
+  }
+
+  .mainActionContainer {
+    margin-right: var(--spacing-md);
+  }
+
+  .inputCard {
+    max-width: 100%;
+  }
+
+  .executeButtonContainer {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .executeButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .navButton {
+    padding: var(--spacing-sm);
+    font-size: var(--font-size-xs);
+  }
+
+  .headerContent {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .txStatusContainer {
+    margin-left: 0;
+    justify-content: center;
+  }
+
+  .titleTon {
+    font-size: var(--font-size-lg);
+  }
+
+  .mainActionContainer {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin-right: var(--spacing-sm);
+    align-items: stretch;
+  }
+
+  .executeButton {
+  }
+
+  .iconLink {
+    padding: var(--spacing-xs);
+  }
+}

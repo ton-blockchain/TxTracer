@@ -1,0 +1,120 @@
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-background-primary);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+
+  background-color: var(--color-background-primary);
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.mainContent {
+  flex: 1;
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.codeEditorArea {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-background-secondary);
+  border-radius: 0.5rem;
+}
+
+.sidePanel {
+  width: 400px;
+  min-width: 400px;
+}
+
+.noTrace {
+  padding: 2rem;
+  text-align: center;
+  color: var(--color-text-secondary);
+  background: var(--color-background-secondary);
+  border-radius: 0.5rem;
+  margin: 1rem;
+}
+
+.stackItemView {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.inlineContainer {
+  border-radius: var(--border-radius-md);
+}
+
+.inlineContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.inlineMainContent {
+  display: flex;
+  gap: var(--spacing-md);
+  min-height: 500px;
+  height: 80vh;
+}
+
+.inlineContainer .codeEditorArea {
+  min-height: 400px;
+
+  position: relative;
+}
+
+.inlineContainer .sidePanel {
+  min-width: 350px;
+  height: 100%;
+}
+
+.inlineContainer .title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+@media (max-width: 1024px) {
+  .inlineMainContent {
+    flex-direction: column;
+    max-height: none;
+  }
+
+  .inlineContainer .sidePanel {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .inlineContainer .codeEditorArea {
+    min-height: 300px;
+  }
+}
