@@ -42,12 +42,15 @@ export const useTasmCodeLensProvider = ({
         }
 
         const stdInfo = EXIT_CODE_DESCRIPTIONS[exitCode.num as keyof typeof EXIT_CODE_DESCRIPTIONS]
-        const description =
-          exitCode.description && exitCode.description.trim().length > 0
-            ? `: ${exitCode.description}`
-            : stdInfo?.name
-              ? `: ${stdInfo.name}`
-              : ``
+        const description = (() => {
+          if (exitCode.description && exitCode.description.trim().length > 0) {
+            return `: ${exitCode.description}`
+          }
+          if (stdInfo?.name) {
+            return `: ${stdInfo.name}`
+          }
+          return `: Custom error`
+        })()
         const lenses: monacoTypes.languages.CodeLens[] = [
           {
             range: new monaco.Range(line, 1, line, 1),

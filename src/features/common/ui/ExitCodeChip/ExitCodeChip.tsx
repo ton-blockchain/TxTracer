@@ -16,8 +16,13 @@ export function ExitCodeChip({exitCode, abi}: ExitCodeViewerProps) {
     return <span className={styles.exitCode}>—</span>
   }
 
-  const standardDescription =
-    EXIT_CODE_DESCRIPTIONS[exitCode as keyof typeof EXIT_CODE_DESCRIPTIONS]
+  const standardDescription = EXIT_CODE_DESCRIPTIONS[
+    exitCode as keyof typeof EXIT_CODE_DESCRIPTIONS
+  ] ?? {
+    name: "Custom error",
+    description: "User defined error",
+    phase: "Compute phase",
+  }
   const abiError = abi?.errors?.[exitCode]
   const customError = abiError && !standardDescription
 
