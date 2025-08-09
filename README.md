@@ -58,6 +58,10 @@ If you just want to try TxTracer, here are some interesting transactions:
 
 This project is heavily inspired by [retracer](https://retracer.ton.org/).
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for local setup, build, test, and lint instructions.
+
 ## License
 
 MIT © TON Studio
