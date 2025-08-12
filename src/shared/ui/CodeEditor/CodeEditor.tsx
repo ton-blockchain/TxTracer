@@ -99,6 +99,8 @@ interface CodeEditorProps {
 
   /** Optional gas summation per FunC line to display as inlay hints */
   readonly funcGasByLine?: ReadonlyMap<number, number>
+
+  readonly needFloatingTip?: boolean
 }
 
 // use local instance of monaco
@@ -134,6 +136,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   showInstructionDocs = true,
   onEditorMount,
   funcGasByLine,
+  needFloatingTip = lineExecutionData && language === "tasm",
 }) => {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
   const [editorReady, setEditorReady] = useState(false)
@@ -338,8 +341,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   }, [editorReady])
 
   /* -------------------------------- render ------------------------------- */
-  const needFloatingTip = lineExecutionData && language === "tasm"
-
   return (
     <>
       <div

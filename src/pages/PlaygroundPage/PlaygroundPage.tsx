@@ -18,6 +18,8 @@ import PageHeader from "@shared/ui/PageHeader"
 import Tutorial, {useTutorial} from "@shared/ui/Tutorial"
 
 import ShareButton from "@shared/ui/ShareButton/ShareButton.tsx"
+import SettingsDropdown from "@shared/ui/SettingsDropdown/SettingsDropdown.tsx"
+import {usePlaygroundSettings} from "@app/pages/PlaygroundPage/hooks/usePlaygroundSettings.ts"
 import {decodeCodeFromUrl} from "@app/pages/GodboltPage/urlCodeSharing.ts"
 
 import {ExecuteButton} from "@app/pages/PlaygroundPage/components/ExecuteButton.tsx"
@@ -115,6 +117,7 @@ function PlaygroundPage() {
   const {setError, clearError} = useGlobalError()
 
   const tutorial = useTutorial({tutorialKey: "playground-page", autoStart: true})
+  const settings = usePlaygroundSettings()
 
   const funcEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
   const asmViewerRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
@@ -140,6 +143,9 @@ function PlaygroundPage() {
   }, [funcResult?.funcSourceMap])
 
   const {
+    funcHighlightGroups,
+    asmHighlightGroups,
+    asmHoveredLines,
     funcPreciseHighlightRanges,
     handleAsmLineHover,
     filteredAsmCode,
@@ -182,6 +188,22 @@ function PlaygroundPage() {
   })
 
   const lineExecutionData = useLineExecutionData(traceInfo)
+
+  const filteredAsmLineExecutionData = useMemo(() => {
+    if (!filteredAsmCode || !settings.dimNeverExecutedLines) return undefined
+    const remapped: Record<number, {gas?: number; executions?: number}> = {}
+    for (const [key, data] of Object.entries(lineExecutionData)) {
+      const originalLine = Number(key)
+      const mapped = mapOriginalAsmToFiltered(originalLine)
+      if (mapped === undefined) continue
+      const prev = remapped[mapped] ?? {}
+      remapped[mapped] = {
+        gas: (prev.gas ?? 0) + (data.gas ?? 0),
+        executions: (prev.executions ?? 0) + (data.executions ?? 0),
+      }
+    }
+    return remapped
+  }, [filteredAsmCode, lineExecutionData, mapOriginalAsmToFiltered, settings.dimNeverExecutedLines])
 
   const [funcHighlightLine, setFuncHighlightLine] = useState<number | undefined>(undefined)
   const currentAsmLine = useMemo(() => {
@@ -556,6 +578,22 @@ function PlaygroundPage() {
               loading={loading || funcCompiling}
             />
             <ShareButton value={currentCode} />
+            <SettingsDropdown
+              items={[
+                {
+                  id: "mapping",
+                  label: "Show color mapping",
+                  checked: settings.showMappingHighlight && !isLineStepping,
+                  onToggle: settings.toggleShowMappingHighlight,
+                },
+                {
+                  id: "dim-never-executed",
+                  label: "Dim never executed lines",
+                  checked: settings.dimNeverExecutedLines,
+                  onToggle: settings.toggleDimNeverExecutedLines,
+                },
+              ]}
+            />
           </div>
         </div>
       </PageHeader>
@@ -596,6 +634,11 @@ function PlaygroundPage() {
                   readOnly={false}
                   markers={languageMode === "func" ? funcMarkers : []}
                   highlightLine={languageMode === "tasm" ? highlightLine : funcHighlightLine}
+                  highlightGroups={
+                    languageMode === "func" && settings.showMappingHighlight && !isLineStepping
+                      ? funcHighlightGroups
+                      : undefined
+                  }
                   highlightRanges={
                     languageMode === "func" && steppingMode === "instructions"
                       ? funcPreciseHighlightRanges
@@ -625,7 +668,24 @@ function PlaygroundPage() {
                         code={filteredAsmCode ?? funcResult.assembly}
                         readOnly={true}
                         language="tasm"
+                        needFloatingTip={false}
                         highlightLine={currentAsmLine}
+                        lineExecutionData={filteredAsmLineExecutionData}
+                        highlightGroups={
+                          settings.showMappingHighlight && !isLineStepping
+                            ? asmHighlightGroups
+                            : undefined
+                        }
+                        hoveredLines={
+                          settings.showMappingHighlight && !isLineStepping
+                            ? asmHoveredLines
+                            : undefined
+                        }
+                        onLineHover={
+                          settings.showMappingHighlight && !isLineStepping
+                            ? handleAsmLineHover
+                            : undefined
+                        }
                         implicitRetLine={implicitRetAsmLine}
                         implicitRetLabel={
                           implicitRet.approx ? "↵ implicit RET (approximate position)" : undefined
