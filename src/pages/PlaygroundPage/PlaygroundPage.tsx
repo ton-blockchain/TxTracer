@@ -48,10 +48,20 @@ NOP
 
 const DEFAULT_FUNC_CODE = `#include "stdlib.fc";
 
-() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
-    var cs = in_msg_cell.begin_parse();
-    var flags = cs~load_int(4);
-    throw(flags);
+;; add two values to stack first!
+() recv_internal(int a, int b) impure {
+    if (a > b) {
+        throw(10);
+    }
+    var data = begin_cell()
+        .store_int(1, 32)
+        .end_cell();
+    if (a == b) {
+        var c = a + b;
+        throw(20 + c);
+    }
+
+    throw(data.cell_hash() % 10);
 }
 `
 

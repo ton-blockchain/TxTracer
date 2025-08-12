@@ -82,6 +82,13 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     placement: "left",
   },
   {
+    title: "Switch to FunC (beta)",
+    content:
+      "You can switch between Assembly and FunC using this segmented control.\n\nSelect FunC (beta) to write high-level code and see the compiled assembly alongside.\n\nMapping highlight and stepping by source lines are available in FunC mode.",
+    target: `[class*="languageSwitcher"]`,
+    placement: "bottom",
+  },
+  {
     title: "Share Your Code",
     content:
       "Use the share button to generate links to your code.\n\nPerfect for collaboration, asking for help, or showcasing your smart contracts!",
