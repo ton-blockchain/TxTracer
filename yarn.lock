@@ -817,6 +817,13 @@
   dependencies:
     node-inspect-extracted "^2.0.0"
 
+"@ton/tolk-js@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@ton/tolk-js/-/tolk-js-1.0.0.tgz#f9863d8ed7016ea50890e5d33d9972042ef61c0f"
+  integrity sha512-OWFybjqo7MYZBB2XSuALEaH3uMJQeQHKbpbTmCWXJYnZskhPT4jwBshZ0gDvTskag++rwyPkcYTNJsfi6ngMXw==
+  dependencies:
+    arg "^5.0.2"
+
 "@ton/ton@^15.3.1":
   version "15.3.1"
   resolved "https://registry.yarnpkg.com/@ton/ton/-/ton-15.3.1.tgz#c20688b27eb8ce8474610843804a7599679c38a2"

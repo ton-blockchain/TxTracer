@@ -1,3 +1,5 @@
 export {default as CompileButton} from "./CompileButton"
 export {default as SettingsDropdown} from "./SettingsDropdown"
 export {default as CompilerErrors} from "./CompilerErrors"
+export {default as LanguageSelector} from "./LanguageSelector"
+export type {CodeLanguage} from "./LanguageSelector"

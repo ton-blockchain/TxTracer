@@ -8,11 +8,16 @@ import type * as monaco from "monaco-editor"
 import {trace} from "ton-assembly"
 
 import InlineLoader from "@shared/ui/InlineLoader"
-import ErrorBanner from "@shared/ui/ErrorBanner/ErrorBanner"
 import PageHeader from "@shared/ui/PageHeader"
 import Tutorial, {useTutorial} from "@shared/ui/Tutorial"
 
-import {CompileButton, SettingsDropdown, CompilerErrors} from "@app/pages/GodboltPage/components"
+import {
+  CompileButton,
+  SettingsDropdown,
+  CompilerErrors,
+  LanguageSelector,
+  type CodeLanguage,
+} from "@app/pages/GodboltPage/components"
 
 import {useSourceMapHighlight} from "@app/pages/GodboltPage/hooks"
 
@@ -20,9 +25,14 @@ import ShareButton from "@shared/ui/ShareButton/ShareButton.tsx"
 
 import {TUTORIAL_STEPS} from "@app/pages/GodboltPage/Tutorial.ts"
 
+import type {FuncCompilationResult} from "@features/godbolt/lib/func/compilation.ts"
+
+import type {TolkCompilationResult} from "@features/godbolt/lib/tolk/types.ts"
+
 import {useGodboltSettings} from "./hooks/useGodboltSettings"
 import {useFuncCompilation} from "./hooks/useFuncCompilation.ts"
-import {decodeCodeFromUrl} from "./urlCodeSharing"
+import {useTolkCompilation} from "./hooks/useTolkCompilation.ts"
+import {decodeCodeFromUrl, decodeLanguageFromUrl} from "./urlCodeSharing"
 
 import styles from "./GodboltPage.module.css"
 
@@ -56,18 +66,109 @@ const DEFAULT_FUNC_CODE = `#include "stdlib.fc";
 `
 
 const DEFAULT_ASM_CODE = `// Compile to see assembly here`
+const DEFAULT_TOLK_CODE = `tolk 1.0
+
+// this struct defines storage layout of the contract
+struct Storage {
+    id: uint32  // required to allow multiple independent counter instances, since the contract address depends on its initial state
+    counter: uint32 // the current counter value
+}
+
+// load contract data from the persistent storage
+fun Storage.load() {
+    return Storage.fromCell(contract.getData())
+}
+
+// save contract data into the persistent storage
+fun Storage.save(mutate self) {
+    contract.setData(self.toCell())
+}
+
+// the struct uses a 32-bit opcode prefix for message identification
+struct (0x7e8764ef) IncreaseCounter {
+    queryId: uint64 = 0  // query id, typically included in messages
+    increaseBy: uint32
+}
+
+struct (0x3a752f06) ResetCounter {
+    queryId: uint64
+}
+
+// using unions to represent available messages
+// this allows processing them with pattern matching
+type AllowedMessage = IncreaseCounter | ResetCounter
+
+// the main entrypoint: called when a contract receives an message from other contracts
+fun onInternalMessage(in: InMessage) {
+    // use \`lazy\` to defer loading fields until they are accessed
+    val msg = lazy AllowedMessage.fromSlice(in.body);
+
+    match (msg) {
+        IncreaseCounter => {
+            // load contract storage lazily (efficient for large or partial reads/updates)
+            var storage = lazy Storage.load();
+
+            storage.counter += msg.increaseBy;
+            storage.save();
+        }
+
+        ResetCounter => {
+            var storage = lazy Storage.load();
+
+            storage.counter = 0;
+            storage.save();
+        }
+
+        else => {
+            // ignore empty messages, "wrong opcode" for others
+            assert (in.body.isEmpty()) throw 0xFFFF
+        }
+    }
+}
+
+// a handler for bounced messages (not used here, may be ommited)
+fun onBouncedMessage(in: InMessageBounced) {
+}
+
+// get methods are a means to conveniently read contract data using, for example, HTTP APIs
+// note that unlike in many other smart contract VMs, get methods cannot be called by other contracts
+get fun currentCounter(): int {
+    val storage = lazy Storage.load();
+    return storage.counter;
+}
+
+get fun initialId(): int {
+    val storage = lazy Storage.load();
+    return storage.id;
+}
+`
+const STORAGE_LANG_KEY = "txtracer-godbolt-lang"
 
 const FUNC_EDITOR_KEY = "txtracer-godbolt-func-code"
+const TOLK_EDITOR_KEY = "txtracer-godbolt-tolk-code"
 const ASM_EDITOR_KEY = "txtracer-godbolt-asm-code"
 
 function GodboltPage() {
   const [initiallyCompiled, setInitiallyCompiled] = useState<boolean>(false)
+  const [language, setLanguage] = useState<CodeLanguage>(() => {
+    const fromUrl = decodeLanguageFromUrl()
+    if (fromUrl) return fromUrl
+    const saved = localStorage.getItem(STORAGE_LANG_KEY)
+    return saved === "tolk" ? "tolk" : "func"
+  })
   const [funcCode, setFuncCode] = useState(() => {
     const sharedCode = decodeCodeFromUrl()
-    if (sharedCode) {
+    if (sharedCode && (decodeLanguageFromUrl() ?? "func") === "func") {
       return sharedCode
     }
     return localStorage.getItem(FUNC_EDITOR_KEY) ?? DEFAULT_FUNC_CODE
+  })
+  const [tolkCode, setTolkCode] = useState(() => {
+    const sharedCode = decodeCodeFromUrl()
+    if (sharedCode && decodeLanguageFromUrl() === "tolk") {
+      return sharedCode
+    }
+    return localStorage.getItem("txtracer-godbolt-tolk-code") ?? DEFAULT_TOLK_CODE
   })
   const [asmCode] = useState(() => {
     return localStorage.getItem(ASM_EDITOR_KEY) ?? DEFAULT_ASM_CODE
@@ -77,19 +178,37 @@ function GodboltPage() {
     localStorage.setItem(FUNC_EDITOR_KEY, funcCode)
   }, [funcCode])
   useEffect(() => {
+    localStorage.setItem(TOLK_EDITOR_KEY, tolkCode)
+  }, [tolkCode])
+  useEffect(() => {
     localStorage.setItem(ASM_EDITOR_KEY, asmCode)
   }, [asmCode])
+  useEffect(() => {
+    localStorage.setItem(STORAGE_LANG_KEY, language)
+  }, [language])
 
   const funcEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
   const asmEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
 
   const [editorsReady, setEditorsReady] = useState({func: false, asm: false})
 
-  const {result, compiling, error, errorMarkers, handleCompile, clearError, setResult} =
-    useFuncCompilation()
+  const func = useFuncCompilation()
+  const handleFuncCompile = func.handleCompile
+  const clearFuncErrors = func.clearError
+  const setFuncResult = func.setResult
+  const tolk = useTolkCompilation()
+  const handleTolkCompile = tolk.handleCompile
+  const clearTolkErrors = tolk.clearError
+  const setTolkResult = tolk.setResult
+
+  const result: FuncCompilationResult | TolkCompilationResult | undefined =
+    language === "func" ? func.result : tolk.result
+  const compiling = language === "func" ? func.compiling : tolk.compiling
+  const error = language === "func" ? func.error : tolk.error
+  const errorMarkers = language === "func" ? func.errorMarkers : tolk.errorMarkers
 
   const sourceMap = useMemo(() => {
-    if (result?.funcSourceMap) {
+    if (result?.lang === "func" && result?.funcSourceMap) {
       try {
         return trace.loadFuncMapping(result.funcSourceMap)
       } catch (e) {
@@ -98,7 +217,7 @@ function GodboltPage() {
       }
     }
     return undefined
-  }, [result?.funcSourceMap])
+  }, [result])
 
   const {
     funcHighlightGroups,
@@ -127,26 +246,51 @@ function GodboltPage() {
 
   const handleCodeChange = useCallback(
     (newCode: string) => {
-      setFuncCode(newCode)
-      clearError()
-
-      if (!autoCompile) {
-        // reset results since code changed
-        setResult(undefined)
-        return
+      if (language === "func") {
+        setFuncCode(newCode)
+        clearFuncErrors()
+        if (!autoCompile) {
+          setFuncResult(undefined)
+          return
+        }
+        void handleFuncCompile(newCode)
+      } else {
+        setTolkCode(newCode)
+        clearTolkErrors()
+        if (!autoCompile) {
+          setTolkResult(undefined)
+          return
+        }
+        void handleTolkCompile(newCode)
       }
-
-      void handleCompile(newCode)
     },
-    [handleCompile, autoCompile, clearError, setResult],
+    [
+      language,
+      clearFuncErrors,
+      autoCompile,
+      handleFuncCompile,
+      setFuncResult,
+      clearTolkErrors,
+      handleTolkCompile,
+      setTolkResult,
+    ],
   )
+
+  const compileCode = useCallback(() => {
+    if (language === "func") {
+      void handleFuncCompile(funcCode)
+    } else {
+      void handleTolkCompile(tolkCode)
+    }
+  }, [language, handleFuncCompile, funcCode, handleTolkCompile, tolkCode])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
         event.preventDefault()
         if (!compiling) {
-          void handleCompile(funcCode)
+          if (language === "func") void handleFuncCompile(funcCode)
+          else void handleTolkCompile(tolkCode)
         }
       }
     }
@@ -155,32 +299,49 @@ function GodboltPage() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown)
     }
-  }, [handleCompile, funcCode, compiling])
+  }, [funcCode, compiling, language, tolkCode, handleFuncCompile, handleTolkCompile])
 
   // Compile code on page open
   useEffect(() => {
     if (initiallyCompiled) return
     if (editorsReady.func && editorsReady.asm) {
-      void handleCompile(funcCode)
+      if (language === "func") void handleFuncCompile(funcCode)
+      else void handleTolkCompile(tolkCode)
       setInitiallyCompiled(true)
     }
-  }, [editorsReady.func, editorsReady.asm, handleCompile, funcCode, initiallyCompiled])
+  }, [
+    editorsReady.func,
+    editorsReady.asm,
+    handleFuncCompile,
+    handleTolkCompile,
+    funcCode,
+    tolkCode,
+    initiallyCompiled,
+    language,
+  ])
+
+  // Auto-compile when switching language
+  useEffect(() => {
+    if (!editorsReady.func || !editorsReady.asm) return
+    if (language === "func") void handleFuncCompile(funcCode)
+    else void handleTolkCompile(tolkCode)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [language])
 
   return (
     <div className={styles.traceViewWrapper}>
       <PageHeader pageTitle="explorer">
+        <LanguageSelector value={language} onChange={setLanguage} />
         <div className={styles.mainActionContainer} role="toolbar" aria-label="Code editor actions">
           <CompileButton
-            onCompile={() => void handleCompile(funcCode)}
+            onCompile={() => void compileCode()}
             loading={compiling}
             className={styles.executeButton}
           />
-          <ShareButton value={funcCode} />
+          <ShareButton value={language === "func" ? funcCode : tolkCode} lang={language} />
           <SettingsDropdown hooks={godboltSettingsHook} />
         </div>
       </PageHeader>
-
-      {error && <ErrorBanner message={error} onClose={clearError} />}
 
       <div id="compile-status" className="sr-only" aria-live="polite" aria-atomic="true">
         {compiling && "Compiling code..."}
@@ -202,10 +363,10 @@ function GodboltPage() {
               </h2>
               <Suspense fallback={<InlineLoader message="Loading Editor..." loading={true} />}>
                 <CodeEditor
-                  code={funcCode}
+                  code={language === "func" ? funcCode : tolkCode}
                   onChange={handleCodeChange}
                   readOnly={false}
-                  language="func"
+                  language={language}
                   highlightGroups={funcHighlightGroups}
                   hoveredLines={funcHoveredLines}
                   highlightRanges={funcPreciseHighlightRanges}
@@ -220,6 +381,7 @@ function GodboltPage() {
               </Suspense>
               <CompilerErrors
                 markers={errorMarkers}
+                filename={language === "func" ? "main.fc" : "main.tolk"}
                 onNavigate={(line, column) => {
                   const editor = funcEditorRef.current
                   if (!editor) return

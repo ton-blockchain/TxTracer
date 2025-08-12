@@ -54,6 +54,7 @@
   --color-text-on-primary: #ffffff;
   --color-text-link: var(--color-primary);
   --color-text-inverted: #ffffff;
+  --color-text-inverted-only-on-ligth: #ffffff;
   --editor-faded-text-color: #777777;
 
   --color-change-theme-background: #ffffff;
@@ -297,6 +298,7 @@
   --color-text-on-primary: #ffffff;
   --color-text-link: var(--color-primary);
   --color-text-inverted: #1c1c1e;
+  --color-text-inverted-only-on-ligth: #ffffff;
   --editor-faded-text-color: #aaaaaa;
 
   --color-change-theme-background: #2c2c2e;
