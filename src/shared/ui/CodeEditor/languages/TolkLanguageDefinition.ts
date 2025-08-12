@@ -40,7 +40,7 @@ export const tolkLanguageDefinition: languages.IMonarchLanguage = {
     "self",
   ],
 
-  typeKeywords: ["int", "cell", "slice", "builder", "cont", "tuple"],
+  typeKeywords: ["int", "bool", "cell", "slice", "builder", "continuation", "tuple"],
 
   operators: [
     "=",
@@ -93,28 +93,36 @@ export const tolkLanguageDefinition: languages.IMonarchLanguage = {
       [/\/\/.*$/, "comment"],
       [/\/\*/, {token: "comment", next: "@comment"}],
 
-      // String literals with triple quotes
+      // Triple-quoted strings (multiline)
       [/"""/, {token: "string", next: "@stringTriple"}],
 
       // Regular string literals
-      [/"(?:[^"\\\\n]|\\\\.)*"/, "string"],
+      [/"(?:[^"\\\n]|\\.)*"/, "string"],
+
+      // uint32 or int123
+      [/(u)int\d{1,3}/, "type"],
+      // bits256 or bytes32
+      [/((bits)|(bytes))\d{1,3}/, "type"],
 
       // Annotations
       [/@[a-zA-Z_][a-zA-Z0-9_]*/, "annotation"],
-
-      // Version numbers in tolk directives
-      [/(\d+)(.\d+)?(.\d+)?/, "number.version"],
 
       // Numbers
       [/0x[0-9a-fA-F]+/, "number.hex"],
       [/0b[01]+/, "number.binary"],
       [/\d+/, "number"],
 
+      // Version numbers in tolk directives
+      [/(\d+)(\.\d+)?(\.\d+)?/, "number.version"],
+
       // Identifiers in backticks
       [/`[^`]+`/, "identifier.backtick"],
 
       // Function calls
       [/[a-zA-Z_][a-zA-Z0-9_$]*(?=\()/, "identifier.function"],
+
+      // Member access: dot as its own token, then color the name
+      [/\.(?=[A-Za-z_][A-Za-z0-9_]*)/, {token: "delimiter.dot", next: "@member"}],
 
       // Type identifiers (capitalized)
       [/[A-Z][a-zA-Z0-9_]*/, "type.identifier"],
@@ -156,9 +164,14 @@ export const tolkLanguageDefinition: languages.IMonarchLanguage = {
       [/\s+/, "white"],
     ],
 
+    // Multiline triple-quoted strings:
+    // - closes strictly on """
+    // - supports backslash escapes like \" or \n inside
+    // - allows single or double " characters inside without closing
     stringTriple: [
       [/"""/, {token: "string", next: "@pop"}],
-      [/[^"]+/, "string"],
+      [/\\./, "string.escape"],
+      [/[^\\"]+/, "string"],
       [/"/, "string"],
     ],
 
@@ -167,6 +180,13 @@ export const tolkLanguageDefinition: languages.IMonarchLanguage = {
       [/\/\*/, {token: "comment", next: "@push"}],
       [/\*\//, {token: "comment", next: "@pop"}],
       [/[/*]/, "comment"],
+    ],
+
+    member: [
+      // method call: .foo()
+      [/[A-Za-z_][A-Za-z0-9_]*(?=\()/, {token: "identifier.function", next: "@pop"}],
+      // field access: .foo
+      [/[A-Za-z_][A-Za-z0-9_]*/, {token: "identifier.field", next: "@pop"}],
     ],
   },
 }
