@@ -40,7 +40,20 @@ export const tolkLanguageDefinition: languages.IMonarchLanguage = {
     "self",
   ],
 
-  typeKeywords: ["int", "bool", "cell", "slice", "builder", "continuation", "tuple"],
+  typeKeywords: [
+    "int",
+    "bool",
+    "cell",
+    "slice",
+    "builder",
+    "continuation",
+    "tuple",
+    "address",
+    "never",
+    "coins",
+    "map",
+    "void",
+  ],
 
   operators: [
     "=",
@@ -100,7 +113,9 @@ export const tolkLanguageDefinition: languages.IMonarchLanguage = {
       [/"(?:[^"\\\n]|\\.)*"/, "string"],
 
       // uint32 or int123
-      [/(u)int\d{1,3}/, "type"],
+      [/u?int\d{1,3}/, "type"],
+      // varuint32 or varint16
+      [/varu?int\d{1,2}/, "type"],
       // bits256 or bytes32
       [/((bits)|(bytes))\d{1,3}/, "type"],
 
@@ -118,8 +133,8 @@ export const tolkLanguageDefinition: languages.IMonarchLanguage = {
       // Identifiers in backticks
       [/`[^`]+`/, "identifier.backtick"],
 
-      // Function calls
-      [/[a-zA-Z_][a-zA-Z0-9_$]*(?=\()/, "identifier.function"],
+      // Function calls foo() or foo<...
+      [/[a-zA-Z_][a-zA-Z0-9_$]*(?=[(<])/, "identifier.function"],
 
       // Member access: dot as its own token, then color the name
       [/\.(?=[A-Za-z_][A-Za-z0-9_]*)/, {token: "delimiter.dot", next: "@member"}],
@@ -183,8 +198,8 @@ export const tolkLanguageDefinition: languages.IMonarchLanguage = {
     ],
 
     member: [
-      // method call: .foo()
-      [/[A-Za-z_][A-Za-z0-9_]*(?=\()/, {token: "identifier.function", next: "@pop"}],
+      // method call: .foo() or .foo<...
+      [/[A-Za-z_][A-Za-z0-9_]*(?=[(<])/, {token: "identifier.function", next: "@pop"}],
       // field access: .foo
       [/[A-Za-z_][A-Za-z0-9_]*/, {token: "identifier.field", next: "@pop"}],
     ],
