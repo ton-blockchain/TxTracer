@@ -2,9 +2,9 @@ import type {TutorialStep} from "@shared/ui/Tutorial"
 
 export const TUTORIAL_STEPS: TutorialStep[] = [
   {
-    title: "Welcome to Assembly Playground",
+    title: "Welcome to Playground",
     content:
-      "This tool lets you write and execute TON Assembly (TVM) code step by step.\n\nPerfect for learning TVM instructions and debugging smart contracts!\n\nPress Esc to close this tutorial at any time.",
+      "This tool lets you write and execute TON Assembly (TASM) and FunC code step by step.\n\nPerfect for learning TVM instructions and debugging smart contracts!\n\nPress Esc to close this tutorial at any time.",
     target: "",
     placement: "bottom",
   },
