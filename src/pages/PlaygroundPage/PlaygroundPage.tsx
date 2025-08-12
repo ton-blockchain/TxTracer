@@ -153,8 +153,6 @@ function PlaygroundPage() {
   )
 
   const traceInfo = result?.traceInfo
-  console.log(traceInfo)
-
   const baseStepperReturn = useTraceStepper(traceInfo)
   const isLineStepping = languageMode === "func" && steppingMode === "lines"
 
@@ -198,7 +196,7 @@ function PlaygroundPage() {
       const stepIndex = selectedStep
       if (stepIndex >= 0 && stepIndex < traceInfo.steps.length) {
         const step = traceInfo.steps[stepIndex]
-        console.log(`Step ${selectedStep}: step.loc?.line=${step.loc?.line}`)
+        console.log(`Step ${selectedStep}: step.loc.line=${step.loc?.line}`)
 
         if (step?.loc?.line !== undefined && sourceMap && funcResult?.mapping) {
           const asmLine = step.loc.line + 1
@@ -457,7 +455,6 @@ function PlaygroundPage() {
   const shouldShowStatusContainer = txStatus !== undefined
   const txStatusText = `Exit code: ${result?.exitCode?.num ?? 0}`
   const currentCode = languageMode === "func" ? funcCode : assemblyCode
-  // keep var removed: now errors are shown via markers/CompilerErrors
 
   return (
     <div className={styles.traceViewWrapper}>

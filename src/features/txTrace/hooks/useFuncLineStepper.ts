@@ -25,13 +25,11 @@ export function useFuncLineStepper(
   baseStepperReturn: UseTraceStepperReturn,
   {sourceMap, compilationResult, traceInfo, isEnabled}: UseFuncLineStepperOptions,
 ): UseFuncLineStepperReturn {
-  // Get all steps that have corresponding FunC lines
   const funcSteps = useMemo(() => {
     if (!isEnabled || !traceInfo || !sourceMap || !compilationResult?.mapping) {
       return []
     }
 
-    // First, collect all steps for each FunC line
     const funcLineToSteps = new Map<number, number[]>()
 
     for (let i = 0; i < traceInfo.steps.length; i++) {
@@ -40,7 +38,6 @@ export function useFuncLineStepper(
 
       const asmLine = step.loc.line + 1
 
-      // Find corresponding FunC line
       for (const [debugSection, instructions] of compilationResult.mapping.entries()) {
         for (const instr of instructions) {
           if (instr.loc?.line !== undefined && instr.loc.line + 1 === asmLine) {
@@ -60,7 +57,6 @@ export function useFuncLineStepper(
       }
     }
 
-    // Now take the last step for each FunC line, in execution order
     const steps: Array<{stepIndex: number; funcLine: number}> = []
     const processedLines = new Set<number>()
 
@@ -70,7 +66,6 @@ export function useFuncLineStepper(
 
       const asmLine = step.loc.line + 1
 
-      // Find corresponding FunC line
       for (const [debugSection, instructions] of compilationResult.mapping.entries()) {
         for (const instr of instructions) {
           if (instr.loc?.line !== undefined && instr.loc.line + 1 === asmLine) {
@@ -80,7 +75,6 @@ export function useFuncLineStepper(
                 const stepIndices = funcLineToSteps.get(funcLine)
 
                 if (stepIndices && !processedLines.has(funcLine)) {
-                  // Take the last step for this FunC line
                   const lastStepIndex = stepIndices[stepIndices.length - 1]
                   if (i === lastStepIndex) {
                     steps.push({stepIndex: i, funcLine})
@@ -101,7 +95,6 @@ export function useFuncLineStepper(
 
   const [currentFuncStepIndex, setCurrentFuncStepIndex] = useState(0)
 
-  // Reset to first func step when trace changes
   useEffect(() => {
     if (isEnabled && funcSteps.length > 0) {
       setCurrentFuncStepIndex(0)
@@ -149,7 +142,6 @@ export function useFuncLineStepper(
     }
   }, [isEnabled, funcSteps.length, baseStepperReturn])
 
-  // Recalculate currentStep and currentStack based on actualSelectedStep
   const actualCurrentStep = useMemo(() => {
     if (!traceInfo || actualSelectedStep < 0 || actualSelectedStep >= traceInfo.steps.length) {
       return undefined
