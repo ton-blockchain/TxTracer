@@ -19,6 +19,8 @@ export interface UseFuncLineStepperOptions {
 export interface UseFuncLineStepperReturn extends UseTraceStepperReturn {
   readonly funcSteps: Array<{stepIndex: number; funcLine: number}>
   readonly currentFuncStepIndex?: number
+  readonly handlePrevFunc?: () => void
+  readonly handleNextFunc?: () => void
 }
 
 export function useFuncLineStepper(
@@ -167,5 +169,7 @@ export function useFuncLineStepper(
     goToLastStep: goToLastStepFunc,
     funcSteps,
     currentFuncStepIndex: isEnabled ? currentFuncStepIndex : undefined,
+    handlePrevFunc: isEnabled ? handlePrevFunc : undefined,
+    handleNextFunc: isEnabled ? handleNextFunc : undefined,
   }
 }

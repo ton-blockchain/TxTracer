@@ -170,6 +170,8 @@ function PlaygroundPage() {
     findStepByLine,
     highlightLine,
     transitionType,
+    handlePrevFunc,
+    handleNextFunc,
   } = useFuncLineStepper(baseStepperReturn, {
     sourceMap,
     compilationResult: funcResult,
@@ -352,6 +354,19 @@ function PlaygroundPage() {
         if (!loading && !funcCompiling) {
           void handleExecute()
         }
+        return
+      }
+      if (languageMode === "func" && isLineStepping) {
+        if (event.key === "ArrowLeft") {
+          event.preventDefault()
+          handlePrevFunc?.()
+          return
+        }
+        if (event.key === "ArrowRight") {
+          event.preventDefault()
+          handleNextFunc?.()
+          return
+        }
       }
     }
 
@@ -359,7 +374,15 @@ function PlaygroundPage() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown)
     }
-  }, [handleExecute, loading, funcCompiling])
+  }, [
+    handleExecute,
+    loading,
+    funcCompiling,
+    languageMode,
+    isLineStepping,
+    handlePrevFunc,
+    handleNextFunc,
+  ])
 
   useEffect(() => {
     localStorage.setItem(LOCAL_STORAGE_KEY_ASM, assemblyCode)
