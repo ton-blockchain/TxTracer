@@ -20,6 +20,7 @@ import {
   useTasmCodeLensProvider,
   useTasmCompletionProvider,
   useTasmInlayProvider,
+  useImplicitRetInlayProvider,
   useFuncLanguageProviders,
   useFolding,
   type SupportedLanguage,
@@ -196,6 +197,16 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     monaco,
     editorRef,
     markers,
+    enabled: language === "func",
+  })
+
+  useImplicitRetInlayProvider({
+    monaco,
+    editorRef,
+    languageId: "func",
+    implicitRetLine,
+    implicitRetLabel,
+    editorReady,
     enabled: language === "func",
   })
 

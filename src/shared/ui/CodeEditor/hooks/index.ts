@@ -6,6 +6,7 @@ export {useTasmCodeLensProvider} from "./useTasmCodeLensProvider"
 export {useTasmCompletionProvider} from "./useTasmCompletionProvider"
 export {useTasmInlayProvider} from "./useTasmInlayProvider"
 export {useFuncLanguageProviders} from "./useFuncLanguageProviders"
+export {useImplicitRetInlayProvider} from "./useImplicitRetInlayProvider"
 export {useFolding} from "./useFolding"
 
 export type {SupportedLanguage} from "./useMonacoSetup"

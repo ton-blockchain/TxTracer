@@ -189,7 +189,7 @@ function PlaygroundPage() {
       return mapped ?? undefined
     }
     return undefined
-  }, [languageMode, traceInfo, selectedStep])
+  }, [languageMode, traceInfo, selectedStep, mapOriginalAsmToFiltered])
 
   useEffect(() => {
     if (languageMode === "func" && traceInfo && selectedStep > 0) {
@@ -443,6 +443,11 @@ function PlaygroundPage() {
     return {line, approx}
   })()
 
+  const implicitRetAsmLine = useMemo(() => {
+    if (implicitRet.line === undefined) return undefined
+    return mapOriginalAsmToFiltered(implicitRet.line)
+  }, [implicitRet.line, mapOriginalAsmToFiltered])
+
   const txStatus: StatusType | undefined = useMemo(() => {
     if (!result) return undefined
 
@@ -569,6 +574,10 @@ function PlaygroundPage() {
                         readOnly={true}
                         language="tasm"
                         highlightLine={currentAsmLine}
+                        implicitRetLine={implicitRetAsmLine}
+                        implicitRetLabel={
+                          implicitRet.approx ? "↵ implicit RET (approximate position)" : undefined
+                        }
                         shouldCenter={true}
                         onEditorMount={editor => {
                           asmViewerRef.current = editor
