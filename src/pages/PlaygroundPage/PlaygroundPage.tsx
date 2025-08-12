@@ -172,6 +172,8 @@ function PlaygroundPage() {
     transitionType,
     handlePrevFunc,
     handleNextFunc,
+    currentFuncStepIndex,
+    funcSteps,
   } = useFuncLineStepper(baseStepperReturn, {
     sourceMap,
     compilationResult: funcResult,
@@ -625,8 +627,12 @@ function PlaygroundPage() {
             </Suspense>
           </div>
           <TraceSidePanel
-            selectedStep={selectedStep}
-            totalSteps={totalSteps}
+            selectedStep={
+              isLineStepping && currentFuncStepIndex !== undefined
+                ? currentFuncStepIndex
+                : selectedStep
+            }
+            totalSteps={isLineStepping ? funcSteps.length : totalSteps}
             currentStep={currentStep}
             currentStack={currentStack}
             canGoPrev={canGoPrev}
