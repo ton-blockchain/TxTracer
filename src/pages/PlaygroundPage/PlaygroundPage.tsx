@@ -12,6 +12,7 @@ import {useLineExecutionData, useTraceStepper, useFuncLineStepper} from "@featur
 import {normalizeGas} from "@features/txTrace/lib/traceTx"
 import type {InstructionDetail} from "@features/txTrace/ui/StepInstructionBlock"
 import {useFuncCompilation, useSourceMapHighlight} from "@app/pages/GodboltPage/hooks"
+import {CompilerErrors} from "@app/pages/GodboltPage/components"
 
 import PageHeader from "@shared/ui/PageHeader"
 import Tutorial, {useTutorial} from "@shared/ui/Tutorial"
@@ -118,28 +119,28 @@ function PlaygroundPage() {
   const funcEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
 
   const {
-    result: compilationResult,
-    compiling: compilationLoading,
-    error: compilationError,
+    result: funcResult,
+    compiling: funcCompiling,
+    errorMarkers: funcMarkers,
     handleCompile: handleCompileFuncCode,
     clearError: clearCompilationError,
   } = useFuncCompilation()
 
   const sourceMap = useMemo(() => {
-    if (compilationResult?.funcSourceMap) {
+    if (funcResult?.funcSourceMap) {
       try {
-        return trace.loadFuncMapping(compilationResult.funcSourceMap)
+        return trace.loadFuncMapping(funcResult.funcSourceMap)
       } catch (e) {
         console.error("Failed to parse source map:", e as Error)
         return undefined
       }
     }
     return undefined
-  }, [compilationResult?.funcSourceMap])
+  }, [funcResult?.funcSourceMap])
 
   const {funcPreciseHighlightRanges, handleAsmLineHover} = useSourceMapHighlight(
     sourceMap,
-    compilationResult?.mapping,
+    funcResult?.mapping,
     funcEditorRef,
     undefined,
   )
@@ -166,14 +167,13 @@ function PlaygroundPage() {
     transitionType,
   } = useFuncLineStepper(baseStepperReturn, {
     sourceMap,
-    compilationResult,
+    compilationResult: funcResult,
     traceInfo,
     isEnabled: isLineStepping,
   })
 
   const lineExecutionData = useLineExecutionData(traceInfo)
 
-  // Handle highlighting for FunC mode based on current step
   const [funcHighlightLine, setFuncHighlightLine] = useState<number | undefined>(undefined)
 
   useEffect(() => {
@@ -183,16 +183,13 @@ function PlaygroundPage() {
         const step = traceInfo.steps[stepIndex]
         console.log(`Step ${selectedStep}: step.loc?.line=${step.loc?.line}`)
 
-        // Find corresponding instruction and use its debugSection to find source location
-        if (step?.loc?.line !== undefined && sourceMap && compilationResult?.mapping) {
+        if (step?.loc?.line !== undefined && sourceMap && funcResult?.mapping) {
           const asmLine = step.loc.line + 1
           let foundLocation = false
 
-          // Find instruction that matches the assembly line
-          for (const [debugSection, instructions] of compilationResult.mapping.entries()) {
+          for (const [debugSection, instructions] of funcResult.mapping.entries()) {
             for (const instr of instructions) {
               if (instr.loc?.line !== undefined && instr.loc.line + 1 === asmLine) {
-                // Found matching instruction, now find corresponding source location
                 for (const [debugId, location] of sourceMap.locations.entries()) {
                   if (debugId === debugSection && location.file === "main.fc") {
                     console.log(
@@ -232,14 +229,7 @@ function PlaygroundPage() {
       handleAsmLineHover(null)
       setFuncHighlightLine(undefined)
     }
-  }, [
-    selectedStep,
-    traceInfo,
-    languageMode,
-    handleAsmLineHover,
-    sourceMap,
-    compilationResult?.mapping,
-  ])
+  }, [selectedStep, traceInfo, languageMode, handleAsmLineHover, sourceMap, funcResult?.mapping])
 
   const instructionDetails: InstructionDetail[] = useMemo(() => {
     if (!traceInfo) return []
@@ -308,12 +298,14 @@ function PlaygroundPage() {
     setError,
   ])
 
-  // Execute compiled FunC code when compilation completes
   useEffect(() => {
-    if (languageMode === "func" && compilationResult?.assembly && loading && !compilationLoading) {
+    if (languageMode !== "func" || !loading || funcCompiling) return
+
+    const assembly = funcResult?.assembly
+    if (assembly) {
       const executeCompiledCode = async () => {
         try {
-          const result = await executeAssemblyCode(compilationResult.assembly, initialStack)
+          const result = await executeAssemblyCode(assembly, initialStack)
           setResult(result)
         } catch (error) {
           const errorMessage = error instanceof Error ? error.message : "Unknown error"
@@ -323,23 +315,18 @@ function PlaygroundPage() {
           setLoading(false)
         }
       }
-
       void executeCompiledCode()
+      return
     }
-  }, [
-    languageMode,
-    compilationResult?.assembly,
-    loading,
-    compilationLoading,
-    setError,
-    initialStack,
-  ])
+
+    setLoading(false)
+  }, [languageMode, loading, funcCompiling, funcResult?.assembly, setError, initialStack])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
         event.preventDefault()
-        if (!loading && !compilationLoading) {
+        if (!loading && !funcCompiling) {
           void handleExecute()
         }
       }
@@ -349,7 +336,7 @@ function PlaygroundPage() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown)
     }
-  }, [handleExecute, loading, compilationLoading])
+  }, [handleExecute, loading, funcCompiling])
 
   useEffect(() => {
     localStorage.setItem(LOCAL_STORAGE_KEY_ASM, assemblyCode)
@@ -445,7 +432,7 @@ function PlaygroundPage() {
   const shouldShowStatusContainer = txStatus !== undefined
   const txStatusText = `Exit code: ${result?.exitCode?.num ?? 0}`
   const currentCode = languageMode === "func" ? funcCode : assemblyCode
-  const displayError = compilationError || (languageMode === "tasm" ? undefined : undefined)
+  // keep var removed: now errors are shown via markers/CompilerErrors
 
   return (
     <div className={styles.traceViewWrapper}>
@@ -488,27 +475,21 @@ function PlaygroundPage() {
           <div className={styles.mainActionContainer} role="toolbar" aria-label="Code actions">
             <ExecuteButton
               onClick={() => void handleExecute()}
-              loading={loading || compilationLoading}
+              loading={loading || funcCompiling}
             />
             <ShareButton value={currentCode} />
           </div>
         </div>
       </PageHeader>
 
-      {displayError && (
-        <div className={styles.errorContainer}>
-          <div className={styles.errorMessage}>{displayError}</div>
-        </div>
-      )}
-
       <div id="execution-status" className="sr-only" aria-live="polite" aria-atomic="true">
-        {(loading || compilationLoading) &&
+        {(loading || funcCompiling) &&
           `${languageMode === "func" ? "Compiling and executing" : "Executing"} code...`}
-        {result && !loading && !compilationLoading && "Code executed successfully"}
+        {result && !loading && !funcCompiling && "Code executed successfully"}
         {result?.exitCode &&
           result.exitCode.num !== 0 &&
           !loading &&
-          !compilationLoading &&
+          !funcCompiling &&
           `Execution completed with exit code ${result.exitCode.num}`}
       </div>
 
@@ -528,6 +509,7 @@ function PlaygroundPage() {
                 code={currentCode}
                 onChange={handleCodeChange}
                 readOnly={false}
+                markers={languageMode === "func" ? funcMarkers : []}
                 highlightLine={languageMode === "tasm" ? highlightLine : funcHighlightLine}
                 highlightRanges={
                   languageMode === "func" && steppingMode === "instructions"
@@ -549,6 +531,19 @@ function PlaygroundPage() {
                   }
                 }}
               />
+              {languageMode === "func" && (
+                <CompilerErrors
+                  markers={funcMarkers}
+                  filename="main.fc"
+                  onNavigate={(line, column) => {
+                    const editor = funcEditorRef.current
+                    if (!editor) return
+                    editor.revealPositionInCenter({lineNumber: line, column})
+                    editor.setPosition({lineNumber: line, column})
+                    editor.focus()
+                  }}
+                />
+              )}
             </Suspense>
           </div>
           <TraceSidePanel
