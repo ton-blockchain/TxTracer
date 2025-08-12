@@ -32,6 +32,10 @@
   /*border: 1px solid var(--color-border);*/
   border: 0;
   border-right: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
   min-width: 70px;
 }
 
@@ -48,10 +52,29 @@
 
 .buttonSelected {
   background-color: var(--color-primary);
-  color: var(--color-text-inverted-only-on-ligth);
+  color: var(--color-text-on-primary);
   border: 0;
 }
 
 .buttonSelected:hover {
   background-color: var(--color-secondary);
+}
+
+.badge {
+  margin-left: var(--spacing-xs);
+  padding: 1px 6px 2px;
+  font-size: var(--font-size-xss);
+  line-height: 1;
+  border-radius: var(--border-radius-full);
+  border: 1px solid var(--status-badge-success-border-color);
+  background-color: var(--color-success-bg);
+  color: var(--color-success-text);
+  display: inline-flex;
+  align-items: center;
+}
+
+.buttonSelected .badge {
+  background-color: transparent;
+  border-color: var(--color-text-on-primary);
+  color: var(--color-text-on-primary);
 }

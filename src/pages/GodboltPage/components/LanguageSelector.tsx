@@ -42,7 +42,7 @@ export default function LanguageSelector({value, onChange}: LanguageSelectorProp
             className={`${styles.button} ${value === "tolk" ? styles.buttonSelected : ""}`}
             onClick={() => onChange("tolk")}
           >
-            Tolk
+            Tolk <span className={styles.badge}>beta</span>
           </button>
         </label>
       </div>
