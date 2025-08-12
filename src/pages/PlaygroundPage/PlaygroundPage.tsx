@@ -1,7 +1,7 @@
 import React, {Suspense, useCallback, useEffect, useMemo, useRef, useState} from "react"
 import type {StackElement} from "ton-assembly/dist/trace"
 import type * as monaco from "monaco-editor"
-import {trace} from "ton-assembly"
+import {trace, logs} from "ton-assembly"
 
 import InlineLoader from "@shared/ui/InlineLoader"
 import TraceSidePanel from "@shared/ui/TraceSidePanel"
@@ -20,7 +20,11 @@ import Tutorial, {useTutorial} from "@shared/ui/Tutorial"
 import ShareButton from "@shared/ui/ShareButton/ShareButton.tsx"
 import SettingsDropdown from "@shared/ui/SettingsDropdown/SettingsDropdown.tsx"
 import {usePlaygroundSettings} from "@app/pages/PlaygroundPage/hooks/usePlaygroundSettings.ts"
-import {decodeCodeFromUrl, decodeLanguageFromUrl} from "@app/pages/GodboltPage/urlCodeSharing.ts"
+import {
+  decodeCodeFromUrl,
+  decodeLanguageFromUrl,
+  decodeStackFromUrl,
+} from "@app/pages/GodboltPage/urlCodeSharing.ts"
 
 import {ExecuteButton} from "@app/pages/PlaygroundPage/components/ExecuteButton.tsx"
 import {CustomSegmentedSelector} from "@app/pages/GodboltPage/components"
@@ -93,6 +97,13 @@ function PlaygroundPage() {
   const [loading, setLoading] = useState(false)
   const [initialStack, setInitialStack] = useState<StackElement[]>(() => {
     try {
+      const fromUrl = decodeStackFromUrl()
+      if (fromUrl) {
+        const parsedStack = logs.parseStack(fromUrl)
+        if (parsedStack) {
+          return logs.processStack(parsedStack)
+        }
+      }
       const saved = localStorage.getItem(INITIAL_STACK_STORAGE_KEY)
       if (!saved) return []
 
@@ -534,6 +545,8 @@ function PlaygroundPage() {
   const txStatusText = `Exit code: ${result?.exitCode?.num ?? 0}`
   const currentCode = languageMode === "func" ? funcCode : assemblyCode
 
+  const stackToShare = useMemo(() => logs.serializeStack(initialStack), [initialStack])
+
   return (
     <div className={styles.traceViewWrapper}>
       <PageHeader pageTitle="playground">
@@ -577,7 +590,7 @@ function PlaygroundPage() {
               onClick={() => void handleExecute()}
               loading={loading || funcCompiling}
             />
-            <ShareButton value={currentCode} lang={languageMode} />
+            <ShareButton value={currentCode} lang={languageMode} stack={stackToShare} />
             <SettingsDropdown
               items={[
                 {
