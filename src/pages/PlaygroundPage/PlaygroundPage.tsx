@@ -48,14 +48,17 @@ NOP
 
 const DEFAULT_FUNC_CODE = `#include "stdlib.fc";
 
-;; add two values to stack first!
+;; Add two values to stack first! For example: 10 and 20
 () recv_internal(int a, int b) impure {
     if (a > b) {
         throw(10);
     }
+    
+    ;; create some data
     var data = begin_cell()
         .store_int(1, 32)
         .end_cell();
+
     if (a == b) {
         var c = a + b;
         throw(20 + c);
@@ -655,6 +658,7 @@ function PlaygroundPage() {
                   code={currentCode}
                   onChange={handleCodeChange}
                   readOnly={false}
+                  modelPath={languageMode === "func" ? "playground-func.fc" : "playground-asm.tasm"}
                   markers={languageMode === "func" ? funcMarkers : []}
                   highlightLine={languageMode === "tasm" ? highlightLine : funcHighlightLine}
                   highlightGroups={
@@ -691,6 +695,7 @@ function PlaygroundPage() {
                         code={filteredAsmCode ?? funcResult.assembly}
                         readOnly={true}
                         language="tasm"
+                        modelPath="playground-func-output.tasm"
                         needFloatingTip={false}
                         highlightLine={currentAsmLine}
                         lineExecutionData={filteredAsmLineExecutionData}

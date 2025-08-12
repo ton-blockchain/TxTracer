@@ -100,7 +100,11 @@ interface CodeEditorProps {
   /** Optional gas summation per FunC line to display as inlay hints */
   readonly funcGasByLine?: ReadonlyMap<number, number>
 
+  /** Whether to show the floating tip for the editor */
   readonly needFloatingTip?: boolean
+
+  /** Optional explicit Monaco model path to avoid sharing models between editors */
+  readonly modelPath?: string
 }
 
 // use local instance of monaco
@@ -137,6 +141,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   onEditorMount,
   funcGasByLine,
   needFloatingTip = lineExecutionData && language === "tasm",
+  modelPath,
 }) => {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
   const [editorReady, setEditorReady] = useState(false)
@@ -229,6 +234,20 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     editorRef,
     lineExecutionData,
   })
+
+  useEffect(() => {
+    if (!editorRef.current) return
+    try {
+      editorRef.current.trigger("unfold", "editor.unfoldAll", {})
+    } catch {
+      /* ignore */
+    }
+    setIsFolded(true)
+  }, [code, language])
+
+  useEffect(() => {
+    setIsFolded(false)
+  }, [lineExecutionData])
 
   // display gas sum for FunC line of code
   useEffect(() => {
@@ -354,7 +373,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
           height="100%"
           width="100%"
           language={language}
-          path={language === "func" ? "main.fc" : language === "tolk" ? "main.tolk" : "out.tasm"}
+          path={
+            modelPath ??
+            (language === "func" ? "main.fc" : language === "tolk" ? "main.tolk" : "out.tasm")
+          }
           value={code}
           options={{
             minimap: {enabled: false},
