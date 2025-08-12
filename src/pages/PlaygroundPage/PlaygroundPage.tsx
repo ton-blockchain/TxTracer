@@ -117,6 +117,7 @@ function PlaygroundPage() {
   const tutorial = useTutorial({tutorialKey: "playground-page", autoStart: true})
 
   const funcEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
+  const asmViewerRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
 
   const {
     result: funcResult,
@@ -138,11 +139,17 @@ function PlaygroundPage() {
     return undefined
   }, [funcResult?.funcSourceMap])
 
-  const {funcPreciseHighlightRanges, handleAsmLineHover} = useSourceMapHighlight(
+  const {
+    funcPreciseHighlightRanges,
+    handleAsmLineHover,
+    filteredAsmCode,
+    mapOriginalAsmToFiltered,
+  } = useSourceMapHighlight(
     sourceMap,
     funcResult?.mapping,
     funcEditorRef,
-    undefined,
+    asmViewerRef,
+    funcResult?.assembly,
   )
 
   const traceInfo = result?.traceInfo
@@ -178,7 +185,11 @@ function PlaygroundPage() {
   const currentAsmLine = useMemo(() => {
     if (languageMode !== "func") return undefined
     const step = traceInfo?.steps?.[selectedStep]
-    if (step?.loc?.line !== undefined) return step.loc.line + 1
+    if (step?.loc?.line !== undefined) {
+      const original = step.loc.line + 1
+      const mapped = mapOriginalAsmToFiltered(original)
+      return mapped ?? undefined
+    }
     return undefined
   }, [languageMode, traceInfo, selectedStep])
 
@@ -220,10 +231,10 @@ function PlaygroundPage() {
           setFuncHighlightLine(undefined)
         }
 
-        // Handle precise highlighting based on assembly line
         if (step.loc?.line !== undefined) {
-          const asmLine = step.loc.line + 1
-          handleAsmLineHover(asmLine)
+          const originalAsmLine = step.loc.line + 1
+          const filteredAsmLine = mapOriginalAsmToFiltered(originalAsmLine)
+          handleAsmLineHover(filteredAsmLine ?? null)
         } else {
           handleAsmLineHover(null)
         }
@@ -235,7 +246,15 @@ function PlaygroundPage() {
       handleAsmLineHover(null)
       setFuncHighlightLine(undefined)
     }
-  }, [selectedStep, traceInfo, languageMode, handleAsmLineHover, sourceMap, funcResult?.mapping])
+  }, [
+    selectedStep,
+    traceInfo,
+    languageMode,
+    handleAsmLineHover,
+    sourceMap,
+    funcResult?.mapping,
+    mapOriginalAsmToFiltered,
+  ])
 
   const instructionDetails: InstructionDetail[] = useMemo(() => {
     if (!traceInfo) return []
@@ -549,11 +568,14 @@ function PlaygroundPage() {
                   funcResult?.assembly && (
                     <div className={styles.asmViewerWrapper}>
                       <CodeEditor
-                        code={funcResult.assembly}
+                        code={filteredAsmCode ?? funcResult.assembly}
                         readOnly={true}
                         language="tasm"
                         highlightLine={currentAsmLine}
                         shouldCenter={true}
+                        onEditorMount={editor => {
+                          asmViewerRef.current = editor
+                        }}
                       />
                     </div>
                   )}

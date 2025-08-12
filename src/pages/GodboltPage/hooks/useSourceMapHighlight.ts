@@ -15,6 +15,7 @@ export interface UseSourceMapHighlightReturn {
   readonly handleAsmLineHover: (line: number | null) => void
   readonly filteredAsmCode: string
   readonly getVariablesForAsmLine: (line: number) => trace.FuncVar[] | undefined
+  readonly mapOriginalAsmToFiltered: (line: number) => number | undefined
 }
 
 function filterDebugMarks(asmCode: string): {
@@ -278,5 +279,6 @@ export function useSourceMapHighlight(
     handleAsmLineHover,
     filteredAsmCode,
     getVariablesForAsmLine,
+    mapOriginalAsmToFiltered: (line: number) => originalToFiltered.get(line),
   }
 }
