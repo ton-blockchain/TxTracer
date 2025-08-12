@@ -9,28 +9,27 @@ import {
 import {parseFuncErrors, convertErrorsToMarkers} from "@features/godbolt/lib/func/error-parser.ts"
 import {useGlobalError} from "@shared/lib/useGlobalError.tsx"
 
-export interface UseCompilationReturn {
+export interface UseFuncCompilationReturn {
   readonly result: FuncCompilationResult | undefined
-  readonly loading: boolean
+  readonly compiling: boolean
   readonly error: string
   readonly errorMarkers: monaco.editor.IMarkerData[]
-  readonly handleExecuteCode: (code: string) => Promise<void>
-  readonly handleExecute: (code: string) => Promise<void>
+  readonly handleCompile: (code: string) => Promise<void>
   readonly clearError: () => void
   readonly setResult: (result: FuncCompilationResult | undefined) => void
 }
 
-export const useCompilation = (): UseCompilationReturn => {
+export const useFuncCompilation = (): UseFuncCompilationReturn => {
   const [result, setResult] = useState<FuncCompilationResult | undefined>(undefined)
-  const [loading, setLoading] = useState(false)
+  const [compiling, setCompiling] = useState(false)
   const [error, setError] = useState<string>("")
   const [errorMarkers, setErrorMarkers] = useState<monaco.editor.IMarkerData[]>([])
 
   const {setError: setGlobalError} = useGlobalError()
 
-  const handleExecuteCode = useCallback(
+  const handleCompile = useCallback(
     async (code: string) => {
-      setLoading(true)
+      setCompiling(true)
       setError("")
       setErrorMarkers([])
 
@@ -51,17 +50,10 @@ export const useCompilation = (): UseCompilationReturn => {
         const markers = convertErrorsToMarkers(parsedErrors)
         setErrorMarkers(markers)
       } finally {
-        setLoading(false)
+        setCompiling(false)
       }
     },
     [setGlobalError],
-  )
-
-  const handleExecute = useCallback(
-    async (code: string) => {
-      await handleExecuteCode(code)
-    },
-    [handleExecuteCode],
   )
 
   const clearError = useCallback(() => {
@@ -71,11 +63,10 @@ export const useCompilation = (): UseCompilationReturn => {
 
   return {
     result,
-    loading,
+    compiling,
     error,
     errorMarkers,
-    handleExecuteCode,
-    handleExecute,
+    handleCompile,
     clearError,
     setResult,
   }

@@ -1,0 +1,45 @@
+.container {
+  background-color: transparent;
+  padding: var(--spacing-sm);
+  border-top: 1px solid var(--color-border);
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family-mono), monospace;
+}
+
+.item {
+  margin: var(--spacing-xs) 0;
+  padding: 0;
+  line-height: 1.4;
+}
+
+.link {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  font: inherit;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.error {
+  color: var(--color-error-text);
+}
+
+.warning {
+  color: var(--color-warning-text);
+}
+
+.info {
+  color: var(--color-info-text);
+}
+
+.mono {
+  font-family: var(--font-family-mono);
+}
