@@ -175,6 +175,12 @@ function PlaygroundPage() {
   const lineExecutionData = useLineExecutionData(traceInfo)
 
   const [funcHighlightLine, setFuncHighlightLine] = useState<number | undefined>(undefined)
+  const currentAsmLine = useMemo(() => {
+    if (languageMode !== "func") return undefined
+    const step = traceInfo?.steps?.[selectedStep]
+    if (step?.loc?.line !== undefined) return step.loc.line + 1
+    return undefined
+  }, [languageMode, traceInfo, selectedStep])
 
   useEffect(() => {
     if (languageMode === "func" && traceInfo && selectedStep > 0) {
@@ -505,32 +511,53 @@ function PlaygroundPage() {
               {languageMode === "func" ? "FunC" : "Assembly"} Code Editor
             </h2>
             <Suspense fallback={<InlineLoader message="Loading Editor..." loading={true} />}>
-              <CodeEditor
-                code={currentCode}
-                onChange={handleCodeChange}
-                readOnly={false}
-                markers={languageMode === "func" ? funcMarkers : []}
-                highlightLine={languageMode === "tasm" ? highlightLine : funcHighlightLine}
-                highlightRanges={
-                  languageMode === "func" && steppingMode === "instructions"
-                    ? funcPreciseHighlightRanges
-                    : undefined
+              <div
+                className={
+                  languageMode === "func" && steppingMode === "instructions" && funcResult?.assembly
+                    ? styles.funcEditorWrapper
+                    : styles.fullEditorWrapper
                 }
-                lineExecutionData={languageMode === "tasm" ? lineExecutionData : undefined}
-                implicitRetLine={implicitRet.line}
-                implicitRetLabel={
-                  implicitRet.approx ? "↵ implicit RET (approximate position)" : undefined
-                }
-                shouldCenter={transitionType === "button"}
-                exitCode={result?.exitCode}
-                onLineClick={languageMode === "tasm" ? findStepByLine : undefined}
-                language={languageMode}
-                onEditorMount={editor => {
-                  if (languageMode === "func") {
-                    funcEditorRef.current = editor
+              >
+                <CodeEditor
+                  code={currentCode}
+                  onChange={handleCodeChange}
+                  readOnly={false}
+                  markers={languageMode === "func" ? funcMarkers : []}
+                  highlightLine={languageMode === "tasm" ? highlightLine : funcHighlightLine}
+                  highlightRanges={
+                    languageMode === "func" && steppingMode === "instructions"
+                      ? funcPreciseHighlightRanges
+                      : undefined
                   }
-                }}
-              />
+                  lineExecutionData={languageMode === "tasm" ? lineExecutionData : undefined}
+                  implicitRetLine={implicitRet.line}
+                  implicitRetLabel={
+                    implicitRet.approx ? "↵ implicit RET (approximate position)" : undefined
+                  }
+                  shouldCenter={transitionType === "button"}
+                  exitCode={result?.exitCode}
+                  onLineClick={languageMode === "tasm" ? findStepByLine : undefined}
+                  language={languageMode}
+                  onEditorMount={editor => {
+                    if (languageMode === "func") {
+                      funcEditorRef.current = editor
+                    }
+                  }}
+                />
+                {languageMode === "func" &&
+                  steppingMode === "instructions" &&
+                  funcResult?.assembly && (
+                    <div className={styles.asmViewerWrapper}>
+                      <CodeEditor
+                        code={funcResult.assembly}
+                        readOnly={true}
+                        language="tasm"
+                        highlightLine={currentAsmLine}
+                        shouldCenter={true}
+                      />
+                    </div>
+                  )}
+              </div>
               {languageMode === "func" && (
                 <CompilerErrors
                   markers={funcMarkers}
