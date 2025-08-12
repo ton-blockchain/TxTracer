@@ -2,24 +2,23 @@ import {useState, useCallback} from "react"
 import type * as monaco from "monaco-editor"
 
 import {
-  compileFuncCode,
-  FuncCompilationError,
-  type FuncCompilationResult,
-} from "@features/godbolt/lib/func/compilation.ts"
-import {parseFuncErrors, convertErrorsToMarkers} from "@features/godbolt/lib/func/error-parser.ts"
+  convertTolkErrorsToMarkers,
+  parseTolkErrors,
+} from "@features/godbolt/lib/tolk/error-parser.ts"
+import {TolkCompilationError, type TolkCompilationResult} from "@features/godbolt/lib/tolk/types"
 
-export interface UseFuncCompilationReturn {
-  readonly result: FuncCompilationResult | undefined
+export interface UseTolkCompilationReturn {
+  readonly result: TolkCompilationResult | undefined
   readonly compiling: boolean
   readonly error: string
   readonly errorMarkers: monaco.editor.IMarkerData[]
   readonly handleCompile: (code: string) => Promise<void>
   readonly clearError: () => void
-  readonly setResult: (result: FuncCompilationResult | undefined) => void
+  readonly setResult: (result: TolkCompilationResult | undefined) => void
 }
 
-export const useFuncCompilation = (): UseFuncCompilationReturn => {
-  const [result, setResult] = useState<FuncCompilationResult | undefined>(undefined)
+export const useTolkCompilation = (): UseTolkCompilationReturn => {
+  const [result, setResult] = useState<TolkCompilationResult | undefined>(undefined)
   const [compiling, setCompiling] = useState(false)
   const [error, setError] = useState<string>("")
   const [errorMarkers, setErrorMarkers] = useState<monaco.editor.IMarkerData[]>([])
@@ -30,19 +29,21 @@ export const useFuncCompilation = (): UseFuncCompilationReturn => {
     setErrorMarkers([])
 
     try {
-      const compilationResult = await compileFuncCode(code)
+      const tolk = await import("@features/godbolt/lib/tolk/compilation.ts")
+      const compilationResult = await tolk.compileTolkCode(code)
       setResult(compilationResult)
       setErrorMarkers([])
     } catch (compilationError) {
+      console.log(compilationError)
       const errorMessage =
         compilationError instanceof Error ? compilationError.message : "Unknown error"
 
-      if (!(compilationError instanceof FuncCompilationError)) {
+      if (!(compilationError instanceof TolkCompilationError)) {
         setError(errorMessage)
       }
 
-      const parsedErrors = parseFuncErrors(errorMessage)
-      const markers = convertErrorsToMarkers(parsedErrors)
+      const parsedErrors = parseTolkErrors(errorMessage)
+      const markers = convertTolkErrorsToMarkers(parsedErrors)
       setErrorMarkers(markers)
     } finally {
       setCompiling(false)

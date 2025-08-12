@@ -7,15 +7,16 @@ import styles from "@app/pages/GodboltPage/GodboltPage.module.css"
 
 interface ShareButtonProps {
   readonly value: string
+  readonly lang?: "func" | "tolk"
 }
 
-export const ShareButton: React.FC<ShareButtonProps> = ({value}) => {
+export const ShareButton: React.FC<ShareButtonProps> = ({value, lang}) => {
   const [isCopied, setIsCopied] = useState(false)
 
   const className = `${styles.shareButton} ${isCopied ? styles.copied : ""}`
 
   const handleShareCode = useCallback(async () => {
-    const shareUrl = encodeCodeToUrl(value)
+    const shareUrl = encodeCodeToUrl(value, lang)
 
     try {
       await navigator.clipboard.writeText(shareUrl)
@@ -36,7 +37,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({value}) => {
         setTimeout(() => setIsCopied(false), 1000)
       }
     }
-  }, [value])
+  }, [value, lang])
 
   return (
     <>

@@ -44,6 +44,13 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     placement: "bottom",
   },
   {
+    title: "Switch Languages",
+    content:
+      "Use the selector in the header to switch between FunC and Tolk. Your choice and code are saved between sessions, and compilation runs automatically when switching.\n\nNote that Tolk support here is still in beta and may not work as expected.",
+    target: '[aria-label="Select language"]',
+    placement: "bottom",
+  },
+  {
     title: "Ready to Code!",
     content:
       "You're all set! You now know how to:\n\n• Write and compile FunC code\n• Analyze assembly output\n• Customize settings for your workflow\n• Share your code with others\n\nHappy smart contract development! 🚀",

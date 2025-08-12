@@ -1,46 +1,22 @@
 import {Cell} from "@ton/core"
 import {runtime as i, text, trace} from "ton-assembly"
 
-import {FUNC_STDLIB} from "@features/godbolt/lib/func/stdlib.ts"
-import {funcCompile} from "@features/godbolt/lib/func/func-wasm/func-compile.ts"
+import {runTolkCompiler} from "@ton/tolk-js"
 
-export interface FuncCompilationResult {
-  readonly lang: "func"
-  readonly instructions: i.Instr[]
-  readonly code: string
-  readonly assembly: string
-  readonly funcSourceMap?: string
-  readonly mapping: Map<number, trace.InstructionInfo[]>
-}
+import {TolkCompilationError, type TolkCompilationResult} from "@features/godbolt/lib/tolk/types.ts"
 
-export class FuncCompilationError extends Error {
-  constructor(message: string) {
-    super(message)
-    this.name = "FuncCompilationError"
-  }
-}
-
-export const compileFuncCode = async (code: string): Promise<FuncCompilationResult | undefined> => {
-  const result = await funcCompile({
-    entries: ["main.fc"],
-    sources: [
-      {
-        path: "stdlib.fc",
-        content: FUNC_STDLIB,
-      },
-      {
-        path: "main.fc",
-        content: code,
-      },
-    ],
-    debugInfo: true,
+export const compileTolkCode = async (code: string): Promise<TolkCompilationResult | undefined> => {
+  const result = await runTolkCompiler({
+    entrypointFileName: "main.tolk",
+    fsReadCallback: () => code,
+    withStackComments: true,
+    withSrcLineComments: true,
   })
-
-  if (!result.ok) {
-    throw new FuncCompilationError(result.log)
+  if (result.status === "error") {
+    throw new TolkCompilationError(result.message)
   }
 
-  const codeCell = Cell.fromBoc(result.output)[0]
+  const codeCell = Cell.fromBase64(result.codeBoc64)
 
   const initialInstructions = i.decompileCell(codeCell)
   const [, mapping] = recompileCell(codeCell)
@@ -60,16 +36,15 @@ export const compileFuncCode = async (code: string): Promise<FuncCompilationResu
   }
 
   return {
-    lang: "func",
+    lang: "tolk",
     instructions: initialInstructions,
     code: code,
     assembly: text.print(initialInstructions),
-    funcSourceMap: result.sourceMap ? JSON.stringify(result.sourceMap) : undefined,
     mapping: debugSectionToInstructions,
   }
 }
 
-export const recompileCell = (cell: Cell): [Cell, i.Mapping] => {
+const recompileCell = (cell: Cell): [Cell, i.Mapping] => {
   const instructionsWithoutPositions = i.decompileCell(cell)
   const assemblyForPositions = text.print(instructionsWithoutPositions)
 
