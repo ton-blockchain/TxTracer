@@ -458,31 +458,33 @@ function PlaygroundPage() {
           </div>
         )}
         <div className={styles.headerContent}>
-          <div className={styles.languageSwitcher}>
-            <CustomSegmentedSelector
-              options={[
-                {value: "tasm", label: "Assembly"},
-                {value: "func", label: "FunC", badge: "beta"},
-              ]}
-              value={languageMode}
-              onChange={val => handleLanguageModeChange(val as "func" | "tasm")}
-              ariaLabel="Select Playground language"
-            />
-          </div>
-          {languageMode === "func" && (
-            <div className={styles.steppingSwitcher}>
-              <span className={styles.steppingLabel}>Stepping mode:</span>
+          <div className={styles.languageSwitcherContainer}>
+            <div className={styles.languageSwitcher}>
               <CustomSegmentedSelector
                 options={[
-                  {value: "instructions", label: "Instructions"},
-                  {value: "lines", label: "Source Lines"},
+                  {value: "tasm", label: "Assembly"},
+                  {value: "func", label: "FunC", badge: "beta"},
                 ]}
-                value={steppingMode}
-                onChange={val => handleSteppingModeChange(val as "instructions" | "lines")}
-                ariaLabel="Select stepping mode"
+                value={languageMode}
+                onChange={val => handleLanguageModeChange(val as "func" | "tasm")}
+                ariaLabel="Select Playground language"
               />
             </div>
-          )}
+            {languageMode === "func" && (
+              <div className={styles.steppingSwitcher}>
+                <span className={styles.steppingLabel}>Stepping mode:</span>
+                <CustomSegmentedSelector
+                  options={[
+                    {value: "instructions", label: "Instructions"},
+                    {value: "lines", label: "Source Lines"},
+                  ]}
+                  value={steppingMode}
+                  onChange={val => handleSteppingModeChange(val as "instructions" | "lines")}
+                  ariaLabel="Select stepping mode"
+                />
+              </div>
+            )}
+          </div>
           <div className={styles.mainActionContainer} role="toolbar" aria-label="Code actions">
             <ExecuteButton
               onClick={() => void handleExecute()}

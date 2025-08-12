@@ -24,6 +24,12 @@
   gap: var(--spacing-md);
 }
 
+.languageSwitcherContainer {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-right: auto;
+}
+
 .languageSwitcher {
   display: flex;
   gap: var(--spacing-xs);
