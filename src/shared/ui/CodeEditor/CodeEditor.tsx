@@ -8,9 +8,9 @@ import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker"
 import type {ExitCode} from "@features/txTrace/lib/traceTx"
 import type {FuncVar} from "@features/godbolt/lib/func/variables.ts"
 
-import {FUNC_LANGUAGE_ID, TASM_LANGUAGE_ID} from "@shared/ui/CodeEditor/languages"
-
 import type {LinesExecutionData} from "@features/txTrace/hooks"
+
+import {useTolkLanguageProviders} from "@shared/ui/CodeEditor/hooks/useTolkLanguageProviders.ts"
 
 import {
   useMonacoSetup,
@@ -199,6 +199,13 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     enabled: language === "func",
   })
 
+  useTolkLanguageProviders({
+    monaco,
+    editorRef,
+    markers,
+    enabled: language === "tolk",
+  })
+
   const {collapseInactiveBlocks} = useFolding({
     monaco,
     editorRef,
@@ -268,8 +275,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         <Editor
           height="100%"
           width="100%"
-          language={language === "func" ? FUNC_LANGUAGE_ID : TASM_LANGUAGE_ID}
-          path={language === "func" ? "main.fc" : "out.tasm"}
+          language={language}
+          path={language === "func" ? "main.fc" : language === "tolk" ? "main.tolk" : "out.tasm"}
           value={code}
           options={{
             minimap: {enabled: false},
