@@ -96,6 +96,9 @@ interface CodeEditorProps {
 
   /** Error markers to display in the editor. Used for compilation errors in FunC on the Code Explorer page */
   readonly markers?: readonly monaco.editor.IMarkerData[]
+
+  /** Optional gas summation per FunC line to display as inlay hints */
+  readonly funcGasByLine?: ReadonlyMap<number, number>
 }
 
 // use local instance of monaco
@@ -130,6 +133,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   showVariablesDocs = true,
   showInstructionDocs = true,
   onEditorMount,
+  funcGasByLine,
 }) => {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
   const [editorReady, setEditorReady] = useState(false)
@@ -222,6 +226,68 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     editorRef,
     lineExecutionData,
   })
+
+  // display gas sum for FunC line of code
+  useEffect(() => {
+    if (language !== "func" || !editorReady || !editorRef.current || !funcGasByLine) return
+    const editor = editorRef.current
+    const domNode = editor.getDomNode()
+    if (!domNode) return
+
+    const container = document.createElement("div")
+    container.style.position = "absolute"
+    container.style.pointerEvents = "none"
+    container.style.zIndex = "5"
+    domNode.appendChild(container)
+
+    const render = () => {
+      const layout = editor.getLayoutInfo()
+      const scrollTop = editor.getScrollTop()
+      const ranges = editor.getVisibleRanges() ?? []
+      container.style.left = `${layout.glyphMarginLeft}px`
+      container.style.width = `${layout.glyphMarginWidth}px`
+      container.style.top = "0px"
+      container.innerHTML = ""
+
+      const lines = new Set<number>()
+      for (const r of ranges) {
+        for (let ln = r.startLineNumber; ln <= r.endLineNumber; ln++) lines.add(ln)
+      }
+
+      for (const ln of lines) {
+        const gas = funcGasByLine.get(ln)
+        if (!gas || gas <= 0) continue
+        const top = editor.getTopForLineNumber(ln) - scrollTop
+        const el = document.createElement("div")
+        el.style.position = "absolute"
+        el.style.left = "0"
+        el.style.top = `${top}px`
+        el.style.height = `${editor.getOption(monaco?.editor.EditorOption.lineHeight ?? 40)}px`
+        el.style.display = "flex"
+        el.style.alignItems = "center"
+        el.style.justifyContent = "end"
+        el.style.width = "100%"
+        el.style.fontSize = "10px"
+        el.style.color = "var(--color-text-secondary)"
+        el.style.opacity = "0.9"
+        el.style.pointerEvents = "none"
+        el.textContent = String(gas)
+        container.appendChild(el)
+      }
+    }
+
+    const disposeScroll = editor.onDidScrollChange(() => render())
+    const disposeLayout = editor.onDidLayoutChange(() => render())
+    const disposeContent = editor.onDidChangeModelContent(() => render())
+    render()
+
+    return () => {
+      disposeScroll?.dispose()
+      disposeLayout?.dispose()
+      disposeContent?.dispose()
+      container.remove()
+    }
+  }, [language, editorReady, editorRef, funcGasByLine, monaco])
 
   /* ----------------------- folding inactive blocks ----------------------- */
   const handleCollapseInactiveBlocks = useCallback(() => {

@@ -473,6 +473,32 @@ function PlaygroundPage() {
     return mapOriginalAsmToFiltered(implicitRet.line)
   }, [implicitRet.line, mapOriginalAsmToFiltered])
 
+  const funcGasByLine = useMemo(() => {
+    const map = new Map<number, number>()
+    if (!traceInfo || !sourceMap || !funcResult?.mapping) return map
+
+    for (const step of traceInfo.steps ?? []) {
+      if (step?.loc?.line === undefined) continue
+      const asmLine = step.loc.line + 1
+
+      for (const [debugSection, instructions] of funcResult.mapping.entries()) {
+        for (const instr of instructions) {
+          if (instr.loc?.line !== undefined && instr.loc.line + 1 === asmLine) {
+            const location = sourceMap.locations[debugSection]
+            if (location && location.file === "main.fc") {
+              const funcLine = location.line
+              const prev = map.get(funcLine) ?? 0
+              map.set(funcLine, prev + normalizeGas(step))
+              break
+            }
+          }
+        }
+      }
+    }
+
+    return map
+  }, [traceInfo, sourceMap, funcResult?.mapping])
+
   const txStatus: StatusType | undefined = useMemo(() => {
     if (!result) return undefined
 
@@ -584,6 +610,7 @@ function PlaygroundPage() {
                   exitCode={result?.exitCode}
                   onLineClick={languageMode === "tasm" ? findStepByLine : undefined}
                   language={languageMode}
+                  funcGasByLine={languageMode === "func" ? funcGasByLine : undefined}
                   onEditorMount={editor => {
                     if (languageMode === "func") {
                       funcEditorRef.current = editor
