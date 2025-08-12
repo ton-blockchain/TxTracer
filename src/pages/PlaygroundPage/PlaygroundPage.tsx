@@ -20,7 +20,7 @@ import Tutorial, {useTutorial} from "@shared/ui/Tutorial"
 import ShareButton from "@shared/ui/ShareButton/ShareButton.tsx"
 import SettingsDropdown from "@shared/ui/SettingsDropdown/SettingsDropdown.tsx"
 import {usePlaygroundSettings} from "@app/pages/PlaygroundPage/hooks/usePlaygroundSettings.ts"
-import {decodeCodeFromUrl} from "@app/pages/GodboltPage/urlCodeSharing.ts"
+import {decodeCodeFromUrl, decodeLanguageFromUrl} from "@app/pages/GodboltPage/urlCodeSharing.ts"
 
 import {ExecuteButton} from "@app/pages/PlaygroundPage/components/ExecuteButton.tsx"
 import {CustomSegmentedSelector} from "@app/pages/GodboltPage/components"
@@ -62,6 +62,8 @@ const INITIAL_STACK_STORAGE_KEY = "txtracer-playground-initial-stack"
 
 function PlaygroundPage() {
   const [languageMode, setLanguageMode] = useState<LanguageMode>(() => {
+    const fromUrl = decodeLanguageFromUrl()
+    if (fromUrl === "func" || fromUrl === "tasm") return fromUrl
     return (localStorage.getItem(LOCAL_STORAGE_KEY_MODE) as LanguageMode) ?? "tasm"
   })
 
@@ -70,21 +72,19 @@ function PlaygroundPage() {
   })
 
   const [assemblyCode, setAssemblyCode] = useState(() => {
-    if (languageMode === "tasm") {
+    const fromUrl = decodeLanguageFromUrl()
+    if (fromUrl === "tasm") {
       const sharedCode = decodeCodeFromUrl()
-      if (sharedCode) {
-        return sharedCode
-      }
+      if (sharedCode) return sharedCode
     }
     return localStorage.getItem(LOCAL_STORAGE_KEY_ASM) ?? DEFAULT_ASSEMBLY_CODE
   })
 
   const [funcCode, setFuncCode] = useState(() => {
-    if (languageMode === "func") {
+    const fromUrl = decodeLanguageFromUrl()
+    if (fromUrl === "func") {
       const sharedCode = decodeCodeFromUrl()
-      if (sharedCode) {
-        return sharedCode
-      }
+      if (sharedCode) return sharedCode
     }
     return localStorage.getItem(LOCAL_STORAGE_KEY_FUNC) ?? DEFAULT_FUNC_CODE
   })
@@ -577,7 +577,7 @@ function PlaygroundPage() {
               onClick={() => void handleExecute()}
               loading={loading || funcCompiling}
             />
-            <ShareButton value={currentCode} />
+            <ShareButton value={currentCode} lang={languageMode} />
             <SettingsDropdown
               items={[
                 {

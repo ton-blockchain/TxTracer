@@ -7,7 +7,7 @@ import styles from "@app/pages/GodboltPage/GodboltPage.module.css"
 
 interface ShareButtonProps {
   readonly value: string
-  readonly lang?: "func" | "tolk"
+  readonly lang?: "func" | "tolk" | "tasm"
 }
 
 export const ShareButton: React.FC<ShareButtonProps> = ({value, lang}) => {

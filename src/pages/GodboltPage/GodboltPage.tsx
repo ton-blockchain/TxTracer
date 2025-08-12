@@ -152,7 +152,7 @@ function GodboltPage() {
   const [initiallyCompiled, setInitiallyCompiled] = useState<boolean>(false)
   const [language, setLanguage] = useState<CodeLanguage>(() => {
     const fromUrl = decodeLanguageFromUrl()
-    if (fromUrl) return fromUrl
+    if (fromUrl === "func" || fromUrl === "tolk") return fromUrl
     const saved = localStorage.getItem(STORAGE_LANG_KEY)
     return saved === "tolk" ? "tolk" : "func"
   })
