@@ -1,12 +1,6 @@
 import * as monaco from "monaco-editor"
 
-export interface ParsedError {
-  readonly filename: string
-  readonly line: number
-  readonly column: number
-  readonly message: string
-  readonly severity: "error" | "warning" | "info"
-}
+import type {ParsedError} from "../common/compiler-errors"
 
 export function parseFuncErrors(errorText: string): ParsedError[] {
   const errors: ParsedError[] = []

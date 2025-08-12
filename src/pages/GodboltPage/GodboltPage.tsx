@@ -12,7 +12,7 @@ import ErrorBanner from "@shared/ui/ErrorBanner/ErrorBanner"
 import PageHeader from "@shared/ui/PageHeader"
 import Tutorial, {useTutorial} from "@shared/ui/Tutorial"
 
-import {CompileButton, SettingsDropdown} from "@app/pages/GodboltPage/components"
+import {CompileButton, SettingsDropdown, CompilerErrors} from "@app/pages/GodboltPage/components"
 
 import {useSourceMapHighlight} from "@app/pages/GodboltPage/hooks"
 
@@ -21,7 +21,7 @@ import ShareButton from "@shared/ui/ShareButton/ShareButton.tsx"
 import {TUTORIAL_STEPS} from "@app/pages/GodboltPage/Tutorial.ts"
 
 import {useGodboltSettings} from "./hooks/useGodboltSettings"
-import {useCompilation} from "./hooks/useCompilation"
+import {useFuncCompilation} from "./hooks/useFuncCompilation.ts"
 import {decodeCodeFromUrl} from "./urlCodeSharing"
 
 import styles from "./GodboltPage.module.css"
@@ -85,16 +85,8 @@ function GodboltPage() {
 
   const [editorsReady, setEditorsReady] = useState({func: false, asm: false})
 
-  const {
-    result,
-    loading,
-    error,
-    errorMarkers,
-    handleExecuteCode,
-    handleExecute,
-    clearError,
-    setResult,
-  } = useCompilation()
+  const {result, compiling, error, errorMarkers, handleCompile, clearError, setResult} =
+    useFuncCompilation()
 
   const sourceMap = useMemo(() => {
     if (result?.funcSourceMap) {
@@ -144,17 +136,17 @@ function GodboltPage() {
         return
       }
 
-      void handleExecuteCode(newCode)
+      void handleCompile(newCode)
     },
-    [handleExecuteCode, autoCompile, clearError, setResult],
+    [handleCompile, autoCompile, clearError, setResult],
   )
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
         event.preventDefault()
-        if (!loading) {
-          void handleExecute(funcCode)
+        if (!compiling) {
+          void handleCompile(funcCode)
         }
       }
     }
@@ -163,24 +155,24 @@ function GodboltPage() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown)
     }
-  }, [handleExecute, funcCode, loading])
+  }, [handleCompile, funcCode, compiling])
 
   // Compile code on page open
   useEffect(() => {
     if (initiallyCompiled) return
     if (editorsReady.func && editorsReady.asm) {
-      void handleExecuteCode(funcCode)
+      void handleCompile(funcCode)
       setInitiallyCompiled(true)
     }
-  }, [editorsReady.func, editorsReady.asm, handleExecuteCode, funcCode, initiallyCompiled])
+  }, [editorsReady.func, editorsReady.asm, handleCompile, funcCode, initiallyCompiled])
 
   return (
     <div className={styles.traceViewWrapper}>
       <PageHeader pageTitle="explorer">
         <div className={styles.mainActionContainer} role="toolbar" aria-label="Code editor actions">
           <CompileButton
-            onCompile={() => void handleExecute(funcCode)}
-            loading={loading}
+            onCompile={() => void handleCompile(funcCode)}
+            loading={compiling}
             className={styles.executeButton}
           />
           <ShareButton value={funcCode} />
@@ -191,9 +183,9 @@ function GodboltPage() {
       {error && <ErrorBanner message={error} onClose={clearError} />}
 
       <div id="compile-status" className="sr-only" aria-live="polite" aria-atomic="true">
-        {loading && "Compiling code..."}
-        {result && !loading && "Code compiled successfully"}
-        {error && !loading && `Compilation failed: ${error}`}
+        {compiling && "Compiling code..."}
+        {result && !compiling && "Code compiled successfully"}
+        {error && !compiling && `Compilation failed: ${error}`}
       </div>
 
       <div className="sr-only">Press Ctrl+Enter or Cmd+Enter to compile the FunC code</div>
@@ -226,6 +218,16 @@ function GodboltPage() {
                   }}
                 />
               </Suspense>
+              <CompilerErrors
+                markers={errorMarkers}
+                onNavigate={(line, column) => {
+                  const editor = funcEditorRef.current
+                  if (!editor) return
+                  editor.revealPositionInCenter({lineNumber: line, column})
+                  editor.setPosition({lineNumber: line, column})
+                  editor.focus()
+                }}
+              />
             </section>
           </Allotment.Pane>
 
