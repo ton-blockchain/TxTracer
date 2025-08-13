@@ -41,7 +41,7 @@
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.6.0",
     "ton-assembly": "0.2.2",
-    "txtracer-core-test-dev": "^0.1.5"
+    "txtracer-core": "^0.1.1"
   },
   "devDependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",

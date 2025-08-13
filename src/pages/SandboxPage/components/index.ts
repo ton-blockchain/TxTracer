@@ -1,6 +1,6 @@
 export {TransactionTree} from "./TransactionTree/TransactionTree"
 export {ContractChip} from "./ContractChip/ContractChip"
-export {OpcodeChip} from "./OpcodeChip/OpcodeChip"
+export {OpcodeChip} from "@shared/ui/OpcodeChip/OpcodeChip"
 export {ContractDetails} from "./ContractDetails/ContractDetails"
 export {TransactionShortInfo} from "./TransactionShortInfo/TransactionShortInfo"
 export {TestInfo} from "./TestInfo/TestInfo"

@@ -1,12 +1,13 @@
 import React, {type JSX} from "react"
 
-import type {TraceResult} from "txtracer-core-test-dev/dist/types"
+import type {TraceResult} from "txtracer-core/dist/types"
 
 import AddressChip from "@shared/ui/AddressChip"
 import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
 import {formatAddress, formatCurrency, formatNumber} from "@shared/lib/format"
 
 import {ExitCodeChip} from "@features/common/ui/ExitCodeChip/ExitCodeChip.tsx"
+import {OpcodeChip} from "@shared/ui/OpcodeChip/OpcodeChip.tsx"
 
 import styles from "./TransactionDetailsTable.module.css"
 
@@ -100,6 +101,23 @@ const TransactionDetailsTable: React.FC<TransactionDetailsTableProps> = ({result
         <div className={styles.detailLabel}>LT</div>
         <div className={`${styles.detailValue} ${styles.numberValue}`}>{String(tx.lt)}</div>
       </div>
+
+      {result.inMsg.sender && (
+        <div className={styles.labeledSectionRow}>
+          <div className={styles.labeledSectionTitle}>Message Data</div>
+          <div className={styles.labeledSectionContent}>
+            <div className={styles.multiColumnRow}>
+              <div className={styles.multiColumnItem}>
+                <div className={styles.multiColumnItemTitle}>Opcode</div>
+                <div className={`${styles.multiColumnItemValue}`}>
+                  <OpcodeChip opcode={result.inMsg.opcode} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {result.inMsg.amount && (
         <div className={styles.detailRow}>
           <div className={styles.detailLabel}>Amount In</div>
