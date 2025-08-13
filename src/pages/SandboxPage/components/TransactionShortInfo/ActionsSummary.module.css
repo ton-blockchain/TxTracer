@@ -113,6 +113,7 @@
 .detailsContainer {
   padding: var(--spacing-sm) var(--spacing-md) var(--spacing-md);
   border-radius: var(--border-radius-sm);
+  margin-top: var(--spacing-sm);
 }
 
 .actionDetails {
