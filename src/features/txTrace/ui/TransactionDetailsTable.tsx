@@ -1,6 +1,10 @@
-import React, {type JSX} from "react"
+import React, {type JSX, useMemo} from "react"
 
 import type {TraceResult} from "txtracer-core/dist/types"
+
+import {type ParsedInternal, parseWithPayloads} from "@truecarry/tlb-abi"
+
+import {Cell, loadTransaction} from "@ton/core"
 
 import AddressChip from "@shared/ui/AddressChip"
 import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
@@ -8,6 +12,8 @@ import {formatAddress, formatCurrency, formatNumber} from "@shared/lib/format"
 
 import {ExitCodeChip} from "@features/common/ui/ExitCodeChip/ExitCodeChip.tsx"
 import {OpcodeChip} from "@shared/ui/OpcodeChip/OpcodeChip.tsx"
+
+import {ParsedBodyViewer} from "@features/txTrace/ui/ParsedBodyViewer"
 
 import styles from "./TransactionDetailsTable.module.css"
 
@@ -69,6 +75,24 @@ const TransactionDetailsTable: React.FC<TransactionDetailsTableProps> = ({result
   const exitCode = tx.computeInfo !== "skipped" ? tx.computeInfo.exitCode : undefined
   const statusType: StatusType = isSuccess ? "success" : "failed"
 
+  const {parsedBody, inCellHex} = useMemo(() => {
+    if (!result)
+      return {
+        parsedBody: undefined as ParsedInternal | undefined,
+        inCellHex: undefined as string | undefined,
+      }
+    const loadedTx = loadTransaction(Cell.fromHex(result.emulatedTx.raw).asSlice())
+    if (loadedTx.inMessage) {
+      const parsed = parseWithPayloads(loadedTx.inMessage.body.beginParse())
+      const hex = loadedTx.inMessage.body.toBoc().toString("hex")
+      return {parsedBody: parsed, inCellHex: hex}
+    }
+    return {
+      parsedBody: undefined as ParsedInternal | undefined,
+      inCellHex: undefined as string | undefined,
+    }
+  }, [result])
+
   return (
     <div className={styles.transactionDetailsContainer}>
       <div className={styles.detailRow}>
@@ -101,22 +125,6 @@ const TransactionDetailsTable: React.FC<TransactionDetailsTableProps> = ({result
         <div className={styles.detailLabel}>LT</div>
         <div className={`${styles.detailValue} ${styles.numberValue}`}>{String(tx.lt)}</div>
       </div>
-
-      {result.inMsg.opcode && (
-        <div className={styles.labeledSectionRow}>
-          <div className={styles.labeledSectionTitle}>Message Data</div>
-          <div className={styles.labeledSectionContent}>
-            <div className={styles.multiColumnRow}>
-              <div className={styles.multiColumnItem}>
-                <div className={styles.multiColumnItemTitle}>Opcode</div>
-                <div className={`${styles.multiColumnItemValue}`}>
-                  <OpcodeChip opcode={result.inMsg.opcode} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {result.inMsg.amount && (
         <div className={styles.detailRow}>
@@ -234,6 +242,36 @@ const TransactionDetailsTable: React.FC<TransactionDetailsTableProps> = ({result
           </div>
         </div>
       </div>
+
+      {(result.inMsg.opcode || parsedBody) && (
+        <div className={styles.labeledSectionRow}>
+          <div className={styles.labeledSectionTitle}>Message Data</div>
+          <div className={styles.labeledSectionContent}>
+            <div className={styles.multiColumnRow}>
+              <div className={styles.multiColumnItem}>
+                <div className={styles.multiColumnItemTitle}>Opcode</div>
+                <div className={`${styles.multiColumnItemValue}`}>
+                  <OpcodeChip
+                    showOpcode={true}
+                    abiName={parsedBody?.data?.kind}
+                    opcode={result.inMsg.opcode}
+                  />
+                </div>
+              </div>
+            </div>
+            {parsedBody && (
+              <div className={styles.multiColumnRow}>
+                <div className={styles.multiColumnItem}>
+                  <div className={styles.multiColumnItemTitle}>Parsed Data</div>
+                  <div className={`${styles.multiColumnItemValue}`}>
+                    <ParsedBodyViewer parsedBody={parsedBody} cellHex={inCellHex} />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {result.emulatorVersion && (
         <div className={styles.labeledSectionRow}>

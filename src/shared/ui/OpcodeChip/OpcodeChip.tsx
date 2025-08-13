@@ -5,12 +5,14 @@ import styles from "./OpcodeChip.module.css"
 interface OpcodeChipProps {
   readonly opcode?: number
   readonly abiName?: string
+  readonly showOpcode?: boolean
 }
 
-export const OpcodeChip: React.FC<OpcodeChipProps> = ({opcode, abiName}) => {
+export const OpcodeChip: React.FC<OpcodeChipProps> = ({opcode, abiName, showOpcode = false}) => {
   const [isCopied, setIsCopied] = useState(false)
 
   const displayText = abiName ?? (opcode ? `0x${opcode.toString(16)}` : "Empty")
+  const displaySubText = abiName && showOpcode && opcode ? `0x${opcode.toString(16)}` : undefined
   const copyValue = opcode ? `0x${opcode.toString(16)}` : ""
 
   const handleCopy = useCallback(
@@ -38,6 +40,7 @@ export const OpcodeChip: React.FC<OpcodeChipProps> = ({opcode, abiName}) => {
   return (
     <div className={styles.opcodeChip}>
       <span className={styles.opcodeText}>{displayText}</span>
+      {displaySubText && <span className={styles.opcodeSubText}>{"· " + displaySubText}</span>}
       {copyValue && (
         <button
           className={styles.copyButton}
