@@ -14,6 +14,8 @@ import {ExitCodeChip} from "@features/common/ui/ExitCodeChip/ExitCodeChip.tsx"
 import {OpcodeChip} from "@shared/ui/OpcodeChip/OpcodeChip.tsx"
 
 import {ParsedBodyViewer} from "@features/txTrace/ui/ParsedBodyViewer"
+import {ActionsSummary} from "@app/pages/SandboxPage/components/TransactionShortInfo/ActionsSummary"
+import type {ContractData} from "@features/sandbox/lib/contract"
 
 import styles from "./TransactionDetailsTable.module.css"
 
@@ -242,6 +244,19 @@ const TransactionDetailsTable: React.FC<TransactionDetailsTableProps> = ({result
           </div>
         </div>
       </div>
+
+      {tx.actions.length > 0 && (
+        <div className={styles.labeledSectionRow}>
+          <div className={styles.labeledSectionTitle}>Out Actions</div>
+          <div className={styles.labeledSectionContent}>
+            <ActionsSummary
+              actions={tx.actions}
+              contracts={new Map<string, ContractData>()}
+              contractAddress={formatAddress(result.inMsg.contract)}
+            />
+          </div>
+        </div>
+      )}
 
       {(result.inMsg.opcode || parsedBody) && (
         <div className={styles.labeledSectionRow}>
