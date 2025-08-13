@@ -102,7 +102,7 @@ const TransactionDetailsTable: React.FC<TransactionDetailsTableProps> = ({result
         <div className={`${styles.detailValue} ${styles.numberValue}`}>{String(tx.lt)}</div>
       </div>
 
-      {result.inMsg.sender && (
+      {result.inMsg.opcode && (
         <div className={styles.labeledSectionRow}>
           <div className={styles.labeledSectionTitle}>Message Data</div>
           <div className={styles.labeledSectionContent}>
