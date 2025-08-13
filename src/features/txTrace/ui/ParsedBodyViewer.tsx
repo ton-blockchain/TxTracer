@@ -7,10 +7,10 @@ import {CopyButton} from "@shared/CopyButton/CopyButton"
 
 import styles from "./ParsedBodyViewer.module.css"
 
-type ParsedBodyViewerProps = Readonly<{
-  parsedBody: ParsedInternal
-  cellHex?: string
-}>
+interface ParsedBodyViewerProps {
+  readonly parsedBody: ParsedInternal
+  readonly cellHex?: string
+}
 
 type JsonLike =
   | string
