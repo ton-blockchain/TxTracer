@@ -78,7 +78,6 @@ export const CopyButton: React.FC<{
         <Icon svg={isCopied ? checkIconSvg : copyIconSvg} />
       </button>
 
-      {/* Live region for screen reader announcements */}
       <div className="sr-only" aria-live="polite" aria-atomic="true">
         {isCopied && "Copied to clipboard"}
       </div>
