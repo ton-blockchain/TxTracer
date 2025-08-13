@@ -154,7 +154,7 @@ function PlaygroundPage() {
     clearError: clearCompilationError,
   } = useFuncCompilation()
 
-  const sourceMap = funcResult?.funcSourceMap
+  const sourceMap = funcResult?.sourceMap
 
   const {
     funcHighlightGroups,

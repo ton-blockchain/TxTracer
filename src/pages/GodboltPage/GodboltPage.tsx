@@ -1,4 +1,4 @@
-import React, {Suspense, useCallback, useEffect, useMemo, useRef, useState} from "react"
+import React, {Suspense, useCallback, useEffect, useRef, useState} from "react"
 
 import {Allotment} from "allotment"
 import "allotment/dist/style.css"
@@ -205,12 +205,12 @@ function GodboltPage() {
   const error = language === "func" ? func.error : tolk.error
   const errorMarkers = language === "func" ? func.errorMarkers : tolk.errorMarkers
 
-  const sourceMap = useMemo(() => {
-    if (result?.lang === "func" && result?.funcSourceMap) {
-      return result.funcSourceMap
+  const sourceMap = (() => {
+    if (result?.lang === "func" && result?.sourceMap) {
+      return result.sourceMap
     }
     return undefined
-  }, [result])
+  })()
 
   const {
     funcHighlightGroups,
