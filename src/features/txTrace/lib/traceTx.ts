@@ -1,5 +1,5 @@
-import {retrace, retraceBaseTx} from "txtracer-core-test-dev"
-import type {TraceResult} from "txtracer-core-test-dev/dist/types"
+import {retrace, retraceBaseTx} from "txtracer-core"
+import type {TraceResult} from "txtracer-core/dist/types"
 import {compileCellWithMapping, decompileCell} from "ton-assembly/dist/runtime/instr"
 import {
   createMappingInfo,
