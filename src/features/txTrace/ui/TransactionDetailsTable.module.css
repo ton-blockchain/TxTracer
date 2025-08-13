@@ -141,11 +141,16 @@
   display: block;
 }
 
+.multiColumnRow:first-child {
+  margin-top: 0;
+}
+
 .multiColumnRow {
   display: flex;
   flex-wrap: nowrap;
 
   align-items: flex-start;
+  margin-top: var(--spacing-sm);
 }
 
 .multiColumnItem {

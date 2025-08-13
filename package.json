@@ -26,6 +26,7 @@
     "@ton/sandbox": "^0.36.0",
     "@ton/test-utils": "^0.7.0",
     "@ton/tolk-js": "^1.0.0",
+    "@truecarry/tlb-abi": "^0.2.0",
     "@types/d3": "^7.4.3",
     "@xyflow/react": "^12.3.2",
     "allotment": "^1.20.4",
@@ -41,7 +42,7 @@
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.6.0",
     "ton-assembly": "0.2.2",
-    "txtracer-core-test-dev": "^0.1.5"
+    "txtracer-core": "^0.1.1"
   },
   "devDependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
