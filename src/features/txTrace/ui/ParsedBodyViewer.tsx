@@ -12,6 +12,61 @@ interface ParsedBodyViewerProps {
   readonly cellHex?: string
 }
 
+export const ParsedBodyViewer: React.FC<ParsedBodyViewerProps> = ({parsedBody, cellHex}) => {
+  const [mode, setMode] = useState<"json" | "yaml">("yaml")
+
+  const content = useMemo(() => {
+    const sanitized = sanitizeObject(parsedBody.data)
+    return mode === "json" ? JSON.stringify(sanitized, null, 2) : toYaml(sanitized)
+  }, [mode, parsedBody.data])
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <div className={styles.tabs} role="tablist" aria-label="Data format">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={mode === "yaml"}
+            className={`${styles.tabButton} ${mode === "yaml" ? styles.tabButtonActive : ""}`}
+            onClick={() => setMode("yaml")}
+          >
+            YAML
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={mode === "json"}
+            className={`${styles.tabButton} ${mode === "json" ? styles.tabButtonActive : ""}`}
+            onClick={() => setMode("json")}
+          >
+            JSON
+          </button>
+        </div>
+        <div className={styles.actions}>
+          <span className={styles.copyAction} role="group">
+            <span className={styles.copyText}>{mode === "json" ? "JSON" : "YAML"}</span>
+            <CopyButton
+              value={content}
+              title={mode === "json" ? "Copy JSON" : "Copy YAML"}
+              className={styles.copyButton}
+            />
+          </span>
+          {cellHex && (
+            <span className={styles.copyAction} role="group">
+              <span className={styles.copyText}>Raw hex</span>
+              <CopyButton value={cellHex} title="Copy Raw" className={styles.copyButton} />
+            </span>
+          )}
+        </div>
+      </div>
+      <pre className={styles.codeBlock} data-testid="parsed-body-viewer">
+        {content}
+      </pre>
+    </div>
+  )
+}
+
 type JsonLike =
   | string
   | number
@@ -89,59 +144,4 @@ function formatInlineOrBlock(value: unknown, indent: number): string {
     return prefix + block
   }
   return toYaml(value, 0)
-}
-
-export const ParsedBodyViewer: React.FC<ParsedBodyViewerProps> = ({parsedBody, cellHex}) => {
-  const [mode, setMode] = useState<"json" | "yaml">("yaml")
-
-  const content = useMemo(() => {
-    const sanitized = sanitizeObject(parsedBody.data)
-    return mode === "json" ? JSON.stringify(sanitized, null, 2) : toYaml(sanitized)
-  }, [mode, parsedBody.data])
-
-  return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles.tabs} role="tablist" aria-label="Data format">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={mode === "yaml"}
-            className={`${styles.tabButton} ${mode === "yaml" ? styles.tabButtonActive : ""}`}
-            onClick={() => setMode("yaml")}
-          >
-            YAML
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={mode === "json"}
-            className={`${styles.tabButton} ${mode === "json" ? styles.tabButtonActive : ""}`}
-            onClick={() => setMode("json")}
-          >
-            JSON
-          </button>
-        </div>
-        <div className={styles.actions}>
-          <span className={styles.copyAction} role="group">
-            <span className={styles.copyText}>{mode === "json" ? "JSON" : "YAML"}</span>
-            <CopyButton
-              value={content}
-              title={mode === "json" ? "Copy JSON" : "Copy YAML"}
-              className={styles.copyButton}
-            />
-          </span>
-          {cellHex && (
-            <span className={styles.copyAction} role="group">
-              <span className={styles.copyText}>Raw hex</span>
-              <CopyButton value={cellHex} title="Copy Raw" className={styles.copyButton} />
-            </span>
-          )}
-        </div>
-      </div>
-      <pre className={styles.codeBlock} data-testid="parsed-body-viewer">
-        {content}
-      </pre>
-    </div>
-  )
 }
