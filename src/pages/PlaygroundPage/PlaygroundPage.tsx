@@ -1,7 +1,7 @@
 import React, {Suspense, useCallback, useEffect, useMemo, useRef, useState} from "react"
 import type {StackElement} from "ton-assembly/dist/trace"
 import type * as monaco from "monaco-editor"
-import {trace, logs} from "ton-assembly"
+import {logs} from "ton-assembly"
 
 import InlineLoader from "@shared/ui/InlineLoader"
 import TraceSidePanel from "@shared/ui/TraceSidePanel"
@@ -154,17 +154,7 @@ function PlaygroundPage() {
     clearError: clearCompilationError,
   } = useFuncCompilation()
 
-  const sourceMap = useMemo(() => {
-    if (funcResult?.funcSourceMap) {
-      try {
-        return trace.loadFuncMapping(funcResult.funcSourceMap)
-      } catch (e) {
-        console.error("Failed to parse source map:", e as Error)
-        return undefined
-      }
-    }
-    return undefined
-  }, [funcResult?.funcSourceMap])
+  const sourceMap = funcResult?.funcSourceMap
 
   const {
     funcHighlightGroups,

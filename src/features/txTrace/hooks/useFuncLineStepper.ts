@@ -6,7 +6,7 @@ import type {UseTraceStepperReturn} from "./useTraceStepper"
 export interface CompilationResult {
   readonly mapping?: Map<number, trace.InstructionInfo[]>
   readonly assembly?: string
-  readonly funcSourceMap?: string
+  readonly funcSourceMap?: trace.FuncMapping
 }
 
 export interface UseFuncLineStepperOptions {

@@ -5,8 +5,6 @@ import "allotment/dist/style.css"
 
 import type * as monaco from "monaco-editor"
 
-import {trace} from "ton-assembly"
-
 import InlineLoader from "@shared/ui/InlineLoader"
 import PageHeader from "@shared/ui/PageHeader"
 import Tutorial, {useTutorial} from "@shared/ui/Tutorial"
@@ -209,12 +207,7 @@ function GodboltPage() {
 
   const sourceMap = useMemo(() => {
     if (result?.lang === "func" && result?.funcSourceMap) {
-      try {
-        return trace.loadFuncMapping(result.funcSourceMap)
-      } catch (e) {
-        console.error("Failed to parse source map:", e)
-        return undefined
-      }
+      return result.funcSourceMap
     }
     return undefined
   }, [result])
