@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns:
     80px
-    240px
+    250px
     100px
     minmax(200px, 2.5fr)
     minmax(250px, 1fr);
@@ -159,6 +159,14 @@
 }
 
 .descriptionColumn {
+}
+
+.descriptionColumn code {
+  font-size: var(--font-size-sm);
+  background-color: var(--color-background-secondary);
+  padding: var(--spacing-xss) var(--spacing-xs);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--border-radius-sm);
 }
 
 .stackColumn {

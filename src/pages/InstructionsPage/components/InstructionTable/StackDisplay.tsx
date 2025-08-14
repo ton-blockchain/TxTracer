@@ -65,6 +65,13 @@ const getPillDisplayProps = (entry: StackEntry): PillProps => {
   }
 }
 
+function getType(item: PillProps) {
+  if (item.type === "Continuation") {
+    return "Cont"
+  }
+  return item.type
+}
+
 export const renderStackItemPill = (item: PillProps, key: string | number) => {
   const itemType = item.type.charAt(0).toUpperCase() + item.type.slice(1).toLowerCase()
   const displayName = item.name ?? (item.value !== undefined ? String(item.value) : "unnamed")
@@ -72,7 +79,7 @@ export const renderStackItemPill = (item: PillProps, key: string | number) => {
   const pillStyle = styles[typeClass] ?? styles.stackItemAny
   return (
     <span key={key} className={`${styles.stackItem} ${styles.stackPillVertical} ${pillStyle}`}>
-      {displayName}: {item.type}
+      {displayName}: {getType(item)}
     </span>
   )
 }

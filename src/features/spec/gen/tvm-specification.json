@@ -3877,7 +3877,7 @@
         }
       ],
       "signature": {
-        "stack_string": "child:Builder b:Builder -> b2:Builder",
+        "stack_string": "child:Builder b:Builder -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -3896,7 +3896,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -3927,7 +3927,7 @@
         "prefix_str": "CF13"
       },
       "signature": {
-        "stack_string": "from:Builder to:Builder -> b2:Builder",
+        "stack_string": "from:Builder to:Builder -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -3946,7 +3946,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -3977,7 +3977,7 @@
         "prefix_str": "CF14"
       },
       "signature": {
-        "stack_string": "b:Builder c:Cell -> b2:Builder",
+        "stack_string": "b:Builder c:Cell -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -3996,7 +3996,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -4027,7 +4027,7 @@
         "prefix_str": "CF15"
       },
       "signature": {
-        "stack_string": "b:Builder child:Builder -> b2:Builder",
+        "stack_string": "b:Builder child:Builder -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -4046,7 +4046,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -4077,7 +4077,7 @@
         "prefix_str": "CF16"
       },
       "signature": {
-        "stack_string": "b:Builder s:Slice -> b2:Builder",
+        "stack_string": "b:Builder s:Slice -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -4096,7 +4096,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -4177,7 +4177,7 @@
         "prefix_str": "CF18"
       },
       "signature": {
-        "stack_string": "c:Cell b:Builder -> (b2:Builder 0)|(c:Cell b:Builder -1) status:Int",
+        "stack_string": "c:Cell b:Builder -> (b':Builder 0)|(c:Cell b:Builder -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -4203,7 +4203,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "b2",
+                      "name": "b'",
                       "value_types": ["Builder"]
                     }
                   ]
@@ -4258,12 +4258,12 @@
         "prefix_str": "CF19"
       },
       "signature": {
-        "stack_string": "b2:Builder b:Builder -> (b3:Builder 0)|(b2:Builder b:Builder -1) status:Int",
+        "stack_string": "b':Builder b:Builder -> (b3:Builder 0)|(b':Builder b:Builder -1) status:Int",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             },
             {
@@ -4294,7 +4294,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "b2",
+                      "name": "b'",
                       "value_types": ["Builder"]
                     },
                     {
@@ -4339,7 +4339,7 @@
         "prefix_str": "CF1A"
       },
       "signature": {
-        "stack_string": "s:Slice b:Builder -> (b2:Builder 0)|(s:Slice b:Builder -1) status:Int",
+        "stack_string": "s:Slice b:Builder -> (b':Builder 0)|(s:Slice b:Builder -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -4365,7 +4365,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "b2",
+                      "name": "b'",
                       "value_types": ["Builder"]
                     }
                   ]
@@ -4420,12 +4420,12 @@
         "prefix_str": "CF1B"
       },
       "signature": {
-        "stack_string": "b2:Builder b:Builder -> (b3:Builder 0)|(b2:Builder b:Builder -1) status:Int",
+        "stack_string": "b':Builder b:Builder -> (b3:Builder 0)|(b':Builder b:Builder -1) status:Int",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             },
             {
@@ -4456,7 +4456,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "b2",
+                      "name": "b'",
                       "value_types": ["Builder"]
                     },
                     {
@@ -4501,7 +4501,7 @@
         "prefix_str": "CF1C"
       },
       "signature": {
-        "stack_string": "b:Builder c:Cell -> (b2:Builder 0)|(b:Builder c:Cell -1) status:Int",
+        "stack_string": "b:Builder c:Cell -> (b':Builder 0)|(b:Builder c:Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -4527,7 +4527,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "b2",
+                      "name": "b'",
                       "value_types": ["Builder"]
                     }
                   ]
@@ -4582,12 +4582,12 @@
         "prefix_str": "CF1D"
       },
       "signature": {
-        "stack_string": "b2:Builder b:Builder -> (b3:Builder 0)|(b2:Builder b:Builder -1) status:Int",
+        "stack_string": "b':Builder b:Builder -> (b3:Builder 0)|(b':Builder b:Builder -1) status:Int",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             },
             {
@@ -4618,7 +4618,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "b2",
+                      "name": "b'",
                       "value_types": ["Builder"]
                     },
                     {
@@ -4744,7 +4744,7 @@
         "prefix_str": "CF1F"
       },
       "signature": {
-        "stack_string": "b:Builder b2:Builder -> (b3:Builder 0)|(b:Builder b2:Builder -1) status:Int",
+        "stack_string": "b:Builder b':Builder -> (b3:Builder 0)|(b:Builder b':Builder -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -4754,7 +4754,7 @@
             },
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -4785,7 +4785,7 @@
                     },
                     {
                       "type": "simple",
-                      "name": "b2",
+                      "name": "b'",
                       "value_types": ["Builder"]
                     }
                   ]
@@ -5398,7 +5398,7 @@
         "prefix_str": "CF40"
       },
       "signature": {
-        "stack_string": "b:Builder n:Int -> b2:Builder",
+        "stack_string": "b:Builder n:Int -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -5417,7 +5417,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -5448,7 +5448,7 @@
         "prefix_str": "CF41"
       },
       "signature": {
-        "stack_string": "b:Builder n:Int -> b2:Builder",
+        "stack_string": "b:Builder n:Int -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -5467,7 +5467,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -5498,7 +5498,7 @@
         "prefix_str": "CF42"
       },
       "signature": {
-        "stack_string": "b:Builder n:Int x:Int -> b2:Builder",
+        "stack_string": "b:Builder n:Int x:Int -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -5522,7 +5522,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -5584,7 +5584,7 @@
       "category": "cell",
       "subCategory": "cell_deserialize",
       "description": {
-        "short": "Removes a _Slice_ `s` from the stack.",
+        "short": "Removes a _Slice_ `s` from the stack. Throws an exception if it is not empty.",
         "exit_codes": [
           {
             "errno": "9",
@@ -5644,7 +5644,7 @@
         "prefix_str": "D4"
       },
       "signature": {
-        "stack_string": "s:Slice -> c:Cell s2:Slice",
+        "stack_string": "s:Slice -> c:Cell s':Slice",
         "inputs": {
           "stack": [
             {
@@ -5663,7 +5663,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -5700,7 +5700,7 @@
         }
       ],
       "signature": {
-        "stack_string": "s:Slice -> s2:Slice s3:Slice",
+        "stack_string": "s:Slice -> s':Slice loaded:Slice",
         "inputs": {
           "stack": [
             {
@@ -5714,12 +5714,12 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             },
             {
               "type": "simple",
-              "name": "s3",
+              "name": "loaded",
               "value_types": ["Slice"]
             }
           ]
@@ -5731,7 +5731,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns the first `0 <= l <= 1023` bits of `s`. It is equivalent to `PLDSLICEX`.",
+        "long": "Returns the first `0 <= length <= 1023` bits of `s`. It is equivalent to `PLDSLICEX`.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -5750,7 +5750,7 @@
         "prefix_str": "D720"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int -> s2:Slice",
+        "stack_string": "s:Slice length:Int -> s2:Slice",
         "inputs": {
           "stack": [
             {
@@ -5760,7 +5760,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -5781,7 +5781,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns all but the first `0 <= l <= 1023` bits of `s`. It is equivalent to `LDSLICEX` `NIP`.",
+        "long": "Returns all but the first `0 <= length <= 1023` bits of `s`. It is equivalent to `LDSLICEX` `NIP`.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -5800,7 +5800,7 @@
         "prefix_str": "D721"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int -> s2:Slice",
+        "stack_string": "s:Slice length:Int -> s2:Slice",
         "inputs": {
           "stack": [
             {
@@ -5810,7 +5810,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -5831,7 +5831,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns the last `0 <= l <= 1023` bits of `s`.",
+        "long": "Returns the last `0 <= length <= 1023` bits of `s`.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -5850,7 +5850,7 @@
         "prefix_str": "D722"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int -> s2:Slice",
+        "stack_string": "s:Slice length:Int -> s2:Slice",
         "inputs": {
           "stack": [
             {
@@ -5860,7 +5860,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -5881,7 +5881,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns all but the last `0 <= l <= 1023` bits of `s`.",
+        "long": "Returns all but the last `0 <= length <= 1023` bits of `s`.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -5900,7 +5900,7 @@
         "prefix_str": "D723"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int -> s2:Slice",
+        "stack_string": "s:Slice length:Int -> s2:Slice",
         "inputs": {
           "stack": [
             {
@@ -5910,7 +5910,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -5931,7 +5931,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns `0 <= l' <= 1023` bits of `s` starting from offset `0 <= l <= 1023`, thus extracting a bit substring out of the data of `s`.",
+        "long": "Returns `0 <= l' <= 1023` bits of `s` starting from offset `0 <= length <= 1023`, thus extracting a bit substring out of the data of `s`.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -5950,7 +5950,7 @@
         "prefix_str": "D724"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int l2:Int -> s2:Slice",
+        "stack_string": "s:Slice length:Int l2:Int -> s2:Slice",
         "inputs": {
           "stack": [
             {
@@ -5960,7 +5960,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             },
             {
@@ -5986,7 +5986,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns the first `0 <= l <= 1023` bits and first `0 <= r <= 4` references of `s`.",
+        "long": "Returns the first `0 <= length <= 1023` bits and first `0 <= r <= 4` references of `s`.",
         "operands": []
       },
       "layout": {
@@ -6004,7 +6004,7 @@
         "prefix_str": "D730"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int r:Int -> s2:Slice",
+        "stack_string": "s:Slice length:Int r:Int -> s2:Slice",
         "inputs": {
           "stack": [
             {
@@ -6014,7 +6014,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             },
             {
@@ -6040,7 +6040,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns all but the first `l` bits of `s` and `r` references of `s`.",
+        "long": "Returns all but the first `length` bits of `s` and `r` references of `s`.",
         "operands": []
       },
       "layout": {
@@ -6058,7 +6058,7 @@
         "prefix_str": "D731"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int r:Int -> s2:Slice",
+        "stack_string": "s:Slice length:Int r:Int -> s2:Slice",
         "inputs": {
           "stack": [
             {
@@ -6068,7 +6068,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             },
             {
@@ -6094,7 +6094,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns the last `0 <= l <= 1023` data bits and last `0 <= r <= 4` references of `s`.",
+        "long": "Returns the last `0 <= length <= 1023` data bits and last `0 <= r <= 4` references of `s`.",
         "operands": []
       },
       "layout": {
@@ -6112,7 +6112,7 @@
         "prefix_str": "D732"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int r:Int -> s2:Slice",
+        "stack_string": "s:Slice length:Int r:Int -> s2:Slice",
         "inputs": {
           "stack": [
             {
@@ -6122,7 +6122,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             },
             {
@@ -6148,7 +6148,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns all but the last `l` bits of `s` and `r` references of `s`.",
+        "long": "Returns all but the last `length` bits of `s` and `r` references of `s`.",
         "operands": []
       },
       "layout": {
@@ -6166,7 +6166,7 @@
         "prefix_str": "D733"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int r:Int -> s2:Slice",
+        "stack_string": "s:Slice length:Int r:Int -> s2:Slice",
         "inputs": {
           "stack": [
             {
@@ -6176,7 +6176,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             },
             {
@@ -6202,7 +6202,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns `0 <= l' <= 1023` bits and `0 <= r' <= 4` references from _Slice_ `s`, after skipping the first `0 <= l <= 1023` bits and first `0 <= r <= 4` references.",
+        "long": "Returns `0 <= l' <= 1023` bits and `0 <= r' <= 4` references from _Slice_ `s`, after skipping the first `0 <= length <= 1023` bits and first `0 <= r <= 4` references.",
         "operands": []
       },
       "layout": {
@@ -6220,7 +6220,7 @@
         "prefix_str": "D734"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int r:Int l2:Int r2:Int -> s2:Slice",
+        "stack_string": "s:Slice length:Int r:Int l2:Int r2:Int -> s2:Slice",
         "inputs": {
           "stack": [
             {
@@ -6230,7 +6230,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             },
             {
@@ -6266,7 +6266,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Splits the first `0 <= l <= 1023` data bits and first `0 <= r <= 4` references from `s` into `s'`, returning the remainder of `s` as `s''`.",
+        "long": "Splits the first `0 <= length <= 1023` data bits and first `0 <= r <= 4` references from `s` into `s'`, returning the remainder of `s` as `s''`.",
         "operands": []
       },
       "layout": {
@@ -6573,7 +6573,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Checks whether there are at least `l` data bits in _Slice_ `s`. If this is not the case, throws a cell deserialisation (i.e., cell underflow) exception.",
+        "long": "Checks whether there are at least `length` data bits in _Slice_ `s`. If this is not the case, throws a cell deserialisation (i.e., cell underflow) exception.",
         "operands": []
       },
       "layout": {
@@ -6597,7 +6597,7 @@
         }
       ],
       "signature": {
-        "stack_string": "s:Slice l:Int -> ∅",
+        "stack_string": "s:Slice length:Int -> ∅",
         "inputs": {
           "stack": [
             {
@@ -6607,7 +6607,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -6665,7 +6665,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Checks whether there are at least `l` data bits and `r` references in _Slice_ `s`.",
+        "long": "Checks whether there are at least `length` data bits and `r` references in _Slice_ `s`.",
         "operands": []
       },
       "layout": {
@@ -6689,7 +6689,7 @@
         }
       ],
       "signature": {
-        "stack_string": "s:Slice l:Int r:Int -> ∅",
+        "stack_string": "s:Slice length:Int r:Int -> ∅",
         "inputs": {
           "stack": [
             {
@@ -6699,7 +6699,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             },
             {
@@ -6716,7 +6716,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Checks whether there are at least `l` data bits in _Slice_ `s`.",
+        "long": "Checks whether there are at least `length` data bits in _Slice_ `s`.",
         "operands": []
       },
       "layout": {
@@ -6734,7 +6734,7 @@
         "prefix_str": "D745"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int -> result:Int",
+        "stack_string": "s:Slice length:Int -> result:Int",
         "inputs": {
           "stack": [
             {
@@ -6744,7 +6744,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -6814,7 +6814,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Checks whether there are at least `l` data bits and `r` references in _Slice_ `s`.",
+        "long": "Checks whether there are at least `length` data bits and `r` references in _Slice_ `s`.",
         "operands": []
       },
       "layout": {
@@ -6832,7 +6832,7 @@
         "prefix_str": "D747"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int r:Int -> result:Int",
+        "stack_string": "s:Slice length:Int r:Int -> result:Int",
         "inputs": {
           "stack": [
             {
@@ -6842,7 +6842,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             },
             {
@@ -6936,7 +6936,7 @@
         "prefix_str": "D749"
       },
       "signature": {
-        "stack_string": "s:Slice -> l:Int",
+        "stack_string": "s:Slice -> length:Int",
         "inputs": {
           "stack": [
             {
@@ -6950,7 +6950,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -7024,7 +7024,7 @@
         "prefix_str": "D74B"
       },
       "signature": {
-        "stack_string": "s:Slice -> l:Int r:Int",
+        "stack_string": "s:Slice -> length:Int r:Int",
         "inputs": {
           "stack": [
             {
@@ -7038,7 +7038,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             },
             {
@@ -7520,7 +7520,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Jumps_, or transfers control, to continuation `c`.\nThe remainder of the previous current continuation `cc` is discarded.",
+        "long": "_Jumps_, or transfers control, to continuation `c`.\nThe remainder of the previous current continuation `c` is discarded.",
         "operands": []
       },
       "layout": {
@@ -7555,7 +7555,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Returns_ to the continuation at `c0`. The remainder of the current continuation `cc` is discarded.\nApproximately equivalent to `c0 PUSHCTR` `JMPX`.",
+        "long": "_Returns_ to the continuation at `c0`. The remainder of the current continuation `c` is discarded.\nApproximately equivalent to `c0 PUSHCTR` `JMPX`.",
         "operands": []
       },
       "layout": {
@@ -7656,7 +7656,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Call with current continuation_, transfers control to `c`, pushing the old value of `cc` into `c`'s stack (instead of discarding it or writing it into new `c0`).",
+        "long": "_Call with current continuation_, transfers control to `c`, pushing the old value of `c` into `c`'s stack (instead of discarding it or writing it into new `c0`).",
         "operands": []
       },
       "layout": {
@@ -7691,7 +7691,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Similar to `CALLCC`, but the remainder of the current continuation (the old value of `cc`) is converted into a _Slice_ before pushing it into the stack of `c`.",
+        "long": "Similar to `CALLCC`, but the remainder of the current continuation (the old value of `c`) is converted into a _Slice_ before pushing it into the stack of `c`.",
         "operands": []
       },
       "layout": {
@@ -8014,7 +8014,7 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Performs a `RET`, but only if integer `f` is non-zero. If `f` is a `NaN`, throws an integer overflow exception.",
+        "long": "Performs a `RET`, but only if integer `cond` is non-zero. If `cond` is a `NaN`, throws an integer overflow exception.",
         "operands": []
       },
       "layout": {
@@ -8032,12 +8032,12 @@
         "prefix_str": "DC"
       },
       "signature": {
-        "stack_string": "f:Int -> ∅",
+        "stack_string": "cond:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             }
           ]
@@ -8049,7 +8049,7 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Performs a `RET`, but only if integer `f` is zero.",
+        "long": "Performs a `RET`, but only if integer `cond` is zero.",
         "operands": []
       },
       "layout": {
@@ -8067,12 +8067,12 @@
         "prefix_str": "DD"
       },
       "signature": {
-        "stack_string": "f:Int -> ∅",
+        "stack_string": "cond:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             }
           ]
@@ -8084,7 +8084,7 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Performs `EXECUTE` for `c` (i.e., _executes_ `c`), but only if integer `f` is non-zero. Otherwise simply discards both values.",
+        "long": "Performs `EXECUTE` for `body` (i.e., _executes_ `body`), but only if integer `cond` is non-zero. Otherwise simply discards both values.",
         "operands": []
       },
       "layout": {
@@ -8102,17 +8102,17 @@
         "prefix_str": "DE"
       },
       "signature": {
-        "stack_string": "f:Int c:Continuation -> ∅",
+        "stack_string": "cond:Int body:Continuation -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             },
             {
               "type": "simple",
-              "name": "c",
+              "name": "body",
               "value_types": ["Continuation"]
             }
           ]
@@ -8124,7 +8124,7 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Executes continuation `c`, but only if integer `f` is zero. Otherwise simply discards both values.",
+        "long": "Executes continuation `body`, but only if integer `cond` is zero. Otherwise simply discards both values.",
         "operands": []
       },
       "layout": {
@@ -8142,17 +8142,17 @@
         "prefix_str": "DF"
       },
       "signature": {
-        "stack_string": "f:Int c:Continuation -> ∅",
+        "stack_string": "cond:Int body:Continuation -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             },
             {
               "type": "simple",
-              "name": "c",
+              "name": "body",
               "value_types": ["Continuation"]
             }
           ]
@@ -8163,7 +8163,7 @@
       "category": "continuation",
       "subCategory": "continuation_cond",
       "description": {
-        "long": "Transfers control to `c` if `f` is non-zero. The remainder of the current continuation is discarded which means that after `c` completes, control will not return to instruction immediately following the `IFJMP`. Instead, it will return to the instruction immediately following the instruction that started current continuation. If such continuation is not present, the program will exit.",
+        "long": "Transfers control to `body` if `cond` is non-zero. The remainder of the current continuation is discarded which means that after `body` completes, control will not return to instruction immediately following the `IFJMP`. Instead, it will return to the instruction immediately following the instruction that started current continuation. If such continuation is not present, the program will exit.",
         "tags": ["control_flow"],
         "examples": [
           {
@@ -8208,17 +8208,17 @@
         "prefix_str": "E0"
       },
       "signature": {
-        "stack_string": "f:Int c:Continuation -> ∅",
+        "stack_string": "cond:Int body:Continuation -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             },
             {
               "type": "simple",
-              "name": "c",
+              "name": "body",
               "value_types": ["Continuation"]
             }
           ]
@@ -8230,7 +8230,7 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Jumps to `c` (similarly to `JMPX`), but only if `f` is zero.",
+        "long": "Jumps to `body` (similarly to `JMPX`), but only if `cond` is zero.",
         "operands": []
       },
       "layout": {
@@ -8248,17 +8248,17 @@
         "prefix_str": "E1"
       },
       "signature": {
-        "stack_string": "f:Int c:Continuation -> ∅",
+        "stack_string": "cond:Int body:Continuation -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             },
             {
               "type": "simple",
-              "name": "c",
+              "name": "body",
               "value_types": ["Continuation"]
             }
           ]
@@ -8270,8 +8270,14 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "If integer `f` is non-zero, executes `c`, otherwise executes `c'`. Equivalent to `CONDSELCHK` `EXECUTE`.",
-        "operands": []
+        "long": "If integer `cond` is non-zero, executes `body`, otherwise executes `else`",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["CONDSELCHK", "EXECUTE"]
+          }
+        ]
       },
       "layout": {
         "min": 14811136,
@@ -8288,22 +8294,22 @@
         "prefix_str": "E2"
       },
       "signature": {
-        "stack_string": "f:Int true:Continuation false:Continuation -> ∅",
+        "stack_string": "cond:Int body:Continuation else:Continuation -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             },
             {
               "type": "simple",
-              "name": "true",
+              "name": "body",
               "value_types": ["Continuation"]
             },
             {
               "type": "simple",
-              "name": "false",
+              "name": "else",
               "value_types": ["Continuation"]
             }
           ]
@@ -8333,12 +8339,12 @@
         "prefix_str": "E304"
       },
       "signature": {
-        "stack_string": "f:Int x:Any y:Any -> result:Any",
+        "stack_string": "cond:Int x:Any y:Any -> result:Any",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             },
             {
@@ -8384,12 +8390,12 @@
         "prefix_str": "E305"
       },
       "signature": {
-        "stack_string": "f:Int x:Any y:Any -> result:Any",
+        "stack_string": "cond:Int x:Any y:Any -> result:Any",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             },
             {
@@ -8417,7 +8423,7 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Performs `RETALT` if integer `f!=0`.",
+        "long": "Performs `RETALT` if integer `cond != 0`.",
         "operands": []
       },
       "layout": {
@@ -8435,12 +8441,12 @@
         "prefix_str": "E308"
       },
       "signature": {
-        "stack_string": "f:Int -> ∅",
+        "stack_string": "cond:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             }
           ]
@@ -8452,7 +8458,7 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Performs `RETALT` if integer `f=0`.",
+        "long": "Performs `RETALT` if integer `cond == 0`.",
         "operands": []
       },
       "layout": {
@@ -8470,12 +8476,12 @@
         "prefix_str": "E309"
       },
       "signature": {
-        "stack_string": "f:Int -> ∅",
+        "stack_string": "cond:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             }
           ]
@@ -8487,7 +8493,7 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Executes continuation `c` `n` times, if integer `n` is non-negative. If `n>=2^31` or `n<-2^31`, generates a range check exception.\nNotice that a `RET` inside the code of `c` works as a `continue`, not as a `break`. One should use either alternative (experimental) loops or alternative `RETALT` (along with a `SETEXITALT` before the loop) to `break` out of a loop.",
+        "long": "Executes continuation `body` `n` times, if integer `n` is non-negative. If `n >= 2^31` or `n < -2^31`, generates a range check exception.\nNotice that a `RET` inside the code of `body` works as a `continue`, not as a `break`. One should use either alternative (experimental) loops or alternative `RETALT` (along with a `SETEXITALT` before the loop) to `break` out of a loop.",
         "operands": []
       },
       "layout": {
@@ -8527,7 +8533,7 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Similar to `REPEAT`, but it is applied to the current continuation `cc`.",
+        "long": "Similar to `REPEAT`, but it is applied to the current continuation `c`.",
         "operands": []
       },
       "layout": {
@@ -8562,7 +8568,7 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Executes continuation `c`, then pops an integer `x` from the resulting stack. If `x` is zero, performs another iteration of this loop. The actual implementation of this primitive involves an extraordinary continuation `ec_until` with its arguments set to the body of the loop (continuation `c`) and the original current continuation `cc`. This extraordinary continuation is then saved into the savelist of `c` as `c.c0` and the modified `c` is then executed. The other loop primitives are implemented similarly with the aid of suitable extraordinary continuations.",
+        "long": "Executes continuation `c`, then pops an integer `x` from the resulting stack. If `x` is zero, performs another iteration of this loop. The actual implementation of this primitive involves an extraordinary continuation `ec_until` with its arguments set to the body of the loop (continuation `c`) and the original current continuation `c`. This extraordinary continuation is then saved into the savelist of `c` as `c.c0` and the modified `c` is then executed. The other loop primitives are implemented similarly with the aid of suitable extraordinary continuations.",
         "operands": []
       },
       "layout": {
@@ -8597,7 +8603,7 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Similar to `UNTIL`, but executes the current continuation `cc` in a loop. When the loop exit condition is satisfied, performs a `RET`.",
+        "long": "Similar to `UNTIL`, but executes the current continuation `c` in a loop. When the loop exit condition is satisfied, performs a `RET`.",
         "operands": []
       },
       "layout": {
@@ -8631,7 +8637,7 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Executes `c'` and pops an integer `x` from the resulting stack. If `x` is zero, exists the loop and transfers control to the original `cc`. If `x` is non-zero, executes `c`, and then begins a new iteration.",
+        "long": "Executes `c'` and pops an integer `x` from the resulting stack. If `x` is zero, exists the loop and transfers control to the original `c`. If `x` is non-zero, executes `c`, and then begins a new iteration.",
         "operands": []
       },
       "layout": {
@@ -8671,7 +8677,7 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Similar to `WHILE`, but uses the current continuation `cc` as the loop body.",
+        "long": "Similar to `WHILE`, but uses the current continuation `c` as the loop body.",
         "operands": []
       },
       "layout": {
@@ -8741,7 +8747,7 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Similar to `AGAIN`, but performed with respect to the current continuation `cc`.",
+        "long": "Similar to `AGAIN`, but performed with respect to the current continuation `c`.",
         "operands": []
       },
       "layout": {
@@ -8775,7 +8781,7 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Similar to `REPEAT`, but also sets `c1` to the original `cc` after saving the old value of `c1` into the savelist of the original `cc`. In this way `RETALT` could be used to break out of the loop body.",
+        "long": "Similar to `REPEAT`, but also sets `c1` to the original `c` after saving the old value of `c1` into the savelist of the original `c`. In this way `RETALT` could be used to break out of the loop body.",
         "operands": []
       },
       "layout": {
@@ -10128,7 +10134,7 @@
         "prefix_str": "F400"
       },
       "signature": {
-        "stack_string": "D:Cell|Null b:Builder -> b2:Builder",
+        "stack_string": "D:Cell|Null b:Builder -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -10147,7 +10153,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -10203,7 +10209,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Loads (parses) a (_Slice_-represented) dictionary `s'` from _Slice_ `s`, and returns the remainder of `s` as `s''`.\nThis is a ''split function'' for all `HashmapE(n,X)` dictionary types.",
+        "long": "Loads (parses) a (_Slice_-represented) dictionary `s'` from _Slice_ `s`, and returns the remainder of `s` as `s'`.\nThis is a 'split function' for all `HashmapE(n,X)` dictionary types.",
         "operands": []
       },
       "layout": {
@@ -10221,7 +10227,7 @@
         "prefix_str": "F402"
       },
       "signature": {
-        "stack_string": "s:Slice -> D:Slice s3:Slice",
+        "stack_string": "s:Slice -> D:Slice s':Slice",
         "inputs": {
           "stack": [
             {
@@ -10240,7 +10246,7 @@
             },
             {
               "type": "simple",
-              "name": "s3",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -13163,8 +13169,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Returns the `k`-th global variable for `0 <= k < 255`.\nEquivalent to `c7 PUSHCTR` `SWAP` `INDEXVARQ`.",
-        "operands": []
+        "long": "Returns the `k`-th (from the stack) global variable.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["PUSHCTR c7", "SWAP", "INDEXVARQ"]
+          }
+        ]
       },
       "layout": {
         "min": 16269312,
@@ -13212,8 +13224,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Assigns `x` to the `k`-th global variable for `0 <= k < 255`.\nEquivalent to `c7 PUSHCTR` `ROTREV` `SETINDEXVARQ` `c7 POPCTR`.",
-        "operands": []
+        "long": "Assigns `x` from the stack to the `k`-th (from the stack) global variable.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["PUSHCTR c7", "ROTREV", "SETINDEXVARQ", "POPCTR c7"]
+          }
+        ]
       },
       "layout": {
         "min": 16277504,
@@ -16074,7 +16092,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads (deserializes) a `Gram` or `VarUInteger 16` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, followed by an `8l`-bit unsigned big-endian representation of `x`.\nThe net effect is approximately equivalent to `4 LDU` `SWAP` `3 LSHIFT#` `LDUX`.",
+        "long": "Loads (deserializes) a `Gram` or `VarUInteger 16` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 4-bit unsigned big-endian integer `length`, followed by an `8l`-bit unsigned big-endian representation of `x`.\nThe net effect is approximately equivalent to `4 LDU` `SWAP` `3 LSHIFT#` `LDUX`.",
         "tags": ["variable-size integer", "slice parsing"],
         "operands": []
       },
@@ -16174,7 +16192,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Stores (serializes) an _Integer_ `x` in the range `0...2^120-1` into _Builder_ `b`, and returns the resulting _Builder_ `b'`. The serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, which is the smallest integer `l>=0`, such that `x<2^(8l)`, followed by an `8l`-bit unsigned big-endian representation of `x`. If `x` does not belong to the supported range, a range check exception is thrown.",
+        "long": "Stores (serializes) an _Integer_ `x` in the range `0...2^120-1` into _Builder_ `b`, and returns the resulting _Builder_ `b'`. The serialization of `x` consists of a 4-bit unsigned big-endian integer `length`, which is the smallest integer `l>=0`, such that `x<2^(8l)`, followed by an `8l`-bit unsigned big-endian representation of `x`. If `x` does not belong to the supported range, a range check exception is thrown.",
         "tags": ["variable-size integer", "builder building"],
         "operands": []
       },
@@ -16274,7 +16292,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads (deserializes) a `VarUInteger 32` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 5-bit unsigned big-endian integer `l`, followed by an `8l`-bit unsigned big-endian representation of `x`.\nThe net effect is approximately equivalent to `4 LDU` `SWAP` `3 LSHIFT#` `LDUX`.",
+        "long": "Loads (deserializes) a `VarUInteger 32` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 5-bit unsigned big-endian integer `length`, followed by an `8l`-bit unsigned big-endian representation of `x`.\nThe net effect is approximately equivalent to `4 LDU` `SWAP` `3 LSHIFT#` `LDUX`.",
         "tags": ["variable-size integer", "slice parsing"],
         "operands": []
       },
@@ -16374,7 +16392,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Stores (serializes) an _Integer_ `x` in the range `0...2^248-1` into _Builder_ `b`, and returns the resulting _Builder_ `b'`. The serialization of `x` consists of a 5-bit unsigned big-endian integer `l`, which is the smallest integer `l>=0`, such that `x<2^(8l)`, followed by an `8l`-bit unsigned big-endian representation of `x`. If `x` does not belong to the supported range, a range check exception is thrown.",
+        "long": "Stores (serializes) an _Integer_ `x` in the range `0...2^248-1` into _Builder_ `b`, and returns the resulting _Builder_ `b'`. The serialization of `x` consists of a 5-bit unsigned big-endian integer `length`, which is the smallest integer `l>=0`, such that `x<2^(8l)`, followed by an `8l`-bit unsigned big-endian representation of `x`. If `x` does not belong to the supported range, a range check exception is thrown.",
         "tags": ["variable-size integer", "builder building"],
         "operands": []
       },
@@ -16474,7 +16492,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Loads from _Slice_ `s` the only prefix that is a valid `MsgAddress`, and returns both this prefix `s'` and the remainder `s''` of `s` as slices.",
+        "long": "Loads from _Slice_ `s` the only prefix that is a valid `MsgAddress`, and returns both this prefix `addr` and the remainder `s'` of `s` as slices.",
         "tags": ["address", "slice parsing"],
         "operands": []
       },
@@ -16493,7 +16511,7 @@
         "prefix_str": "FA40"
       },
       "signature": {
-        "stack_string": "s:Slice -> s2:Slice s3:Slice",
+        "stack_string": "s:Slice -> s':Slice addr:Slice",
         "inputs": {
           "stack": [
             {
@@ -16507,12 +16525,12 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             },
             {
               "type": "simple",
-              "name": "s3",
+              "name": "addr",
               "value_types": ["Slice"]
             }
           ]
@@ -16543,7 +16561,7 @@
         "prefix_str": "FA41"
       },
       "signature": {
-        "stack_string": "s:Slice -> (s:Slice 0)|(s2:Slice s3:Slice -1) status:Int",
+        "stack_string": "s:Slice -> (s:Slice 0)|(s':Slice addr:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -16574,12 +16592,12 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "s2",
+                      "name": "s'",
                       "value_types": ["Slice"]
                     },
                     {
                       "type": "simple",
-                      "name": "s3",
+                      "name": "addr",
                       "value_types": ["Slice"]
                     }
                   ]
@@ -16708,7 +16726,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Parses _Slice_ `s` containing a valid `MsgAddressInt` (usually a `msg_addr_std`), applies rewriting from the `anycast` (if present) to the same-length prefix of the address, and returns both the workchain `x` and the 256-bit address `y` as integers. If the address is not 256-bit, or if `s` is not a valid serialization of `MsgAddressInt`, throws a cell deserialization exception.",
+        "long": "Parses _Slice_ `s` containing a valid `MsgAddressInt` (usually a `msg_addr_std`), applies rewriting from the `anycast` (if present) to the same-length prefix of the address, and returns both the `workchain` and the 256-bit address `hash` as integers. If the address is not 256-bit, or if `s` is not a valid serialization of `MsgAddressInt`, throws a cell deserialization exception.",
         "operands": []
       },
       "layout": {
@@ -16726,7 +16744,7 @@
         "prefix_str": "FA44"
       },
       "signature": {
-        "stack_string": "s:Slice -> x:Int y:Int",
+        "stack_string": "s:Slice -> workchain:Int hash:Int",
         "inputs": {
           "stack": [
             {
@@ -16740,12 +16758,12 @@
           "stack": [
             {
               "type": "simple",
-              "name": "x",
+              "name": "workchain",
               "value_types": ["Int"]
             },
             {
               "type": "simple",
-              "name": "y",
+              "name": "hash",
               "value_types": ["Int"]
             }
           ]
@@ -25173,7 +25191,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Stores a signed `l`-bit integer `x` into `b` for `0 <= l <= 257`.",
+        "long": "Stores a signed `length`-bit integer `x` into `b` for `0 <= length <= 257`.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -25192,7 +25210,7 @@
         "prefix_str": "CF00"
       },
       "signature": {
-        "stack_string": "x:Int b:Builder l:Int -> b2:Builder",
+        "stack_string": "x:Int b:Builder length:Int -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -25207,7 +25225,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -25216,7 +25234,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"],
               "mutations": [
                 {
@@ -25235,7 +25253,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Stores an unsigned `l`-bit integer `x` into `b` for `0 <= l <= 256`.",
+        "long": "Stores an unsigned `length`-bit integer `x` into `b` for `0 <= length <= 256`.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -25254,7 +25272,7 @@
         "prefix_str": "CF01"
       },
       "signature": {
-        "stack_string": "x:Int b:Builder l:Int -> b2:Builder",
+        "stack_string": "x:Int b:Builder length:Int -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -25269,7 +25287,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -25278,7 +25296,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"],
               "mutations": [
                 {
@@ -25316,7 +25334,7 @@
         "prefix_str": "CF02"
       },
       "signature": {
-        "stack_string": "b:Builder x:Int l:Int -> b2:Builder",
+        "stack_string": "b:Builder x:Int length:Int -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -25331,7 +25349,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -25340,7 +25358,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"],
               "mutations": [
                 {
@@ -25378,7 +25396,7 @@
         "prefix_str": "CF03"
       },
       "signature": {
-        "stack_string": "b:Builder x:Int l:Int -> b2:Builder",
+        "stack_string": "b:Builder x:Int length:Int -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -25393,7 +25411,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -25402,7 +25420,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"],
               "mutations": [
                 {
@@ -25421,7 +25439,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "A quiet version of `STIX`. If there is no space in `b`, sets `b'=b` and `f=-1`.\nIf `x` does not fit into `l` bits, sets `b'=b` and `f=1`.\nIf the operation succeeds, `b'` is the new _Builder_ and `f=0`.\nHowever, `0 <= l <= 257`, with a range check exception if this is not so.",
+        "long": "A quiet version of `STIX`. If there is no space in `b`, sets `b'=b` and `f=-1`.\nIf `x` does not fit into `length` bits, sets `b'=b` and `f=1`.\nIf the operation succeeds, `b'` is the new _Builder_ and `f=0`.\nHowever, `0 <= length <= 257`, with a range check exception if this is not so.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -25440,7 +25458,7 @@
         "prefix_str": "CF04"
       },
       "signature": {
-        "stack_string": "x:Int b:Builder l:Int -> (b2:Builder 0)|(x:Int b:Builder -1)|(x:Int b:Builder 1) status:Int",
+        "stack_string": "x:Int b:Builder length:Int -> (b':Builder 0)|(x:Int b:Builder -1)|(x:Int b:Builder 1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -25455,7 +25473,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -25471,7 +25489,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "b2",
+                      "name": "b'",
                       "value_types": ["Builder"]
                     }
                   ]
@@ -25541,7 +25559,7 @@
         "prefix_str": "CF05"
       },
       "signature": {
-        "stack_string": "x:Int b:Builder l:Int -> (b2:Builder 0)|(x:Int b:Builder -1)|(x:Int b:Builder 1) status:Int",
+        "stack_string": "x:Int b:Builder length:Int -> (b':Builder 0)|(x:Int b:Builder -1)|(x:Int b:Builder 1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -25556,7 +25574,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -25572,7 +25590,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "b2",
+                      "name": "b'",
                       "value_types": ["Builder"]
                     }
                   ]
@@ -25642,7 +25660,7 @@
         "prefix_str": "CF06"
       },
       "signature": {
-        "stack_string": "b:Builder x:Int l:Int -> (b2:Builder 0)|(b:Builder x:Int -1)|(b:Builder x:Int 1) status:Int",
+        "stack_string": "b:Builder x:Int length:Int -> (b':Builder 0)|(b:Builder x:Int -1)|(b:Builder x:Int 1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -25657,7 +25675,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -25673,7 +25691,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "b2",
+                      "name": "b'",
                       "value_types": ["Builder"]
                     }
                   ]
@@ -25743,7 +25761,7 @@
         "prefix_str": "CF07"
       },
       "signature": {
-        "stack_string": "b:Builder x:Int l:Int -> (b2:Builder 0)|(b:Builder x:Int -1)|(b:Builder x:Int 1) status:Int",
+        "stack_string": "b:Builder x:Int length:Int -> (b':Builder 0)|(b:Builder x:Int -1)|(b:Builder x:Int 1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -25758,7 +25776,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -25774,7 +25792,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "b2",
+                      "name": "b'",
                       "value_types": ["Builder"]
                     }
                   ]
@@ -25844,7 +25862,7 @@
         "prefix_str": "CF28"
       },
       "signature": {
-        "stack_string": "x:Int b:Builder -> b2:Builder",
+        "stack_string": "x:Int b:Builder -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -25863,7 +25881,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -25894,7 +25912,7 @@
         "prefix_str": "CF29"
       },
       "signature": {
-        "stack_string": "x:Int b:Builder -> b2:Builder",
+        "stack_string": "x:Int b:Builder -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -25913,7 +25931,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -25944,7 +25962,7 @@
         "prefix_str": "CF2A"
       },
       "signature": {
-        "stack_string": "x:Int b:Builder -> b2:Builder",
+        "stack_string": "x:Int b:Builder -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -25963,7 +25981,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -25994,7 +26012,7 @@
         "prefix_str": "CF2B"
       },
       "signature": {
-        "stack_string": "x:Int b:Builder -> b2:Builder",
+        "stack_string": "x:Int b:Builder -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -26013,7 +26031,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -26025,7 +26043,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads a signed `l`-bit (`0 <= l <= 257`) integer `x` from _Slice_ `s`, and returns the remainder of `s` as `s'`.",
+        "long": "Loads a signed `length`-bit (`0 <= length <= 257`) integer `x` from _Slice_ `s`, and returns the remainder of `s` as `s'`.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -26044,7 +26062,7 @@
         "prefix_str": "D700"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int -> x:Int s2:Slice",
+        "stack_string": "s:Slice length:Int -> x:Int s':Slice",
         "inputs": {
           "stack": [
             {
@@ -26054,7 +26072,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -26068,7 +26086,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -26080,7 +26098,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads an unsigned `l`-bit integer `x` from (the first `l` bits of) `s`, with `0 <= l <= 256`.",
+        "long": "Loads an unsigned `length`-bit integer `x` from (the first `length` bits of) `s`, with `0 <= length <= 256`.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -26099,7 +26117,7 @@
         "prefix_str": "D701"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int -> x:Int s2:Slice",
+        "stack_string": "s:Slice length:Int -> x:Int s':Slice",
         "inputs": {
           "stack": [
             {
@@ -26109,7 +26127,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -26123,7 +26141,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -26135,7 +26153,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Preloads a signed `l`-bit integer from _Slice_ `s`, for `0 <= l <= 257`.",
+        "long": "Preloads a signed `length`-bit integer from _Slice_ `s`, for `0 <= length <= 257`.",
         "tags": ["slice parsing", "preload"],
         "operands": []
       },
@@ -26154,7 +26172,7 @@
         "prefix_str": "D702"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int -> x:Int",
+        "stack_string": "s:Slice length:Int -> x:Int",
         "inputs": {
           "stack": [
             {
@@ -26164,7 +26182,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -26185,7 +26203,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Preloads an unsigned `l`-bit integer from `s`, for `0 <= l <= 256`.",
+        "long": "Preloads an unsigned `length`-bit integer from `s`, for `0 <= length <= 256`.",
         "tags": ["slice parsing", "preload"],
         "operands": []
       },
@@ -26204,7 +26222,7 @@
         "prefix_str": "D703"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int -> x:Int",
+        "stack_string": "s:Slice length:Int -> x:Int",
         "inputs": {
           "stack": [
             {
@@ -26214,7 +26232,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -26235,7 +26253,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Quiet version of `LDIX`: loads a signed `l`-bit integer from `s` similarly to `LDIX`, but returns a success flag, equal to `-1` on success or to `0` on failure (if `s` does not have `l` bits), instead of throwing a cell underflow exception.",
+        "long": "Quiet version of `LDIX`: loads a signed `length`-bit integer from `s` similarly to `LDIX`, but returns a success flag, equal to `-1` on success or to `0` on failure (if `s` does not have `length` bits), instead of throwing a cell underflow exception.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -26254,7 +26272,7 @@
         "prefix_str": "D704"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int -> (s:Slice 0)|(x:Int s2:Slice -1) status:Int",
+        "stack_string": "s:Slice length:Int -> (s:Slice 0)|(x:Int s':Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -26264,7 +26282,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -26295,7 +26313,7 @@
                     },
                     {
                       "type": "simple",
-                      "name": "s2",
+                      "name": "s'",
                       "value_types": ["Slice"]
                     }
                   ]
@@ -26335,7 +26353,7 @@
         "prefix_str": "D705"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int -> (s:Slice 0)|(x:Int s2:Slice -1) status:Int",
+        "stack_string": "s:Slice length:Int -> (s:Slice 0)|(x:Int s':Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -26345,7 +26363,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -26376,7 +26394,7 @@
                     },
                     {
                       "type": "simple",
-                      "name": "s2",
+                      "name": "s'",
                       "value_types": ["Slice"]
                     }
                   ]
@@ -26416,7 +26434,7 @@
         "prefix_str": "D706"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int -> (∅ 0)|(x:Int -1) status:Int",
+        "stack_string": "s:Slice length:Int -> (∅ 0)|(x:Int -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -26426,7 +26444,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -26486,7 +26504,7 @@
         "prefix_str": "D707"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int -> (∅ 0)|(x:Int -1) status:Int",
+        "stack_string": "s:Slice length:Int -> (∅ 0)|(x:Int -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -26496,7 +26514,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -26537,7 +26555,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads the first `0 <= l <= 1023` bits from _Slice_ `s` into a separate _Slice_ `s''`, returning the remainder of `s` as `s'`.",
+        "long": "Loads the first `0 <= length <= 1023` bits from _Slice_ `s` into a separate _Slice_ `loaded`, returning the remainder of `s` as `s'`.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -26556,7 +26574,7 @@
         "prefix_str": "D718"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int -> s3:Slice s2:Slice",
+        "stack_string": "s:Slice length:Int -> loaded:Slice s':Slice",
         "inputs": {
           "stack": [
             {
@@ -26566,7 +26584,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -26575,12 +26593,12 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s3",
+              "name": "loaded",
               "value_types": ["Slice"]
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -26592,7 +26610,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns the first `0 <= l <= 1023` bits of `s` as `s''`.",
+        "long": "Returns the first `0 <= length <= 1023` bits of `s` as `loaded`.",
         "tags": ["slice parsing", "preload"],
         "operands": []
       },
@@ -26611,7 +26629,7 @@
         "prefix_str": "D719"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int -> s3:Slice",
+        "stack_string": "s:Slice length:Int -> loaded:Slice",
         "inputs": {
           "stack": [
             {
@@ -26621,7 +26639,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -26630,7 +26648,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s3",
+              "name": "loaded",
               "value_types": ["Slice"]
             }
           ]
@@ -26661,7 +26679,7 @@
         "prefix_str": "D71A"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int -> (s:Slice 0)|(s3:Slice s2:Slice -1) status:Int",
+        "stack_string": "s:Slice length:Int -> (s:Slice 0)|(loaded:Slice s':Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -26671,7 +26689,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -26697,12 +26715,12 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "s3",
+                      "name": "loaded",
                       "value_types": ["Slice"]
                     },
                     {
                       "type": "simple",
-                      "name": "s2",
+                      "name": "s'",
                       "value_types": ["Slice"]
                     }
                   ]
@@ -26742,7 +26760,7 @@
         "prefix_str": "D71B"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int -> (∅ 0)|(s2:Slice -1) status:Int",
+        "stack_string": "s:Slice length:Int -> (∅ 0)|(s':Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -26752,7 +26770,7 @@
             },
             {
               "type": "simple",
-              "name": "l",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -26772,7 +26790,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "s2",
+                      "name": "s'",
                       "value_types": ["Slice"]
                     }
                   ]
@@ -36353,7 +36371,7 @@
       "category": "exception",
       "subCategory": "",
       "description": {
-        "short": "Throws an exception with error code `n` and parameter set to zero. Parameter represents the additional information passed to the exception handler.",
+        "short": "Throws an exception with error code `num` and parameter set to zero. Parameter represents the additional information passed to the exception handler.",
         "tags": ["exception_handling", "throw", "control_flow"],
         "other_implementations": [
           {
@@ -36384,12 +36402,12 @@
         }
       ],
       "signature": {
-        "stack_string": "n:Int -> ∅",
+        "stack_string": "num:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "n",
+              "name": "num",
               "value_types": ["Int"]
             }
           ]
@@ -36400,7 +36418,7 @@
       "category": "exception",
       "subCategory": "",
       "description": {
-        "short": "Throws an exception with error code `n` and parameter set to `x`. Parameter represents the additional information passed to the exception handler.",
+        "short": "Throws an exception with error code `num` and parameter set to `x`. Parameter represents the additional information passed to the exception handler.",
         "tags": ["exception_handling", "throw", "control_flow"],
         "other_implementations": [
           {
@@ -36431,7 +36449,7 @@
         }
       ],
       "signature": {
-        "stack_string": "x:Int n:Int -> ∅",
+        "stack_string": "x:Int num:Int -> ∅",
         "inputs": {
           "stack": [
             {
@@ -36441,7 +36459,7 @@
             },
             {
               "type": "simple",
-              "name": "n",
+              "name": "num",
               "value_types": ["Int"]
             }
           ]
@@ -36452,7 +36470,7 @@
       "category": "exception",
       "subCategory": "",
       "description": {
-        "short": "Throws an exception with error code `n` and parameter set to zero only if `f` is EQUAL to 0. Parameter represents the additional information passed to the exception handler.",
+        "short": "Throws an exception with error code `num` and parameter set to zero only if `cond` is EQUAL to 0. Parameter represents the additional information passed to the exception handler.",
         "tags": ["exception_handling", "throw", "control_flow"],
         "operands": []
       },
@@ -36477,17 +36495,17 @@
         }
       ],
       "signature": {
-        "stack_string": "n:Int f:Int -> ∅",
+        "stack_string": "num:Int cond:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "n",
+              "name": "num",
               "value_types": ["Int"]
             },
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             }
           ]
@@ -36498,7 +36516,7 @@
       "category": "exception",
       "subCategory": "",
       "description": {
-        "short": "Throws an exception with error code `n` and parameter set to `x` taken from the stack only if `f` is EQUAL to 0. Parameter represents the additional information passed to the exception handler.",
+        "short": "Throws an exception with error code `num` and parameter set to `x` taken from the stack only if `cond` is EQUAL to 0. Parameter represents the additional information passed to the exception handler.",
         "tags": ["exception_handling", "throw", "control_flow"],
         "operands": []
       },
@@ -36523,7 +36541,7 @@
         }
       ],
       "signature": {
-        "stack_string": "x:Int n:Int f:Int -> ∅",
+        "stack_string": "x:Int num:Int cond:Int -> ∅",
         "inputs": {
           "stack": [
             {
@@ -36533,12 +36551,12 @@
             },
             {
               "type": "simple",
-              "name": "n",
+              "name": "num",
               "value_types": ["Int"]
             },
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             }
           ]
@@ -38465,7 +38483,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Similar to `CALLXARGS`, but pushes the old value of `cc` (along with the top `0 <= p <= 15` values from the original stack) into the stack of newly-invoked continuation `c`, setting `cc.nargs` to `-1 <= r <= 14`.",
+        "long": "Similar to `CALLXARGS`, but pushes the old value of `c` (along with the top `0 <= p <= 15` values from the original stack) into the stack of newly-invoked continuation `c`, setting `cc.nargs` to `-1 <= r <= 14`.",
         "operands": ["p", "r"]
       },
       "layout": {
@@ -38871,7 +38889,7 @@
       "description": {
         "short": "Throws an exception with exit code `x` taken from the stack.",
         "tags": ["exception_handling", "throw", "control_flow"],
-        "operands": ["n"]
+        "operands": ["num"]
       },
       "layout": {
         "min": 15910912,
@@ -38919,9 +38937,9 @@
       "category": "exception",
       "subCategory": "",
       "description": {
-        "short": "Conditionally throws an exception with error code `x` taken from stack if `f` is NOT EQUAL to 0.",
+        "short": "Conditionally throws an exception with error code `x` taken from stack if `cond` is NOT EQUAL to 0.",
         "tags": ["exception_handling", "throw", "control_flow"],
-        "operands": ["n"]
+        "operands": ["num"]
       },
       "layout": {
         "min": 15915008,
@@ -38953,7 +38971,7 @@
         }
       ],
       "signature": {
-        "stack_string": "x:Int f:Int -> ∅",
+        "stack_string": "x:Int cond:Int -> ∅",
         "inputs": {
           "stack": [
             {
@@ -38963,7 +38981,7 @@
             },
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             }
           ]
@@ -38974,9 +38992,9 @@
       "category": "exception",
       "subCategory": "",
       "description": {
-        "short": "Conditionally throws an exception with error code `x` taken from stack if `f` is EQUAL to 0.",
+        "short": "Conditionally throws an exception with error code `x` taken from stack if `cond` is EQUAL to 0.",
         "tags": ["exception_handling", "throw", "control_flow"],
-        "operands": ["n"]
+        "operands": ["num"]
       },
       "layout": {
         "min": 15919104,
@@ -39008,7 +39026,7 @@
         }
       ],
       "signature": {
-        "stack_string": "x:Int f:Int -> ∅",
+        "stack_string": "x:Int cond:Int -> ∅",
         "inputs": {
           "stack": [
             {
@@ -39018,7 +39036,7 @@
             },
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             }
           ]
@@ -40608,10 +40626,33 @@
       "category": "cell",
       "subCategory": "cell_serialize",
       "description": {
-        "short": "",
-        "long": "Equivalent to `SWAP` `[cc+1] STI`.",
+        "short": "Stores a signed `width`-bit integer `x` into _Builder_ `b` and returns the resulting _Builder_ `b'`.",
         "tags": ["builder building"],
-        "operands": ["c"]
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than 2 elements."
+          },
+          {
+            "errno": "5",
+            "condition": "Integer is too large to fit into `c` bits."
+          },
+          {
+            "errno": "7",
+            "condition": "Top element is not an Int."
+          },
+          {
+            "errno": "7",
+            "condition": "Second element is not a Builder."
+          }
+        ],
+        "operands": ["width"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["SWAP [c+1]", "STI"]
+          }
+        ]
       },
       "layout": {
         "min": 13568512,
@@ -40641,7 +40682,7 @@
         "prefix_str": "CF0A"
       },
       "signature": {
-        "stack_string": "b:Builder x:Int -> b2:Builder",
+        "stack_string": "b:Builder x:Int -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -40660,7 +40701,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"],
               "mutations": [
                 {
@@ -40678,10 +40719,33 @@
       "category": "cell",
       "subCategory": "cell_serialize",
       "description": {
-        "short": "",
-        "long": "Equivalent to `SWAP` `[cc+1] STU`.",
+        "short": "Stores an unsigned `width`-bit integer `x` into _Builder_ `b` and returns the resulting _Builder_ `b'`.",
         "tags": ["builder building"],
-        "operands": ["c"]
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than 2 elements."
+          },
+          {
+            "errno": "5",
+            "condition": "Integer is too large to fit into `c` bits."
+          },
+          {
+            "errno": "7",
+            "condition": "Top element is not an Int."
+          },
+          {
+            "errno": "7",
+            "condition": "Second element is not a Builder."
+          }
+        ],
+        "operands": ["width"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["SWAP [c+1]", "STU"]
+          }
+        ]
       },
       "layout": {
         "min": 13568768,
@@ -40711,7 +40775,7 @@
         "prefix_str": "CF0B"
       },
       "signature": {
-        "stack_string": "b:Builder x:Int -> b2:Builder",
+        "stack_string": "b:Builder x:Int -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -40730,7 +40794,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"],
               "mutations": [
                 {
@@ -40781,7 +40845,7 @@
         "prefix_str": "CF0C"
       },
       "signature": {
-        "stack_string": "x:Int b:Builder -> (b2:Builder 0)|(x:Int b:Builder -1)|(x:Int b:Builder 1) status:Int",
+        "stack_string": "x:Int b:Builder -> (b':Builder 0)|(x:Int b:Builder -1)|(x:Int b:Builder 1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -40807,7 +40871,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "b2",
+                      "name": "b'",
                       "value_types": ["Builder"]
                     }
                   ]
@@ -40890,7 +40954,7 @@
         "prefix_str": "CF0D"
       },
       "signature": {
-        "stack_string": "x:Int b:Builder -> (b2:Builder 0)|(x:Int b:Builder -1)|(x:Int b:Builder 1) status:Int",
+        "stack_string": "x:Int b:Builder -> (b':Builder 0)|(x:Int b:Builder -1)|(x:Int b:Builder 1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -40916,7 +40980,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "b2",
+                      "name": "b'",
                       "value_types": ["Builder"]
                     }
                   ]
@@ -40999,7 +41063,7 @@
         "prefix_str": "CF0E"
       },
       "signature": {
-        "stack_string": "b:Builder x:Int -> (b2:Builder 0)|(b:Builder x:Int -1)|(b:Builder x:Int 1) status:Int",
+        "stack_string": "b:Builder x:Int -> (b':Builder 0)|(b:Builder x:Int -1)|(b:Builder x:Int 1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -41025,7 +41089,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "b2",
+                      "name": "b'",
                       "value_types": ["Builder"]
                     }
                   ]
@@ -41108,7 +41172,7 @@
         "prefix_str": "CF0F"
       },
       "signature": {
-        "stack_string": "b:Builder x:Int -> (b2:Builder 0)|(b:Builder x:Int -1)|(b:Builder x:Int 1) status:Int",
+        "stack_string": "b:Builder x:Int -> (b':Builder 0)|(b:Builder x:Int -1)|(b:Builder x:Int 1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -41134,7 +41198,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "b2",
+                      "name": "b'",
                       "value_types": ["Builder"]
                     }
                   ]
@@ -41333,7 +41397,7 @@
         "prefix_str": "D70C"
       },
       "signature": {
-        "stack_string": "s:Slice -> (s:Slice 0)|(x:Int s2:Slice -1) status:Int",
+        "stack_string": "s:Slice -> (s:Slice 0)|(x:Int s':Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -41369,7 +41433,7 @@
                     },
                     {
                       "type": "simple",
-                      "name": "s2",
+                      "name": "s'",
                       "value_types": ["Slice"]
                     }
                   ]
@@ -41422,7 +41486,7 @@
         "prefix_str": "D70D"
       },
       "signature": {
-        "stack_string": "s:Slice -> (s:Slice 0)|(x:Int s2:Slice -1) status:Int",
+        "stack_string": "s:Slice -> (s:Slice 0)|(x:Int s':Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -41458,7 +41522,7 @@
                     },
                     {
                       "type": "simple",
-                      "name": "s2",
+                      "name": "s'",
                       "value_types": ["Slice"]
                     }
                   ]
@@ -41693,7 +41757,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns the first `0 < cc+1 <= 256` bits of `s` as `s''`.",
+        "long": "Returns the first `0 < c+1 <= 256` bits of `s` as `loaded`.",
         "tags": ["slice parsing", "preload"],
         "operands": ["c"]
       },
@@ -41725,7 +41789,7 @@
         "prefix_str": "D71D"
       },
       "signature": {
-        "stack_string": "s:Slice -> s3:Slice",
+        "stack_string": "s:Slice -> loaded:Slice",
         "inputs": {
           "stack": [
             {
@@ -41739,7 +41803,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s3",
+              "name": "loaded",
               "value_types": ["Slice"]
             }
           ]
@@ -41783,7 +41847,7 @@
         "prefix_str": "D71E"
       },
       "signature": {
-        "stack_string": "s:Slice -> (s:Slice 0)|(s3:Slice s2:Slice -1) status:Int",
+        "stack_string": "s:Slice -> (s:Slice 0)|(loaded:Slice s':Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -41814,12 +41878,12 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "s3",
+                      "name": "loaded",
                       "value_types": ["Slice"]
                     },
                     {
                       "type": "simple",
-                      "name": "s2",
+                      "name": "s'",
                       "value_types": ["Slice"]
                     }
                   ]
@@ -41872,7 +41936,7 @@
         "prefix_str": "D71F"
       },
       "signature": {
-        "stack_string": "s:Slice -> (∅ 0)|(s3:Slice -1) status:Int",
+        "stack_string": "s:Slice -> (∅ 0)|(loaded:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -41897,7 +41961,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "s3",
+                      "name": "loaded",
                       "value_types": ["Slice"]
                     }
                   ]
@@ -41918,8 +41982,8 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Checks whether bit `0 <= n <= 31` is set in integer `x`, and if so, performs `JMPX` to continuation `c`. Value `x` is left in the stack.",
-        "operands": ["n"]
+        "long": "Checks whether bit `0 <= num <= 31` is set in integer `x`, and if so, performs `JMPX` to continuation `body`. Value `x` is left in the stack.",
+        "operands": ["num"]
       },
       "layout": {
         "min": 14909440,
@@ -41976,8 +42040,8 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Jumps to `c` if bit `0 <= n <= 31` is not set in integer `x`.",
-        "operands": ["n"]
+        "long": "Jumps to `body` if bit `0 <= num <= 31` is not set in integer `x`.",
+        "operands": ["num"]
       },
       "layout": {
         "min": 14917632,
@@ -42312,8 +42376,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Returns the `k`-th global variable for `1 <= k <= 31`.\nEquivalent to `c7 PUSHCTR` `[k] INDEXQ`.",
-        "operands": ["k"]
+        "long": "Returns the `k`-th global variable.",
+        "operands": ["k"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["PUSHCTR c7", "INDEXQ [k]"]
+          }
+        ]
       },
       "layout": {
         "min": 16269568,
@@ -42364,8 +42434,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Assigns `x` to the `k`-th global variable for `1 <= k <= 31`.\nEquivalent to `c7 PUSHCTR` `SWAP` `k SETINDEXQ` `c7 POPCTR`.",
-        "operands": ["k"]
+        "long": "Assigns `x` from the stack to the `k`-th global variable.",
+        "operands": ["k"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["PUSHCTR c7", "SWAP", "k SETINDEXQ", "POPCTR c7"]
+          }
+        ]
       },
       "layout": {
         "min": 16277760,
@@ -42736,8 +42812,8 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Equivalent to `PUSHREFCONT` `IF`, with the optimization that the cell reference is not actually loaded into a _Slice_ and then converted into an ordinary _Continuation_ if `f=0`.\nGas consumption of this primitive depends on whether `f=0` and whether the reference was loaded before.\nSimilar remarks apply other primitives that accept a continuation as a reference.",
-        "operands": ["c"]
+        "long": "Equivalent to `PUSHREFCONT` `IF`, with the optimization that the cell reference is not actually loaded into a _Slice_ and then converted into an ordinary _Continuation_ if `cond == 0`.\nGas consumption of this primitive depends on whether `cond == 0` and whether the reference was loaded before.\nSimilar remarks apply other primitives that accept a continuation as a reference.",
+        "operands": ["body"]
       },
       "layout": {
         "min": 14876672,
@@ -42768,12 +42844,12 @@
         }
       ],
       "signature": {
-        "stack_string": "f:Int -> ∅",
+        "stack_string": "cond:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             }
           ]
@@ -42786,7 +42862,7 @@
       "description": {
         "short": "",
         "long": "Equivalent to `PUSHREFCONT` `IFNOT`.",
-        "operands": ["c"]
+        "operands": ["body"]
       },
       "layout": {
         "min": 14876928,
@@ -42817,12 +42893,12 @@
         }
       ],
       "signature": {
-        "stack_string": "f:Int -> ∅",
+        "stack_string": "cond:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             }
           ]
@@ -42835,7 +42911,7 @@
       "description": {
         "short": "",
         "long": "Equivalent to `PUSHREFCONT` `IFJMP`.",
-        "operands": ["c"]
+        "operands": ["body"]
       },
       "layout": {
         "min": 14877184,
@@ -42866,12 +42942,12 @@
         }
       ],
       "signature": {
-        "stack_string": "f:Int -> ∅",
+        "stack_string": "cond:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             }
           ]
@@ -42884,7 +42960,7 @@
       "description": {
         "short": "",
         "long": "Equivalent to `PUSHREFCONT` `IFNOTJMP`.",
-        "operands": ["c"]
+        "operands": ["body"]
       },
       "layout": {
         "min": 14877440,
@@ -42915,12 +42991,12 @@
         }
       ],
       "signature": {
-        "stack_string": "f:Int -> ∅",
+        "stack_string": "cond:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             }
           ]
@@ -42964,12 +43040,12 @@
         }
       ],
       "signature": {
-        "stack_string": "f:Int body:Continuation -> ∅",
+        "stack_string": "cond:Int body:Continuation -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             },
             {
@@ -43018,12 +43094,12 @@
         }
       ],
       "signature": {
-        "stack_string": "f:Int body:Continuation -> ∅",
+        "stack_string": "cond:Int body:Continuation -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             },
             {
@@ -43041,7 +43117,7 @@
       "description": {
         "short": "",
         "long": "Equivalent to `PUSHREFCONT` `PUSHREFCONT` `IFELSE`.",
-        "operands": ["c1", "c2"]
+        "operands": ["body", "else"]
       },
       "layout": {
         "min": 14880512,
@@ -43071,12 +43147,12 @@
         }
       ],
       "signature": {
-        "stack_string": "f:Int -> ∅",
+        "stack_string": "cond:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             }
           ]
@@ -43088,8 +43164,8 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Performs a `JMPREF` if bit `0 <= n <= 31` is set in integer `x`.",
-        "operands": ["n", "c"]
+        "long": "Performs a `JMPREF` if bit `0 <= num <= 31` is set in integer `x`.",
+        "operands": ["num", "body"]
       },
       "layout": {
         "min": 14925824,
@@ -43154,8 +43230,8 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Performs a `JMPREF` if bit `0 <= n <= 31` is not set in integer `x`.",
-        "operands": ["n", "c"]
+        "long": "Performs a `JMPREF` if bit `0 <= num <= 31` is not set in integer `x`.",
+        "operands": ["num", "body"]
       },
       "layout": {
         "min": 14934016,
@@ -43309,7 +43385,7 @@
         "prefix_str": "D726"
       },
       "signature": {
-        "stack_string": "s:Slice s2:Slice -> s3:Slice",
+        "stack_string": "s:Slice search:Slice -> s':Slice",
         "inputs": {
           "stack": [
             {
@@ -43319,7 +43395,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "search",
               "value_types": ["Slice"]
             }
           ]
@@ -43328,7 +43404,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s3",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -43358,7 +43434,7 @@
         "prefix_str": "D727"
       },
       "signature": {
-        "stack_string": "s:Slice s2:Slice -> (s:Slice 0)|(s3:Slice -1) status:Int",
+        "stack_string": "s:Slice search:Slice -> (s:Slice 0)|(s':Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -43368,7 +43444,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "search",
               "value_types": ["Slice"]
             }
           ]
@@ -43394,7 +43470,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "s3",
+                      "name": "s'",
                       "value_types": ["Slice"]
                     }
                   ]
@@ -43416,7 +43492,7 @@
       "description": {
         "short": "",
         "long": "Checks whether `s` begins with constant bitstring `sss` of length `8x+3` (with continuation bit assumed), where `0 <= x <= 127`, and removes `sss` from `s` on success.",
-        "operands": ["s"]
+        "operands": ["search"]
       },
       "layout": {
         "min": 14100480,
@@ -43450,7 +43526,7 @@
         "prefix_str": "35CA"
       },
       "signature": {
-        "stack_string": "s:Slice -> s3:Slice",
+        "stack_string": "s:Slice -> s':Slice",
         "inputs": {
           "stack": [
             {
@@ -43464,7 +43540,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s3",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -43477,7 +43553,7 @@
       "description": {
         "short": "",
         "long": "A quiet version of `SDBEGINS`.",
-        "operands": ["s"]
+        "operands": ["search"]
       },
       "layout": {
         "min": 14101504,
@@ -43511,7 +43587,7 @@
         "prefix_str": "35CB"
       },
       "signature": {
-        "stack_string": "s:Slice -> (s:Slice 0)|(s3:Slice -1) status:Int",
+        "stack_string": "s:Slice -> (s:Slice 0)|(s':Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -43542,7 +43618,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "s3",
+                      "name": "s'",
                       "value_types": ["Slice"]
                     }
                   ]
@@ -43586,7 +43662,7 @@
         "prefix_str": "CF20"
       },
       "signature": {
-        "stack_string": "b:Builder -> b2:Builder",
+        "stack_string": "b:Builder -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -43600,7 +43676,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -43638,7 +43714,7 @@
         "prefix_str": "CF21"
       },
       "signature": {
-        "stack_string": "b:Builder -> b2:Builder",
+        "stack_string": "b:Builder -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -43652,7 +43728,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -43663,7 +43739,7 @@
       "category": "exception",
       "subCategory": "",
       "description": {
-        "short": "Throws an exception with error code `n` and parameter set to zero only if `f` is NOT EQUAL to 0. Parameter represents the additional information passed to the exception handler.",
+        "short": "Throws an exception with error code `num` and parameter set to zero only if `cond` is NOT EQUAL to 0. Parameter represents the additional information passed to the exception handler.",
         "tags": ["exception_handling", "throw", "control_flow"],
         "operands": []
       },
@@ -43688,17 +43764,17 @@
         }
       ],
       "signature": {
-        "stack_string": "n:Int f:Int -> ∅",
+        "stack_string": "num:Int cond:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "n",
+              "name": "num",
               "value_types": ["Int"]
             },
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             }
           ]
@@ -43709,7 +43785,7 @@
       "category": "exception",
       "subCategory": "",
       "description": {
-        "short": "Throws an exception with error code `n` and parameter set to `x` taken from the stack only if `f` is NOT EQUAL to 0. Parameter represents the additional information passed to the exception handler.",
+        "short": "Throws an exception with error code `num` and parameter set to `x` taken from the stack only if `cond` is NOT EQUAL to 0. Parameter represents the additional information passed to the exception handler.",
         "tags": ["exception_handling", "throw", "control_flow"],
         "operands": []
       },
@@ -43734,7 +43810,7 @@
         }
       ],
       "signature": {
-        "stack_string": "x:Int n:Int f:Int -> ∅",
+        "stack_string": "x:Int num:Int cond:Int -> ∅",
         "inputs": {
           "stack": [
             {
@@ -43744,12 +43820,12 @@
             },
             {
               "type": "simple",
-              "name": "n",
+              "name": "num",
               "value_types": ["Int"]
             },
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             }
           ]
@@ -46196,7 +46272,7 @@
         "prefix_str": "CC"
       },
       "signature": {
-        "stack_string": "c:Cell b:Builder -> b2:Builder",
+        "stack_string": "c:Cell b:Builder -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -46215,7 +46291,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -46246,7 +46322,7 @@
         "prefix_str": "CF10"
       },
       "signature": {
-        "stack_string": "c:Cell b:Builder -> b2:Builder",
+        "stack_string": "c:Cell b:Builder -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -46265,7 +46341,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -46296,7 +46372,7 @@
         "prefix_str": "CE"
       },
       "signature": {
-        "stack_string": "s:Slice b:Builder -> b2:Builder",
+        "stack_string": "s:Slice b:Builder -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -46315,7 +46391,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"],
               "mutations": [
                 {
@@ -46353,7 +46429,7 @@
         "prefix_str": "CF12"
       },
       "signature": {
-        "stack_string": "s:Slice b:Builder -> b2:Builder",
+        "stack_string": "s:Slice b:Builder -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -46372,7 +46448,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"],
               "mutations": [
                 {
@@ -46508,7 +46584,7 @@
       "category": "cell",
       "subCategory": "cell_serialize",
       "description": {
-        "short": "Stores a signed `cc`-bit integer `x` into _Builder_ `b` and returns the resulting _Builder_ `b'`.",
+        "short": "Stores a signed `width`-bit integer `x` into _Builder_ `b` and returns the resulting _Builder_ `b'`.",
         "tags": ["builder building"],
         "exit_codes": [
           {
@@ -46517,7 +46593,7 @@
           },
           {
             "errno": "5",
-            "condition": "Integer is too large to fit into `cc` bits."
+            "condition": "Integer is too large to fit into `c` bits."
           },
           {
             "errno": "7",
@@ -46528,7 +46604,7 @@
             "condition": "Second element is not a Builder."
           }
         ],
-        "operands": ["c"]
+        "operands": ["width"]
       },
       "layout": {
         "min": 13238272,
@@ -46558,7 +46634,7 @@
         "prefix_str": "CA"
       },
       "signature": {
-        "stack_string": "x:Int b:Builder -> b2:Builder",
+        "stack_string": "x:Int b:Builder -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -46577,7 +46653,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"],
               "mutations": [
                 {
@@ -46595,10 +46671,27 @@
       "category": "cell",
       "subCategory": "cell_serialize",
       "description": {
-        "short": "",
-        "long": "A longer version of `[cc+1] STI`.",
+        "short": "Stores a signed `width`-bit integer `x` into _Builder_ `b` and returns the resulting _Builder_ `b'`. A longer version of `[c+1] STI`.",
         "tags": ["builder building"],
-        "operands": ["c"]
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than 2 elements."
+          },
+          {
+            "errno": "5",
+            "condition": "Integer is too large to fit into `c` bits."
+          },
+          {
+            "errno": "7",
+            "condition": "Top element is not an Int."
+          },
+          {
+            "errno": "7",
+            "condition": "Second element is not a Builder."
+          }
+        ],
+        "operands": ["width"]
       },
       "layout": {
         "min": 13568000,
@@ -46628,7 +46721,7 @@
         "prefix_str": "CF08"
       },
       "signature": {
-        "stack_string": "x:Int b:Builder -> b2:Builder",
+        "stack_string": "x:Int b:Builder -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -46647,7 +46740,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"],
               "mutations": [
                 {
@@ -46665,7 +46758,7 @@
       "category": "cell",
       "subCategory": "cell_serialize",
       "description": {
-        "short": "Stores an unsigned `cc`-bit integer `x` into _Builder_ `b` and returns the resulting _Builder_ `b'`.",
+        "short": "Stores an unsigned `width`-bit integer `x` into _Builder_ `b` and returns the resulting _Builder_ `b'`.",
         "tags": ["builder building"],
         "exit_codes": [
           {
@@ -46674,7 +46767,7 @@
           },
           {
             "errno": "5",
-            "condition": "Integer is too large to fit into `cc` bits."
+            "condition": "Integer is too large to fit into `c` bits."
           },
           {
             "errno": "7",
@@ -46685,7 +46778,7 @@
             "condition": "Second element is not a Builder."
           }
         ],
-        "operands": ["c"]
+        "operands": ["width"]
       },
       "layout": {
         "min": 13303808,
@@ -46715,7 +46808,7 @@
         "prefix_str": "CB"
       },
       "signature": {
-        "stack_string": "x:Int b:Builder -> b2:Builder",
+        "stack_string": "x:Int b:Builder -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -46734,7 +46827,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"],
               "mutations": [
                 {
@@ -46752,10 +46845,27 @@
       "category": "cell",
       "subCategory": "cell_serialize",
       "description": {
-        "short": "",
-        "long": "A longer version of `[cc+1] STU`.",
+        "short": "Stores an unsigned `width`-bit integer `x` into _Builder_ `b` and returns the resulting _Builder_ `b'`. A longer version of `[c+1] STU`.",
         "tags": ["builder building"],
-        "operands": ["c"]
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than 2 elements."
+          },
+          {
+            "errno": "5",
+            "condition": "Integer is too large to fit into `c` bits."
+          },
+          {
+            "errno": "7",
+            "condition": "Top element is not an Int."
+          },
+          {
+            "errno": "7",
+            "condition": "Second element is not a Builder."
+          }
+        ],
+        "operands": ["width"]
       },
       "layout": {
         "min": 13568256,
@@ -46785,7 +46895,7 @@
         "prefix_str": "CF09"
       },
       "signature": {
-        "stack_string": "x:Int b:Builder -> b2:Builder",
+        "stack_string": "x:Int b:Builder -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -46804,7 +46914,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"],
               "mutations": [
                 {
@@ -46822,7 +46932,7 @@
       "category": "cell",
       "subCategory": "cell_deserialize",
       "description": {
-        "short": "Loads a signed `cc`-bit integer `x` from _Slice_ `s` and pushes loaded value on stack along with _Slice_ with remainder data.",
+        "short": "Loads a signed `width`-bit integer `x` from _Slice_ `s` and pushes loaded value on stack along with _Slice_ with remainder data.",
         "tags": ["slice parsing"],
         "exit_codes": [
           {
@@ -46873,7 +46983,7 @@
             }
           }
         ],
-        "operands": ["c"]
+        "operands": ["width"]
       },
       "layout": {
         "min": 13762560,
@@ -46903,7 +47013,7 @@
         "prefix_str": "D2"
       },
       "signature": {
-        "stack_string": "s:Slice -> x:Int s2:Slice",
+        "stack_string": "s:Slice -> x:Int s':Slice",
         "inputs": {
           "stack": [
             {
@@ -46922,7 +47032,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -46966,7 +47076,7 @@
         "prefix_str": "D708"
       },
       "signature": {
-        "stack_string": "s:Slice -> x:Int s2:Slice",
+        "stack_string": "s:Slice -> x:Int s':Slice",
         "inputs": {
           "stack": [
             {
@@ -46985,7 +47095,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -46996,7 +47106,7 @@
       "category": "cell",
       "subCategory": "cell_deserialize",
       "description": {
-        "short": "Loads an unsigned `cc`-bit integer `x` from _Slice_ `s` and pushes loaded value on stack along with _Slice_ with remainder data.",
+        "short": "Loads an unsigned `width`-bit integer `x` from _Slice_ `s` and pushes loaded value on stack along with _Slice_ with remainder data.",
         "tags": ["slice parsing"],
         "exit_codes": [
           {
@@ -47047,7 +47157,7 @@
             }
           }
         ],
-        "operands": ["c"]
+        "operands": ["width"]
       },
       "layout": {
         "min": 13828096,
@@ -47077,7 +47187,7 @@
         "prefix_str": "D3"
       },
       "signature": {
-        "stack_string": "s:Slice -> x:Int s2:Slice",
+        "stack_string": "s:Slice -> x:Int s':Slice",
         "inputs": {
           "stack": [
             {
@@ -47096,7 +47206,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -47140,7 +47250,7 @@
         "prefix_str": "D709"
       },
       "signature": {
-        "stack_string": "s:Slice -> x:Int s2:Slice",
+        "stack_string": "s:Slice -> x:Int s':Slice",
         "inputs": {
           "stack": [
             {
@@ -47159,7 +47269,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -47171,7 +47281,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Cuts the next `cc+1` bits of `s` into a separate _Slice_ `s''`.",
+        "long": "Cuts the next `c + 1` bits of `s` into a separate _Slice_ `loaded`.",
         "tags": ["slice parsing"],
         "operands": ["c"]
       },
@@ -47203,7 +47313,7 @@
         "prefix_str": "D6"
       },
       "signature": {
-        "stack_string": "s:Slice -> s3:Slice s2:Slice",
+        "stack_string": "s:Slice -> loaded:Slice s':Slice",
         "inputs": {
           "stack": [
             {
@@ -47217,12 +47327,12 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s3",
+              "name": "loaded",
               "value_types": ["Slice"]
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -47265,7 +47375,7 @@
         "prefix_str": "D71C"
       },
       "signature": {
-        "stack_string": "s:Slice -> s3:Slice s2:Slice",
+        "stack_string": "s:Slice -> loaded:Slice s2:Slice",
         "inputs": {
           "stack": [
             {
@@ -47279,7 +47389,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s3",
+              "name": "loaded",
               "value_types": ["Slice"]
             },
             {
@@ -48117,9 +48227,9 @@
       "category": "exception",
       "subCategory": "",
       "description": {
-        "short": "Throws an exception with error code `n`.",
+        "short": "Throws an exception with error code `num`.",
         "tags": ["exception_handling", "throw", "control_flow"],
-        "operands": ["n"]
+        "operands": ["num"]
       },
       "layout": {
         "min": 15859712,
@@ -48166,9 +48276,9 @@
       "category": "exception",
       "subCategory": "",
       "description": {
-        "short": "Throws an exception with error code `n`.",
+        "short": "Throws an exception with error code `num`.",
         "tags": ["exception_handling", "throw", "control_flow"],
-        "operands": ["n"]
+        "operands": ["num"]
       },
       "layout": {
         "min": 15908864,
@@ -48215,9 +48325,9 @@
       "category": "exception",
       "subCategory": "",
       "description": {
-        "short": "Conditionally throws an exception with error code `n` if `f` is NOT EQUAL to 0.",
+        "short": "Conditionally throws an exception with error code `num` if `cond` is NOT EQUAL to 0.",
         "tags": ["exception_handling", "throw", "control_flow"],
-        "operands": ["n"]
+        "operands": ["num"]
       },
       "layout": {
         "min": 15876096,
@@ -48249,12 +48359,12 @@
         }
       ],
       "signature": {
-        "stack_string": "f:Int -> ∅",
+        "stack_string": "cond:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             }
           ]
@@ -48265,9 +48375,9 @@
       "category": "exception",
       "subCategory": "",
       "description": {
-        "short": "Conditionally throws an exception with error code `n` if `f` is NOT EQUAL to 0.",
+        "short": "Conditionally throws an exception with error code `num` if `cond` is NOT EQUAL to 0.",
         "tags": ["exception_handling", "throw", "control_flow"],
-        "operands": ["n"]
+        "operands": ["num"]
       },
       "layout": {
         "min": 15912960,
@@ -48299,12 +48409,12 @@
         }
       ],
       "signature": {
-        "stack_string": "f:Int -> ∅",
+        "stack_string": "cond:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             }
           ]
@@ -48315,9 +48425,9 @@
       "category": "exception",
       "subCategory": "",
       "description": {
-        "short": "Conditionally throws an exception with error code `n` if `f` is EQUAL to 0.",
+        "short": "Conditionally throws an exception with error code `num` if `cond` is EQUAL to 0.",
         "tags": ["exception_handling", "throw", "control_flow"],
-        "operands": ["n"]
+        "operands": ["num"]
       },
       "layout": {
         "min": 15892480,
@@ -48349,12 +48459,12 @@
         }
       ],
       "signature": {
-        "stack_string": "f:Int -> ∅",
+        "stack_string": "cond:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             }
           ]
@@ -48365,9 +48475,9 @@
       "category": "exception",
       "subCategory": "",
       "description": {
-        "short": "Conditionally throws an exception with error code `n` if `f` is EQUAL to 0.",
+        "short": "Conditionally throws an exception with error code `num` if `cond` is EQUAL to 0.",
         "tags": ["exception_handling", "throw", "control_flow"],
-        "operands": ["n"]
+        "operands": ["num"]
       },
       "layout": {
         "min": 15917056,
@@ -48399,12 +48509,12 @@
         }
       ],
       "signature": {
-        "stack_string": "f:Int -> ∅",
+        "stack_string": "cond:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "f",
+              "name": "cond",
               "value_types": ["Int"]
             }
           ]
@@ -49066,7 +49176,7 @@
       "category": "stack",
       "subCategory": "",
       "description": {
-        "short": "Copy value of `s[i]` and pushes it onto the stack.",
+        "short": "Copy value of `s(i)` and pushes it onto the stack.",
         "tags": ["stack"],
         "exit_codes": [
           {
@@ -49155,8 +49265,8 @@
       "category": "stack",
       "subCategory": "",
       "description": {
-        "short": "Copy value of `s[i]` and pushes it onto the stack.",
-        "long": "Copy value of `s[i]` and pushes it onto the stack. This instruction is equivalent to `PUSH` except that it operates on a integer value with bigger range.",
+        "short": "Copy value of `s(i)` and pushes it onto the stack.",
+        "long": "Copy value of `s(i)` and pushes it onto the stack. This instruction is equivalent to `PUSH` except that it operates on a integer value with bigger range.",
         "tags": ["stack"],
         "exit_codes": [
           {
@@ -49257,7 +49367,7 @@
       "category": "stack",
       "subCategory": "",
       "description": {
-        "short": "Removes the top element from the stack and stores it in `s[i]`. If `i` equal to 0, POP is effectively a `DROP`, i.e. the top element is removed from the stack.",
+        "short": "Removes the top element from the stack and stores it in `s(i)`. If `i` equal to 0, POP is effectively a `DROP`, i.e. the top element is removed from the stack.",
         "tags": ["stack"],
         "exit_codes": [
           {
@@ -49307,8 +49417,8 @@
       "category": "stack",
       "subCategory": "",
       "description": {
-        "short": "Removes the top element from the stack and stores it in `s[i]`",
-        "long": "Removes the top element from the stack and stores it in `s[i]`. If `i` equal to 0, POP is effectively a `DROP`, i.e. the top element is removed from the stack. This instruction is equivalent to `POP` except that it operates on a integer value with bigger range.",
+        "short": "Removes the top element from the stack and stores it in `s(i).`",
+        "long": "Removes the top element from the stack and stores it in `s(i)`. If `i` equal to 0, POP is effectively a `DROP`, i.e. the top element is removed from the stack. This instruction is equivalent to `POP` except that it operates on a integer value with bigger range.",
         "tags": ["stack"],
         "exit_codes": [
           {
@@ -49783,7 +49893,7 @@
         "prefix_str": "19F"
       },
       "signature": {
-        "stack_string": "b:Builder -> b2:Builder",
+        "stack_string": "b:Builder -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -49797,7 +49907,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
