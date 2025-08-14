@@ -148,6 +148,9 @@ function InstructionsPage() {
     return out
   }, [filteredInstructions, sortMode])
 
+  const [shownLimit, setShownLimit] = useState<number>(100)
+  const handleShowMore = () => setShownLimit(prev => prev + 100)
+
   if (!spec) {
     return <div>Loading specification...</div>
   }
@@ -207,6 +210,9 @@ function InstructionsPage() {
             expandedRows={expandedRows}
             onRowClick={handleRowClick}
             groupByCategory={sortMode === "category"}
+            limit={shownLimit}
+            totalCount={Object.keys(sortedInstructions).length}
+            onShowMore={handleShowMore}
             emptyState={
               Object.keys(sortedInstructions).length === 0 ? (
                 <div className={styles.noResultsSuggestion} role="status" aria-live="polite">

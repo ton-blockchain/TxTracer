@@ -35,6 +35,9 @@ interface InstructionTableProps {
   readonly onRowClick: (instructionName: string) => void
   readonly groupByCategory?: boolean
   readonly emptyState?: React.ReactNode
+  readonly limit?: number
+  readonly totalCount?: number
+  readonly onShowMore?: () => void
 }
 
 const InstructionTable: React.FC<InstructionTableProps> = ({
@@ -43,8 +46,12 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
   onRowClick,
   groupByCategory = false,
   emptyState,
+  limit = 100,
+  totalCount,
+  onShowMore,
 }: InstructionTableProps) => {
   const instructionEntries = Object.entries(instructions)
+  const shownCount = Math.min(instructionEntries.length, limit)
 
   return (
     <div className={styles.divTable} role="table">
@@ -64,6 +71,11 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
           </div>
           <div className={`${styles.divTh} ${styles.stackColumn}`} role="columnheader">
             Stack
+            {typeof totalCount === "number" && (
+              <span className={styles.shownCountBadge} aria-label="Shown instructions count">
+                Shown {shownCount} out of {instructionEntries.length}
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -76,7 +88,7 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
             </div>
           </div>
         )}
-        {instructionEntries.slice(0, 100).map(([name, instruction], idx) => {
+        {instructionEntries.slice(0, shownCount).map(([name, instruction], idx) => {
           const opcode = infoOf(name)
           if (!opcode) return null
 
@@ -157,6 +169,27 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
             </Fragment>
           )
         })}
+        {instructionEntries.length > shownCount && onShowMore && (
+          <div className={styles.divTrExpanded} role="row">
+            <div className={`${styles.divTd} ${styles.divTdNoPadding} full`} role="cell">
+              <div
+                className={styles.loadMoreCell}
+                onClick={onShowMore}
+                onKeyDown={e => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault()
+                    onShowMore()
+                  }
+                }}
+                tabIndex={0}
+                role="button"
+                aria-label="Show more instructions"
+              >
+                Show more instructions
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
