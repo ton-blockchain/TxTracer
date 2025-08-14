@@ -296,13 +296,13 @@
 }
 
 .exampleItemError {
-  background-color: #fff5f5;
+  background-color: var(--color-error-bg-light);
 }
 
 .exampleErrorHeader {
   padding: var(--spacing-sm);
   margin-bottom: var(--spacing-sm);
-  background-color: #ffebee;
+  background-color: var(--color-error-bg);
   border-radius: calc(var(--border-radius-md) / 2);
   color: var(--color-text-primary);
   display: flex;

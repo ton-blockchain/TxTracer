@@ -24,6 +24,7 @@
   --color-error: #ff3b30;
   --color-error-rgb: 255, 59, 48;
   --color-error-bg: #ffebe9;
+  --color-error-bg-light: #ffebee;
   --color-error-text: #a32119;
 
   --color-warning: #ffcc00;
@@ -270,6 +271,7 @@
   --color-error: #ff453a;
   --color-error-rgb: 255, 69, 58;
   --color-error-bg: #4d1a16;
+  --color-error-bg-light: #2e1b19;
   --color-error-text: #ff8f87;
 
   --color-warning: #ffd60a;

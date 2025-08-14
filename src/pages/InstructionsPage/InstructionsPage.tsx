@@ -161,7 +161,7 @@ function InstructionsPage() {
     return out
   }, [filteredInstructions, sortMode])
 
-  const [shownLimit, setShownLimit] = useState<number>(stored?.shownLimit ?? 100)
+  const [shownLimit, setShownLimit] = useState<number>(100)
   const handleShowMore = () => setShownLimit(prev => prev + 100)
 
   useEffect(() => {

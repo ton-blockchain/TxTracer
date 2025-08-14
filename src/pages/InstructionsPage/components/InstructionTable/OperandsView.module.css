@@ -1,0 +1,114 @@
+.operandsSection {
+  margin-bottom: var(--spacing-lg);
+}
+
+.sectionTitle {
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.operandsList {
+  list-style: none;
+  padding-left: 0;
+  margin: 0 0 var(--spacing-sm) 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.operandItem {
+  background-color: var(--color-background-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-xxs) var(--spacing-sm);
+  font-family: var(--font-family-mono), monospace;
+}
+
+.operandName {
+  color: var(--color-text-primary);
+}
+
+.operandsEmpty {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.argTree {
+}
+
+.argsHeader {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xs);
+  font-family: var(--font-family-mono), monospace;
+}
+
+.argChildren {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.argNode {
+  font-size: var(--font-size-xsm);
+  margin-bottom: var(--spacing-sm);
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.argRowHeader,
+.argHeader {
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.argNameAndType {
+  font-family: var(--font-family-mono), monospace;
+  display: flex;
+}
+
+.argName {
+}
+
+.argValidRange {
+  font-family: var(--font-family-mono), monospace;
+  color: var(--color-text-secondary);
+}
+
+.argRowList {
+  list-style: none;
+  padding-left: 0;
+  margin: var(--spacing-xxs) 0 0 0;
+}
+
+.argRow {
+  display: flex;
+  gap: var(--spacing-xs);
+  font-family: var(--font-family-mono), monospace;
+  color: var(--color-text-secondary);
+}
+
+.argLabel {
+  color: var(--color-text-tertiary);
+}
+
+.argValue {
+  color: var(--color-text-primary);
+}
+
+.argCompactRow {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.argCompactValue {
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-mono), monospace;
+}
+
+.argSummary {
+  margin-top: var(--spacing-xs);
+  font-family: var(--font-family-mono), monospace;
+  color: var(--color-text-secondary);
+}

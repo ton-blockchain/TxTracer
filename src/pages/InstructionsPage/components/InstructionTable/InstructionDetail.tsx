@@ -17,6 +17,7 @@ import {useProcessedMarkdown} from "../../hooks/useProcessedMarkdown"
 
 import styles from "./InstructionDetail.module.css"
 import {formatGasRanges} from "./utils.ts"
+import OperandsView from "./OperandsView"
 
 interface InstructionDetailProps {
   readonly instruction: Instruction
@@ -97,6 +98,8 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
           </ul>
         </div>
       )}
+
+      <OperandsView instruction={instruction} />
 
       <div className={styles.detailSection}>
         <div className={styles.descriptionText}>

@@ -1056,7 +1056,7 @@
       "subCategory": "other_arith",
       "description": {
         "short": "",
-        "long": "Sorts two integers. Quiet version of this operation returns two `NaN`s if any of the arguments are `NaN`s.",
+        "long": "Sorts two integers.",
         "operands": []
       },
       "layout": {
@@ -1881,7 +1881,7 @@
       "subCategory": "other_arith",
       "description": {
         "short": "",
-        "long": ""
+        "long": "Computes the minimum of two integers `x` and `y`. Returns `NaN` if any of the arguments is `NaN`."
       },
       "layout": {
         "min": 12039688,
@@ -1898,14 +1898,29 @@
         "prefix_str": "B7B608"
       },
       "signature": {
-        "stack_string": "",
+        "stack_string": "x:Int y:Int -> result:Int",
         "inputs": {
-          "stack": [],
-          "registers": []
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ]
         },
         "outputs": {
-          "stack": [],
-          "registers": []
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Int"]
+            }
+          ]
         }
       }
     },
@@ -1914,7 +1929,7 @@
       "subCategory": "other_arith",
       "description": {
         "short": "",
-        "long": ""
+        "long": "Computes the maximum of two integers `x` and `y`. Returns `NaN` if any of the arguments is `NaN`."
       },
       "layout": {
         "min": 12039689,
@@ -1931,14 +1946,29 @@
         "prefix_str": "B7B609"
       },
       "signature": {
-        "stack_string": "",
+        "stack_string": "x:Int y:Int -> result:Int",
         "inputs": {
-          "stack": [],
-          "registers": []
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ]
         },
         "outputs": {
-          "stack": [],
-          "registers": []
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Int"]
+            }
+          ]
         }
       }
     },
@@ -1947,7 +1977,7 @@
       "subCategory": "other_arith",
       "description": {
         "short": "",
-        "long": ""
+        "long": "Sorts two integers. Returns two `NaN` if any of the arguments is `NaN`."
       },
       "layout": {
         "min": 12039690,
@@ -1964,14 +1994,34 @@
         "prefix_str": "B7B60A"
       },
       "signature": {
-        "stack_string": "",
+        "stack_string": "x:Int y:Int -> r1:Int r2:Int",
         "inputs": {
-          "stack": [],
-          "registers": []
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ]
         },
         "outputs": {
-          "stack": [],
-          "registers": []
+          "stack": [
+            {
+              "type": "simple",
+              "name": "r1",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r2",
+              "value_types": ["Int"]
+            }
+          ]
         }
       }
     },
@@ -19978,7 +20028,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11083776,
@@ -20158,7 +20208,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11085056,
@@ -20207,7 +20257,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11085312,
@@ -20256,7 +20306,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11085824,
@@ -20305,7 +20355,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11086080,
@@ -20354,7 +20404,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11086336,
@@ -20403,7 +20453,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11086848,
@@ -20523,7 +20573,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036384,
@@ -20703,7 +20753,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036389,
@@ -20752,7 +20802,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036390,
@@ -20801,7 +20851,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036392,
@@ -20850,7 +20900,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036393,
@@ -20899,7 +20949,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036394,
@@ -20948,7 +20998,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036396,
@@ -22460,7 +22510,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11116544,
@@ -22520,7 +22570,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11116800,
@@ -22580,7 +22630,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11117056,
@@ -22640,7 +22690,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11117568,
@@ -22694,7 +22744,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11117824,
@@ -22748,7 +22798,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11118080,
@@ -22802,7 +22852,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11118592,
@@ -22856,7 +22906,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11118848,
@@ -22910,7 +22960,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11119104,
@@ -22964,7 +23014,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11119616,
@@ -23018,7 +23068,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11119872,
@@ -23072,7 +23122,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11120128,
@@ -23126,7 +23176,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036512,
@@ -23186,7 +23236,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036513,
@@ -23246,7 +23296,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036514,
@@ -23306,7 +23356,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036516,
@@ -23360,7 +23410,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036517,
@@ -23414,7 +23464,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036518,
@@ -23468,7 +23518,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036520,
@@ -23522,7 +23572,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036521,
@@ -23576,7 +23626,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036522,
@@ -23792,7 +23842,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11124736,
@@ -23852,7 +23902,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11124992,
@@ -23912,7 +23962,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11125248,
@@ -23972,7 +24022,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11125760,
@@ -24026,7 +24076,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11126016,
@@ -24080,7 +24130,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11126272,
@@ -24134,7 +24184,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11126784,
@@ -24188,7 +24238,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11127040,
@@ -24242,7 +24292,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11127296,
@@ -24296,7 +24346,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11127808,
@@ -24350,7 +24400,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11128064,
@@ -24404,7 +24454,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 11128320,
@@ -24458,7 +24508,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036544,
@@ -24518,7 +24568,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036545,
@@ -24578,7 +24628,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036546,
@@ -24638,7 +24688,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036548,
@@ -24692,7 +24742,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036549,
@@ -24746,7 +24796,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036550,
@@ -24800,7 +24850,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036552,
@@ -24854,7 +24904,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036553,
@@ -24908,7 +24958,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036554,
@@ -24962,7 +25012,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036556,
@@ -25016,7 +25066,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036557,
@@ -25070,7 +25120,7 @@
       "description": {
         "short": "",
         "long": "",
-        "operands": ["t"]
+        "operands": []
       },
       "layout": {
         "min": 12036558,
@@ -38032,7 +38082,7 @@
       "subCategory": "int_const",
       "description": {
         "short": "",
-        "long": "Pushes `2^(xx+1)-1` for `0 <= xx <= 255`.",
+        "long": "Pushes `2 ^ (x + 1) - 1`.",
         "operands": ["x"]
       },
       "layout": {
@@ -38080,7 +38130,7 @@
       "subCategory": "int_const",
       "description": {
         "short": "",
-        "long": "Pushes `-2^(xx+1)` for `0 <= xx <= 255`.",
+        "long": "Pushes `-2 ^ (x + 1)`.",
         "operands": ["x"]
       },
       "layout": {
@@ -42111,8 +42161,8 @@
       "category": "arithmetic",
       "subCategory": "int_const",
       "description": {
-        "short": "",
-        "long": "(Quietly) pushes `2^(xx+1)` for `0 <= xx <= 255`.\n`2^256` is a `NaN`.",
+        "short": "Quietly pushes `2 ^ (x + 1)`.",
+        "long": "Note that `2^256` is a `NaN`.",
         "operands": ["x"]
       },
       "layout": {
@@ -43711,7 +43761,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`0 <= n < 16`. Length of `ssss` is `n+1` bytes.\n`{string}` is a [string literal](https://github.com/Piterden/TON-docs/blob/master/Fift.%20A%20Brief%20Introduction.md#user-content-29-string-literals).\n`DEBUGSTR`: `ssss` is the given string.\n`DEBUGSTRI`: `ssss` is one-byte integer `0 <= x <= 255` followed by the given string.",
+        "long": "Outputs passed string to VM logs.",
         "operands": ["s"]
       },
       "layout": {
@@ -44274,7 +44324,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11087872,
@@ -44321,7 +44372,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11088128,
@@ -44368,7 +44420,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11088384,
@@ -44415,7 +44468,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11088896,
@@ -44461,7 +44515,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11089152,
@@ -44507,7 +44562,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11089408,
@@ -44553,7 +44609,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11089920,
@@ -44599,7 +44656,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11090176,
@@ -44645,7 +44703,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11090432,
@@ -44691,7 +44750,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11090944,
@@ -44737,7 +44797,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11091200,
@@ -44783,7 +44844,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11091456,
@@ -44829,7 +44891,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11120640,
@@ -44876,7 +44939,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11120896,
@@ -44923,7 +44987,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11121152,
@@ -44970,7 +45035,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11121664,
@@ -45016,7 +45082,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11121920,
@@ -45062,7 +45129,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11122176,
@@ -45108,7 +45176,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11122688,
@@ -45154,7 +45223,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11122944,
@@ -45200,7 +45270,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11123200,
@@ -45246,7 +45317,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11123712,
@@ -45292,7 +45364,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11123968,
@@ -45338,7 +45411,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11124224,
@@ -45384,7 +45458,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11128832,
@@ -45431,7 +45506,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11129088,
@@ -45478,7 +45554,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11129344,
@@ -45525,7 +45602,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11129856,
@@ -45571,7 +45649,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11130112,
@@ -45617,7 +45696,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11130368,
@@ -45663,7 +45743,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11130880,
@@ -45709,7 +45790,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11131136,
@@ -45755,7 +45837,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11131392,
@@ -45801,7 +45884,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11131904,
@@ -45847,7 +45931,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11132160,
@@ -45893,7 +45978,8 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": ""
+        "long": "",
+        "operands": ["t"]
       },
       "layout": {
         "min": 11132416,
@@ -48329,7 +48415,7 @@
       "category": "arithmetic",
       "subCategory": "int_const",
       "description": {
-        "short": "Pushes tiny signed integer `x` (`-5 <= x <= 10`) into the stack.",
+        "short": "Pushes tiny signed integer `x` into the stack. Note that the instruction does not have the usual 4-bit range for the argument, but `-5 <= x <= 10`!",
         "exit_codes": [],
         "operands": ["i"]
       },
@@ -48372,7 +48458,7 @@
       "category": "arithmetic",
       "subCategory": "int_const",
       "description": {
-        "short": "Pushes small signed integer `xx` (`-128 <= xx <= 127`) into the stack.",
+        "short": "Pushes small 8-bit signed integer `x` into the stack.",
         "exit_codes": [],
         "operands": ["x"]
       },
@@ -48416,7 +48502,7 @@
       "category": "arithmetic",
       "subCategory": "int_const",
       "description": {
-        "short": "Pushes signed integer `xxxx` (`-32768 <= xxxx <= 32767`) into the stack.",
+        "short": "Pushes 16-bit signed integer `x` into the stack.",
         "exit_codes": [],
         "operands": ["x"]
       },
@@ -48432,8 +48518,8 @@
               "$": "int",
               "len": 16,
               "range": {
-                "min": "-65536",
-                "max": "65535"
+                "min": "-32768",
+                "max": "32767"
               }
             }
           ]
@@ -48460,7 +48546,7 @@
       "category": "arithmetic",
       "subCategory": "int_const",
       "description": {
-        "short": "Pushes big signed integer `xxx`.",
+        "short": "Pushes big signed integer `x`.",
         "exit_codes": [],
         "operands": ["x"]
       },
