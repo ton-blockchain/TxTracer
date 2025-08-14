@@ -84,11 +84,12 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
         </div>
       </div>
 
-      {gasConsumption.length > 1 && (
+      {gasConsumption.length > 1 && gasConsumption.length < 10 && (
         <div className={styles.detailSection}>
           <h3 className={styles.detailSectionTitle}>Gas Details</h3>
           <ul className={styles.exitCodeList}>
             {gasConsumption
+              .filter(it => it.value !== 36)
               .sort((a, b) => a.value - b.value)
               .map((entry, idx) => (
                 <li key={idx} className={styles.exitCodeItem}>

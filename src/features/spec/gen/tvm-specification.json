@@ -3852,9 +3852,15 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Equivalent to `SWAP` `STBREFR`.",
+        "long": "Converts a _Builder_ to _Cell_ and stores a reference to it into another _Builder_.",
         "tags": ["builder building"],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["SWAP", "STBREFR"]
+          }
+        ]
       },
       "layout": {
         "min": 13570304,
@@ -3958,9 +3964,15 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Equivalent to `SWAP` `STREF`.",
+        "long": "Stores a reference to _Cell_ `c` into _Builder_ `b` with swapped arguments.",
         "tags": ["builder building"],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["SWAP", "STREF"]
+          }
+        ]
       },
       "layout": {
         "min": 13571072,
@@ -4008,9 +4020,15 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Equivalent to `ENDC` `SWAP` `STREF`.",
+        "long": "Converts a _Builder_ to _Cell_ and stores a reference to it into another _Builder_.",
         "tags": ["builder building"],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["ENDC", "SWAP", "STREF"]
+          }
+        ]
       },
       "layout": {
         "min": 13571328,
@@ -4058,9 +4076,15 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Equivalent to `SWAP` `STSLICE`.",
+        "long": "Stores _Slice_ `s` into _Builder_ `b` with swapped arguments.",
         "tags": ["builder building"],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["SWAP", "STSLICE"]
+          }
+        ]
       },
       "layout": {
         "min": 13571584,
@@ -4108,9 +4132,15 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Concatenates two builders.\nEquivalent to `SWAP` `STB`.",
+        "long": "Appends all data from _Builder_ `b'` to _Builder_ `b` with swapped arguments.",
         "tags": ["builder building"],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["SWAP", "STB"]
+          }
+        ]
       },
       "layout": {
         "min": 13571840,
@@ -4158,7 +4188,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Quiet version of `STREF`.",
+        "long": "Stores a reference to _Cell_ `c` into _Builder_ `b`. This is a quiet version of `STREF` which means that instead of throwing an exception, it pushes a status flag to the stack: -1 if there is no space in `b`, 0 if the operation succeeds.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -4239,7 +4269,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Quiet version of `STBREF`.",
+        "long": "Converts a _Builder_ to _Cell_ and stores a reference to it into another _Builder_. This is a quiet version of `STBREF` which means that instead of throwing an exception, it pushes a status flag to the stack: -1 if there is no space in `b`, 0 if the operation succeeds.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -4320,7 +4350,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Quiet version of `STSLICE`.",
+        "long": "Stores _Slice_ `s` into _Builder_ `b`. This is a quiet version of `STSLICE` which means that instead of throwing an exception, it pushes a status flag to the stack: -1 if there is no space in `b`, 0 if the operation succeeds.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -4401,7 +4431,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Quiet version of `STB`.",
+        "long": "Appends all data from _Builder_ `b'` to _Builder_ `b`. This is a quiet version of `STB` which means that instead of throwing an exception, it pushes a status flag to the stack: -1 if there is no space in `b`, 0 if the operation succeeds.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -4482,7 +4512,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Quiet version of `STREFR`.",
+        "long": "Stores a reference to _Cell_ `c` into _Builder_ `b` with swapped arguments. This is a quiet version of `STREFR` which means that instead of throwing an exception, it pushes a status flag to the stack: -1 if there is no space in `b`, 0 if the operation succeeds.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -4563,7 +4593,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Quiet version of `STBREFR`.",
+        "long": "Converts a _Builder_ to _Cell_ and stores a reference to it into another _Builder_. This is a quiet version of `STBREFR` which means that instead of throwing an exception, it pushes a status flag to the stack: -1 if there is no space in `b`, 0 if the operation succeeds.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -4644,7 +4674,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Quiet version of `STSLICER`.",
+        "long": "Stores _Slice_ `s` into _Builder_ `b` with swapped arguments. This is a quiet version of `STSLICER` which means that instead of throwing an exception, it pushes a status flag to the stack: -1 if there is no space in `b`, 0 if the operation succeeds.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -4725,7 +4755,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Quiet version of `STBR`.",
+        "long": "Appends all data from _Builder_ `b'` to _Builder_ `b` with swapped arguments. This is a quiet version of `STBR` which means that instead of throwing an exception, it pushes a status flag to the stack: -1 if there is no space in `b`, 0 if the operation succeeds.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -4805,8 +4835,8 @@
       "category": "cell",
       "subCategory": "cell_serialize",
       "description": {
-        "short": "",
-        "long": "If `x!=0`, creates a _special_ or _exotic_ cell from _Builder_ `b`.\nThe type of the exotic cell must be stored in the first 8 bits of `b`.\nIf `x=0`, it is equivalent to `ENDC`. Otherwise some validity checks on the data and references of `b` are performed before creating the exotic cell.",
+        "short": "Creates an exotic or ordinary _Cell_ from _Builder_.",
+        "long": "If ` x!= 0`, creates a _special_ or _exotic_ cell from _Builder_ `b`.\nThe type of the exotic cell must be stored in the first 8 bits of `b`.\nIf `x=0`, it is equivalent to `ENDC`. Otherwise some validity checks on the data and references of `b` are performed before creating the exotic cell.",
         "operands": []
       },
       "layout": {
@@ -5675,9 +5705,15 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Equivalent to `LDREF` `SWAP` `CTOS`.",
+        "long": "Loads a cell reference `c` from `s`, converts it to _Slice_ and returns the _Slice_ and remainder.",
         "tags": ["slice parsing"],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["LDREF", "SWAP", "CTOS"]
+          }
+        ]
       },
       "layout": {
         "min": 13959168,
@@ -6325,7 +6361,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "A quiet version of `SPLIT`.",
+        "long": "Splits the first `0 <= length <= 1023` data bits and first `0 <= r <= 4` references from `s` into `s'`, returning the remainder of `s` as `s''`. This is a quiet version of `SPLIT` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "operands": []
       },
       "layout": {
@@ -7520,7 +7556,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Jumps_, or transfers control, to continuation `c`.\nThe remainder of the previous current continuation `c` is discarded.",
+        "long": "_Jumps_, or transfers control, to continuation `c`.\nThe remainder of the previous current continuation `cс` is discarded.",
         "operands": []
       },
       "layout": {
@@ -7555,8 +7591,14 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Returns_ to the continuation at `c0`. The remainder of the current continuation `c` is discarded.\nApproximately equivalent to `c0 PUSHCTR` `JMPX`.",
-        "operands": []
+        "long": "_Returns_ to the continuation at `c0`. The remainder of the current continuation `cc` is discarded.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["c0 PUSHCTR", "JMPX"]
+          }
+        ]
       },
       "layout": {
         "min": 14364672,
@@ -7589,8 +7631,14 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Returns_ to the continuation at `c1`.\nApproximately equivalent to `c1 PUSHCTR` `JMPX`.",
-        "operands": []
+        "long": "_Returns_ to the continuation at `c1`. The remainder of the current continuation `cc` is discarded.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["c1 PUSHCTR", "JMPX"]
+          }
+        ]
       },
       "layout": {
         "min": 14364928,
@@ -7691,7 +7739,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Similar to `CALLCC`, but the remainder of the current continuation (the old value of `c`) is converted into a _Slice_ before pushing it into the stack of `c`.",
+        "long": "_Transfers control_ to continuation `c`, converting the remainder of the current continuation (the old value of `cс`) into a _Slice_ before pushing it into the stack of `c`. Unlike `CALLCC` which pushes the old continuation as is, this instruction converts it to a _Slice_ first.",
         "operands": []
       },
       "layout": {
@@ -7726,7 +7774,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Similar to `CALLXARGS`, but takes `-1 <= p,r <= 254` from the stack. The next three operations also take `p` and `r` from the stack, both in the range `-1...254`.",
+        "long": "_Calls_ continuation `c` with parameters and expected return values, but unlike `CALLXARGS` which takes these values from the instruction itself, this instruction takes `-1 <= p,r <= 254` from the stack. Here `p` represents the number of parameters to pass to the continuation, and `r` represents the number of expected return values. The next three operations (`RETVARARGS`, `JMPXVARARGS`, `CALLCCVARARGS`) also take `p` and `r` from the stack, both in the range `-1...254`.",
         "operands": []
       },
       "layout": {
@@ -7782,7 +7830,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Similar to `RETARGS`.",
+        "long": "_Returns_ to the continuation at `c0`, but unlike `RETARGS` which takes the number of return values from the instruction itself, this instruction takes the number of return values `0 <= r <= 255` from the stack. The top `r` values from the current stack are passed as return values to `c0`.",
         "operands": []
       },
       "layout": {
@@ -7833,7 +7881,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Similar to `JMPXARGS`.",
+        "long": "_Jumps_ to continuation `c`, but unlike `JMPXARGS` which takes the number of parameters from the instruction itself, this instruction takes the number of parameters `0 <= p <= 254` from the stack. Only the top `p` values from the current stack are passed to the continuation, and the remainder of the current stack is discarded. The remainder of the current continuation is also discarded.",
         "operands": []
       },
       "layout": {
@@ -7889,7 +7937,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Similar to `CALLCCARGS`.",
+        "long": "_Calls_ continuation `c` with parameters and pushes the old value of the current continuation, but unlike `CALLCCARGS` which takes the number of parameters and return values from the instruction itself, this instruction takes `-1 <= p,r <= 254` from the stack. The old value of the current continuation `cс` (along with the top `p` values from the original stack) is pushed into the stack of the newly-invoked continuation `c`, setting `cc.nargs` to `r`. This allows the called continuation to later return to the caller with the specified number of return values.",
         "operands": []
       },
       "layout": {
@@ -7945,8 +7993,14 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Equivalent to `c0 PUSHCTR` `JMPXDATA`. In this way, the remainder of the current continuation is converted into a _Slice_ and returned to the caller.",
-        "operands": []
+        "long": "Returns to the continuation at `c0`, converting the remainder of the current continuation into a _Slice_ and pushing it into the stack of `c0`.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["c0 PUSHCTR", "JMPXDATA"]
+          }
+        ]
       },
       "layout": {
         "min": 14368512,
@@ -8533,7 +8587,7 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Similar to `REPEAT`, but it is applied to the current continuation `c`.",
+        "long": "Executes the current continuation `cс` `n` times, if integer `n` is non-negative. This is like `REPEAT` but instead of executing a separate continuation `body`, it repeatedly executes the current continuation. If `n >= 2^31` or `n < -2^31`, generates a range check exception.",
         "operands": []
       },
       "layout": {
@@ -8568,7 +8622,7 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Executes continuation `c`, then pops an integer `x` from the resulting stack. If `x` is zero, performs another iteration of this loop. The actual implementation of this primitive involves an extraordinary continuation `ec_until` with its arguments set to the body of the loop (continuation `c`) and the original current continuation `c`. This extraordinary continuation is then saved into the savelist of `c` as `c.c0` and the modified `c` is then executed. The other loop primitives are implemented similarly with the aid of suitable extraordinary continuations.",
+        "long": "Executes continuation `c`, then pops an integer `x` from the resulting stack. If `x` is zero, performs another iteration of this loop. The actual implementation of this primitive involves an extraordinary continuation `ec_until` with its arguments set to the body of the loop (continuation `c`) and the original current continuation `cс`. This extraordinary continuation is then saved into the savelist of `c` as `c.c0` and the modified `c` is then executed. The other loop primitives are implemented similarly with the aid of suitable extraordinary continuations.",
         "operands": []
       },
       "layout": {
@@ -8603,7 +8657,7 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Similar to `UNTIL`, but executes the current continuation `c` in a loop. When the loop exit condition is satisfied, performs a `RET`.",
+        "long": "Executes the current continuation `cс`, then pops an integer `x` from the resulting stack. If `x` is zero, performs another iteration of this loop. Unlike `UNTIL` which executes a separate continuation as the loop body, this instruction uses the current continuation itself as the loop body. When the loop exit condition is satisfied (when `x` is non-zero), performs a `RET`.",
         "operands": []
       },
       "layout": {
@@ -8677,7 +8731,7 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Similar to `WHILE`, but uses the current continuation `c` as the loop body.",
+        "long": "Executes continuation `c'` and pops an integer `x` from the resulting stack. If `x` is zero, exits the loop and transfers control to the original continuation. If `x` is non-zero, executes the current continuation `cс` as the loop body, and then begins a new iteration. Unlike `WHILE` which uses a separate continuation as the loop body, this instruction uses the current continuation itself as the loop body.",
         "operands": []
       },
       "layout": {
@@ -8712,7 +8766,7 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Similar to `REPEAT`, but executes `c` infinitely many times. A `RET` only begins a new iteration of the infinite loop, which can be exited only by an exception, or a `RETALT` (or an explicit `JMPX`).",
+        "long": "Executes continuation `c` infinitely many times. Unlike `REPEAT` which executes a continuation a specified number of times, this instruction creates an infinite loop. A `RET` inside the code of `c` only begins a new iteration of the infinite loop, which can be exited only by an exception, or a `RETALT` (or an explicit `JMPX`).",
         "operands": []
       },
       "layout": {
@@ -8747,7 +8801,7 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Similar to `AGAIN`, but performed with respect to the current continuation `c`.",
+        "long": "Executes the current continuation `cс` infinitely many times. Unlike `AGAIN` which executes a separate continuation in an infinite loop, this instruction uses the current continuation itself as the loop body. A `RET` only begins a new iteration of the infinite loop, which can be exited only by an exception, or a `RETALT` (or an explicit `JMPX`).",
         "operands": []
       },
       "layout": {
@@ -8781,7 +8835,7 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Similar to `REPEAT`, but also sets `c1` to the original `c` after saving the old value of `c1` into the savelist of the original `c`. In this way `RETALT` could be used to break out of the loop body.",
+        "long": "Executes continuation `body` `n` times, if integer `n` is non-negative, just like `REPEAT`. Additionally, it sets `c1` to the original `c` after saving the old value of `c1` into the savelist of the original `c`. This modification allows `RETALT` to be used to break out of the loop body, providing a way to exit the loop before all iterations are completed.",
         "operands": []
       },
       "layout": {
@@ -8821,8 +8875,14 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Similar to `REPEATEND`, but also sets `c1` to the original `c0` after saving the old value of `c1` into the savelist of the original `c0`. Equivalent to `SAMEALTSAVE` `REPEATEND`.",
-        "operands": []
+        "long": "Executes the current continuation `cс` `n` times, if integer `n` is non-negative, just like `REPEATEND`. Additionally, it sets `c1` to the original `c0` after saving the old value of `c1` into the savelist of the original `c0`. This modification allows `RETALT` to be used to break out of the loop body, providing a way to exit the loop before all iterations are completed.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["SAMEALTSAVE", "REPEATEND"]
+          }
+        ]
       },
       "layout": {
         "min": 14882048,
@@ -8856,7 +8916,7 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Similar to `UNTIL`, but also modifies `c1` in the same way as `REPEATBRK`.",
+        "long": "Executes continuation `c`, then pops an integer `x` from the resulting stack. If `x` is zero, performs another iteration of this loop, just like `UNTIL`. Additionally, it sets `c1` to the original continuation after saving the old value of `c1` into the savelist of the original continuation. This modification allows `RETALT` to be used to break out of the loop body, providing a way to exit the loop before the exit condition is met.",
         "operands": []
       },
       "layout": {
@@ -8891,8 +8951,14 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Equivalent to `SAMEALTSAVE` `UNTILEND`.",
-        "operands": []
+        "long": "Executes the current continuation `cс`, then pops an integer `x` from the resulting stack. If `x` is zero, performs another iteration of this loop, just like `UNTILEND`. Additionally, it sets `c1` to the original `c0` after saving the old value of `c1` into the savelist of the original `c0`. This modification allows `RETALT` to be used to break out of the loop body, providing a way to exit the loop before the exit condition is met.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["SAMEALTSAVE", "UNTILEND"]
+          }
+        ]
       },
       "layout": {
         "min": 14882560,
@@ -8925,7 +8991,7 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Similar to `WHILE`, but also modifies `c1` in the same way as `REPEATBRK`.",
+        "long": "Executes continuation `c'` and pops an integer `x` from the resulting stack. If `x` is zero, exits the loop and transfers control to the original continuation. If `x` is non-zero, executes continuation `c`, and then begins a new iteration, just like `WHILE`. Additionally, it sets `c1` to the original continuation after saving the old value of `c1` into the savelist of the original continuation. This modification allows `RETALT` to be used to break out of the loop body, providing a way to exit the loop before the condition becomes false.",
         "operands": []
       },
       "layout": {
@@ -8965,8 +9031,14 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Equivalent to `SAMEALTSAVE` `WHILEEND`.",
-        "operands": []
+        "long": "Executes continuation `c'` and pops an integer `x` from the resulting stack. If `x` is zero, exits the loop and transfers control to the original continuation. If `x` is non-zero, executes the current continuation `cс` as the loop body, and then begins a new iteration, just like `WHILEEND`. Additionally, it sets `c1` to the original `c0` after saving the old value of `c1` into the savelist of the original `c0`. This modification allows `RETALT` to be used to break out of the loop body, providing a way to exit the loop before the condition becomes false.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["SAMEALTSAVE", "WHILEEND"]
+          }
+        ]
       },
       "layout": {
         "min": 14883072,
@@ -9000,7 +9072,7 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Similar to `AGAIN`, but also modifies `c1` in the same way as `REPEATBRK`.",
+        "long": "Executes continuation `c` infinitely many times, just like `AGAIN`. Additionally, it sets `c1` to the original continuation after saving the old value of `c1` into the savelist of the original continuation. This modification allows `RETALT` to be used to break out of the infinite loop, providing a way to exit the loop that would otherwise continue indefinitely.",
         "operands": []
       },
       "layout": {
@@ -9035,8 +9107,14 @@
       "subCategory": "continuation_cond_loop",
       "description": {
         "short": "",
-        "long": "Equivalent to `SAMEALTSAVE` `AGAINEND`.",
-        "operands": []
+        "long": "Executes the current continuation `cс` infinitely many times, just like `AGAINEND`. Additionally, it sets `c1` to the original `c0` after saving the old value of `c1` into the savelist of the original `c0`. This modification allows `RETALT` to be used to break out of the infinite loop, providing a way to exit the loop that would otherwise continue indefinitely.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["SAMEALTSAVE", "AGAINEND"]
+          }
+        ]
       },
       "layout": {
         "min": 14883584,
@@ -9069,7 +9147,7 @@
       "subCategory": "continuation_change",
       "description": {
         "short": "",
-        "long": "Similar to `RETURNARGS`, but with Integer `0 <= p <= 255` taken from the stack.",
+        "long": "Leaves only the top `p` values in the current stack, where `0 <= p <= 255` is taken from the stack. Unlike `RETURNARGS` which takes the number of values to keep from the instruction itself, this instruction takes this number from the stack. All the unused bottom values are not discarded, but saved into continuation `c0` in the same way as `SETCONTARGS` does.",
         "operands": []
       },
       "layout": {
@@ -9103,7 +9181,7 @@
       "subCategory": "continuation_change",
       "description": {
         "short": "",
-        "long": "Similar to `SETCONTARGS`, but with `0 <= r <= 255` and `-1 <= n <= 255` taken from the stack.",
+        "long": "Pushes values into the stack of a continuation and optionally sets the number of missing arguments. Unlike `SETCONTARGS` which takes the number of values to push and the number of missing arguments from the instruction itself, this instruction takes `0 <= r <= 255` and `-1 <= n <= 255` from the stack. It pushes `r` values from the current stack into the stack of continuation `c`, and for `n` not equal to -1, sets `c.nargs` to the final size of the stack of `c` plus `n`, effectively creating a closure with `n` missing arguments.",
         "operands": []
       },
       "layout": {
@@ -9168,7 +9246,7 @@
       "subCategory": "continuation_change",
       "description": {
         "short": "",
-        "long": "If `n=-1`, this operation does nothing (`c'=c`).\nOtherwise its action is similar to `[n] SETNUMARGS`, but with `n` taken from the stack.",
+        "long": "Sets the number of arguments expected by continuation `c`. If `n=-1`, this operation does nothing (`c'=c`). Otherwise, it sets `c.nargs` to `n`, where `n` is taken from the stack. Unlike `SETNUMARGS` which takes the number of expected arguments from the instruction itself, this instruction takes this number from the stack.",
         "operands": []
       },
       "layout": {
@@ -9265,8 +9343,14 @@
       "subCategory": "continuation_change",
       "description": {
         "short": "",
-        "long": "Equivalent to `ROT` `BLESS` `ROTREV` `SETCONTVARARGS`.",
-        "operands": []
+        "long": "Transforms a _Slice_ into a simple ordinary continuation and sets its arguments from the stack.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["ROT", "BLESS", "ROTREV", "SETCONTVARARGS"]
+          }
+        ]
       },
       "layout": {
         "min": 15539968,
@@ -9330,7 +9414,7 @@
       "subCategory": "continuation_change",
       "description": {
         "short": "",
-        "long": "Similar to `c[i] PUSHCTR`, but with `i`, `0 <= i <= 255`, taken from the stack.\nNotice that this primitive is one of the few ''exotic'' primitives, which are not polymorphic like stack manipulation primitives, and at the same time do not have well-defined types of parameters and return values, because the type of `x` depends on `i`.",
+        "long": "Pushes the current value of control register `c(i)` onto the stack, where `i`, `0 <= i <= 255`, is taken from the stack. Unlike `c[i] PUSHCTR` which takes the register index from the instruction itself, this instruction takes this index from the stack. If the control register is not supported in the current codepage, or if it does not have a value, an exception is triggered.\nNotice that this primitive is one of the few ''exotic'' primitives, which are not polymorphic like stack manipulation primitives, and at the same time do not have well-defined types of parameters and return values, because the type of `x` depends on `i`.",
         "operands": []
       },
       "layout": {
@@ -9379,7 +9463,7 @@
       "subCategory": "continuation_change",
       "description": {
         "short": "",
-        "long": "Similar to `c[i] POPCTR`, but with `0 <= i <= 255` from the stack.",
+        "long": "Pops a value `x` from the stack and stores it into control register `c(i)`, where `i`, `0 <= i <= 255`, is taken from the stack. Unlike `c[i] POPCTR` which takes the register index from the instruction itself, this instruction takes this index from the stack. If the control register is not supported in the current codepage, or if it only accepts values of a specific type and `x` is not of that type, an exception is triggered.",
         "operands": []
       },
       "layout": {
@@ -9427,7 +9511,7 @@
       "subCategory": "continuation_change",
       "description": {
         "short": "",
-        "long": "Similar to `c[i] SETCONTCTR`, but with `0 <= i <= 255` from the stack.",
+        "long": "Stores value `x` into the savelist of continuation `c` as `c(i)`, and returns the resulting continuation `c'`, where `i`, `0 <= i <= 255`, is taken from the stack. Unlike `c[i] SETCONTCTR` which takes the register index from the instruction itself, this instruction takes this index from the stack. Almost all operations with continuations may be expressed in terms of this primitive, along with `POPCTRX` and `PUSHCTRX`.",
         "operands": []
       },
       "layout": {
@@ -9979,8 +10063,14 @@
       "subCategory": "continuation_change",
       "description": {
         "short": "",
-        "long": "Sets `c1` to `c0`. Equivalent to `c0 PUSHCTR` `c1 POPCTR`.",
-        "operands": []
+        "long": "Sets `c1` to `c0`.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["c0 PUSHCTR", "c1 POPCTR"]
+          }
+        ]
       },
       "layout": {
         "min": 15596032,
@@ -10023,8 +10113,14 @@
       "subCategory": "continuation_change",
       "description": {
         "short": "",
-        "long": "Sets `c1` to `c0`, but first saves the old value of `c1` into the savelist of `c0`.\nEquivalent to `c1 SAVE` `SAMEALT`.",
-        "operands": []
+        "long": "Sets `c1` to `c0`, but first saves the old value of `c1` into the savelist of `c0`.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["c1 SAVE", "SAMEALT"]
+          }
+        ]
       },
       "layout": {
         "min": 15596288,
@@ -15954,7 +16050,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `CDATASIZEQ`, but accepting a _Slice_ `s` instead of a _Cell_. The returned value of `x` does not take into account the cell that contains the slice `s` itself; however, the data bits and the cell references of `s` are accounted for in `y` and `z`.",
+        "long": "Recursively computes the count of distinct cells `x`, data bits `y`, and cell references `z` in the dag rooted at _Slice_ `s`, effectively returning the total storage used by this dag taking into account the identification of equal cells. The values of `x`, `y`, and `z` are computed by a depth-first traversal of this dag, with a hash table of visited cell hashes used to prevent visits of already-visited cells. The total count of visited cells `x` cannot exceed non-negative _Integer_ `n`; otherwise the computation is aborted before visiting the `(n+1)`-st cell and a zero is returned to indicate failure. The returned value of `x` does not take into account the cell that contains the slice `s` itself; however, the data bits and the cell references of `s` are accounted for in `y` and `z`.",
         "operands": []
       },
       "layout": {
@@ -16092,9 +16188,15 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads (deserializes) a `Gram` or `VarUInteger 16` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 4-bit unsigned big-endian integer `length`, followed by an `8l`-bit unsigned big-endian representation of `x`.\nThe net effect is approximately equivalent to `4 LDU` `SWAP` `3 LSHIFT#` `LDUX`.",
+        "long": "Loads (deserializes) a `Gram` or `VarUInteger 16` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 4-bit unsigned big-endian integer `length`, followed by an `8l`-bit unsigned big-endian representation of `x`.",
         "tags": ["variable-size integer", "slice parsing"],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["4 LDU", "SWAP", "3 LSHIFT#", "LDUX"]
+          }
+        ]
       },
       "layout": {
         "min": 16384000,
@@ -16142,9 +16244,15 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Similar to `LDVARUINT16`, but loads a _signed_ _Integer_ `x`.\nApproximately equivalent to `4 LDU` `SWAP` `3 LSHIFT#` `LDIX`.",
+        "long": "Loads (deserializes) a `VarInteger 16` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 4-bit unsigned big-endian integer `length`, followed by an `8l`-bit signed big-endian representation of `x`.",
         "tags": ["variable-size integer", "slice parsing"],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["4 LDU", "SWAP", "3 LSHIFT#", "LDIX"]
+          }
+        ]
       },
       "layout": {
         "min": 16384256,
@@ -16192,7 +16300,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Stores (serializes) an _Integer_ `x` in the range `0...2^120-1` into _Builder_ `b`, and returns the resulting _Builder_ `b'`. The serialization of `x` consists of a 4-bit unsigned big-endian integer `length`, which is the smallest integer `l>=0`, such that `x<2^(8l)`, followed by an `8l`-bit unsigned big-endian representation of `x`. If `x` does not belong to the supported range, a range check exception is thrown.",
+        "long": "Stores an _Integer_ `x` in the range `0...2^120-1` into _Builder_ `b`, and returns the resulting _Builder_ `b'`. The serialization of `x` consists of a 4-bit unsigned big-endian integer `length`, which is the smallest integer `l>=0`, such that `x<2^(8l)`, followed by an `8l`-bit unsigned big-endian representation of `x`. If `x` does not belong to the supported range, a range check exception is thrown.",
         "tags": ["variable-size integer", "builder building"],
         "operands": []
       },
@@ -16242,7 +16350,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Similar to `STVARUINT16`, but serializes a _signed_ _Integer_ `x` in the range `-2^119...2^119-1`.",
+        "long": "Stores a _signed_ _Integer_ `x` in the range `-2^119...2^119-1` into _Builder_ `b`, and returns the resulting _Builder_ `b'`. The serialization of `x` consists of a 4-bit unsigned big-endian integer `length`, which is the smallest integer `l>=0`, such that `-2^(8l-1) <= x < 2^(8l-1)`, followed by an `8l`-bit signed big-endian representation of `x`. If `x` does not belong to the supported range, a range check exception is thrown.",
         "tags": ["variable-size integer", "builder building"],
         "operands": []
       },
@@ -16292,9 +16400,15 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads (deserializes) a `VarUInteger 32` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 5-bit unsigned big-endian integer `length`, followed by an `8l`-bit unsigned big-endian representation of `x`.\nThe net effect is approximately equivalent to `4 LDU` `SWAP` `3 LSHIFT#` `LDUX`.",
+        "long": "Loads (deserializes) a `VarUInteger 32` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 5-bit unsigned big-endian integer `length`, followed by an `8l`-bit unsigned big-endian representation of `x`.",
         "tags": ["variable-size integer", "slice parsing"],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["4 LDU", "SWAP", "3 LSHIFT#", "LDUX"]
+          }
+        ]
       },
       "layout": {
         "min": 16385024,
@@ -16342,9 +16456,15 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Similar to `LDVARUINT32`, but loads a _signed_ _Integer_ `x`.\nApproximately equivalent to `5 LDU` `SWAP` `3 LSHIFT#` `LDIX`.",
+        "long": "Loads (deserializes) a `VarInteger 32` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 5-bit unsigned big-endian integer `length`, followed by an `8l`-bit signed big-endian representation of `x`.",
         "tags": ["variable-size integer", "slice parsing"],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["5 LDU", "SWAP", "3 LSHIFT#", "LDIX"]
+          }
+        ]
       },
       "layout": {
         "min": 16385280,
@@ -16392,7 +16512,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Stores (serializes) an _Integer_ `x` in the range `0...2^248-1` into _Builder_ `b`, and returns the resulting _Builder_ `b'`. The serialization of `x` consists of a 5-bit unsigned big-endian integer `length`, which is the smallest integer `l>=0`, such that `x<2^(8l)`, followed by an `8l`-bit unsigned big-endian representation of `x`. If `x` does not belong to the supported range, a range check exception is thrown.",
+        "long": "Stores an _Integer_ `x` in the range `0...2^248-1` into _Builder_ `b`, and returns the resulting _Builder_ `b'`. The serialization of `x` consists of a 5-bit unsigned big-endian integer `length`, which is the smallest integer `l>=0`, such that `x<2^(8l)`, followed by an `8l`-bit unsigned big-endian representation of `x`. If `x` does not belong to the supported range, a range check exception is thrown.",
         "tags": ["variable-size integer", "builder building"],
         "operands": []
       },
@@ -16442,7 +16562,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Similar to `STVARUINT32`, but serializes a _signed_ _Integer_ `x` in the range `-2^247...2^247-1`.",
+        "long": "Stores a _signed_ _Integer_ `x` in the range `-2^247...2^247-1` into _Builder_ `b`, and returns the resulting _Builder_ `b'`. The serialization of `x` consists of a 5-bit unsigned big-endian integer `length`, which is the smallest integer `l>=0`, such that `-2^(8l-1) <= x < 2^(8l-1)`, followed by an `8l`-bit signed big-endian representation of `x`. If `x` does not belong to the supported range, a range check exception is thrown.",
         "tags": ["variable-size integer", "builder building"],
         "operands": []
       },
@@ -17354,7 +17474,8 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": ""
+        "long": "Pushes a `null`.",
+        "operands": []
       },
       "layout": {
         "min": 7143424,
@@ -17497,7 +17618,13 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `k INDEX`, but with `k` taken from the stack.",
+        "long": "Returns the `k`-th element of a _Tuple_ `t`, where `k` is taken from the stack rather than specified in the instruction.",
+        "exit_codes": [
+          {
+            "errno": "7",
+            "condition": "Top element is not a Tuple."
+          }
+        ],
         "operands": []
       },
       "layout": {
@@ -17549,7 +17676,17 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `n UNTUPLE`, but with `n` taken from the stack.",
+        "long": "Unpacks a _Tuple_ `t=(x_1,...,x_n)` of length equal to `0 <= n <= 15`, where `n` is taken from the stack rather than specified in the instruction.",
+        "exit_codes": [
+          {
+            "errno": "7",
+            "condition": "Top element is not a Tuple."
+          },
+          {
+            "errno": "7",
+            "condition": "Tuple length is not equal to n."
+          }
+        ],
         "operands": []
       },
       "layout": {
@@ -17608,7 +17745,13 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `n UNPACKFIRST`, but with `n` taken from the stack.",
+        "long": "Unpacks first `k` elements of a _Tuple_ `t`, where `k` is taken from the stack rather than specified in the instruction.",
+        "exit_codes": [
+          {
+            "errno": "7",
+            "condition": "Tuple length is less than k."
+          }
+        ],
         "operands": []
       },
       "layout": {
@@ -17667,7 +17810,13 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `n EXPLODE`, but with `n` taken from the stack.",
+        "long": "Unpacks a _Tuple_ `t=(x_1,...,x_m)` and returns its length `m`, but only if `m <= n <= 15`, where `n` is taken from the stack rather than specified in the instruction.",
+        "exit_codes": [
+          {
+            "errno": "7",
+            "condition": "Tuple length is greater than n or greater than 15."
+          }
+        ],
         "operands": []
       },
       "layout": {
@@ -17731,7 +17880,13 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `k SETINDEX`, but with `k` taken from the stack.",
+        "long": "Computes _Tuple_ `t'` that differs from `t` only at position `t'_{k+1}`, which is set to `x`, where `k` is taken from the stack rather than specified in the instruction.",
+        "exit_codes": [
+          {
+            "errno": "7",
+            "condition": "Index k is greater than or equal to tuple length."
+          }
+        ],
         "operands": []
       },
       "layout": {
@@ -17788,7 +17943,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `n INDEXQ`, but with `k` taken from the stack.",
+        "long": "Returns the `k`-th element of a _Tuple_ `t`, where `k` is taken from the stack rather than specified in the instruction. In other words, returns `x_{k+1}` if `t=(x_1,...,x_n)`. If `k>=n`, or if `t` is _Null_, returns a _Null_ instead of `x`.",
         "operands": []
       },
       "layout": {
@@ -17840,7 +17995,13 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `k SETINDEXQ`, but with `k` taken from the stack.",
+        "long": "Sets the `k`-th component of _Tuple_ `t` to `x`, and returns the resulting _Tuple_ `t'`, where `k` is taken from the stack rather than specified in the instruction. If `|t| <= k`, first extends the original _Tuple_ to length `n'=k+1` by setting all new components to _Null_. If the original value of `t` is _Null_, treats it as an empty _Tuple_. If `x` is _Null_ and either `|t| <= k` or `t` is _Null_, then always returns `t'=t` (and does not consume tuple creation gas).",
+        "exit_codes": [
+          {
+            "errno": "7",
+            "condition": "Top element is neither a Tuple nor Null."
+          }
+        ],
         "operands": []
       },
       "layout": {
@@ -17941,7 +18102,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `TLEN`, but returns `-1` if `t` is not a _Tuple_.",
+        "long": "Returns the length of a _Tuple_ `t` if `t` is a _Tuple_, but returns `-1` if `t` is not a _Tuple_. Unlike `TLEN` which throws an exception when `t` is not a _Tuple_, this instruction provides a way to safely check if a value is a _Tuple_ and get its length in one operation.",
         "operands": []
       },
       "layout": {
@@ -17959,7 +18120,7 @@
         "prefix_str": "6F89"
       },
       "signature": {
-        "stack_string": "t:Tuple -> (-1 0)|(n:Int -1)",
+        "stack_string": "t:Tuple -> (-1 0)|(length:Int -1)",
         "inputs": {
           "stack": [
             {
@@ -17990,7 +18151,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "n",
+                      "name": "length",
                       "value_types": ["Int"]
                     }
                   ]
@@ -18093,7 +18254,13 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Appends a value `x` to a _Tuple_ `t=(x_1,...,x_n)`, but only if the resulting _Tuple_ `t'=(x_1,...,x_n,x)` is of length at most 255. Otherwise throws a type check exception.",
+        "long": "Appends a value `x` to a _Tuple_ `t=(x_1,...,x_n)`, but only if the resulting _Tuple_ `t'=(x_1,...,x_n,x)` is of length at most 255.",
+        "exit_codes": [
+          {
+            "errno": "7",
+            "condition": "Resulting tuple length would exceed 255."
+          }
+        ],
         "operands": []
       },
       "layout": {
@@ -25315,7 +25482,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Similar to `STIX`, but with arguments in a different order.",
+        "long": "Stores a signed `length`-bit integer `x` into `b` for `0 <= length <= 257`, but with arguments in a different order.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -25377,7 +25544,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Similar to `STUX`, but with arguments in a different order.",
+        "long": "Stores an unsigned `length`-bit integer `x` into `b` for `0 <= length <= 256`, but with arguments in a different order.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -25540,7 +25707,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "A quiet version of `STUX`.",
+        "long": "Stores an unsigned `length`-bit integer `x` into `b` for `0 <= length <= 256`. This is a quiet version of `STUX` which means that instead of throwing an exception, it pushes a status flag to the stack: -1 if there is no space in `b`, 0 if the operation succeeds.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -25641,7 +25808,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "A quiet version of `STIXR`.",
+        "long": "Stores a signed `length`-bit integer `x` into `b` for `0 <= length <= 257`, but with arguments in a different order. This is a quiet version of `STIXR` which means that instead of throwing an exception, it pushes a status flag to the stack: -1 if there is no space in `b`, 0 if the operation succeeds.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -25742,7 +25909,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "A quiet version of `STUXR`.",
+        "long": "Stores an unsigned `length`-bit integer `x` into `b` for `0 <= length <= 256`, but with arguments in a different order. This is a quiet version of `STUXR` which means that instead of throwing an exception, it pushes a status flag to the stack: -1 if there is no space in `b`, 0 if the operation succeeds.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -26334,7 +26501,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Quiet version of `LDUX`.",
+        "long": "Loads an unsigned `length`-bit integer `x` from (the first `length` bits of) `s`, with `0 <= length <= 256`. This is a quiet version of `LDUX` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -26415,7 +26582,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Quiet version of `PLDIX`.",
+        "long": "Preloads a signed `length`-bit integer from _Slice_ `s`, for `0 <= length <= 257`. This is a quiet version of `PLDIX` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["slice parsing", "preload"],
         "operands": []
       },
@@ -26485,7 +26652,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Quiet version of `PLDUX`.",
+        "long": "Preloads an unsigned `length`-bit integer from `s`, for `0 <= length <= 256`. This is a quiet version of `PLDUX` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["slice parsing", "preload"],
         "operands": []
       },
@@ -26660,7 +26827,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "A quiet version of `LDSLICEX`.",
+        "long": "Loads the first `0 <= length <= 1023` bits from _Slice_ `s` into a separate _Slice_ `loaded`, returning the remainder of `s` as `s'`. This is a quiet version of `LDSLICEX` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -26741,7 +26908,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "A quiet version of `LDSLICEXQ`.",
+        "long": "Returns the first `0 <= length <= 1023` bits of `s` as `loaded`. This is a quiet version of `PLDSLICEX` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["slice parsing", "preload"],
         "operands": []
       },
@@ -38483,7 +38650,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Similar to `CALLXARGS`, but pushes the old value of `c` (along with the top `0 <= p <= 15` values from the original stack) into the stack of newly-invoked continuation `c`, setting `cc.nargs` to `-1 <= r <= 14`.",
+        "long": "_Calls_ continuation `c` with `p` parameters, but unlike `CALLXARGS` which only passes parameters, this instruction also pushes the old value of the current continuation `cс` (along with the top `0 <= p <= 15` values from the original stack) into the stack of newly-invoked continuation `c`, setting `cc.nargs` to `-1 <= r <= 14`. This allows the called continuation to later return to the caller with the specified number of return values.",
         "operands": ["p", "r"]
       },
       "layout": {
@@ -38777,8 +38944,14 @@
       "subCategory": "continuation_dict_jump",
       "description": {
         "short": "",
-        "long": "Jumps to the continuation in `c3`, pushing integer `0 <= n < 2^14` as its argument.\nApproximately equivalent to `n PUSHINT` `c3 PUSHCTR` `JMPX`.",
-        "operands": ["n"]
+        "long": "Jumps to the continuation in `c3`, pushing integer `0 <= n < 2^14` as its argument.",
+        "operands": ["n"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["n PUSHINT", "c3 PUSHCTR", "JMPX"]
+          }
+        ]
       },
       "layout": {
         "min": 15810560,
@@ -38830,8 +39003,14 @@
       "subCategory": "continuation_dict_jump",
       "description": {
         "short": "",
-        "long": "Equivalent to `n PUSHINT` `c3 PUSHCTR`, for `0 <= n < 2^14`.\nIn this way, `[n] CALL` is approximately equivalent to `[n] PREPARE` `EXECUTE`, and `[n] JMP` is approximately equivalent to `[n] PREPARE` `JMPX`.\nOne might use, for instance, `CALLXARGS` or `CALLCC` instead of `EXECUTE` here.",
-        "operands": ["n"]
+        "long": "Equivalent to `n PUSHINT` `c3 PUSHCTR`, for `0 <= n < 2^14`.\nOne might use, for instance, `CALLXARGS` or `CALLCC` instead of `EXECUTE` here.",
+        "operands": ["n"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["n PUSHINT", "c3 PUSHCTR"]
+          }
+        ]
       },
       "layout": {
         "min": 15826944,
@@ -39130,13 +39309,13 @@
         "prefix_str": "DB2"
       },
       "signature": {
-        "stack_string": "x_1...x_p -> ∅",
+        "stack_string": "x_1...x_r -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "array",
               "name": "args",
-              "length_var": "p",
+              "length_var": "r",
               "array_entry": [
                 {
                   "type": "simple",
@@ -39239,7 +39418,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Creates a new _Tuple_ `t=(x_1, ... ,x_n)` containing `n` values `x_1`,..., `x_n`.",
+        "long": "Creates a new _Tuple_ from the first `n` values from the stack.",
         "operands": ["n"]
       },
       "layout": {
@@ -39304,7 +39483,13 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Returns the `$k`-th element of a _Tuple_ `$t`.\nThrows if `$t` is not a tuple.",
+        "long": "Returns the `$k`-th element of a _Tuple_ `$t`.",
+        "exit_codes": [
+          {
+            "errno": "7",
+            "condition": "Top element is not a Tuple."
+          }
+        ],
         "operands": ["k"]
       },
       "layout": {
@@ -39356,7 +39541,17 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Unpacks a _Tuple_ `t=(x_1,...,x_n)` of length equal to `0 <= n <= 15`.\nIf `t` is not a _Tuple_, or if `|t| != n`, a type check exception is thrown.",
+        "long": "Unpacks a _Tuple_ `t=(x_1,...,x_n)` of length equal to `0 <= n <= 15`.",
+        "exit_codes": [
+          {
+            "errno": "7",
+            "condition": "Top element is not a Tuple."
+          },
+          {
+            "errno": "7",
+            "condition": "Tuple length is not equal to `n`."
+          }
+        ],
         "operands": ["n"]
       },
       "layout": {
@@ -39421,7 +39616,13 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Unpacks first `k` elements of a _Tuple_ `t`.\nIf `|t|<k`, throws a type check exception.",
+        "long": "Unpacks first `k` elements of a _Tuple_ `t`.",
+        "exit_codes": [
+          {
+            "errno": "7",
+            "condition": "Tuple length is less than `k`."
+          }
+        ],
         "operands": ["k"]
       },
       "layout": {
@@ -39486,8 +39687,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Unpacks a _Tuple_ `$t=(x_1,...,x_$m)` and returns its length `$m`, but only if `$m <= $n <= 15`. Otherwise throws a type check exception.",
-        "operands": ["n"]
+        "long": "Unpacks a _Tuple_ `$t=(x_1,...,x_$tuple_len)` and returns its `$length`, but only if `$length <= $tuple_len <= 15`.",
+        "exit_codes": [
+          {
+            "errno": "7",
+            "condition": "Tuple length is greater than `tuple_len` or greater than 15."
+          }
+        ],
+        "operands": ["length"]
       },
       "layout": {
         "min": 7290880,
@@ -39519,7 +39726,7 @@
         }
       ],
       "signature": {
-        "stack_string": "t:Tuple -> x_1...x_m m:Int",
+        "stack_string": "t:Tuple -> x_1...x_length length:Int",
         "inputs": {
           "stack": [
             {
@@ -39534,7 +39741,7 @@
             {
               "type": "array",
               "name": "tuple_elements",
-              "length_var": "m",
+              "length_var": "length",
               "array_entry": [
                 {
                   "type": "simple",
@@ -39544,7 +39751,7 @@
             },
             {
               "type": "simple",
-              "name": "m",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -39556,7 +39763,13 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Computes _Tuple_ `t'` that differs from `t` only at position `t'_{k+1}`, which is set to `x`.\nIf `k >= |t|`, throws a range check exception.",
+        "long": "Computes _Tuple_ `t'` that differs from `t` only at position `t'_{k+1}`, which is set to `x`.",
+        "exit_codes": [
+          {
+            "errno": "7",
+            "condition": "Index `k` is greater than or equal to tuple length."
+          }
+        ],
         "operands": ["k"]
       },
       "layout": {
@@ -39671,7 +39884,13 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Sets the `k`-th component of _Tuple_ `t` to `x`, and returns the resulting _Tuple_ `t'`.\nIf `|t| <= k`, first extends the original _Tuple_ to length `n'=k+1` by setting all new components to _Null_. If the original value of `t` is _Null_, treats it as an empty _Tuple_. If `t` is not _Null_ or _Tuple_, throws an exception. If `x` is _Null_ and either `|t| <= k` or `t` is _Null_, then always returns `t'=t` (and does not consume tuple creation gas).",
+        "long": "Sets the `k`-th component of _Tuple_ `t` to `x`, and returns the resulting _Tuple_ `t'`.\nIf `|t| <= k`, first extends the original _Tuple_ to length `n'=k+1` by setting all new components to _Null_. If the original value of `t` is _Null_, treats it as an empty _Tuple_. If `x` is _Null_ and either `|t| <= k` or `t` is _Null_, then always returns `t'=t` (and does not consume tuple creation gas).",
+        "exit_codes": [
+          {
+            "errno": "7",
+            "condition": "Top element is neither a Tuple nor Null."
+          }
+        ],
         "operands": ["k"]
       },
       "layout": {
@@ -40551,8 +40770,14 @@
       "subCategory": "continuation_change",
       "description": {
         "short": "",
-        "long": "Equivalent to `BLESS` `[r] [n] SETCONTARGS`.\nThe value of `n` is represented inside the instruction by the 4-bit integer `n mod 16`.",
-        "operands": ["r", "n"]
+        "long": "Transforms a _Slice_ into a simple ordinary continuation and sets `r` arguments and `n` missing arguments.\nThe value of `n` is represented inside the instruction by the 4-bit integer `n mod 16`.",
+        "operands": ["r", "n"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["BLESS", "[r] [n] SETCONTARGS"]
+          }
+        ]
       },
       "layout": {
         "min": 15597568,
@@ -40813,7 +41038,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "A quiet version of `STI`.",
+        "long": "Stores a signed `width`-bit integer `x` into _Builder_ `b` and returns the resulting _Builder_ `b'`. This is a quiet version of `STI` which means that instead of throwing an exception, it pushes a status flag to the stack: -1 if there is no space in `b`, 0 if the operation succeeds.",
         "tags": ["builder building"],
         "operands": ["c"]
       },
@@ -40922,7 +41147,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "A quiet version of `STU`.",
+        "long": "Stores an unsigned `width`-bit integer `x` into _Builder_ `b` and returns the resulting _Builder_ `b'`. This is a quiet version of `STU` which means that instead of throwing an exception, it pushes a status flag to the stack: -1 if there is no space in `b`, 0 if the operation succeeds.",
         "tags": ["builder building"],
         "operands": ["c"]
       },
@@ -41031,7 +41256,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "A quiet version of `STIR`.",
+        "long": "Stores a signed `width`-bit integer `x` into _Builder_ `b` and returns the resulting _Builder_ `b'`. This is a quiet version of `STIR` which means that instead of throwing an exception, it pushes a status flag to the stack: -1 if there is no space in `b`, 0 if the operation succeeds.",
         "tags": ["builder building"],
         "operands": ["c"]
       },
@@ -41140,7 +41365,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "A quiet version of `STUR`.",
+        "long": "Stores an unsigned `width`-bit integer `x` into _Builder_ `b` and returns the resulting _Builder_ `b'`. This is a quiet version of `STUR` which means that instead of throwing an exception, it pushes a status flag to the stack: -1 if there is no space in `b`, 0 if the operation succeeds.",
         "tags": ["builder building"],
         "operands": ["c"]
       },
@@ -41249,9 +41474,9 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Preloads a signed `cc+1`-bit integer from _Slice_ `s`.",
+        "long": "Preloads a signed `width + 1`-bit integer from _Slice_ `s`.",
         "tags": ["slice parsing", "preload"],
-        "operands": ["c"]
+        "operands": ["width"]
       },
       "layout": {
         "min": 14092800,
@@ -41307,9 +41532,9 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Preloads an unsigned `cc+1`-bit integer from `s`.",
+        "long": "Preloads an unsigned `width + 1`-bit integer from `s`.",
         "tags": ["slice parsing", "preload"],
-        "operands": ["c"]
+        "operands": ["width"]
       },
       "layout": {
         "min": 14093056,
@@ -41365,9 +41590,9 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "A quiet version of `LDI`.",
+        "long": "Loads a signed `width`-bit integer `x` from _Slice_ `s` and pushes loaded value on stack along with _Slice_ with remainder data. This is a quiet version of `LDI` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["slice parsing"],
-        "operands": ["c"]
+        "operands": ["width"]
       },
       "layout": {
         "min": 14093312,
@@ -41454,9 +41679,9 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "A quiet version of `LDU`.",
+        "long": "Loads an unsigned `width`-bit integer `x` from _Slice_ `s` and pushes loaded value on stack along with _Slice_ with remainder data. This is a quiet version of `LDU` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["slice parsing"],
-        "operands": ["c"]
+        "operands": ["width"]
       },
       "layout": {
         "min": 14093568,
@@ -41543,9 +41768,9 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "A quiet version of `PLDI`.",
+        "long": "Preloads a signed `width + 1`-bit integer from _Slice_ `s`. This is a quiet version of `PLDI` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["slice parsing", "preload"],
-        "operands": ["c"]
+        "operands": ["width"]
       },
       "layout": {
         "min": 14093824,
@@ -41621,7 +41846,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "A quiet version of `PLDU`.",
+        "long": "Preloads an unsigned `cc+1`-bit integer from `s`. This is a quiet version of `PLDU` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["slice parsing", "preload"],
         "operands": ["c"]
       },
@@ -41815,7 +42040,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "A quiet version of `LDSLICE`.",
+        "long": "Cuts the next `c + 1` bits of `s` into a separate _Slice_ `loaded`. This is a quiet version of `LDSLICE` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["slice parsing"],
         "operands": ["c"]
       },
@@ -41904,7 +42129,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "A quiet version of `PLDSLICE`.",
+        "long": "Returns the first `0 < c+1 <= 256` bits of `s` as `loaded`. This is a quiet version of `PLDSLICE` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["slice parsing", "preload"],
         "operands": ["c"]
       },
@@ -42098,8 +42323,20 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Returns `t[i][j]`.\nThrows if `t[i]` is not a tuple.\nEquivalent to `[i] INDEX` `[j] INDEX`.",
-        "operands": ["i", "j"]
+        "long": "Returns `t[i][j]`.",
+        "exit_codes": [
+          {
+            "errno": "7",
+            "condition": "Element at index i is not a Tuple."
+          }
+        ],
+        "operands": ["i", "j"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["[i] INDEX", "[j] INDEX"]
+          }
+        ]
       },
       "layout": {
         "min": 7319552,
@@ -42158,8 +42395,24 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Returns `t[i][j][k]`.\nThrows if `t[i]` or `t[i][j]` is not a tuple.\nEquivalent to `[i] [j] INDEX2` `[k] INDEX`.",
-        "operands": ["i", "j", "k"]
+        "long": "Returns `t[i][j][k]`.",
+        "exit_codes": [
+          {
+            "errno": "7",
+            "condition": "Element at index i is not a Tuple."
+          },
+          {
+            "errno": "7",
+            "condition": "Element at index j of t[i] is not a Tuple."
+          }
+        ],
+        "operands": ["i", "j", "k"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["[i] [j] INDEX2", "[k] INDEX"]
+          }
+        ]
       },
       "layout": {
         "min": 7323648,
@@ -42680,8 +42933,14 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Equivalent to `PUSHREFCONT` `CALLX`.",
-        "operands": ["c"]
+        "long": "Calls the continuation stored in cell reference `c`.",
+        "operands": ["c"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["PUSHREFCONT", "CALLX"]
+          }
+        ]
       },
       "layout": {
         "min": 14367744,
@@ -42724,8 +42983,14 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Equivalent to `PUSHREFCONT` `JMPX`.",
-        "operands": ["c"]
+        "long": "Jumps to the continuation stored in cell reference `c`.",
+        "operands": ["c"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["PUSHREFCONT", "JMPX"]
+          }
+        ]
       },
       "layout": {
         "min": 14368000,
@@ -42768,8 +43033,14 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Equivalent to `PUSHREFCONT` `JMPXDATA`.",
-        "operands": ["c"]
+        "long": "Jumps to the continuation stored in cell reference `c`, converting the remainder of the current continuation into a _Slice_ before pushing it into the stack of `c`.",
+        "operands": ["c"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["PUSHREFCONT", "JMPXDATA"]
+          }
+        ]
       },
       "layout": {
         "min": 14368256,
@@ -42812,8 +43083,14 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Equivalent to `PUSHREFCONT` `IF`, with the optimization that the cell reference is not actually loaded into a _Slice_ and then converted into an ordinary _Continuation_ if `cond == 0`.\nGas consumption of this primitive depends on whether `cond == 0` and whether the reference was loaded before.\nSimilar remarks apply other primitives that accept a continuation as a reference.",
-        "operands": ["body"]
+        "long": "Executes the continuation stored in cell reference `body` if integer `cond` is non-zero. Optimized so that the cell reference is not actually loaded into a _Slice_ and then converted into an ordinary _Continuation_ if `cond == 0`.\nGas consumption of this primitive depends on whether `cond == 0` and whether the reference was loaded before.\nSimilar remarks apply other primitives that accept a continuation as a reference.",
+        "operands": ["body"],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["PUSHREFCONT", "IF"]
+          }
+        ]
       },
       "layout": {
         "min": 14876672,
@@ -42861,8 +43138,14 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Equivalent to `PUSHREFCONT` `IFNOT`.",
-        "operands": ["body"]
+        "long": "Executes the continuation stored in cell reference `body`, but only if integer `cond` is zero.",
+        "operands": ["body"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["PUSHREFCONT", "IFNOT"]
+          }
+        ]
       },
       "layout": {
         "min": 14876928,
@@ -42910,8 +43193,14 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Equivalent to `PUSHREFCONT` `IFJMP`.",
-        "operands": ["body"]
+        "long": "Transfers control to the continuation stored in cell reference `body` if `cond` is non-zero.",
+        "operands": ["body"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["PUSHREFCONT", "IFJMP"]
+          }
+        ]
       },
       "layout": {
         "min": 14877184,
@@ -42959,8 +43248,14 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Equivalent to `PUSHREFCONT` `IFNOTJMP`.",
-        "operands": ["body"]
+        "long": "Transfers control to the continuation stored in cell reference `body` if `cond` is zero.",
+        "operands": ["body"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["PUSHREFCONT", "IFNOTJMP"]
+          }
+        ]
       },
       "layout": {
         "min": 14877440,
@@ -43008,8 +43303,14 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Equivalent to `PUSHREFCONT` `SWAP` `IFELSE`, with the optimization that the cell reference is not actually loaded into a _Slice_ and then converted into an ordinary _Continuation_ if `f=0`. Similar remarks apply to the next two primitives: cells are converted into continuations only when necessary.",
-        "operands": ["c"]
+        "long": "If integer `cond` is non-zero, executes the continuation stored in cell reference `c`, otherwise executes `else`. Optimized so that the cell reference is not actually loaded into a _Slice_ and then converted into an ordinary _Continuation_ if `f=0`. Similar remarks apply to the next two primitives: cells are converted into continuations only when necessary.",
+        "operands": ["c"],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["PUSHREFCONT", "SWAP", "IFELSE"]
+          }
+        ]
       },
       "layout": {
         "min": 14880000,
@@ -43062,8 +43363,14 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Equivalent to `PUSHREFCONT` `IFELSE`.",
-        "operands": ["c"]
+        "long": "If integer `cond` is non-zero, executes `body`, otherwise executes the continuation stored in cell reference `c`.",
+        "operands": ["c"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["PUSHREFCONT", "IFELSE"]
+          }
+        ]
       },
       "layout": {
         "min": 14880256,
@@ -43116,8 +43423,14 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Equivalent to `PUSHREFCONT` `PUSHREFCONT` `IFELSE`.",
-        "operands": ["body", "else"]
+        "long": "If integer `cond` is non-zero, executes the continuation stored in cell reference `body`, otherwise executes the continuation stored in cell reference `else`.",
+        "operands": ["body", "else"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["PUSHREFCONT", "PUSHREFCONT", "IFELSE"]
+          }
+        ]
       },
       "layout": {
         "min": 14880512,
@@ -43416,7 +43729,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "A quiet version of `SDBEGINSX`.",
+        "long": "Checks whether `s` begins with (the data bits of) `s'`, and removes `s'` from `s` on success. This is a quiet version of `SDBEGINSX` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "operands": []
       },
       "layout": {
@@ -43552,7 +43865,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "A quiet version of `SDBEGINS`.",
+        "long": "Checks whether `s` begins with constant bitstring `sss` of length `8x+3` (with continuation bit assumed), where `0 <= x <= 127`, and removes `sss` from `s` on success. This is a quiet version of `SDBEGINS` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "operands": ["search"]
       },
       "layout": {
@@ -43639,9 +43952,15 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Equivalent to `PUSHREF` `STREFR`.",
+        "long": "Pushes the reference `c` and stores it into _Builder_.",
         "tags": ["builder building"],
-        "operands": ["c"]
+        "operands": ["c"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["PUSHREF", "STREFR"]
+          }
+        ]
       },
       "layout": {
         "min": 13574144,
@@ -43688,9 +44007,15 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Equivalent to `STREFCONST` `STREFCONST`.",
+        "long": "Stores two constant references `c1` and `c2` into _Builder_.",
         "tags": ["builder building"],
-        "operands": ["c1", "c2"]
+        "operands": ["c1", "c2"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["STREFCONST", "STREFCONST"]
+          }
+        ]
       },
       "layout": {
         "min": 13574400,
@@ -43931,8 +44256,14 @@
       "subCategory": "continuation_change",
       "description": {
         "short": "",
-        "long": "Equivalent to `c0 PUSHCTR` `c[i] SETCONTCTR` `c0 POPCTR`.",
-        "operands": ["i"]
+        "long": "Stores the value from control register `c[i]` into the savelist of continuation `c0`.",
+        "operands": ["i"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["c0 PUSHCTR", "c[i] SETCONTCTR", "c0 POPCTR"]
+          }
+        ]
       },
       "layout": {
         "min": 15560704,
@@ -43988,8 +44319,14 @@
       "subCategory": "continuation_change",
       "description": {
         "short": "",
-        "long": "Equivalent to `c1 PUSHCTR` `c[i] SETCONTCTR` `c1 POPCTR`.",
-        "operands": ["i"]
+        "long": "Stores the value from control register `c[i]` into the savelist of continuation `c1`.",
+        "operands": ["i"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["c1 PUSHCTR", "c[i] SETCONTCTR", "c1 POPCTR"]
+          }
+        ]
       },
       "layout": {
         "min": 15564800,
@@ -44045,8 +44382,14 @@
       "subCategory": "continuation_change",
       "description": {
         "short": "",
-        "long": "Similar to `c[i] POPCTR`, but also saves the old value of `c[i]` into continuation `c0`.\nEquivalent (up to exceptions) to `c[i] SAVECTR` `c[i] POPCTR`.",
-        "operands": ["i"]
+        "long": "Pops a value from the stack and stores it into control register `c[i]`, but also saves the old value of `c[i]` into continuation `c0`.",
+        "operands": ["i"],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["c[i] SAVECTR", "c[i] POPCTR"]
+          }
+        ]
       },
       "layout": {
         "min": 15568896,
@@ -46303,7 +46646,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "A longer version of `STREF`.",
+        "long": "Stores a reference to _Cell_ `c` into _Builder_ `b`. This is a longer encoding of `STREF`.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -46410,7 +46753,7 @@
       "subCategory": "cell_serialize",
       "description": {
         "short": "",
-        "long": "A longer version of `STSLICE`.",
+        "long": "Stores _Slice_ `s` into _Builder_ `b`. This is a longer encoding of `STSLICE`.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -47044,9 +47387,9 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "A longer encoding for `LDI`.",
+        "long": "Loads a signed `width`-bit integer `x` from _Slice_ `s` and pushes loaded value on stack along with _Slice_ with remainder data. This is a longer encoding of `LDI`.",
         "tags": ["slice parsing"],
-        "operands": ["c"]
+        "operands": ["width"]
       },
       "layout": {
         "min": 14092288,
@@ -47218,9 +47561,9 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "A longer encoding for `LDU`.",
+        "long": "Loads an unsigned `width`-bit integer `x` from _Slice_ `s` and pushes loaded value on stack along with _Slice_ with remainder data. This is a longer encoding of `LDU`.",
         "tags": ["slice parsing"],
-        "operands": ["c"]
+        "operands": ["width"]
       },
       "layout": {
         "min": 14092544,
@@ -47344,7 +47687,8 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "A longer encoding for `LDSLICE`.",
+        "long": "Cuts the next `c + 1` bits of `s` into a separate _Slice_ `loaded`. This is a longer encoding of `LDSLICE`.",
+        "tags": ["slice parsing"],
         "operands": ["c"]
       },
       "layout": {
@@ -48122,8 +48466,14 @@
       "subCategory": "continuation_dict_jump",
       "description": {
         "short": "",
-        "long": "Calls the continuation in `c3`, pushing integer `0 <= nn <= 255` into its stack as an argument.\nApproximately equivalent to `[nn] PUSHINT` `c3 PUSHCTR` `EXECUTE`.",
-        "operands": ["n"]
+        "long": "Calls the continuation in `c3`, pushing integer `0 <= nn <= 255` into its stack as an argument.",
+        "operands": ["n"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["[n] PUSHINT", "c3 PUSHCTR", "EXECUTE"]
+          }
+        ]
       },
       "layout": {
         "min": 15728640,

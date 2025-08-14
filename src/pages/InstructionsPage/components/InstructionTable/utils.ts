@@ -18,5 +18,5 @@ export const formatGasRanges = (gasCosts: readonly number[]): string => {
       startIndex = i + 1
     }
   }
-  return resultParts.join(" | ")
+  return resultParts.filter(it => it !== "36").join(" | ")
 }
