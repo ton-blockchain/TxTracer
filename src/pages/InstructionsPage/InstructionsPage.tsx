@@ -193,7 +193,7 @@ function InstructionsPage() {
 
   return (
     <div className={styles.traceViewWrapper}>
-      <PageHeader pageTitle="spec">
+      <PageHeader pageTitle="spec" titleBadgeText="Beta" titleBadgeColor="green">
         <div className={styles.mainActionContainer}></div>
       </PageHeader>
 
@@ -212,6 +212,7 @@ function InstructionsPage() {
                   placeholder="Search instructions"
                   compact={true}
                   buttonLabel="Search"
+                  autoFocus={true}
                 />
               </div>
             </div>

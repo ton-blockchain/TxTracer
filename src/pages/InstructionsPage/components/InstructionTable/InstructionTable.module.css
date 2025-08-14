@@ -251,6 +251,65 @@
 .tableRoot {
 }
 
+@media (max-width: 1024px) {
+  .divTable {
+    grid-template-columns:
+      72px
+      1.6fr
+      0.9fr
+      minmax(180px, 1.2fr)
+      minmax(200px, 1fr);
+  }
+
+  .divTh,
+  .divTd {
+    padding: var(--spacing-sms) var(--spacing-sms);
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 768px) {
+  .divTable {
+    grid-template-columns: 64px 1fr;
+  }
+
+  .gasColumn,
+  .descriptionColumn,
+  .stackColumn,
+  .stackColumnCell {
+    display: none;
+  }
+
+  .divTh,
+  .divTd {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-sm);
+  }
+
+  .opcodeColumn {
+    white-space: nowrap;
+  }
+
+  .nameColumn {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .operandsDisplay {
+    display: inline;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .shownCountBadge {
+    display: none;
+  }
+
+  .groupHeaderCell {
+    font-size: var(--font-size-xs);
+  }
+}
+
 .stackColumnCell {
 }
 
