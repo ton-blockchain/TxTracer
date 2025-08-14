@@ -223,7 +223,7 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
                     <div className={styles.stackHalf}>
                       <h5 className={styles.exampleStructTitle}>Stack Input:</h5>
                       <pre className={styles.codeBlock}>
-                        {example.stack.input.map((item, i) => (
+                        {[...example.stack.input].reverse().map((item, i) => (
                           <div key={i}>
                             <code>{item}</code>
                           </div>
@@ -234,7 +234,7 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
                     <div className={styles.stackHalf}>
                       <h5 className={styles.exampleStructTitle}>Stack Output:</h5>
                       <pre className={styles.codeBlock}>
-                        {example.stack.output.map((item, i) => (
+                        {[...example.stack.output].reverse().map((item, i) => (
                           <div key={i}>
                             <code>{item}</code>
                           </div>
