@@ -61,6 +61,12 @@
   font-family: var(--font-family-mono), monospace;
 }
 
+.singleContractAddress {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family-mono), monospace;
+}
+
 .contractChipCopyButton {
   opacity: 0;
   position: absolute;

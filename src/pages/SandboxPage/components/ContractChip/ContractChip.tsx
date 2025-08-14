@@ -4,15 +4,19 @@ import type {ContractData} from "@features/sandbox/lib/contract.ts"
 
 import styles from "./ContractChip.module.css"
 
+interface ContractChipProps {
+  readonly address: string | undefined
+  readonly contracts: Map<string, ContractData>
+  readonly trimSoloAddress?: boolean
+  readonly onContractClick?: (address: string) => void
+}
+
 export function ContractChip({
   address,
   contracts,
+  trimSoloAddress = true,
   onContractClick,
-}: {
-  address: string | undefined
-  contracts: Map<string, ContractData>
-  onContractClick?: (address: string) => void
-}) {
+}: ContractChipProps) {
   const [isCopied, setIsCopied] = useState(false)
 
   const handleCopy = useCallback(
@@ -100,8 +104,8 @@ export function ContractChip({
           </span>
         </>
       ) : (
-        <span className={styles.contractAddress}>
-          {address.slice(0, 6)}…{address.slice(-6)}
+        <span className={styles.singleContractAddress}>
+          {trimSoloAddress ? address.slice(0, 6) + "…" + address.slice(-6) : address}
         </span>
       )}
       <div

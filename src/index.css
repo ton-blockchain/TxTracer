@@ -24,6 +24,7 @@
   --color-error: #ff3b30;
   --color-error-rgb: 255, 59, 48;
   --color-error-bg: #ffebe9;
+  --color-error-bg-light: #ffebee;
   --color-error-text: #a32119;
 
   --color-warning: #ffcc00;
@@ -119,6 +120,8 @@
   --stack-item-address-text: #283593;
   --stack-item-tuple-bg: #ffebee;
   --stack-item-tuple-text: #c62828;
+  --stack-item-any-bg: #f2f2f2;
+  --stack-item-any-text: #666666;
   --stack-item-unknown-bg: #fafafa;
   --stack-item-unknown-text: #616161;
   --stack-item-hover-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -168,6 +171,7 @@
 
   --spacing-xss: 0.1rem;
   --spacing-xs: 0.25rem;
+  --spacing-sms: 0.35rem;
   --spacing-sm: 0.5rem;
   --spacing-mds: 0.75rem;
   --spacing-md: 1rem;
@@ -268,6 +272,7 @@
   --color-error: #ff453a;
   --color-error-rgb: 255, 69, 58;
   --color-error-bg: #4d1a16;
+  --color-error-bg-light: #2e1b19;
   --color-error-text: #ff8f87;
 
   --color-warning: #ffd60a;
@@ -364,6 +369,8 @@
   --stack-item-address-text: #a7b0ff;
   --stack-item-tuple-bg: #5c1313;
   --stack-item-tuple-text: #ff8a8a;
+  --stack-item-any-bg: #2c2c2e;
+  --stack-item-any-text: #c7c7c7;
   --stack-item-unknown-bg: #2c2c2e;
   --stack-item-unknown-text: #c7c7c7;
   --stack-item-hover-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
