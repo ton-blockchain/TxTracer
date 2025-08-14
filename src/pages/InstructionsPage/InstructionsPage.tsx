@@ -7,6 +7,8 @@ import SearchColumnsSelector, {
   type InstructionColumnKey,
 } from "@app/pages/InstructionsPage/components/SearchColumnsSelector"
 import SortSelector, {type SortMode} from "@app/pages/InstructionsPage/components/SortSelector"
+import CategoryTabs from "@app/pages/InstructionsPage/components/CategoryTabs"
+import Button from "@shared/ui/Button"
 import tvmSpecData from "@features/spec/gen/tvm-specification.json"
 import {POPULARITY} from "@features/spec/popularity/popularity.ts"
 
@@ -20,6 +22,7 @@ function InstructionsPage() {
   const [query, setQuery] = useState("")
   const [searchColumns, setSearchColumns] = useState<InstructionColumnKey[]>(["name"])
   const [sortMode, setSortMode] = useState<SortMode>("popularity")
+  const [selectedCategory, setSelectedCategory] = useState<string>("All")
 
   useEffect(() => {
     setSpec(tvmSpecData as unknown as TvmSpec)
@@ -31,12 +34,29 @@ function InstructionsPage() {
 
   const instructions = spec?.instructions ?? ({} as TvmSpec["instructions"]) // keep ref stable
 
+  const categories = useMemo(() => {
+    const s = new Set<string>()
+    for (const [, instr] of Object.entries(instructions)) {
+      if (instr?.category) s.add(String(instr.category))
+    }
+    return Array.from(s).sort((a, b) => a.localeCompare(b))
+  }, [instructions])
+
+  const filteredByCategory = useMemo(() => {
+    if (selectedCategory === "All") return instructions
+    const out: typeof instructions = {}
+    for (const [name, instr] of Object.entries(instructions)) {
+      if (String(instr.category) === selectedCategory) out[name] = instr
+    }
+    return out
+  }, [instructions, selectedCategory])
+
   const filteredInstructions = useMemo(() => {
     const q = query.trim().toLowerCase()
-    if (!q) return instructions
+    if (!q) return filteredByCategory
 
-    const entries = Object.entries(instructions)
-    const next: typeof instructions = {}
+    const entries = Object.entries(filteredByCategory)
+    const next: typeof filteredByCategory = {}
 
     for (const [name, instruction] of entries) {
       const haystacks: string[] = []
@@ -58,7 +78,7 @@ function InstructionsPage() {
       if (match) next[name] = instruction
     }
     return next
-  }, [query, instructions, searchColumns])
+  }, [query, filteredByCategory, searchColumns])
 
   const sortedInstructions = useMemo(() => {
     const entries = Object.entries(filteredInstructions)
@@ -128,11 +148,26 @@ function InstructionsPage() {
               </div>
             </div>
           </div>
+          <CategoryTabs
+            categories={categories}
+            selected={selectedCategory}
+            onSelect={setSelectedCategory}
+          />
           <InstructionTable
             instructions={sortedInstructions}
             expandedRows={expandedRows}
             onRowClick={handleRowClick}
             groupByCategory={sortMode === "category"}
+            emptyState={
+              selectedCategory !== "All" ? (
+                <div className={styles.noResultsSuggestion} role="status" aria-live="polite">
+                  <span>No results in this category!</span>
+                  <Button variant="outline" size="sm" onClick={() => setSelectedCategory("All")}>
+                    Search in All
+                  </Button>
+                </div>
+              ) : undefined
+            }
           />
         </div>
       </main>

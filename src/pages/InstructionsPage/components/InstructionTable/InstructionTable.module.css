@@ -92,6 +92,14 @@
   letter-spacing: 0.02em;
 }
 
+.emptyStateCell {
+  padding: var(--spacing-sm) var(--spacing-md) !important;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
 .opcodeColumn {
   white-space: nowrap;
   font-family: var(--font-family-mono), monospace;

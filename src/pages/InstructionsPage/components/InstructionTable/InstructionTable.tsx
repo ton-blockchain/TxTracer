@@ -8,6 +8,8 @@ import type {TvmSpec, Instruction} from "@features/spec/tvm-specification.types"
 
 import {useProcessedMarkdown} from "../../hooks/useProcessedMarkdown"
 
+import {prettyCategoryName} from "../../lib/formatCategory"
+
 import InstructionDetail from "./InstructionDetail"
 import StackDisplay from "./StackDisplay"
 
@@ -32,6 +34,7 @@ interface InstructionTableProps {
   readonly expandedRows: Record<string, boolean>
   readonly onRowClick: (instructionName: string) => void
   readonly groupByCategory?: boolean
+  readonly emptyState?: React.ReactNode
 }
 
 const InstructionTable: React.FC<InstructionTableProps> = ({
@@ -39,6 +42,7 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
   expandedRows,
   onRowClick,
   groupByCategory = false,
+  emptyState,
 }: InstructionTableProps) => {
   const instructionEntries = Object.entries(instructions)
 
@@ -65,6 +69,13 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
       </div>
 
       <div className={styles.divTbody} role="rowgroup">
+        {instructionEntries.length === 0 && emptyState && (
+          <div className={styles.divTrExpanded} role="row">
+            <div className={`${styles.divTd} full ${styles.emptyStateCell}`} role="cell">
+              {emptyState}
+            </div>
+          </div>
+        )}
         {instructionEntries.slice(0, 100).map(([name, instruction], idx) => {
           const opcode = infoOf(name)
           if (!opcode) return null
@@ -81,18 +92,12 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
             idx > 0 ? String(instructionEntries[idx - 1][1].category ?? "") : null
           const shouldShowGroupHeader = groupByCategory && currentCategory !== prevCategory
 
-          const formatCategory = (c: string) =>
-            c
-              .split("_")
-              .map(part => (part ? part[0].toUpperCase() + part.slice(1) : part))
-              .join(" ")
-
           return (
             <Fragment key={name}>
               {shouldShowGroupHeader && (
                 <div className={styles.divTrExpanded} role="row">
                   <div className={`${styles.divTd} full ${styles.groupHeaderCell}`} role="cell">
-                    {formatCategory(currentCategory)}
+                    {prettyCategoryName(currentCategory)}
                   </div>
                 </div>
               )}
