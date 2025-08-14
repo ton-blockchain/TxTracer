@@ -119,6 +119,8 @@
   --stack-item-address-text: #283593;
   --stack-item-tuple-bg: #ffebee;
   --stack-item-tuple-text: #c62828;
+  --stack-item-any-bg: #fafafa;
+  --stack-item-any-text: #616161;
   --stack-item-unknown-bg: #fafafa;
   --stack-item-unknown-text: #616161;
   --stack-item-hover-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -364,6 +366,8 @@
   --stack-item-address-text: #a7b0ff;
   --stack-item-tuple-bg: #5c1313;
   --stack-item-tuple-text: #ff8a8a;
+  --stack-item-any-bg: #2c2c2e;
+  --stack-item-any-text: #c7c7c7;
   --stack-item-unknown-bg: #2c2c2e;
   --stack-item-unknown-text: #c7c7c7;
   --stack-item-hover-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);

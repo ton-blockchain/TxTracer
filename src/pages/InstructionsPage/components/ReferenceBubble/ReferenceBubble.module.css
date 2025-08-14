@@ -1,0 +1,70 @@
+.bubble {
+  display: inline-block;
+  padding: 3px 5px;
+  border-radius: 14px;
+  font-size: var(--font-size-base);
+  font-family: var(--font-family-mono), monospace;
+  margin: 0 1px;
+  cursor: default;
+  position: relative;
+  color: #333333;
+  line-height: 1.2;
+  font-weight: 500;
+  vertical-align: middle;
+}
+
+.operandBubble {
+  background-color: #a0c4ff;
+}
+
+.stackBubble {
+  background-color: #b2f2bb;
+}
+
+.notFound {
+  background-color: #ffadad;
+  text-decoration: none;
+}
+
+.popover {
+  position: absolute;
+  bottom: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-background-secondary, #2c2c2c);
+  color: var(--color-text-light, #f0f0f0);
+  border: 1px solid var(--color-border, #444);
+  border-radius: var(--border-radius-md, 4px);
+  padding: var(--spacing-md, 12px);
+  width: auto;
+  min-width: 250px;
+  max-width: 400px;
+  z-index: 1050;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  font-size: var(--font-size-sm, 13px);
+  text-align: left;
+  white-space: normal;
+  visibility: visible;
+  opacity: 1;
+  transition:
+    opacity 0.1s ease-in-out,
+    visibility 0.1s ease-in-out;
+}
+
+.popoverTitle {
+  display: block;
+  font-size: var(--font-size-base, 15px);
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm, 8px);
+  border-bottom: 1px solid var(--color-border, #444);
+  padding-bottom: var(--spacing-xs, 4px);
+}
+
+.popoverSection {
+  margin: var(--spacing-sm, 8px) 0 0 0;
+  line-height: 1.5;
+}
+
+.popoverSection strong {
+  color: var(--color-text, #bbbbbb);
+}

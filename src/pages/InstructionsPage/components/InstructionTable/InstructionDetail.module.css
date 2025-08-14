@@ -1,0 +1,368 @@
+.detailContainer {
+  background-color: var(--color-background-primary);
+}
+
+.detailHeader {
+  margin-bottom: var(--spacing-md);
+}
+
+.instructionName {
+  display: flex;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.operandsDisplay {
+  margin-top: 2px;
+  font-family: var(--font-family-mono), monospace;
+  font-size: var(--font-size-base); /* Slightly larger than in table view */
+  color: var(--color-text-secondary);
+  font-weight: normal; /* Ensure it's not bold like the instruction name */
+}
+
+.opcode {
+  font-size: var(--font-size-sm);
+  font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  color: var(--color-text-secondary);
+  background-color: var(--background-color);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: calc(var(--border-radius-md) / 2);
+  display: inline-block;
+  margin-bottom: var(--spacing-sm);
+}
+
+.detailSection {
+  margin-bottom: var(--spacing-lg);
+}
+
+.detailSectionTitle {
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+  padding-bottom: var(--spacing-xs);
+}
+
+.descriptionText p {
+  margin: 0 0 var(--spacing-sm) 0;
+  line-height: 1.5;
+  color: var(--color-text-primary);
+}
+
+.descriptionText p:last-child {
+  margin-bottom: 0;
+  max-width: 800px;
+}
+
+.gasInfo {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.gasInfo strong {
+  color: var(--color-text-primary);
+}
+
+.stackDetailLayout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+}
+
+.stackPanel {
+}
+
+.stackTitle {
+  font-weight: 500;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-secondary);
+}
+
+.stackItemsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.stackItemEntry {
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background-color: var(--background-color);
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.stackItemName {
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.stackItemType {
+  font-size: var(--font-size-sm);
+  color: var(--color-accent);
+  margin-left: var(--spacing-sm);
+}
+
+.stackItemValue {
+  font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.stackItemDetails {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-top: var(--spacing-xs);
+}
+
+.arrayDetailItem,
+.conditionalDetailItem {
+  margin-left: var(--spacing-md);
+  margin-top: var(--spacing-sm);
+  padding-left: var(--spacing-sm);
+  border-left: 2px solid var(--color-accent);
+}
+
+.conditionalCase {
+  margin-bottom: var(--spacing-sm);
+}
+
+.conditionalCaseLabel {
+  font-weight: bold;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.metadataContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  font-size: var(--font-size-sm);
+}
+
+.metadataItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.metadataLabel {
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.metadataValue {
+  color: var(--color-text-primary);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.metadataValue span.tagPill {
+  background-color: transparent;
+  color: var(--color-accent);
+  font-family: var(--font-family-mono), monospace;
+  padding: 2px var(--spacing-xs);
+  white-space: nowrap;
+}
+
+.exitCodeList {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.exitCodeItem {
+  margin-left: var(--spacing-md);
+  margin-bottom: var(--spacing-xs);
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.exitCodeErrno {
+  font-weight: bold;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.exitCodeCondition {
+  color: var(--color-text-primary);
+}
+
+.exitCodeCondition p {
+  margin: 0;
+}
+
+.exampleItem {
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background-color: var(--background-color);
+}
+
+.exampleSubtitle {
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-primary);
+}
+
+.exampleStructTitle {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-top: 0;
+  margin-bottom: var(--spacing-xs);
+}
+
+.exampleInstructions {
+  margin-bottom: var(--spacing-md);
+}
+
+.codeBlock {
+  background-color: var(--color-background-secondary);
+  padding: var(--spacing-sm);
+  margin: 0 0 var(--spacing-sm) 0;
+  border-radius: calc(var(--border-radius-md) / 2);
+  font-family: var(--font-family-mono), monospace;
+  font-size: var(--font-size-sm);
+  overflow-x: scroll;
+  overflow-y: visible;
+  white-space: pre;
+}
+
+.codeBlock code {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.codeBlock .comment {
+  color: var(--color-text-tertiary);
+  font-style: italic;
+}
+
+.codeBlock .preparatoryComment {
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.exampleStack {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+.stackHalf {
+}
+
+.examplesGridContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
+}
+
+.exampleItem {
+  margin-bottom: 0;
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background-color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* If examples have varying heights, you might want them to stretch 
+   or have a min-height. For now, letting them size by content. */
+
+@media (max-width: 1200px) {
+  .examplesGridContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .examplesGridContainer {
+    grid-template-columns: 1fr;
+  }
+}
+
+.exampleItemError {
+  background-color: #fff5f5;
+}
+
+.exampleErrorHeader {
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  background-color: #ffebee;
+  border-radius: calc(var(--border-radius-md) / 2);
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.errorIcon {
+  font-size: var(--font-size-lg);
+  color: #c62828;
+  display: flex;
+  align-items: center;
+}
+
+.errorConditionText {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  width: 100%;
+  padding-top: var(--spacing-xs);
+}
+
+.errorConditionText p {
+  display: inline;
+  margin: 0;
+}
+
+.preparatoryInstruction code {
+  color: var(--color-text-secondary);
+}
+
+.implementationsGridContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.implementationsGridContainer li {
+  display: flex;
+  flex-direction: column;
+}
+
+.implementationsHeader {
+  font-size: var(--font-size-sm);
+  padding-bottom: var(--spacing-xs);
+  color: var(--color-text-tertiary);
+}
+
+@media (max-width: 1200px) {
+  .implementationsGridContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .implementationsGridContainer {
+    grid-template-columns: 1fr;
+  }
+}

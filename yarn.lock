@@ -5192,6 +5192,14 @@ to-regex-range@^5.0.1:
   dependencies:
     is-number "^7.0.0"
 
+ton-assembly@/Users/petrmakhnev/tasm-new/ton-assembly-0.2.3.tgz:
+  version "0.2.3"
+  resolved "/Users/petrmakhnev/tasm-new/ton-assembly-0.2.3.tgz#56e0766aae2e796d1e4ecf5d85e27be7ebceb634"
+  dependencies:
+    "@ton/core" "^0.60.1"
+    "@tonstudio/parser-runtime" "^0.0.1"
+    cac "^6.7.14"
+
 ton-assembly@0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/ton-assembly/-/ton-assembly-0.1.0.tgz#a3f1da50c2d2be1cd0f9837a9399ea80f80021eb"
