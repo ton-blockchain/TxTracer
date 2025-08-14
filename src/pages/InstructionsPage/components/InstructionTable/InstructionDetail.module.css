@@ -27,7 +27,7 @@
   font-size: var(--font-size-sm);
   font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   color: var(--color-text-secondary);
-  background-color: var(--background-color);
+  background-color: var(--color-background-secondary);
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: calc(var(--border-radius-md) / 2);
   display: inline-block;

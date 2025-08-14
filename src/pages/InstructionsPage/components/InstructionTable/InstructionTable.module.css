@@ -13,6 +13,15 @@
   background-color: var(--color-background-primary);
 }
 
+.divTable a {
+  text-decoration: none;
+  color: var(--tracepage-create-by-link-color);
+}
+
+.divTable a:hover {
+  color: var(--tracepage-create-by-link-hover-color);
+}
+
 .divThead,
 .divTbody,
 .divTr {
@@ -45,6 +54,14 @@
 
 .divTr.tableRow:hover .divTd {
   background-color: var(--color-background-secondary);
+}
+
+.divTr.tableRow:hover .divTd:first-child {
+  border-radius: 0 0 0 var(--border-radius-md);
+}
+
+.divTr.tableRow:hover .divTd:last-child {
+  border-radius: 0 0 var(--border-radius-md) 0;
 }
 
 .divTr.expandedRowHeader .divTd {
@@ -84,6 +101,7 @@
 
 .instructionDetailCell {
   padding: var(--spacing-md) !important;
+  border-top: 1px solid var(--color-border);
   background-color: var(--color-background-primary);
 }
 
