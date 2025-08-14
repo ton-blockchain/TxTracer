@@ -88,6 +88,30 @@
   font-style: italic;
 }
 
+.arrayBox {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  width: 100%;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.arrayMeta {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.arrayLengthLabel {
+  font-size: var(--font-size-xss);
+  color: var(--color-text-secondary);
+  margin: var(--spacing-xss) 0 var(--spacing-xs);
+}
+
 .emptyStackText {
   font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
@@ -100,12 +124,15 @@
 .stackItem {
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--border-radius-md);
-  margin-right: var(--spacing-sm);
   margin-bottom: var(--spacing-xs);
   font-size: var(--font-size-xs);
   font-family: var(--font-family-mono), monospace;
   display: inline-block;
   white-space: nowrap;
+}
+
+.stackItem:last-child {
+  margin-bottom: 0;
 }
 
 .stackItemInt {
