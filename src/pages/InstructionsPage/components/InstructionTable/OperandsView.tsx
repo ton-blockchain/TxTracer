@@ -1,13 +1,17 @@
 import React from "react"
 
 import {
-  type Arg,
   type Args,
   ArgsEnum,
   type Child,
   type Instruction,
 } from "@features/spec/tvm-specification.types"
-import {Bits} from "@features/spec/tvm-specification.types"
+
+import {
+  childType,
+  getChildRange,
+  renderChildRange,
+} from "@app/pages/InstructionsPage/components/InstructionTable/operands.tsx"
 
 import styles from "./OperandsView.module.css"
 
@@ -27,67 +31,9 @@ const OperandsView: React.FC<OperandsViewProps> = ({instruction}: OperandsViewPr
   )
 }
 
-const renderRange = (min?: string, max?: string) => {
-  if (!min && !max) return null
-  if (min && max) return `${min}..=${max}`
-  if (min) return `${min}-?`
-  return `?-${max}`
-}
-
-function argToString(child: Arg | undefined) {
-  if (!child) return ""
-  switch (child.$) {
-    case Bits.Uint:
-      return `uint${child.len}`
-    case Bits.Stack:
-      return `s${child.len}`
-  }
-}
-
-function typeToString(child: Child) {
-  switch (child.$) {
-    case "uint":
-      return `uint${child.len}`
-    case "int":
-      return `int${child.len}`
-    case "stack":
-      return `stack register`
-    case "control":
-      return `control register`
-    case "largeInt":
-      return `int257`
-    case "refCodeSlice":
-    case "inlineCodeSlice":
-      return `Inline slice`
-    case "codeSlice":
-      return `Slice with code`
-    case "dictpush":
-      return `Dictionary`
-    case "delta":
-      return argToString(child.arg) + ` + ${child.delta}`
-    case "debugstr":
-      return "String slice"
-    default:
-      return undefined
-  }
-}
-
-const getRange = (child: Child) => {
-  if (child.range) {
-    return child.range
-  }
-  if (child.$ === "delta") {
-    return child.arg?.range
-  }
-  if (child.$ === "debugstr") {
-    return {min: "0", max: "15 bytes"}
-  }
-  return undefined
-}
-
 const renderChild = (child: Child, key: string | number, operandName?: string) => {
-  const type = typeToString(child)
-  const range = getRange(child)
+  const type = childType(child)
+  const range = getChildRange(child)
 
   return (
     <li key={key} className={styles.argNode}>
@@ -95,14 +41,15 @@ const renderChild = (child: Child, key: string | number, operandName?: string) =
         <div className={styles.argName}>{operandName ?? child.$}</div>
         {type && <div className={styles.argType}>: {type}</div>}
       </div>
-      {range && <div className={styles.argValidRange}>({renderRange(range.min, range.max)})</div>}
+      {range && (
+        <div className={styles.argValidRange}>({renderChildRange(range.min, range.max)})</div>
+      )}
     </li>
   )
 }
 
 const renderArgsTree = (args: Args | undefined, operandNames?: string[]) => {
   if (!args) return null
-
   if (args.$ === ArgsEnum.Dictpush) {
     const pseudoChildDict: Child = {$: "dictpush"}
     const pseudoChildKeyLength: Child = {
@@ -139,11 +86,13 @@ const renderArgsTree = (args: Args | undefined, operandNames?: string[]) => {
     )
   }
 
+  const children = args.children?.[0]?.$ === "s1" ? args.children.slice(1) : args.children
+
   return (
     <div className={styles.argTree}>
-      {args.children && args.children.length > 0 && (
+      {children && children.length > 0 && (
         <ul className={styles.argChildren}>
-          {args.children.map((child, idx) => renderChild(child, idx, operandNames?.[idx]))}
+          {children.map((child, idx) => renderChild(child, idx, operandNames?.[idx]))}
         </ul>
       )}
     </div>

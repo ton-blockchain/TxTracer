@@ -17,6 +17,7 @@ import {useProcessedMarkdown} from "../../hooks/useProcessedMarkdown"
 
 import styles from "./InstructionDetail.module.css"
 import {formatGasRanges} from "./utils.ts"
+import InlineOperand from "./InlineOperand"
 import OperandsView from "./OperandsView"
 
 interface InstructionDetailProps {
@@ -47,9 +48,9 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
           {instructionName}
           {displayedOperands && displayedOperands.length > 0 && (
             <span className={styles.operandsDisplay}>
-              {" ["}
-              {displayedOperands.join(" ")}
-              {"]"}
+              {displayedOperands.map((_, idx) => (
+                <InlineOperand key={idx} instruction={instruction} operandIndex={idx} />
+              ))}
             </span>
           )}
           <span className={styles.opcode}>{layout.prefix_str}</span>

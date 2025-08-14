@@ -128,10 +128,10 @@
   cursor: pointer;
   color: var(--color-text-secondary);
   padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-sm);
   text-align: left;
   background: none;
   border: none;
-  font: inherit;
 }
 
 .loadMoreCell:hover {

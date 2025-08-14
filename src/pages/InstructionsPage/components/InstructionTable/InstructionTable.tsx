@@ -12,6 +12,7 @@ import {prettySubCategoryName} from "../../lib/formatCategory"
 
 import InstructionDetail from "./InstructionDetail"
 import StackDisplay from "./StackDisplay"
+import InlineOperand from "./InlineOperand"
 
 import styles from "./InstructionTable.module.css"
 import {formatGasRanges} from "./utils.ts"
@@ -133,9 +134,9 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
                   {name}
                   {displayedOperands && displayedOperands.length > 0 && (
                     <span className={styles.operandsDisplay}>
-                      {" ["}
-                      {displayedOperands.join(" ")}
-                      {"]"}
+                      {displayedOperands.map((_, opIdx) => (
+                        <InlineOperand key={opIdx} instruction={instruction} operandIndex={opIdx} />
+                      ))}
                     </span>
                   )}
                 </div>

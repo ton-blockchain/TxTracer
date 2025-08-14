@@ -22,7 +22,7 @@
   background-color: var(--color-background-secondary);
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-md);
-  padding: var(--spacing-xxs) var(--spacing-sm);
+  padding: var(--spacing-xss) var(--spacing-sm);
   font-family: var(--font-family-mono), monospace;
 }
 
@@ -57,6 +57,14 @@
   gap: var(--spacing-xs);
 }
 
+.argNodeInline {
+  font-size: var(--font-size-xsm);
+  margin-bottom: var(--spacing-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
 .argRowHeader,
 .argHeader {
   font-weight: 500;
@@ -79,7 +87,7 @@
 .argRowList {
   list-style: none;
   padding-left: 0;
-  margin: var(--spacing-xxs) 0 0 0;
+  margin: var(--spacing-xss) 0 0 0;
 }
 
 .argRow {
