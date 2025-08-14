@@ -1,3 +1,11 @@
+.tabsHeader {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  opacity: 0.6;
+  margin-bottom: var(--spacing-xs);
+  padding-left: var(--spacing-xss);
+}
+
 .tabsContainer {
   padding-bottom: var(--spacing-sm);
   background-color: var(--color-background-secondary);

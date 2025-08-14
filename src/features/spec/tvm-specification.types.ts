@@ -7,6 +7,7 @@ export interface TvmSpec {
 
 export interface Instruction {
   readonly category: Category
+  readonly subCategory: SubCategory
   readonly description: Description
   readonly layout: Layout
   readonly signature: InstructionSignature
@@ -15,6 +16,12 @@ export interface Instruction {
 }
 
 export enum Category {
+  Arithmetic = "arithmetic",
+  Cell = "cell",
+  Continuation = "continuation",
+}
+
+export enum SubCategory {
   AddMul = "add_mul",
   Address = "address",
   BasicGas = "basic_gas",

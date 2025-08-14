@@ -23,6 +23,7 @@ function InstructionsPage() {
   const [searchColumns, setSearchColumns] = useState<InstructionColumnKey[]>(["name"])
   const [sortMode, setSortMode] = useState<SortMode>("popularity")
   const [selectedCategory, setSelectedCategory] = useState<string>("All")
+  const [selectedSubCategory, setSelectedSubCategory] = useState<string>("All")
 
   useEffect(() => {
     setSpec(tvmSpecData as unknown as TvmSpec)
@@ -37,19 +38,43 @@ function InstructionsPage() {
   const categories = useMemo(() => {
     const s = new Set<string>()
     for (const [, instr] of Object.entries(instructions)) {
-      if (instr?.category) s.add(String(instr.category))
+      if (instr?.category) {
+        s.add(String(instr.category))
+      }
     }
     return Array.from(s).sort((a, b) => a.localeCompare(b))
   }, [instructions])
 
-  const filteredByCategory = useMemo(() => {
-    if (selectedCategory === "All") return instructions
-    const out: typeof instructions = {}
-    for (const [name, instr] of Object.entries(instructions)) {
-      if (String(instr.category) === selectedCategory) out[name] = instr
+  const subCategories = useMemo(() => {
+    if (selectedCategory === "All") return [] as string[]
+    const s = new Set<string>()
+    for (const [, instr] of Object.entries(instructions)) {
+      if (String(instr.category) === selectedCategory && instr?.subCategory) {
+        s.add(String(instr.subCategory))
+      }
     }
-    return out
+    return Array.from(s).sort((a, b) => a.localeCompare(b))
   }, [instructions, selectedCategory])
+
+  const filteredByCategory = useMemo(() => {
+    let base: typeof instructions = instructions
+    if (selectedCategory !== "All") {
+      const tmp: typeof instructions = {}
+      for (const [name, instr] of Object.entries(instructions)) {
+        if (String(instr.category) === selectedCategory) tmp[name] = instr
+      }
+      base = tmp
+    }
+
+    if (selectedSubCategory !== "All") {
+      const tmp: typeof instructions = {}
+      for (const [name, instr] of Object.entries(base)) {
+        if (String(instr.subCategory) === selectedSubCategory) tmp[name] = instr
+      }
+      return tmp
+    }
+    return base
+  }, [instructions, selectedCategory, selectedSubCategory])
 
   const filteredInstructions = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -106,6 +131,17 @@ function InstructionsPage() {
         if (vb !== va) return vb - va
         return a[0].localeCompare(b[0])
       })
+    } else if (sortMode === "opcode") {
+      // Opcode sort: by numeric opcode (prefix), ascending; fallback by name
+      entries.sort((a, b) => {
+        const pa = Number.parseInt(a[1].layout.prefix_str, 16)
+        const pb = Number.parseInt(b[1].layout.prefix_str, 16)
+        if (!Number.isNaN(pa) && !Number.isNaN(pb) && pa !== pb) return pa - pb
+        // if not hex, compare as string
+        if (a[1].layout.prefix_str !== b[1].layout.prefix_str)
+          return a[1].layout.prefix_str.localeCompare(b[1].layout.prefix_str)
+        return a[0].localeCompare(b[0])
+      })
     }
     const out: typeof filteredInstructions = {}
     for (const [k, v] of entries) out[k] = v
@@ -148,22 +184,40 @@ function InstructionsPage() {
               </div>
             </div>
           </div>
-          <CategoryTabs
-            categories={categories}
-            selected={selectedCategory}
-            onSelect={setSelectedCategory}
-          />
+          <div>
+            <CategoryTabs
+              categories={categories}
+              selected={selectedCategory}
+              onSelect={cat => {
+                setSelectedCategory(cat)
+                setSelectedSubCategory("All")
+              }}
+            />
+            {subCategories.length > 0 && (
+              <CategoryTabs
+                categories={subCategories}
+                selected={selectedSubCategory}
+                onSelect={setSelectedSubCategory}
+                label="Subcategory:"
+              />
+            )}
+          </div>
           <InstructionTable
             instructions={sortedInstructions}
             expandedRows={expandedRows}
             onRowClick={handleRowClick}
             groupByCategory={sortMode === "category"}
             emptyState={
-              selectedCategory !== "All" ? (
+              Object.keys(sortedInstructions).length === 0 ? (
                 <div className={styles.noResultsSuggestion} role="status" aria-live="polite">
-                  <span>No results in this category!</span>
-                  <Button variant="outline" size="sm" onClick={() => setSelectedCategory("All")}>
-                    Search in All
+                  <span>No results</span>
+                  {selectedCategory !== "All" && (
+                    <Button variant="outline" size="sm" onClick={() => setSelectedCategory("All")}>
+                      Search in All
+                    </Button>
+                  )}
+                  <Button variant="outline" size="sm" onClick={() => setQuery("")}>
+                    Reset search
                   </Button>
                 </div>
               ) : undefined

@@ -8,7 +8,7 @@ import type {TvmSpec, Instruction} from "@features/spec/tvm-specification.types"
 
 import {useProcessedMarkdown} from "../../hooks/useProcessedMarkdown"
 
-import {prettyCategoryName} from "../../lib/formatCategory"
+import {prettySubCategoryName} from "../../lib/formatCategory"
 
 import InstructionDetail from "./InstructionDetail"
 import StackDisplay from "./StackDisplay"
@@ -97,7 +97,7 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
               {shouldShowGroupHeader && (
                 <div className={styles.divTrExpanded} role="row">
                   <div className={`${styles.divTd} full ${styles.groupHeaderCell}`} role="cell">
-                    {prettyCategoryName(currentCategory)}
+                    {prettySubCategoryName(currentCategory)}
                   </div>
                 </div>
               )}

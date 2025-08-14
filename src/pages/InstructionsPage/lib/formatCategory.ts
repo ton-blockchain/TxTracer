@@ -1,4 +1,4 @@
-const DISPLAY_NAMES: Record<string, string> = {
+const SUB_CATEGORIES_DISPLAY_NAMES: Record<string, string> = {
   all: "All",
   add_mul: "Addition and Multiplication",
   address: "Address Operations",
@@ -9,11 +9,14 @@ const DISPLAY_NAMES: Record<string, string> = {
   cell_serialize: "Cell Serialization",
   codepage: "Codepage Management",
   config: "Config Access",
-  continuation_change: "Continuation Change",
-  continuation_cond_loop: "Continuation: Conditional",
-  continuation_dict_jump: "Continuation: Dictionary Jump",
-  continuation_jump: "Continuation: Jump",
-  crypto: "Cryptography",
+  continuation_change: "Continuations: Changes",
+  continuation_cond: "Continuations: Conditionals",
+  continuation_cond_loop: "Continuations: Loops",
+  continuation_dict_jump: "Continuations: Dictionary Jumps",
+  continuation_jump: "Continuations: Jumps",
+  crypto_bls: "Crypto: BLS",
+  crypto_rist255: "Crypto: RIST255",
+  crypto_common: "Crypto: Common",
   debug: "Debugging",
   dictionary: "Dictionary Operations",
   div: "Division",
@@ -29,10 +32,23 @@ const DISPLAY_NAMES: Record<string, string> = {
   tuple: "Tuple Operations",
 }
 
-export function prettyCategoryName(categoryKey: string): string {
+const CATEGORIES_DISPLAY_NAMES: Record<string, string> = {
+  all: "All",
+  arithmetic: "Arithmetic",
+  cell: "Cells",
+  continuation: "Continuations",
+  globals: "Globals",
+  crypto: "Crypto",
+}
+
+export function prettySubCategoryName(categoryKey: string): string {
   if (!categoryKey) return ""
   const key = categoryKey === "All" ? "all" : categoryKey
-  return DISPLAY_NAMES[key] ?? fallbackPrettyCategoryName(categoryKey)
+  return (
+    SUB_CATEGORIES_DISPLAY_NAMES[key] ??
+    CATEGORIES_DISPLAY_NAMES[key] ??
+    fallbackPrettyCategoryName(categoryKey)
+  )
 }
 
 function fallbackPrettyCategoryName(categoryKey: string): string {

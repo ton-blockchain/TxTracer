@@ -2,7 +2,7 @@ import React from "react"
 
 import styles from "./SortSelector.module.css"
 
-export type SortMode = "popularity" | "category" | "novelty"
+export type SortMode = "popularity" | "category" | "novelty" | "opcode"
 
 interface SortSelectorProps {
   readonly value: SortMode
@@ -13,9 +13,10 @@ const LABELS: Record<SortMode, string> = {
   popularity: "Popular",
   category: "By Category",
   novelty: "Newest",
+  opcode: "Opcode",
 }
 
-const ORDER: SortMode[] = ["popularity", "category", "novelty"]
+const ORDER: SortMode[] = ["popularity", "category", "novelty", "opcode"]
 
 const SortSelector: React.FC<SortSelectorProps> = ({value, onChange}) => {
   return (

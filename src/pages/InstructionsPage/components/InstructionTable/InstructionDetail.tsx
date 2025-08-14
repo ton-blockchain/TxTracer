@@ -7,7 +7,7 @@ import {calculateGasConsumption, infoOf} from "ton-assembly/dist/generator/instr
 
 import type {Instruction} from "@features/spec/tvm-specification.types"
 
-import {prettyCategoryName} from "@app/pages/InstructionsPage/lib/formatCategory.ts"
+import {prettySubCategoryName} from "@app/pages/InstructionsPage/lib/formatCategory.ts"
 
 import {useProcessedMarkdown} from "../../hooks/useProcessedMarkdown"
 
@@ -56,7 +56,7 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
           </div>
           <div className={styles.metadataItem}>
             <span className={styles.metadataLabel}>Category:</span>
-            <span className={styles.metadataValue}>{prettyCategoryName(category)}</span>
+            <span className={styles.metadataValue}>{prettySubCategoryName(category)}</span>
           </div>
           <div className={styles.metadataItem}>
             <span className={styles.metadataLabel}>Gas:</span>
