@@ -11,7 +11,7 @@ interface SortSelectorProps {
 
 const LABELS: Record<SortMode, string> = {
   popularity: "Popular",
-  category: "Category",
+  category: "By Category",
   novelty: "Newest",
 }
 

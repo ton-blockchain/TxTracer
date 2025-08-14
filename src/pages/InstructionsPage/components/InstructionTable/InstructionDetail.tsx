@@ -7,6 +7,8 @@ import {calculateGasConsumption, infoOf} from "ton-assembly/dist/generator/instr
 
 import type {Instruction} from "@features/spec/tvm-specification.types"
 
+import {prettyCategoryName} from "@app/pages/InstructionsPage/lib/formatCategory.ts"
+
 import {useProcessedMarkdown} from "../../hooks/useProcessedMarkdown"
 
 import styles from "./InstructionDetail.module.css"
@@ -15,14 +17,6 @@ import {formatGasRanges} from "./utils.ts"
 interface InstructionDetailProps {
   readonly instruction: Instruction
   readonly instructionName: string
-}
-
-const formatEnumKey = (key: string): string => {
-  if (!key) return ""
-  return key
-    .split("_")
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ")
 }
 
 const InstructionDetail: React.FC<InstructionDetailProps> = ({
@@ -62,7 +56,7 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
           </div>
           <div className={styles.metadataItem}>
             <span className={styles.metadataLabel}>Category:</span>
-            <span className={styles.metadataValue}>{formatEnumKey(category)}</span>
+            <span className={styles.metadataValue}>{prettyCategoryName(category)}</span>
           </div>
           <div className={styles.metadataItem}>
             <span className={styles.metadataLabel}>Gas:</span>
