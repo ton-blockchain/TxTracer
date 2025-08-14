@@ -48937,6 +48937,369 @@
           "stack": []
         }
       }
+    },
+    "GETPARAMLONG": {
+      "category": "config",
+      "description": {
+        "short": "",
+        "long": "",
+        "operands": []
+      },
+      "layout": {
+        "min": 16285952,
+        "max": 16285969,
+        "checkLen": 16,
+        "skipLen": 24,
+        "args": {
+          "$": "simpleArgs",
+          "children": [
+            {
+              "$": "uint",
+              "len": 8,
+              "range": {
+                "min": "0",
+                "max": "255"
+              }
+            }
+          ]
+        },
+        "exec": "exec_get_var_param_long",
+        "version": 11,
+        "kind": "fixed-range",
+        "prefix": 16285952,
+        "prefix_str": "F88100"
+      },
+      "signature": {}
+    },
+    "INMSGPARAMS": {
+      "category": "config",
+      "description": {
+        "short": "",
+        "long": "",
+        "operands": []
+      },
+      "layout": {
+        "min": 16285969,
+        "max": 16285970,
+        "checkLen": 24,
+        "skipLen": 24,
+        "args": {
+          "$": "simpleArgs",
+          "children": []
+        },
+        "exec": "exec_get_param",
+        "version": 11,
+        "kind": "simple",
+        "prefix": 16285969,
+        "prefix_str": "F88111"
+      },
+      "signature": {}
+    },
+    "GETPARAMLONG2": {
+      "category": "config",
+      "description": {
+        "short": "",
+        "long": "",
+        "operands": []
+      },
+      "layout": {
+        "min": 16285970,
+        "max": 16286207,
+        "checkLen": 16,
+        "skipLen": 24,
+        "args": {
+          "$": "simpleArgs",
+          "children": [
+            {
+              "$": "uint",
+              "len": 8,
+              "range": {
+                "min": "0",
+                "max": "255"
+              }
+            }
+          ]
+        },
+        "exec": "exec_get_var_param_long",
+        "version": 11,
+        "kind": "fixed-range",
+        "prefix": 16285970,
+        "prefix_str": "F88112"
+      },
+      "signature": {}
+    },
+    "INMSG_BOUNCE": {
+      "category": "config",
+      "description": {
+        "short": "",
+        "long": "",
+        "operands": []
+      },
+      "layout": {
+        "min": 16289792,
+        "max": 16290048,
+        "checkLen": 16,
+        "skipLen": 16,
+        "args": {
+          "$": "simpleArgs",
+          "children": []
+        },
+        "exec": "exec_get_in_msg_param",
+        "version": 11,
+        "kind": "simple",
+        "prefix": 63632,
+        "prefix_str": "F890"
+      },
+      "signature": {}
+    },
+    "INMSG_BOUNCED": {
+      "category": "config",
+      "description": {
+        "short": "",
+        "long": "",
+        "operands": []
+      },
+      "layout": {
+        "min": 16290048,
+        "max": 16290304,
+        "checkLen": 16,
+        "skipLen": 16,
+        "args": {
+          "$": "simpleArgs",
+          "children": []
+        },
+        "exec": "exec_get_in_msg_param",
+        "version": 11,
+        "kind": "simple",
+        "prefix": 63633,
+        "prefix_str": "F891"
+      },
+      "signature": {}
+    },
+    "INMSG_SRC": {
+      "category": "config",
+      "description": {
+        "short": "",
+        "long": "",
+        "operands": []
+      },
+      "layout": {
+        "min": 16290304,
+        "max": 16290560,
+        "checkLen": 16,
+        "skipLen": 16,
+        "args": {
+          "$": "simpleArgs",
+          "children": []
+        },
+        "exec": "exec_get_in_msg_param",
+        "version": 11,
+        "kind": "simple",
+        "prefix": 63634,
+        "prefix_str": "F892"
+      },
+      "signature": {}
+    },
+    "INMSG_FWDFEE": {
+      "category": "config",
+      "description": {
+        "short": "",
+        "long": "",
+        "operands": []
+      },
+      "layout": {
+        "min": 16290560,
+        "max": 16290816,
+        "checkLen": 16,
+        "skipLen": 16,
+        "args": {
+          "$": "simpleArgs",
+          "children": []
+        },
+        "exec": "exec_get_in_msg_param",
+        "version": 11,
+        "kind": "simple",
+        "prefix": 63635,
+        "prefix_str": "F893"
+      },
+      "signature": {}
+    },
+    "INMSG_LT": {
+      "category": "config",
+      "description": {
+        "short": "",
+        "long": "",
+        "operands": []
+      },
+      "layout": {
+        "min": 16290816,
+        "max": 16291072,
+        "checkLen": 16,
+        "skipLen": 16,
+        "args": {
+          "$": "simpleArgs",
+          "children": []
+        },
+        "exec": "exec_get_in_msg_param",
+        "version": 11,
+        "kind": "simple",
+        "prefix": 63636,
+        "prefix_str": "F894"
+      },
+      "signature": {}
+    },
+    "INMSG_UTIME": {
+      "category": "config",
+      "description": {
+        "short": "",
+        "long": "",
+        "operands": []
+      },
+      "layout": {
+        "min": 16291072,
+        "max": 16291328,
+        "checkLen": 16,
+        "skipLen": 16,
+        "args": {
+          "$": "simpleArgs",
+          "children": []
+        },
+        "exec": "exec_get_in_msg_param",
+        "version": 11,
+        "kind": "simple",
+        "prefix": 63637,
+        "prefix_str": "F895"
+      },
+      "signature": {}
+    },
+    "INMSG_ORIGVALUE": {
+      "category": "config",
+      "description": {
+        "short": "",
+        "long": "",
+        "operands": []
+      },
+      "layout": {
+        "min": 16291328,
+        "max": 16291584,
+        "checkLen": 16,
+        "skipLen": 16,
+        "args": {
+          "$": "simpleArgs",
+          "children": []
+        },
+        "exec": "exec_get_in_msg_param",
+        "version": 11,
+        "kind": "simple",
+        "prefix": 63638,
+        "prefix_str": "F896"
+      },
+      "signature": {}
+    },
+    "INMSG_VALUE": {
+      "category": "config",
+      "description": {
+        "short": "",
+        "long": "",
+        "operands": []
+      },
+      "layout": {
+        "min": 16291584,
+        "max": 16291840,
+        "checkLen": 16,
+        "skipLen": 16,
+        "args": {
+          "$": "simpleArgs",
+          "children": []
+        },
+        "exec": "exec_get_in_msg_param",
+        "version": 11,
+        "kind": "simple",
+        "prefix": 63639,
+        "prefix_str": "F897"
+      },
+      "signature": {}
+    },
+    "INMSG_VALUEEXTRA": {
+      "category": "config",
+      "description": {
+        "short": "",
+        "long": "",
+        "operands": []
+      },
+      "layout": {
+        "min": 16291840,
+        "max": 16292096,
+        "checkLen": 16,
+        "skipLen": 16,
+        "args": {
+          "$": "simpleArgs",
+          "children": []
+        },
+        "exec": "exec_get_in_msg_param",
+        "version": 11,
+        "kind": "simple",
+        "prefix": 63640,
+        "prefix_str": "F898"
+      },
+      "signature": {}
+    },
+    "INMSG_STATEINIT": {
+      "category": "config",
+      "description": {
+        "short": "",
+        "long": "",
+        "operands": []
+      },
+      "layout": {
+        "min": 16292096,
+        "max": 16292352,
+        "checkLen": 16,
+        "skipLen": 16,
+        "args": {
+          "$": "simpleArgs",
+          "children": []
+        },
+        "exec": "exec_get_in_msg_param",
+        "version": 11,
+        "kind": "simple",
+        "prefix": 63641,
+        "prefix_str": "F899"
+      },
+      "signature": {}
+    },
+    "INMSGPARAM": {
+      "category": "config",
+      "description": {
+        "short": "",
+        "long": "",
+        "operands": []
+      },
+      "layout": {
+        "min": 16292352,
+        "max": 16293888,
+        "checkLen": 12,
+        "skipLen": 16,
+        "args": {
+          "$": "simpleArgs",
+          "children": [
+            {
+              "$": "uint",
+              "len": 4,
+              "range": {
+                "min": "0",
+                "max": "15"
+              }
+            }
+          ]
+        },
+        "exec": "exec_get_var_in_msg_param",
+        "version": 11,
+        "kind": "fixed-range",
+        "prefix": 63642,
+        "prefix_str": "F89A"
+      },
+      "signature": {}
     }
   }
 }

@@ -31,12 +31,14 @@ interface InstructionTableProps {
   readonly instructions: TvmSpec["instructions"]
   readonly expandedRows: Record<string, boolean>
   readonly onRowClick: (instructionName: string) => void
+  readonly groupByCategory?: boolean
 }
 
 const InstructionTable: React.FC<InstructionTableProps> = ({
   instructions,
   expandedRows,
   onRowClick,
+  groupByCategory = false,
 }: InstructionTableProps) => {
   const instructionEntries = Object.entries(instructions)
 
@@ -63,7 +65,7 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
       </div>
 
       <div className={styles.divTbody} role="rowgroup">
-        {instructionEntries.slice(0, 100).map(([name, instruction]) => {
+        {instructionEntries.slice(0, 100).map(([name, instruction], idx) => {
           const opcode = infoOf(name)
           if (!opcode) return null
 
@@ -74,10 +76,35 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
 
           const displayedOperands = instruction.operands || instruction.description.operands
 
+          const currentCategory = String(instruction.category ?? "")
+          const prevCategory =
+            idx > 0 ? String(instructionEntries[idx - 1][1].category ?? "") : null
+          const shouldShowGroupHeader = groupByCategory && currentCategory !== prevCategory
+
+          const formatCategory = (c: string) =>
+            c
+              .split("_")
+              .map(part => (part ? part[0].toUpperCase() + part.slice(1) : part))
+              .join(" ")
+
           return (
             <Fragment key={name}>
+              {shouldShowGroupHeader && (
+                <div className={styles.divTrExpanded} role="row">
+                  <div className={`${styles.divTd} full ${styles.groupHeaderCell}`} role="cell">
+                    {formatCategory(currentCategory)}
+                  </div>
+                </div>
+              )}
               <div
                 onClick={() => onRowClick(name)}
+                onKeyDown={e => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault()
+                    onRowClick(name)
+                  }
+                }}
+                tabIndex={0}
                 className={`${styles.divTr} ${styles.tableRow} ${isExpanded ? styles.expandedRowHeader : ""}`}
                 role="row"
                 aria-expanded={isExpanded}

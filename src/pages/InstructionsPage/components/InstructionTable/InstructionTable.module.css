@@ -83,6 +83,15 @@
   background-color: var(--color-background-primary);
 }
 
+.groupHeaderCell {
+  padding: var(--spacing-sm) var(--spacing-md) !important;
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
 .opcodeColumn {
   white-space: nowrap;
   font-family: var(--font-family-mono), monospace;
