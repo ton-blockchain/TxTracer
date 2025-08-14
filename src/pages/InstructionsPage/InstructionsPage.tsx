@@ -14,16 +14,29 @@ import {POPULARITY} from "@features/spec/popularity/popularity.ts"
 
 import type {TvmSpec} from "@features/spec/tvm-specification.types.ts"
 
+import {
+  loadStoredSettings,
+  SETTINGS_STORAGE_KEY,
+  type StoredSettings,
+} from "@app/pages/InstructionsPage/settings.ts"
+
 import styles from "./InstructionsPage.module.css"
 
 function InstructionsPage() {
   const [spec, setSpec] = useState<TvmSpec | null>(null)
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({})
-  const [query, setQuery] = useState("")
-  const [searchColumns, setSearchColumns] = useState<InstructionColumnKey[]>(["name"])
-  const [sortMode, setSortMode] = useState<SortMode>("popularity")
-  const [selectedCategory, setSelectedCategory] = useState<string>("All")
-  const [selectedSubCategory, setSelectedSubCategory] = useState<string>("All")
+
+  const stored = loadStoredSettings()
+
+  const [query, setQuery] = useState<string>(stored?.query ?? "")
+  const [searchColumns, setSearchColumns] = useState<InstructionColumnKey[]>(
+    stored?.searchColumns ?? ["name"],
+  )
+  const [sortMode, setSortMode] = useState<SortMode>(stored?.sortMode ?? "popularity")
+  const [selectedCategory, setSelectedCategory] = useState<string>(stored?.category ?? "All")
+  const [selectedSubCategory, setSelectedSubCategory] = useState<string>(
+    stored?.subCategory ?? "All",
+  )
 
   useEffect(() => {
     setSpec(tvmSpecData as unknown as TvmSpec)
@@ -148,8 +161,24 @@ function InstructionsPage() {
     return out
   }, [filteredInstructions, sortMode])
 
-  const [shownLimit, setShownLimit] = useState<number>(100)
+  const [shownLimit, setShownLimit] = useState<number>(stored?.shownLimit ?? 100)
   const handleShowMore = () => setShownLimit(prev => prev + 100)
+
+  useEffect(() => {
+    const toStore: StoredSettings = {
+      query,
+      searchColumns,
+      sortMode,
+      category: selectedCategory,
+      subCategory: selectedSubCategory,
+      shownLimit,
+    }
+    try {
+      localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(toStore))
+    } catch {
+      // ignore
+    }
+  }, [query, searchColumns, sortMode, selectedCategory, selectedSubCategory, shownLimit])
 
   if (!spec) {
     return <div>Loading specification...</div>
