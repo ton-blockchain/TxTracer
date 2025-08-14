@@ -46,7 +46,9 @@ function InstructionsPage() {
     setSearchColumns(prev => (prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]))
   }
 
-  const instructions = spec?.instructions ?? ({} as TvmSpec["instructions"]) // keep ref stable
+  const instructions = useMemo(() => {
+    return spec?.instructions ?? ({} as TvmSpec["instructions"])
+  }, [spec?.instructions])
 
   const categories = useMemo(() => {
     const s = new Set<string>()
