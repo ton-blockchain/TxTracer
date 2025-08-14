@@ -3,7 +3,11 @@ import {FaExclamationTriangle} from "react-icons/fa"
 
 import ReactMarkdown from "react-markdown"
 
-import {calculateGasConsumption, infoOf} from "ton-assembly/dist/generator/instructions"
+import {
+  calculateGasConsumption,
+  calculateGasConsumptionWithDescription,
+  infoOf,
+} from "ton-assembly/dist/generator/instructions"
 
 import type {Instruction} from "@features/spec/tvm-specification.types"
 
@@ -27,8 +31,9 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
   const version = layout.version ?? 0
 
   const opcodeInfo = infoOf(instructionName)
-  const gasConsumption = opcodeInfo ? calculateGasConsumption(opcodeInfo) : []
-  const formattedGas = formatGasRanges(gasConsumption)
+  const gasConsumption = opcodeInfo ? calculateGasConsumptionWithDescription(opcodeInfo) : []
+  const simpleGasConsumption = opcodeInfo ? calculateGasConsumption(opcodeInfo) : []
+  const formattedGas = formatGasRanges(simpleGasConsumption)
 
   const displayedOperands = instruction.operands ?? description.operands
 
@@ -76,6 +81,22 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
           )}
         </div>
       </div>
+
+      {gasConsumption.length > 1 && (
+        <div className={styles.detailSection}>
+          <h3 className={styles.detailSectionTitle}>Gas Details</h3>
+          <ul className={styles.exitCodeList}>
+            {gasConsumption
+              .sort((a, b) => a.value - b.value)
+              .map((entry, idx) => (
+                <li key={idx} className={styles.exitCodeItem}>
+                  <span className={styles.exitCodeErrno}>{entry.value}:</span>
+                  <span className={styles.exitCodeCondition}>{entry.description}</span>
+                </li>
+              ))}
+          </ul>
+        </div>
+      )}
 
       <div className={styles.detailSection}>
         <div className={styles.descriptionText}>

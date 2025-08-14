@@ -5192,9 +5192,9 @@ to-regex-range@^5.0.1:
   dependencies:
     is-number "^7.0.0"
 
-ton-assembly@/Users/petrmakhnev/tasm-new/ton-assembly-0.2.4.tgz:
-  version "0.2.4"
-  resolved "/Users/petrmakhnev/tasm-new/ton-assembly-0.2.4.tgz#62bb9d75b05457b4a40c471cd73eb2c0cbcc0817"
+ton-assembly@/Users/petrmakhnev/tasm-new/ton-assembly-0.2.6.tgz:
+  version "0.2.6"
+  resolved "/Users/petrmakhnev/tasm-new/ton-assembly-0.2.6.tgz#ea77459ac3aecccbda43b7cd6a4fbbabdd3833cf"
   dependencies:
     "@ton/core" "^0.60.1"
     "@tonstudio/parser-runtime" "^0.0.1"
@@ -5209,9 +5209,9 @@ ton-assembly@0.1.0:
     "@tonstudio/parser-runtime" "^0.0.1"
     cac "^6.7.14"
 
-"ton-assembly@file:../tasm-new/ton-assembly-0.2.3.tgz":
-  version "0.2.3"
-  resolved "file:../tasm-new/ton-assembly-0.2.3.tgz#56e0766aae2e796d1e4ecf5d85e27be7ebceb634"
+"ton-assembly@file:../tasm-new/ton-assembly-0.2.5.tgz":
+  version "0.2.5"
+  resolved "file:../tasm-new/ton-assembly-0.2.5.tgz#55ea11365954906ac5034a3d6681a188c7cd7608"
   dependencies:
     "@ton/core" "^0.60.1"
     "@tonstudio/parser-runtime" "^0.0.1"
