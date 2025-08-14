@@ -25,7 +25,7 @@
     "@ton/crypto": "^3.3.0",
     "@ton/sandbox": "^0.36.0",
     "@ton/test-utils": "^0.7.0",
-    "@ton/tolk-js": "^1.0.0",
+    "@ton/tolk-js": "/Users/petrmakhnev/tolk-js/ton-tolk-js-1.0.53.tgz",
     "@truecarry/tlb-abi": "^0.2.0",
     "@types/d3": "^7.4.3",
     "@xyflow/react": "^12.3.2",

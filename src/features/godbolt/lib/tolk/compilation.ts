@@ -1,14 +1,16 @@
 import {Cell} from "@ton/core"
 import {runtime as i, text, trace} from "ton-assembly"
-
+import {type TolkMapping} from "@ton/tolk-js/dist/mapping"
 import {runTolkCompiler} from "@ton/tolk-js"
 
 import {TolkCompilationError, type TolkCompilationResult} from "@features/godbolt/lib/tolk/types.ts"
+import {createMappingWithCorrectPositions} from "@features/godbolt/lib/common/mapping.ts"
 
 export const compileTolkCode = async (code: string): Promise<TolkCompilationResult | undefined> => {
   const result = await runTolkCompiler({
     entrypointFileName: "main.tolk",
     fsReadCallback: () => code,
+    withDebugInfo: true,
     withStackComments: true,
     withSrcLineComments: true,
   })
@@ -19,11 +21,15 @@ export const compileTolkCode = async (code: string): Promise<TolkCompilationResu
   const codeCell = Cell.fromBase64(result.codeBoc64)
 
   const initialInstructions = i.decompileCell(codeCell)
-  const [, mapping] = recompileCell(codeCell)
+  const [newCell, mapping] = recompileCell(codeCell)
+
+  const newInstructions = i.decompileCell(newCell)
+  const newAssembly = text.print(newInstructions)
 
   const mappingInfo = trace.createMappingInfo(mapping)
+  const correctedMappingInfo = createMappingWithCorrectPositions(mappingInfo, newAssembly)
 
-  const allInstructions = [...Object.values(mappingInfo.cells)].flatMap(cell => {
+  const allInstructions = [...Object.values(correctedMappingInfo.cells)].flatMap(cell => {
     return cell?.instructions ?? []
   })
 
@@ -39,7 +45,8 @@ export const compileTolkCode = async (code: string): Promise<TolkCompilationResu
     lang: "tolk",
     instructions: initialInstructions,
     code: code,
-    assembly: text.print(initialInstructions),
+    assembly: text.print(newInstructions),
+    sourceMap: result.debugInfo as TolkMapping,
     mapping: debugSectionToInstructions,
   }
 }

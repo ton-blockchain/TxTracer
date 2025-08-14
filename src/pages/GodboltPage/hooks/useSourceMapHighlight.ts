@@ -2,6 +2,8 @@ import React, {useCallback, useMemo, useState} from "react"
 import type * as monaco from "monaco-editor"
 
 import {trace} from "ton-assembly"
+import {type TolkMapping, type TolkSourceLoc} from "@ton/tolk-js/dist/mapping"
+import type {FuncSourceLoc} from "ton-assembly/dist/trace"
 
 import type {HighlightGroup, HighlightRange} from "@shared/ui/CodeEditor"
 
@@ -13,53 +15,7 @@ export interface UseSourceMapHighlightReturn {
   readonly funcPreciseHighlightRanges: readonly HighlightRange[]
   readonly handleFuncLineHover: (line: number | null) => void
   readonly handleAsmLineHover: (line: number | null) => void
-  readonly filteredAsmCode: string
   readonly getVariablesForAsmLine: (line: number) => trace.FuncVar[] | undefined
-}
-
-function filterDebugMarks(asmCode: string): {
-  filteredCode: string
-  originalToFiltered: Map<number, number>
-  filteredToOriginal: Map<number, number>
-  asmLineToDebugMark: Map<number, number>
-} {
-  const lines = asmCode.split("\n")
-  const filteredLines: string[] = []
-  const originalToFiltered = new Map<number, number>()
-  const filteredToOriginal = new Map<number, number>()
-  const asmLineToDebugMark = new Map<number, number>()
-
-  let filteredLineNumber = 1
-  let currentDebugMark: number | null = null
-
-  for (let i = 0; i < lines.length; i++) {
-    const originalLineNumber = i + 1
-    const line = lines[i].trim()
-
-    if (line.startsWith("DEBUGMARK ")) {
-      const debugMarkMatch = line.match(/DEBUGMARK (\d+)/)
-      if (debugMarkMatch) {
-        currentDebugMark = parseInt(debugMarkMatch[1], 10)
-      }
-      continue
-    }
-
-    if (currentDebugMark !== null) {
-      asmLineToDebugMark.set(filteredLineNumber, currentDebugMark)
-    }
-
-    filteredLines.push(lines[i])
-    originalToFiltered.set(originalLineNumber, filteredLineNumber)
-    filteredToOriginal.set(filteredLineNumber, originalLineNumber)
-    filteredLineNumber++
-  }
-
-  return {
-    filteredCode: filteredLines.join("\n"),
-    originalToFiltered,
-    filteredToOriginal,
-    asmLineToDebugMark,
-  }
 }
 
 const COLORS = [
@@ -75,105 +31,213 @@ const COLORS = [
   "#85C1E9",
 ]
 
+interface MappingGroup {
+  readonly funcLines: readonly number[]
+  readonly asmLines: readonly number[]
+  readonly color: string
+  readonly className: string
+}
+
+interface QueueItem {
+  readonly type: "func" | "asm"
+  readonly line: number
+}
+
+function findConnectedComponents(
+  funcToAsmMap: Map<number, number[]>,
+  asmToFuncMap: Map<number, number[]>,
+): MappingGroup[] {
+  const visited = new Set<string>()
+  const components: MappingGroup[] = []
+
+  const getAllConnected = (
+    startFuncLine: number,
+  ): {funcLines: Set<number>; asmLines: Set<number>} => {
+    const funcLines = new Set<number>()
+    const asmLines = new Set<number>()
+    const queue: QueueItem[] = [{type: "func", line: startFuncLine}]
+    const localVisited = new Set<string>()
+
+    while (queue.length > 0) {
+      const current = queue.shift()
+      if (!current) continue
+
+      const key = `${current.type}:${current.line}`
+      if (localVisited.has(key)) continue
+      localVisited.add(key)
+
+      if (current.type === "func") {
+        funcLines.add(current.line)
+
+        const relatedAsmLines = funcToAsmMap.get(current.line) || []
+        for (const asmLine of relatedAsmLines) {
+          if (!localVisited.has(`asm:${asmLine}`)) {
+            queue.push({type: "asm", line: asmLine})
+          }
+        }
+      } else if (current.type === "asm") {
+        asmLines.add(current.line)
+
+        const relatedFuncLines = asmToFuncMap.get(current.line) || []
+        for (const funcLine of relatedFuncLines) {
+          if (!localVisited.has(`func:${funcLine}`)) {
+            queue.push({type: "func", line: funcLine})
+          }
+        }
+      }
+    }
+
+    return {funcLines, asmLines}
+  }
+
+  let colorIndex = 0
+
+  for (const funcLine of funcToAsmMap.keys()) {
+    const key = `func:${funcLine}`
+    if (visited.has(key)) continue
+
+    const {funcLines, asmLines} = getAllConnected(funcLine)
+
+    for (const fl of funcLines) visited.add(`func:${fl}`)
+    for (const al of asmLines) visited.add(`asm:${al}`)
+
+    if (funcLines.size > 0 && asmLines.size > 0) {
+      const color = COLORS[colorIndex % COLORS.length]
+      components.push({
+        funcLines: Array.from(funcLines).sort((a, b) => a - b),
+        asmLines: Array.from(asmLines).sort((a, b) => a - b),
+        color,
+        className: `source-map-group-${colorIndex % 10}`,
+      })
+      colorIndex++
+    }
+  }
+
+  return components
+}
+
 export function useSourceMapHighlight(
-  sourceMap: trace.FuncMapping | undefined,
+  sourceMap: trace.FuncMapping | TolkMapping | undefined,
   debugSectionToInstructions?: Map<number, trace.InstructionInfo[]>,
   funcEditorRef?: React.RefObject<monaco.editor.IStandaloneCodeEditor | null>,
   asmEditorRef?: React.RefObject<monaco.editor.IStandaloneCodeEditor | null>,
-  originalAsmCode?: string,
 ): UseSourceMapHighlightReturn {
   const [hoveredFuncLine, setHoveredFuncLine] = useState<number | null>(null)
   const [hoveredAsmLine, setHoveredAsmLine] = useState<number | null>(null)
 
-  const {filteredAsmCode, originalToFiltered, asmLineToDebugMark} = useMemo(() => {
-    if (!originalAsmCode) {
+  const {funcToAsmMap, asmToFuncMap, mappingGroups} = useMemo(() => {
+    if (!sourceMap || !debugSectionToInstructions) {
       return {
-        filteredAsmCode: "",
-        originalToFiltered: new Map<number, number>(),
-        asmLineToDebugMark: new Map<number, number>(),
+        funcToAsmMap: new Map<number, number[]>(),
+        asmToFuncMap: new Map<number, number[]>(),
+        mappingGroups: [],
       }
     }
-    const result = filterDebugMarks(originalAsmCode)
-    return {
-      filteredAsmCode: result.filteredCode,
-      originalToFiltered: result.originalToFiltered,
-      asmLineToDebugMark: result.asmLineToDebugMark,
-    }
-  }, [originalAsmCode])
 
-  const {funcToAsmMap, asmToFuncMap} = useMemo(() => {
-    if (!sourceMap || !debugSectionToInstructions) {
-      return {funcToAsmMap: new Map<number, number[]>(), asmToFuncMap: new Map<number, number[]>()}
-    }
+    const funcToAsm = new Map<number, Set<number>>()
+    const asmToFunc = new Map<number, Set<number>>()
 
-    const funcToAsm = new Map<number, number[]>()
-    const asmToFunc = new Map<number, number[]>()
+    let waitingSections: (FuncSourceLoc | TolkSourceLoc)[] = []
 
     for (const [debugId, location] of sourceMap.locations.entries()) {
       const funcLine = location.line
 
       const instructions = debugSectionToInstructions.get(debugId)
       if (!instructions || instructions.length === 0) {
+        if (location.file === "" || location.file.includes("@stdlib")) {
+          continue
+        }
+        waitingSections.push(location)
         continue
       }
 
       const asmLineNumbers: number[] = []
       for (const instr of instructions) {
         if (instr.loc && instr.loc.line !== undefined) {
-          const originalAsmLine = instr.loc.line + 1
-          const filteredAsmLine = originalToFiltered.get(originalAsmLine)
-          if (filteredAsmLine) {
-            asmLineNumbers.push(filteredAsmLine)
-          }
+          const asmLine = instr.loc.line + 1
+          asmLineNumbers.push(asmLine)
         }
       }
 
       if (asmLineNumbers.length === 0) {
+        waitingSections = []
         continue
       }
 
       if (!funcToAsm.has(funcLine)) {
-        funcToAsm.set(funcLine, [])
+        funcToAsm.set(funcLine, new Set())
       }
-      funcToAsm.get(funcLine)?.push(...asmLineNumbers)
-
       for (const asmLine of asmLineNumbers) {
+        funcToAsm.get(funcLine)?.add(asmLine)
+
         if (!asmToFunc.has(asmLine)) {
-          asmToFunc.set(asmLine, [])
+          asmToFunc.set(asmLine, new Set())
         }
-        asmToFunc.get(asmLine)?.push(funcLine)
+        asmToFunc.get(asmLine)?.add(funcLine)
+      }
+
+      if (waitingSections.length > 0) {
+        for (const section of waitingSections) {
+          const waitingFuncLine = section.line
+          if (!funcToAsm.has(waitingFuncLine)) {
+            funcToAsm.set(waitingFuncLine, new Set())
+          }
+
+          for (const asmLine of asmLineNumbers) {
+            funcToAsm.get(waitingFuncLine)?.add(asmLine)
+
+            if (!asmToFunc.has(asmLine)) {
+              asmToFunc.set(asmLine, new Set())
+            }
+            asmToFunc.get(asmLine)?.add(waitingFuncLine)
+          }
+        }
+        waitingSections = []
       }
     }
 
-    return {funcToAsmMap: funcToAsm, asmToFuncMap: asmToFunc}
-  }, [sourceMap, debugSectionToInstructions, originalToFiltered])
+    const finalFuncToAsmMapping: Map<number, number[]> = new Map(
+      [...funcToAsm.entries()].map(([key, value]) => [
+        key,
+        [...value.values()].sort((a, b) => a - b),
+      ]),
+    )
+    const finalAsmToFuncMapping: Map<number, number[]> = new Map(
+      [...asmToFunc.entries()].map(([key, value]) => [
+        key,
+        [...value.values()].sort((a, b) => a - b),
+      ]),
+    )
+
+    const components = findConnectedComponents(finalFuncToAsmMapping, finalAsmToFuncMapping)
+
+    return {
+      funcToAsmMap: finalFuncToAsmMapping,
+      asmToFuncMap: finalAsmToFuncMapping,
+      mappingGroups: components,
+    }
+  }, [sourceMap, debugSectionToInstructions])
 
   const {funcHighlightGroups, asmHighlightGroups} = useMemo(() => {
     const funcGroups: HighlightGroup[] = []
     const asmGroups: HighlightGroup[] = []
 
-    let colorIndex = 0
-
-    for (const [funcLine, asmLines] of funcToAsmMap) {
-      const color = COLORS[colorIndex % COLORS.length]
-
+    for (const group of mappingGroups) {
       funcGroups.push({
-        lines: [funcLine],
-        color,
-        className: `source-map-group-${colorIndex % 10}`,
+        lines: [...group.funcLines],
+        color: group.color,
+        className: group.className,
       })
 
       asmGroups.push({
-        lines: asmLines,
-        color,
-        className: `source-map-group-${colorIndex % 10}`,
+        lines: [...group.asmLines],
+        color: group.color,
+        className: group.className,
       })
-
-      colorIndex++
     }
 
     return {funcHighlightGroups: funcGroups, asmHighlightGroups: asmGroups}
-  }, [funcToAsmMap])
+  }, [mappingGroups])
 
   const handleFuncLineHover = useCallback(
     (line: number | null) => {
@@ -222,51 +286,40 @@ export function useSourceMapHighlight(
   }, [hoveredFuncLine, funcToAsmMap])
 
   const funcPreciseHighlightRanges = useMemo((): HighlightRange[] => {
-    if (!hoveredAsmLine || !sourceMap || !asmLineToDebugMark.has(hoveredAsmLine)) {
+    if (!hoveredAsmLine || !sourceMap || !debugSectionToInstructions) {
       return []
     }
 
-    const debugMarkId = asmLineToDebugMark.get(hoveredAsmLine)
-    if (debugMarkId === undefined) {
-      return []
+    for (const [debugId, location] of sourceMap.locations.entries()) {
+      if (location.file !== "main.fc" && location.file !== "main.tolk") {
+        continue
+      }
+
+      const instructions = debugSectionToInstructions.get(debugId)
+      if (!instructions || instructions.length === 0) {
+        continue
+      }
+
+      for (const instr of instructions) {
+        if (instr.loc?.line !== undefined) {
+          const asmLine = instr.loc.line + 1
+          if (asmLine === hoveredAsmLine) {
+            return [
+              {
+                line: location.line,
+                startColumn: location.pos,
+                endColumn: location.pos + location.length,
+                color: "#FF0000",
+                className: "precise-highlight",
+              },
+            ]
+          }
+        }
+      }
     }
 
-    const location = sourceMap.locations[debugMarkId]
-    if (!location || location.file !== "main.fc") {
-      return []
-    }
-
-    return [
-      {
-        line: location.line,
-        startColumn: location.pos + 1,
-        endColumn: location.pos + location.length + 1,
-        color: "#FF0000",
-        className: "precise-highlight",
-      },
-    ]
-  }, [hoveredAsmLine, sourceMap, asmLineToDebugMark])
-
-  const getVariablesForAsmLine = useCallback(
-    (line: number): trace.FuncVar[] | undefined => {
-      if (!sourceMap || !asmLineToDebugMark.has(line)) {
-        return undefined
-      }
-
-      const debugMarkId = asmLineToDebugMark.get(line)
-      if (debugMarkId === undefined) {
-        return undefined
-      }
-
-      const location = sourceMap.locations[debugMarkId]
-      if (!location || location.file !== "main.fc") {
-        return undefined
-      }
-
-      return location.vars ?? undefined
-    },
-    [sourceMap, asmLineToDebugMark],
-  )
+    return []
+  }, [hoveredAsmLine, sourceMap, debugSectionToInstructions])
 
   return {
     funcHighlightGroups,
@@ -276,7 +329,6 @@ export function useSourceMapHighlight(
     funcPreciseHighlightRanges,
     handleFuncLineHover,
     handleAsmLineHover,
-    filteredAsmCode,
-    getVariablesForAsmLine,
+    getVariablesForAsmLine: () => undefined,
   }
 }

@@ -216,6 +216,9 @@ function GodboltPage() {
         return undefined
       }
     }
+    if (result?.lang === "tolk" && result?.sourceMap) {
+      return result.sourceMap
+    }
     return undefined
   }, [result])
 
@@ -227,17 +230,10 @@ function GodboltPage() {
     funcPreciseHighlightRanges,
     handleFuncLineHover,
     handleAsmLineHover,
-    filteredAsmCode,
     getVariablesForAsmLine,
-  } = useSourceMapHighlight(
-    sourceMap,
-    result?.mapping,
-    funcEditorRef,
-    asmEditorRef,
-    result?.assembly,
-  )
+  } = useSourceMapHighlight(sourceMap, result?.mapping, funcEditorRef, asmEditorRef)
 
-  const displayedAsmCode = result?.assembly ? (filteredAsmCode ?? "") : asmCode
+  const displayedAsmCode = result?.assembly ?? asmCode // ? (filteredAsmCode ?? "") : asmCode
 
   const godboltSettingsHook = useGodboltSettings()
   const {showVariablesInHover, showDocsInHover, autoCompile} = godboltSettingsHook
