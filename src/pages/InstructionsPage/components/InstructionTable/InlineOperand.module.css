@@ -1,0 +1,9 @@
+.inlineOperand {
+  display: inline-block;
+  padding: 0 var(--spacing-xss);
+  border-radius: var(--border-radius-sm);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-mono), monospace;
+  cursor: default;
+}

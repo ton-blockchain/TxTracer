@@ -25,6 +25,7 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({
   const isPlayground = pageTitle === "playground"
   const isExplorer = pageTitle === "explorer"
   const isSandbox = pageTitle === "sandbox"
+  const isSpec = pageTitle === "spec"
 
   return (
     <header className={styles.header} role="banner">
@@ -48,6 +49,12 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({
         {isSandbox && (
           <a className={styles.pageTitle} href="/sandbox/">
             Sandbox
+            {titleBadgeText && <Badge color={titleBadgeColor}>{titleBadgeText}</Badge>}
+          </a>
+        )}
+        {isSpec && (
+          <a className={styles.pageTitle} href="/spec/">
+            TVM Instructions
             {titleBadgeText && <Badge color={titleBadgeColor}>{titleBadgeText}</Badge>}
           </a>
         )}

@@ -1,0 +1,233 @@
+.stackVerticalListContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.stackPillVertical,
+.stackVerticalListContainer > .stackItem,
+.stackVerticalListContainer > span[class*="stackItem"] {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+  white-space: normal;
+  word-break: break-all;
+  margin-bottom: var(--spacing-xs);
+}
+
+.stackVerticalListContainer > .stackItem:last-child,
+.stackVerticalListContainer > span[class*="stackItem"]:last-child {
+  margin-bottom: 0;
+}
+
+.stackTopIndicator {
+  font-size: var(--font-size-xss);
+  color: var(--color-text-secondary);
+  opacity: 0.8;
+  margin-bottom: var(--spacing-xs);
+  font-family: var(--font-family-sans), sans-serif;
+  display: block;
+}
+
+.stackEmptyIndicator {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  opacity: 0.8;
+  margin-bottom: var(--spacing-xs);
+}
+
+.conditionalBlockVertical {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  width: 100%;
+  margin-top: var(--spacing-xs);
+}
+
+.conditionalNameInTable {
+  font-size: calc(var(--font-size-sm) * 0.9);
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  margin-bottom: var(--spacing-xs);
+}
+
+.conditionalBranchVertical {
+  padding-left: var(--spacing-md);
+  border-left: 1px solid var(--color-border);
+  margin-bottom: var(--spacing-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+.conditionalBranchVertical:last-child {
+  margin-bottom: 0;
+}
+
+.conditionalLabelInTable {
+  font-size: calc(var(--font-size-sm) * 0.85);
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-mono), monospace;
+}
+
+.conditionalContainerVertical {
+  border-left: 2px solid var(--color-border);
+  padding-left: var(--spacing-sm);
+  margin-left: var(--spacing-xs);
+  margin-top: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.arraySummaryVertical {
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.arrayBox {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  width: 100%;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.arrayMeta {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.arrayLengthLabel {
+  font-size: var(--font-size-xss);
+  color: var(--color-text-secondary);
+  margin: var(--spacing-xss) 0 var(--spacing-xs);
+}
+
+.emptyStackText {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  font-style: italic;
+  padding: var(--spacing-sm) 0;
+  text-align: center;
+  width: 100%;
+}
+
+.stackItem {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-md);
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--font-size-xs);
+  font-family: var(--font-family-mono), monospace;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.stackItem:last-child {
+  margin-bottom: 0;
+}
+
+.stackItemInt {
+  background-color: var(--stack-item-integer-bg);
+  color: var(--stack-item-integer-text);
+  border-color: var(--stack-item-integer-text);
+}
+
+.stackItemCell {
+  background-color: var(--stack-item-cell-bg);
+  color: var(--stack-item-cell-text);
+  border-color: var(--stack-item-cell-text);
+}
+
+.stackItemSlice {
+  background-color: var(--stack-item-slice-bg);
+  color: var(--stack-item-slice-text);
+  border-color: var(--stack-item-slice-text);
+}
+
+.stackItemBuilder {
+  background-color: var(--stack-item-builder-bg);
+  color: var(--stack-item-builder-text);
+  border-color: var(--stack-item-builder-text);
+}
+
+.stackItemContinuation {
+  background-color: var(--stack-item-continuation-bg);
+  color: var(--stack-item-continuation-text);
+  border-color: var(--stack-item-continuation-text);
+}
+
+.stackItemTuple {
+  background-color: var(--stack-item-tuple-bg);
+  color: var(--stack-item-tuple-text);
+  border-color: var(--stack-item-tuple-text);
+}
+
+.stackItemAny {
+  background-color: var(--stack-item-any-bg);
+  color: var(--stack-item-any-text);
+  border-color: var(--stack-item-any-text);
+}
+
+.stackItemUnknown {
+  background-color: var(--stack-item-unknown-bg);
+  color: var(--stack-item-unknown-text);
+  border-color: var(--stack-item-unknown-text);
+}
+
+.stackItemNull {
+  background-color: var(--stack-item-null-bg);
+  color: var(--stack-item-null-text);
+  border-color: var(--stack-item-null-text);
+}
+
+.stackItemNan {
+  background-color: var(--stack-item-nan-bg);
+  color: var(--stack-item-nan-text);
+  border-color: var(--stack-item-nan-text);
+}
+
+.tableContainer {
+  width: 100%;
+}
+
+.stackItemsColumn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.stackOutputPillGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.conditionalOutputBlock {
+  margin-bottom: var(--spacing-sm);
+}
+
+.conditionalBranch {
+  margin-bottom: var(--spacing-xs);
+  padding-left: var(--spacing-md);
+  border-left: 2px solid var(--color-border);
+}
+
+.conditionalLabel {
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  display: block;
+  margin-bottom: var(--spacing-xs);
+}
+
+.directOutputBranch {
+}
