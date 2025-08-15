@@ -1717,7 +1717,7 @@
       "subCategory": "shift_logic",
       "description": {
         "short": "",
-        "long": "Replaces `x` with a `NaN` if x is not a c-bit signed integer, leaves it intact otherwise.",
+        "long": "Replaces `x` with a `NaN` if x is not a `width`-bit signed integer, leaves it intact otherwise.",
         "operands": []
       },
       "layout": {
@@ -1735,7 +1735,7 @@
         "prefix_str": "B7B600"
       },
       "signature": {
-        "stack_string": "x:Int c:Int -> x:Int",
+        "stack_string": "x:Int width:Int -> x:Int",
         "inputs": {
           "stack": [
             {
@@ -1745,7 +1745,7 @@
             },
             {
               "type": "simple",
-              "name": "c",
+              "name": "width",
               "value_types": ["Int"]
             }
           ]
@@ -1766,7 +1766,7 @@
       "subCategory": "shift_logic",
       "description": {
         "short": "",
-        "long": "Replaces `x` with a `NaN` if x is not a c-bit unsigned integer, leaves it intact otherwise.",
+        "long": "Replaces `x` with a `NaN` if x is not a `width`-bit unsigned integer, leaves it intact otherwise.",
         "operands": []
       },
       "layout": {
@@ -1784,7 +1784,7 @@
         "prefix_str": "B7B601"
       },
       "signature": {
-        "stack_string": "x:Int c:Int -> x:Int",
+        "stack_string": "x:Int width:Int -> x:Int",
         "inputs": {
           "stack": [
             {
@@ -1794,7 +1794,7 @@
             },
             {
               "type": "simple",
-              "name": "c",
+              "name": "width",
               "value_types": ["Int"]
             }
           ]
@@ -2063,7 +2063,7 @@
       "subCategory": "int_cmp",
       "description": {
         "short": "",
-        "long": "Computes the sign of an integer `x`:\n`-1` if `x<0`, `0` if `x == 0`, `1` if `x>0`.",
+        "long": "Computes the sign of an integer `x`:\n`-1` if `x < 0`, `0` if `x == 0`, `1` if `x > 0`.",
         "operands": []
       },
       "layout": {
@@ -17583,7 +17583,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Creates an output action which would reserve exactly `x` nanograms (if `y=0`), at most `x` nanograms (if `y=2`), or all but `x` nanograms (if `y=1` or `y=3`), from the remaining balance of the account. It is roughly equivalent to creating an outbound message carrying `x` nanograms (or `b-x` nanograms, where `b` is the remaining balance) to oneself, so that the subsequent output actions would not be able to spend more money than the remainder. Bit `+2` in `y` means that the external action does not fail if the specified amount cannot be reserved; instead, all remaining balance is reserved. Bit `+8` in `y` means `x:=-x` before performing any further actions. Bit `+4` in `y` means that `x` is increased by the original balance of the current account (before the compute phase), including all extra currencies, before performing any other checks and actions. Currently `x` must be a non-negative integer, and `y` must be in the range `0...15`.",
+        "long": "Creates an output action which would reserve exactly `x` nanograms (if `y == 0`), at most `x` nanograms (if `y=2`), or all but `x` nanograms (if `y=1` or `y=3`), from the remaining balance of the account. It is roughly equivalent to creating an outbound message carrying `x` nanograms (or `b-x` nanograms, where `b` is the remaining balance) to oneself, so that the subsequent output actions would not be able to spend more money than the remainder. Bit `+2` in `y` means that the external action does not fail if the specified amount cannot be reserved; instead, all remaining balance is reserved. Bit `+8` in `y` means `x:=-x` before performing any further actions. Bit `+4` in `y` means that `x` is increased by the original balance of the current account (before the compute phase), including all extra currencies, before performing any other checks and actions. Currently `x` must be a non-negative integer, and `y` must be in the range `0...15`.",
         "operands": []
       },
       "layout": {
@@ -20253,7 +20253,7 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": "Division returns `NaN` if `y=0`.",
+        "long": "Division returns `NaN` if `y == 0`.",
         "operands": []
       },
       "layout": {
@@ -21994,7 +21994,7 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": "`q=floor(x*y/z)`",
+        "long": "Calculates `result = floor(x * y / z)`.",
         "operands": []
       },
       "layout": {
@@ -22048,7 +22048,7 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": "`q'=round(x*y/z)`",
+        "long": "Calculates `result = round(x * y / z)`.",
         "operands": []
       },
       "layout": {
@@ -22102,7 +22102,7 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": "`q'=ceil(x*y/z)`",
+        "long": "Calculates `result = ceil( x * y / z)`.",
         "operands": []
       },
       "layout": {
@@ -22690,7 +22690,7 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": "`q=floor(x*y/z)`",
+        "long": "Calculates `result = floor(x * y / z)`.",
         "operands": []
       },
       "layout": {
@@ -22798,7 +22798,7 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": "`q'=ceil(x*y/z)`",
+        "long": "Calculates `result = ceil(x * y / z)`",
         "operands": []
       },
       "layout": {
@@ -23073,7 +23073,7 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": "`q=round(x*y/z)`, `r=x*y-z*q`",
+        "long": "Calculates `q = round(x * y / z)` and `r = x * y - z * q`.",
         "operands": []
       },
       "layout": {
@@ -23132,7 +23132,7 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": "`q=ceil(x*y/z)`, `r=x*y-z*q`",
+        "long": "Calculates `q = ceil(x * y / z)` and `r = x * y - z * q`.",
         "operands": []
       },
       "layout": {
@@ -38986,8 +38986,8 @@
       "subCategory": "shift_logic",
       "description": {
         "short": "",
-        "long": "Replaces `x` with a `NaN` if x is not a `cc+1`-bit signed integer, leaves it intact otherwise.",
-        "operands": ["c"]
+        "long": "Replaces `x` with a `NaN` if x is not a `width`-bit signed integer, leaves it intact otherwise.",
+        "operands": ["width"]
       },
       "layout": {
         "min": 12039168,
@@ -39043,8 +39043,8 @@
       "subCategory": "shift_logic",
       "description": {
         "short": "",
-        "long": "Replaces `x` with a `NaN` if x is not a `cc+1`-bit unsigned integer, leaves it intact otherwise.",
-        "operands": ["c"]
+        "long": "Replaces `x` with a `NaN` if x is not a `width`-bit unsigned integer, leaves it intact otherwise.",
+        "operands": ["width"]
       },
       "layout": {
         "min": 12039424,
@@ -48433,7 +48433,7 @@
       "subCategory": "shift_logic",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Shift the top element of the stack left by a number of bits equal to the second element of the stack.",
         "operands": []
       },
       "layout": {
@@ -48487,7 +48487,7 @@
       "subCategory": "shift_logic",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Shift the top element of the stack left by `c` bits.",
         "operands": ["c"]
       },
       "layout": {
@@ -48861,7 +48861,7 @@
       "subCategory": "shift_logic",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Shift the top element of the stack right by a number of bits equal to the second element of the stack.",
         "operands": []
       },
       "layout": {
@@ -48915,7 +48915,7 @@
       "subCategory": "shift_logic",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Shift the top element of the stack right by `c` bits.",
         "operands": ["c"]
       },
       "layout": {
