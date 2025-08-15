@@ -49728,12 +49728,21 @@
         }
       }
     },
-    "XCHG_01_LONG": {
+    "XCHG_0I_LONG": {
       "category": "stack",
       "subCategory": "",
       "description": {
-        "short": "",
-        "long": ""
+        "short": "Interchanges top element with element at index `i`.",
+        "long": "This instruction is equivalent to `XCHG_0I` except that it operates on a integer value with bigger range.",
+        "tags": ["stack"],
+        "related_instructions": ["XCHG_0I"],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Count of elements on the stack is less or equal to `i`"
+          }
+        ],
+        "operands": ["i"]
       },
       "layout": {
         "min": 1114112,
