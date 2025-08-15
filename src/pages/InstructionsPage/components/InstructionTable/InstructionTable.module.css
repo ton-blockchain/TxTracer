@@ -272,7 +272,7 @@
   .divTh,
   .divTd {
     padding: var(--spacing-sms) var(--spacing-sms);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-xs);
   }
 }
 
@@ -291,7 +291,8 @@
   .divTh,
   .divTd {
     padding: var(--spacing-xs) var(--spacing-sm);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-xs);
+    align-items: center;
   }
 
   .opcodeColumn {

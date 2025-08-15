@@ -1717,7 +1717,7 @@
       "subCategory": "shift_logic",
       "description": {
         "short": "",
-        "long": "Replaces `x` with a `NaN` if x is not a c-bit signed integer, leaves it intact otherwise.",
+        "long": "Replaces `x` with a `NaN` if x is not a `width`-bit signed integer, leaves it intact otherwise.",
         "operands": []
       },
       "layout": {
@@ -1735,7 +1735,7 @@
         "prefix_str": "B7B600"
       },
       "signature": {
-        "stack_string": "x:Int c:Int -> x:Int",
+        "stack_string": "x:Int width:Int -> x:Int",
         "inputs": {
           "stack": [
             {
@@ -1745,7 +1745,7 @@
             },
             {
               "type": "simple",
-              "name": "c",
+              "name": "width",
               "value_types": ["Int"]
             }
           ]
@@ -1766,7 +1766,7 @@
       "subCategory": "shift_logic",
       "description": {
         "short": "",
-        "long": "Replaces `x` with a `NaN` if x is not a c-bit unsigned integer, leaves it intact otherwise.",
+        "long": "Replaces `x` with a `NaN` if x is not a `width`-bit unsigned integer, leaves it intact otherwise.",
         "operands": []
       },
       "layout": {
@@ -1784,7 +1784,7 @@
         "prefix_str": "B7B601"
       },
       "signature": {
-        "stack_string": "x:Int c:Int -> x:Int",
+        "stack_string": "x:Int width:Int -> x:Int",
         "inputs": {
           "stack": [
             {
@@ -1794,7 +1794,7 @@
             },
             {
               "type": "simple",
-              "name": "c",
+              "name": "width",
               "value_types": ["Int"]
             }
           ]
@@ -2063,7 +2063,7 @@
       "subCategory": "int_cmp",
       "description": {
         "short": "",
-        "long": "Computes the sign of an integer `x`:\n`-1` if `x<0`, `0` if `x == 0`, `1` if `x>0`.",
+        "long": "Computes the sign of an integer `x`:\n`-1` if `x < 0`, `0` if `x == 0`, `1` if `x > 0`.",
         "operands": []
       },
       "layout": {
@@ -3110,8 +3110,14 @@
       "subCategory": "cell_cmp",
       "description": {
         "short": "",
-        "long": "Checks whether the data parts of `s` and `s'` coincide, equivalent to `SDLEXCMP` `ISZERO`.",
-        "operands": []
+        "long": "Checks if the data parts of `s` and `s'` are bitwise equal.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["SDLEXCMP", "ISZERO"]
+          }
+        ]
       },
       "layout": {
         "min": 13042944,
@@ -5823,9 +5829,15 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns the first `0 <= length <= 1023` bits of `s`. It is equivalent to `PLDSLICEX`.",
+        "long": "Returns the first `0 <= length <= 1023` bits of `s`.",
         "tags": ["slice parsing"],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["PLDSLICEX"]
+          }
+        ]
       },
       "layout": {
         "min": 14098432,
@@ -5873,9 +5885,15 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns all but the first `0 <= length <= 1023` bits of `s`. It is equivalent to `LDSLICEX` `NIP`.",
+        "long": "Returns all but the first `0 <= length <= 1023` bits of `s`.",
         "tags": ["slice parsing"],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["LDSLICEX", "NIP"]
+          }
+        ]
       },
       "layout": {
         "min": 14098688,
@@ -5892,7 +5910,7 @@
         "prefix_str": "D721"
       },
       "signature": {
-        "stack_string": "s:Slice length:Int -> s2:Slice",
+        "stack_string": "s:Slice length:Int -> s':Slice",
         "inputs": {
           "stack": [
             {
@@ -5911,7 +5929,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -6258,7 +6276,7 @@
         "prefix_str": "D733"
       },
       "signature": {
-        "stack_string": "s:Slice length:Int refs:Int -> s;:Slice",
+        "stack_string": "s:Slice length:Int refs:Int -> s':Slice",
         "inputs": {
           "stack": [
             {
@@ -6282,7 +6300,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s;",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -7795,7 +7813,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Transfers control_ to continuation `c`, converting the remainder of the current continuation (the old value of `cс`) into a _Slice_ before pushing it into the stack of `c`. Unlike `CALLCC` which pushes the old continuation as is, this instruction converts it to a _Slice_ first.",
+        "long": "_Transfers control_ to continuation `c`, converting the remainder of the current continuation (the old value of `cс`) into a _Slice_ before pushing it onto the stack of `c`. Unlike `CALLCC` which pushes the old continuation as is, this instruction converts it to a _Slice_ first.",
         "operands": []
       },
       "layout": {
@@ -7993,7 +8011,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Calls_ continuation `c` with parameters and pushes the old value of the current continuation, but unlike `CALLCCARGS` which takes the number of parameters and return values from the instruction itself, this instruction takes `-1 <= p,r <= 254` from the stack. The old value of the current continuation `cс` (along with the top `p` values from the original stack) is pushed into the stack of the newly-invoked continuation `c`, setting `cc.nargs` to `r`. This allows the called continuation to later return to the caller with the specified number of return values.",
+        "long": "_Calls_ continuation `c` with parameters and pushes the old value of the current continuation, but unlike `CALLCCARGS` which takes the number of parameters and return values from the instruction itself, this instruction takes `-1 <= p,r <= 254` from the stack. The old value of the current continuation `cс` (along with the top `p` values from the original stack) is pushed onto the stack of the newly-invoked continuation `c`, setting `cc.nargs` to `r`. This allows the called continuation to later return to the caller with the specified number of return values.",
         "operands": []
       },
       "layout": {
@@ -8049,7 +8067,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Returns to the continuation at `c0`, converting the remainder of the current continuation into a _Slice_ and pushing it into the stack of `c0`.",
+        "long": "Returns to the continuation at `c0`, converting the remainder of the current continuation into a _Slice_ and pushing it onto the stack of `c0`.",
         "operands": [],
         "other_implementations": [
           {
@@ -9356,7 +9374,7 @@
       "subCategory": "continuation_change",
       "description": {
         "short": "",
-        "long": "Pushes values into the stack of a continuation and optionally sets the number of missing arguments. Unlike `SETCONTARGS` which takes the number of values to push and the number of missing arguments from the instruction itself, this instruction takes `0 <= r <= 255` and `-1 <= n <= 255` from the stack. It pushes `r` values from the current stack into the stack of continuation `c`, and for `n` not equal to -1, sets `c.nargs` to the final size of the stack of `c` plus `n`, effectively creating a closure with `n` missing arguments.",
+        "long": "Pushes values onto the stack of a continuation and optionally sets the number of missing arguments. Unlike `SETCONTARGS` which takes the number of values to push and the number of missing arguments from the instruction itself, this instruction takes `0 <= r <= 255` and `-1 <= n <= 255` from the stack. It pushes `r` values from the current stack onto the stack of continuation `c`, and for `n` not equal to -1, sets `c.nargs` to the final size of the stack of `c` plus `n`, effectively creating a closure with `n` missing arguments.",
         "operands": []
       },
       "layout": {
@@ -10194,7 +10212,7 @@
       "subCategory": "continuation_change",
       "description": {
         "short": "",
-        "long": "Performs `cc:=compose1(compose0(c, compose0(-1 PUSHINT, cc)), compose0(0 PUSHINT, cc))`. If `c` represents a boolean circuit, the net effect is to evaluate it and push either `-1` or `0` into the stack before continuing.",
+        "long": "Performs `cc:=compose1(compose0(c, compose0(-1 PUSHINT, cc)), compose0(0 PUSHINT, cc))`. If `c` represents a boolean circuit, the net effect is to evaluate it and push either `-1` or `0` onto the stack before continuing.",
         "operands": []
       },
       "layout": {
@@ -10387,8 +10405,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Stores dictionary `D` into _Builder_ `b`, returing the resulting _Builder_ `b'`.\nIn other words, if `D` is a cell, performs `STONE` and `STREF`; if `D` is _Null_, performs `NIP` and `STZERO`; otherwise throws a type checking exception.",
-        "operands": []
+        "long": "Stores dictionary `D` into _Builder_ `b`, returing the resulting _Builder_ `b'`.\nIn other words, if `D` is a cell, performs `STONE` and `STREF`; if `D` is _Null_, performs `NIP` and `STZERO`.",
+        "operands": [],
+        "exit_codes": [
+          {
+            "errno": "7",
+            "condition": "Second element is not a `Cell` or `Null`."
+          }
+        ]
       },
       "layout": {
         "min": 15990784,
@@ -10436,8 +10460,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `LDDICT` `NIP`.",
-        "operands": []
+        "long": "Loads a dictionary and discards its value.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["LDDICT", "NIP"]
+          }
+        ]
       },
       "layout": {
         "min": 15991040,
@@ -10480,7 +10510,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Loads (parses) a (_Slice_-represented) dictionary `s'` from _Slice_ `s`, and returns the remainder of `s` as `s'`.\nThis is a 'split function' for all `HashmapE(n,X)` dictionary types.",
+        "long": "Loads a (_Slice_-represented) dictionary `s'` from _Slice_ `s`, and returns the remainder of `s` as `s'`.\nThis is a 'split function' for all `HashmapE(n,X)` dictionary types.",
         "operands": []
       },
       "layout": {
@@ -10529,8 +10559,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Preloads a (_Slice_-represented) dictionary `s'` from _Slice_ `s`.\nApproximately equivalent to `LDDICTS` `DROP`.",
-        "operands": []
+        "long": "Preloads a (_Slice_-represented) dictionary `s'` from _Slice_ `s`.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["LDDICTS", "DROP"]
+          }
+        ]
       },
       "layout": {
         "min": 15991552,
@@ -10573,7 +10609,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Loads (parses) a dictionary `D` from _Slice_ `s`, and returns the remainder of `s` as `s'`. May be applied to dictionaries or to values of arbitrary `(^Y)?` types.",
+        "long": "Loads a dictionary `D` from _Slice_ `s`, and returns the remainder of `s` as `s'`. May be applied to dictionaries or to values of arbitrary `(^Y)?` types.",
         "operands": []
       },
       "layout": {
@@ -10622,8 +10658,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Preloads a dictionary `D` from _Slice_ `s`.\nApproximately equivalent to `LDDICT` `DROP`.",
-        "operands": []
+        "long": "Preloads a dictionary `D` from _Slice_ `s`.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["LDDICT", "DROP"]
+          }
+        ]
       },
       "layout": {
         "min": 15992064,
@@ -10823,7 +10865,7 @@
         "prefix_str": "F470"
       },
       "signature": {
-        "stack_string": "x:Slice k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null -1) status:Int",
+        "stack_string": "x:Slice k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -10869,8 +10911,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     }
                   ]
                 }
@@ -10908,7 +10950,7 @@
         "prefix_str": "F471"
       },
       "signature": {
-        "stack_string": "x:Slice k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null -1) status:Int",
+        "stack_string": "x:Slice k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -10954,8 +10996,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     }
                   ]
                 }
@@ -10993,7 +11035,7 @@
         "prefix_str": "F472"
       },
       "signature": {
-        "stack_string": "x:Slice k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null -1) status:Int",
+        "stack_string": "x:Slice k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -11039,8 +11081,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     }
                   ]
                 }
@@ -11078,7 +11120,7 @@
         "prefix_str": "F473"
       },
       "signature": {
-        "stack_string": "k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null -1) status:Int",
+        "stack_string": "k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -11119,8 +11161,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     }
                   ]
                 }
@@ -11230,8 +11272,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `PFXDICTGET`, but throws a cell deserialization failure exception on failure.",
-        "operands": []
+        "long": "Looks up the unique prefix of _Slice_ `s` present in the prefix code dictionary represented by `Cell^?` `D` and `0 <= n <= 1023`. If found, the prefix of `s` is returned as `s'`, and the corresponding value (also a _Slice_) as `x`. The remainder of `s` is returned as a _Slice_ `s''`. If no prefix of `s` is a key in prefix code dictionary `D`, throws a `Cell` deserialization failure exception.",
+        "operands": [],
+        "exit_codes": [
+          {
+            "errno": "6",
+            "condition": "No prefix of s is a key in prefix code dictionary D."
+          }
+        ]
       },
       "layout": {
         "min": 16034048,
@@ -11294,7 +11342,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `PFXDICTGETQ`, but on success `BLESS`es the value `x` into a _Continuation_ and transfers control to it as if by a `JMPX`. On failure, returns `s` unchanged and continues execution.",
+        "long": "Looks up the unique prefix of _Slice_ `s` present in the prefix code dictionary represented by `Cell^?` `D` and `0 <= n <= 1023`. If found, `BLESS`es the corresponding value into a _Continuation_ and transfers control to it as if by a `JMPX`. If no prefix of `s` is a key in prefix code dictionary `D`, returns the unchanged `s` and continues execution.",
         "operands": []
       },
       "layout": {
@@ -11328,8 +11376,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `PFXDICTGETJMP`, but `EXEC`utes the continuation found instead of jumping to it. On failure, throws a cell deserialization exception.",
-        "operands": []
+        "long": "Looks up the unique prefix of _Slice_ `s` present in the prefix code dictionary represented by `Cell^?` `D` and `0 <= n <= 1023`. If found, `BLESS`es the corresponding value into a _Continuation_ and executes it as if by `EXECUTE`. If no prefix of `s` is a key in prefix code dictionary `D`, throws a `Cell` deserialization exception.",
+        "operands": [],
+        "exit_codes": [
+          {
+            "errno": "6",
+            "condition": "No prefix of s is a key in prefix code dictionary D."
+          }
+        ]
       },
       "layout": {
         "min": 16034560,
@@ -11718,7 +11772,17 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `1 2 BLKSWAP` or to `s2 s1 XCHG2`.",
+        "long": "Rearranges the top three elements. Moves the third element to the top of the stack: `1 2 3 -> 2 3 1`",
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["1 2 BLKSWAP"]
+          },
+          {
+            "exact": true,
+            "instructions": ["s2 s1 XCHG2"]
+          }
+        ],
         "examples": [
           {
             "instructions": [
@@ -11775,8 +11839,41 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `2 1 BLKSWAP` or to `s2 s2 XCHG2`.",
-        "operands": []
+        "long": "Rearranges the top three elements. Places the top element below the first two following elements.: `1 2 3 -> 3 1 2`",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["2 1 BLKSWAP"]
+          },
+          {
+            "exact": true,
+            "instructions": ["s2 s2 XCHG2"]
+          }
+        ],
+        "examples": [
+          {
+            "instructions": [
+              {
+                "instruction": "PUSHINT_4 1"
+              },
+              {
+                "instruction": "PUSHINT_4 2"
+              },
+              {
+                "instruction": "PUSHINT_4 3"
+              },
+              {
+                "instruction": "ROTREV",
+                "comment": "Rotates in reverse the top three elements: (1,2,3) -> (3,1,2)"
+              }
+            ],
+            "stack": {
+              "input": ["1", "2", "3"],
+              "output": ["3", "1", "2"]
+            }
+          }
+        ]
       },
       "layout": {
         "min": 5832704,
@@ -11843,8 +11940,53 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "",
-        "operands": []
+        "long": "Takes integer `x` from the top of the stack and moves the `x`-th element from the top to the top of the stack. For example, `ROLL 2` is equivalent to `ROT` (`1 2 3 -> 2 3 1`).",
+        "operands": [],
+        "examples": [
+          {
+            "instructions": [
+              {
+                "instruction": "PUSHINT_4 1"
+              },
+              {
+                "instruction": "PUSHINT_4 2"
+              },
+              {
+                "instruction": "PUSHINT_4 3"
+              },
+              {
+                "instruction": "PUSHINT_4 2",
+                "comment": "Push x=2 for ROLL"
+              },
+              {
+                "instruction": "ROLL",
+                "comment": "Moves third element (1) to the top: (1,2,3) -> (2,3,1)"
+              }
+            ],
+            "stack": {
+              "input": ["1", "2", "3", "2"],
+              "output": ["2", "3", "1"]
+            }
+          }
+        ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than 1 element."
+          },
+          {
+            "errno": "7",
+            "condition": "Top element is not an `Int`."
+          },
+          {
+            "errno": "5",
+            "condition": "Integer is out of range."
+          },
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `x + 1` elements."
+          }
+        ]
       },
       "layout": {
         "min": 6356992,
@@ -11877,8 +12019,53 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "",
-        "operands": []
+        "long": "Takes integer `x` from the top of the stack and moves the top element to position `x` from the top. For example, `ROLLREV 2` is equivalent to `ROTREV` (`1 2 3 -> 3 1 2`).",
+        "operands": [],
+        "examples": [
+          {
+            "instructions": [
+              {
+                "instruction": "PUSHINT_4 1"
+              },
+              {
+                "instruction": "PUSHINT_4 2"
+              },
+              {
+                "instruction": "PUSHINT_4 3"
+              },
+              {
+                "instruction": "PUSHINT_4 2",
+                "comment": "Push x=2 for ROLLREV"
+              },
+              {
+                "instruction": "ROLLREV",
+                "comment": "Moves top element (3) to position 2: (1,2,3) -> (3,1,2)"
+              }
+            ],
+            "stack": {
+              "input": ["1", "2", "3", "2"],
+              "output": ["3", "1", "2"]
+            }
+          }
+        ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than 1 element."
+          },
+          {
+            "errno": "7",
+            "condition": "Top element is not an `Int`."
+          },
+          {
+            "errno": "5",
+            "condition": "Integer is out of range."
+          },
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `x + 1` elements."
+          }
+        ]
       },
       "layout": {
         "min": 6422528,
@@ -12214,8 +12401,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Pops integer `i` from the stack, then leaves only the bottom `i` elements. Approximately equivalent to `DEPTH` `SWAP` `SUB` `DROPX`.",
-        "operands": []
+        "long": "Pops integer `i` from the stack, then leaves only the bottom `i` elements.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["DEPTH", "SWAP", "SUB", "DROPX"]
+          }
+        ]
       },
       "layout": {
         "min": 7012352,
@@ -13620,7 +13813,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Returns the `k`-th (from the stack) global variable.",
+        "long": "Returns the `i`-th (from the stack) global variable.",
         "operands": [],
         "other_implementations": [
           {
@@ -13644,12 +13837,12 @@
         "prefix_str": "F840"
       },
       "signature": {
-        "stack_string": "k:Int -> x:Any",
+        "stack_string": "i:Int -> x:Any",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "k",
+              "name": "i",
               "value_types": ["Int"]
             }
           ],
@@ -13675,7 +13868,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Assigns `x` from the stack to the `k`-th (from the stack) global variable.",
+        "long": "Assigns `x` from the stack to the `i`-th (from the stack) global variable.",
         "operands": [],
         "other_implementations": [
           {
@@ -13699,7 +13892,7 @@
         "prefix_str": "F860"
       },
       "signature": {
-        "stack_string": "x:Any k:Int -> ∅",
+        "stack_string": "x:Any i:Int -> ∅",
         "inputs": {
           "stack": [
             {
@@ -13708,7 +13901,7 @@
             },
             {
               "type": "simple",
-              "name": "k",
+              "name": "i",
               "value_types": ["Int"]
             }
           ],
@@ -13941,7 +14134,7 @@
       "subCategory": "crypto_common",
       "description": {
         "short": "",
-        "long": "Computes the representation hash of a _Cell_ `c` and returns it as a 256-bit unsigned integer `x`. Useful for signing and checking signatures of arbitrary entities represented by a tree of cells.",
+        "long": "Computes the representation hash of a _Cell_ `c` and returns it as a 256-bit unsigned integer `hash`. Useful for signing and checking signatures of arbitrary entities represented by a tree of cells.",
         "operands": []
       },
       "layout": {
@@ -13959,7 +14152,7 @@
         "prefix_str": "F900"
       },
       "signature": {
-        "stack_string": "c:Cell -> x:Int",
+        "stack_string": "c:Cell -> hash:Int",
         "inputs": {
           "stack": [
             {
@@ -13973,7 +14166,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "x",
+              "name": "hash",
               "value_types": ["Int"]
             }
           ]
@@ -13985,8 +14178,14 @@
       "subCategory": "crypto_common",
       "description": {
         "short": "",
-        "long": "Computes the hash of a _Slice_ `s` and returns it as a 256-bit unsigned integer `x`. The result is the same as if an ordinary cell containing only data and references from `s` had been created and its hash computed by `HASHCU`.",
-        "operands": []
+        "long": "Computes the hash of a _Slice_ `s` and returns it as a 256-bit unsigned integer `hash`. The result is the same as if an ordinary cell containing only data and references from `s` had been created and its hash computed by `HASHCU`.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["ENDC", "HASHCU"]
+          }
+        ]
       },
       "layout": {
         "min": 16318720,
@@ -14009,7 +14208,7 @@
         }
       ],
       "signature": {
-        "stack_string": "s:Slice -> x:Int",
+        "stack_string": "s:Slice -> hash:Int",
         "inputs": {
           "stack": [
             {
@@ -14023,7 +14222,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "x",
+              "name": "hash",
               "value_types": ["Int"]
             }
           ]
@@ -14035,7 +14234,7 @@
       "subCategory": "crypto_common",
       "description": {
         "short": "",
-        "long": "Computes `Sha` of the data bits of _Slice_ `s`. If the bit length of `s` is not divisible by eight, throws a cell underflow exception. The hash value is returned as a 256-bit unsigned integer `x`.",
+        "long": "Computes `Sha` of the data bits of _Slice_ `s`. If the bit length of `s` is not divisible by eight, throws a cell underflow exception. The hash value is returned as a 256-bit unsigned integer `hash`.",
         "operands": []
       },
       "layout": {
@@ -14053,7 +14252,7 @@
         "prefix_str": "F902"
       },
       "signature": {
-        "stack_string": "s:Slice -> x:Int",
+        "stack_string": "s:Slice -> hash:Int",
         "inputs": {
           "stack": [
             {
@@ -14067,7 +14266,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "x",
+              "name": "hash",
               "value_types": ["Int"]
             }
           ]
@@ -16543,7 +16742,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads (deserializes) a `Gram` or `VarUInteger 16` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, followed by an `8l`-bit unsigned big-endian representation of `x`.",
+        "long": "Loads a `Gram` or `VarUInteger 16` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, followed by an `8l`-bit unsigned big-endian representation of `x`.",
         "tags": ["variable-size integer", "slice parsing"],
         "operands": [],
         "other_implementations": [
@@ -16599,7 +16798,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads (deserializes) a `VarInteger 16` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, followed by an `8l`-bit signed big-endian representation of `x`.",
+        "long": "Loads a `VarInteger 16` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, followed by an `8l`-bit signed big-endian representation of `x`.",
         "tags": ["variable-size integer", "slice parsing"],
         "operands": [],
         "other_implementations": [
@@ -16755,7 +16954,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads (deserializes) a `VarUInteger 32` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 5-bit unsigned big-endian integer `l`, followed by an `8l`-bit unsigned big-endian representation of `x`.",
+        "long": "Loads a `VarUInteger 32` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 5-bit unsigned big-endian integer `l`, followed by an `8l`-bit unsigned big-endian representation of `x`.",
         "tags": ["variable-size integer", "slice parsing"],
         "operands": [],
         "other_implementations": [
@@ -16811,7 +17010,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads (deserializes) a `VarInteger 32` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 5-bit unsigned big-endian integer `l`, followed by an `8l`-bit signed big-endian representation of `x`.",
+        "long": "Loads a `VarInteger 32` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 5-bit unsigned big-endian integer `l`, followed by an `8l`-bit signed big-endian representation of `x`.",
         "tags": ["variable-size integer", "slice parsing"],
         "operands": [],
         "other_implementations": [
@@ -16967,7 +17166,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads from _Slice_ `s` the only prefix that is a valid `MsgAddress`, and returns both this prefix `addr` and the remainder `s'` of `s` as slices.",
+        "long": "Loads a valid `MsgAddress` from _Slice_ `s` and pushes the loaded `addr` value onto the stack along with _Slice_ `s'` with the remaining data.",
         "tags": ["address", "slice parsing"],
         "operands": []
       },
@@ -17437,7 +17636,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Sends a raw message contained in _Cell `c`_, which should contain a correctly serialized object `Message X`, with the only exception that the source address is allowed to have dummy value `addr_none` (to be automatically replaced with the current smart-contract address), and `ihr_fee`, `fwd_fee`, `created_lt` and `created_at` fields can have arbitrary values (to be rewritten with correct values during the action phase of the current transaction). Integer parameter `x` contains the flags. Currently `x == 0` is used for ordinary messages; `x=128` is used for messages that are to carry all the remaining balance of the current smart contract (instead of the value originally indicated in the message); `x=64` is used for messages that carry all the remaining value of the inbound message in addition to the value initially indicated in the new message (if bit 0 is not set, the gas fees are deducted from this amount); `x'=x+1` means that the sender wants to pay transfer fees separately; `x'=x+2` means that any errors arising while processing this message during the action phase should be ignored. Finally, `x'=x+32` means that the current account must be destroyed if its resulting balance is zero. This flag is usually employed together with `+128`.",
+        "long": "Sends a raw message contained in _Cell `c`_, which should contain a correctly serialized object `Message X`, with the only exception that the source address is allowed to have dummy value `addr_none` (to be automatically replaced with the current smart-contract address), and `ihr_fee`, `fwd_fee`, `created_lt` and `created_at` fields can have arbitrary values (to be rewritten with correct values during the action phase of the current transaction).\n\nInteger parameter `x` contains the flags.\n\nCurrently `x == 0` is used for ordinary messages.\n\n`x=128` is used for messages that are to carry all the remaining balance of the current smart contract (instead of the value originally indicated in the message).\n\n`x=64` is used for messages that carry all the remaining value of the inbound message in addition to the value initially indicated in the new message (if bit 0 is not set, the gas fees are deducted from this amount).\n\n`x'=x+1` means that the sender wants to pay transfer fees separately.\n\n`x'=x+2` means that any errors arising while processing this message during the action phase should be ignored.\n\nFinally, `x'=x+32` means that the current account must be destroyed if its resulting balance is zero. This flag is usually employed together with `+128`.",
         "operands": []
       },
       "layout": {
@@ -17492,7 +17691,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Creates an output action which would reserve exactly `x` nanograms (if `y=0`), at most `x` nanograms (if `y=2`), or all but `x` nanograms (if `y=1` or `y=3`), from the remaining balance of the account. It is roughly equivalent to creating an outbound message carrying `x` nanograms (or `b-x` nanograms, where `b` is the remaining balance) to oneself, so that the subsequent output actions would not be able to spend more money than the remainder. Bit `+2` in `y` means that the external action does not fail if the specified amount cannot be reserved; instead, all remaining balance is reserved. Bit `+8` in `y` means `x:=-x` before performing any further actions. Bit `+4` in `y` means that `x` is increased by the original balance of the current account (before the compute phase), including all extra currencies, before performing any other checks and actions. Currently `x` must be a non-negative integer, and `y` must be in the range `0...15`.",
+        "long": "Creates an output action which would reserve exactly `x` nanograms (if `y == 0`), at most `x` nanograms (if `y == 2`), or all but `x` nanograms (if `y == 1` or `y == 3`), from the remaining balance of the account. It is roughly equivalent to creating an outbound message carrying `x` nanograms (or `b-x` nanograms, where `b` is the remaining balance) to oneself, so that the subsequent output actions would not be able to spend more money than the remainder. Bit `+2` in `y` means that the external action does not fail if the specified amount cannot be reserved; instead, all remaining balance is reserved. Bit `+8` in `y` means `x:=-x` before performing any further actions. Bit `+4` in `y` means that `x` is increased by the original balance of the current account (before the compute phase), including all extra currencies, before performing any other checks and actions. Currently `x` must be a non-negative integer, and `y` must be in the range `0...15`.",
         "operands": []
       },
       "layout": {
@@ -20162,7 +20361,7 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": "Division returns `NaN` if `y=0`.",
+        "long": "Division returns `NaN` if `y == 0`.",
         "operands": []
       },
       "layout": {
@@ -21903,7 +22102,7 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": "`q=floor(x*y/z)`",
+        "long": "Calculates `result = floor(x * y / z)`.",
         "operands": []
       },
       "layout": {
@@ -21957,7 +22156,7 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": "`q'=round(x*y/z)`",
+        "long": "Calculates `result = round(x * y / z)`.",
         "operands": []
       },
       "layout": {
@@ -22011,7 +22210,7 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": "`q'=ceil(x*y/z)`",
+        "long": "Calculates `result = ceil( x * y / z)`.",
         "operands": []
       },
       "layout": {
@@ -22599,7 +22798,7 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": "`q=floor(x*y/z)`",
+        "long": "Calculates `result = floor(x * y / z)`.",
         "operands": []
       },
       "layout": {
@@ -22707,7 +22906,7 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": "`q'=ceil(x*y/z)`",
+        "long": "Calculates `result = ceil(x * y / z)`",
         "operands": []
       },
       "layout": {
@@ -22982,7 +23181,7 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": "`q=round(x*y/z)`, `r=x*y-z*q`",
+        "long": "Calculates `q = round(x * y / z)` and `r = x * y - z * q`.",
         "operands": []
       },
       "layout": {
@@ -23041,7 +23240,7 @@
       "subCategory": "div",
       "description": {
         "short": "",
-        "long": "`q=ceil(x*y/z)`, `r=x*y-z*q`",
+        "long": "Calculates `q = ceil(x * y / z)` and `r = x * y - z * q`.",
         "operands": []
       },
       "layout": {
@@ -28328,7 +28527,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTIGET`, but with `x` `BLESS`ed into a continuation with a subsequent `JMPX` to it on success. On failure, does nothing. This is useful for implementing `switch`/`case` constructions.",
+        "long": "Looks up key represented by a signed (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the value found into a continuation and transfers control to it as if by a `JMPX`. On failure, does nothing. This is useful for implementing `switch`/`case` constructions.",
         "operands": []
       },
       "layout": {
@@ -28373,7 +28572,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTIGETJMP`, but performs `DICTUGET` instead of `DICTIGET`.",
+        "long": "Looks up key represented by an unsigned (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the value found into a continuation and transfers control to it as if by a `JMPX`. On failure, does nothing. This is useful for implementing `switch`/`case` constructions.",
         "operands": []
       },
       "layout": {
@@ -28418,7 +28617,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTIGETJMP`, but with `EXECUTE` instead of `JMPX`.",
+        "long": "Looks up key represented by a signed (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the value found into a continuation and executes it as if by `EXECUTE`. On failure, does nothing. This is useful for implementing `switch`/`case` constructions.",
         "operands": []
       },
       "layout": {
@@ -28463,7 +28662,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTUGETJMP`, but with `EXECUTE` instead of `JMPX`.",
+        "long": "Looks up key represented by an unsigned (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the value found into a continuation and executes it as if by `EXECUTE`. On failure, does nothing. This is useful for implementing `switch`/`case` constructions.",
         "operands": []
       },
       "layout": {
@@ -28508,7 +28707,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "A variant of `DICTIGETJMP` that returns index `i` on failure.",
+        "long": "Looks up key represented by a signed (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the value found into a continuation and transfers control to it as if by a `JMPX`. On failure, returns the index `i` and continues execution. This is useful for implementing `switch`/`case` constructions with a default case.",
         "operands": []
       },
       "layout": {
@@ -28542,7 +28741,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "A variant of `DICTUGETJMP` that returns index `i` on failure.",
+        "long": "Looks up key represented by an unsigned (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the value found into a continuation and transfers control to it as if by a `JMPX`. On failure, returns the index `i` and continues execution. This is useful for implementing `switch`/`case` constructions with a default case.",
         "operands": []
       },
       "layout": {
@@ -28576,7 +28775,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "A variant of `DICTIGETEXEC` that returns index `i` on failure.",
+        "long": "Looks up key represented by a signed (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the value found into a continuation and executes it as if by `EXECUTE`. On failure, returns the index `i` and continues execution. This is useful for implementing function dispatch with a default handler.",
         "operands": []
       },
       "layout": {
@@ -28610,7 +28809,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "A variant of `DICTUGETEXEC` that returns index `i` on failure.",
+        "long": "Looks up key represented by an unsigned (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the value found into a continuation and executes it as if by `EXECUTE`. On failure, returns the index `i` and continues execution. This is useful for implementing function dispatch with a default handler.",
         "operands": []
       },
       "layout": {
@@ -28718,7 +28917,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTGET`, but with a `LDREF` `ENDS` applied to `x` on success.\nThis operation is useful for dictionaries of type `HashmapE(n,^Y)`.",
+        "long": "Looks up key `k` (represented by a _Slice_, the first `0 <= n <= 1023` data bits of which are used as a key) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, applies `LDREF` `ENDS` to the value found, returning a _Cell_ `c` instead of a _Slice_.\nThis operation is useful for dictionaries of type `HashmapE(n,^Y)`.",
         "operands": []
       },
       "layout": {
@@ -28792,8 +28991,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTGET`, but with a signed (big-endian) `n`-bit _Integer_ `i` as a key. If `i` does not fit into `n` bits, returns `0`. If `i` is a `NaN`, throws an integer overflow exception.",
-        "operands": []
+        "long": "Looks up key represented by a signed (big-endian) `n`-bit _Integer_ `i` in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, returns the value found as a _Slice_ `x`. If `i` does not fit into `n` bits, returns `0`.",
+        "operands": [],
+        "exit_codes": [
+          {
+            "errno": "5",
+            "condition": "Integer is NaN."
+          }
+        ]
       },
       "layout": {
         "min": 15993856,
@@ -28940,8 +29145,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTIGET`, but with _unsigned_ (big-endian) `n`-bit _Integer_ `i` used as a key.",
-        "operands": []
+        "long": "Looks up key represented by an unsigned (big-endian) `n`-bit _Integer_ `i` in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, returns the value found as a _Slice_ `x`. If `i` does not fit into `n` bits, returns `0`.",
+        "operands": [],
+        "exit_codes": [
+          {
+            "errno": "5",
+            "condition": "Integer is NaN."
+          }
+        ]
       },
       "layout": {
         "min": 15994368,
@@ -29014,8 +29225,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTIGETREF`, but with an unsigned `n`-bit _Integer_ key `i`.",
-        "operands": []
+        "long": "Looks up key represented by an unsigned (big-endian) `n`-bit _Integer_ `i` in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, applies `LDREF` `ENDS` to the value found, returning a _Cell_ `c` instead of a _Slice_. If `i` does not fit into `n` bits, returns `0`.",
+        "operands": [],
+        "exit_codes": [
+          {
+            "errno": "5",
+            "condition": "Integer is NaN."
+          }
+        ]
       },
       "layout": {
         "min": 15994624,
@@ -29088,7 +29305,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Sets the value associated with `n`-bit key `k` (represented by a _Slice_ as in `DICTGET`) in dictionary `D` (also represented by a _Slice_) to value `x` (again a _Slice_), and returns the resulting dictionary as `D'`.",
+        "long": "Sets the value associated with `n`-bit key `k` (represented by a _Slice_ as in `DICTGET`) in dictionary `D` to value `x` (represented by a _Slice_), and returns the resulting dictionary as `D'`.",
         "operands": []
       },
       "layout": {
@@ -29106,7 +29323,7 @@
         "prefix_str": "F412"
       },
       "signature": {
-        "stack_string": "x:Slice k:Slice D:Cell|Null n:Int -> D2:Slice",
+        "stack_string": "x:Slice k:Slice D:Cell|Null n:Int -> D':Cell",
         "inputs": {
           "stack": [
             {
@@ -29135,8 +29352,8 @@
           "stack": [
             {
               "type": "simple",
-              "name": "D2",
-              "value_types": ["Slice"]
+              "name": "D'",
+              "value_types": ["Cell"]
             }
           ]
         }
@@ -29147,7 +29364,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTSET`, but with the value set to a reference to _Cell_ `c`.",
+        "long": "Sets the value associated with `n`-bit key `k` (represented by a _Slice_ as in `DICTGET`) in dictionary `D` to a reference to _Cell_ `c`, and returns the resulting dictionary as `D'`.",
         "operands": []
       },
       "layout": {
@@ -29165,7 +29382,7 @@
         "prefix_str": "F413"
       },
       "signature": {
-        "stack_string": "c:Cell k:Slice D:Cell|Null n:Int -> D2:Slice",
+        "stack_string": "c:Cell k:Slice D:Cell|Null n:Int -> D':Cell",
         "inputs": {
           "stack": [
             {
@@ -29194,8 +29411,8 @@
           "stack": [
             {
               "type": "simple",
-              "name": "D2",
-              "value_types": ["Slice"]
+              "name": "D'",
+              "value_types": ["Cell"]
             }
           ]
         }
@@ -29206,7 +29423,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTSET`, but with the key represented by a (big-endian) signed `n`-bit integer `i`. If `i` does not fit into `n` bits, a range check exception is generated.",
+        "long": "Sets the value associated with `n`-bit key represented by a (big-endian) signed `n`-bit integer `i` in dictionary `D` to value `x`, and returns the resulting dictionary as `D'`. If `i` does not fit into `n` bits, a range check exception is generated.",
         "operands": []
       },
       "layout": {
@@ -29224,7 +29441,7 @@
         "prefix_str": "F414"
       },
       "signature": {
-        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> D2:Slice",
+        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> D':Cell",
         "inputs": {
           "stack": [
             {
@@ -29253,8 +29470,8 @@
           "stack": [
             {
               "type": "simple",
-              "name": "D2",
-              "value_types": ["Slice"]
+              "name": "D'",
+              "value_types": ["Cell"]
             }
           ]
         }
@@ -29265,7 +29482,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTSETREF`, but with the key a signed `n`-bit integer as in `DICTISET`.",
+        "long": "Sets the value associated with `n`-bit key represented by a (big-endian) signed `n`-bit integer `i` in dictionary `D` to a reference to _Cell_ `c`, and returns the resulting dictionary as `D'`. If `i` does not fit into `n` bits, a range check exception is generated.",
         "operands": []
       },
       "layout": {
@@ -29283,7 +29500,7 @@
         "prefix_str": "F415"
       },
       "signature": {
-        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> D2:Slice",
+        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> D':Cell",
         "inputs": {
           "stack": [
             {
@@ -29312,8 +29529,8 @@
           "stack": [
             {
               "type": "simple",
-              "name": "D2",
-              "value_types": ["Slice"]
+              "name": "D'",
+              "value_types": ["Cell"]
             }
           ]
         }
@@ -29324,7 +29541,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTISET`, but with `i` an _unsigned_ `n`-bit integer.",
+        "long": "Sets the value associated with `n`-bit key represented by an unsigned (big-endian) `n`-bit integer `i` in dictionary `D` to value `x`, and returns the resulting dictionary as `D'`. If `i` does not fit into `n` bits, a range check exception is generated.",
         "operands": []
       },
       "layout": {
@@ -29342,7 +29559,7 @@
         "prefix_str": "F416"
       },
       "signature": {
-        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> D2:Slice",
+        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> D':Cell",
         "inputs": {
           "stack": [
             {
@@ -29371,8 +29588,8 @@
           "stack": [
             {
               "type": "simple",
-              "name": "D2",
-              "value_types": ["Slice"]
+              "name": "D'",
+              "value_types": ["Cell"]
             }
           ]
         }
@@ -29383,7 +29600,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTISETREF`, but with `i` unsigned.",
+        "long": "Sets the value associated with `n`-bit key represented by an unsigned (big-endian) `n`-bit integer `i` in dictionary `D` to a reference to _Cell_ `c`, and returns the resulting dictionary as `D'`. If `i` does not fit into `n` bits, a range check exception is generated.",
         "operands": []
       },
       "layout": {
@@ -29401,7 +29618,7 @@
         "prefix_str": "F417"
       },
       "signature": {
-        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> D2:Slice",
+        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> D':Cell",
         "inputs": {
           "stack": [
             {
@@ -29430,8 +29647,8 @@
           "stack": [
             {
               "type": "simple",
-              "name": "D2",
-              "value_types": ["Slice"]
+              "name": "D'",
+              "value_types": ["Cell"]
             }
           ]
         }
@@ -29460,7 +29677,7 @@
         "prefix_str": "F41A"
       },
       "signature": {
-        "stack_string": "x:Slice k:Slice D:Cell|Null n:Int -> (D2:Cell 0)|(D2:Cell y:Slice -1) status:Int",
+        "stack_string": "x:Slice k:Slice D:Cell|Null n:Int -> (D':Cell 0)|(D':Cell y:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -29496,7 +29713,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -29506,7 +29723,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     },
                     {
@@ -29550,7 +29767,7 @@
         "prefix_str": "F41B"
       },
       "signature": {
-        "stack_string": "c:Cell k:Slice D:Cell|Null n:Int -> (D2:Cell 0)|(D2:Cell c2:Cell -1) status:Int",
+        "stack_string": "c:Cell k:Slice D:Cell|Null n:Int -> (D':Cell 0)|(D':Cell c2:Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -29586,7 +29803,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -29596,7 +29813,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     },
                     {
@@ -29622,7 +29839,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTISETGET`, but with `i` a signed `n`-bit integer.",
+        "long": "Sets the value associated with `n`-bit key represented by a (big-endian) signed `n`-bit integer `i` in dictionary `D` to value `x`, and returns the resulting dictionary as `D'` along with the old value `y` associated with the key in question, if present.",
         "operands": []
       },
       "layout": {
@@ -29640,7 +29857,7 @@
         "prefix_str": "F41C"
       },
       "signature": {
-        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> (D2:Cell 0)|(D2:Cell y:Slice -1) status:Int",
+        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> (D':Cell 0)|(D':Cell y:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -29676,7 +29893,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -29686,7 +29903,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     },
                     {
@@ -29712,7 +29929,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTISETGETREF`, but with `i` a signed `n`-bit integer.",
+        "long": "Sets the value associated with `n`-bit key represented by a (big-endian) signed `n`-bit integer `i` in dictionary `D` to a reference to _Cell_ `c`, and returns the resulting dictionary as `D'` along with the old value's reference as a _Cell_ if present.",
         "operands": []
       },
       "layout": {
@@ -29730,7 +29947,7 @@
         "prefix_str": "F41D"
       },
       "signature": {
-        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D2:Cell 0)|(D2:Cell c2:Cell -1) status:Int",
+        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D':Cell 0)|(D':Cell c2:Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -29766,7 +29983,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -29776,7 +29993,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     },
                     {
@@ -29802,7 +30019,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTISETGET`, but with `i` an unsigned `n`-bit integer.",
+        "long": "Sets the value associated with `n`-bit key represented by an unsigned (big-endian) `n`-bit integer `i` in dictionary `D` to value `x`, and returns the resulting dictionary as `D'` along with the old value `y` associated with the key in question, if present.",
         "operands": []
       },
       "layout": {
@@ -29820,7 +30037,7 @@
         "prefix_str": "F41E"
       },
       "signature": {
-        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> (D2:Cell 0)|(D2:Cell y:Slice -1) status:Int",
+        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> (D':Cell 0)|(D':Cell y:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -29856,7 +30073,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -29866,7 +30083,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     },
                     {
@@ -29892,7 +30109,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTISETGETREF`, but with `i` an unsigned `n`-bit integer.",
+        "long": "Sets the value associated with `n`-bit key represented by an unsigned (big-endian) `n`-bit integer `i` in dictionary `D` to a reference to _Cell_ `c`, and returns the resulting dictionary as `D'` along with the old value's reference as a _Cell_ if present.",
         "operands": []
       },
       "layout": {
@@ -29910,7 +30127,7 @@
         "prefix_str": "F41F"
       },
       "signature": {
-        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D2:Cell 0)|(D2:Cell c2:Cell -1) status:Int",
+        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D':Cell 0)|(D':Cell c2:Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -29946,7 +30163,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -29956,7 +30173,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     },
                     {
@@ -30000,7 +30217,7 @@
         "prefix_str": "F422"
       },
       "signature": {
-        "stack_string": "x:Slice k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Cell -1) status:Int",
+        "stack_string": "x:Slice k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -30046,7 +30263,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -30085,7 +30302,7 @@
         "prefix_str": "F423"
       },
       "signature": {
-        "stack_string": "c:Cell k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Cell -1) status:Int",
+        "stack_string": "c:Cell k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -30131,7 +30348,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -30152,7 +30369,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTREPLACE`, but with `i` a signed `n`-bit integer.",
+        "long": "Sets the value associated with `n`-bit key represented by a (big-endian) signed `n`-bit integer `i` in dictionary `D` to value `x` only if the key `i` was already present in `D`. Returns the resulting dictionary as `D'`.",
         "operands": []
       },
       "layout": {
@@ -30170,7 +30387,7 @@
         "prefix_str": "F424"
       },
       "signature": {
-        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Cell -1) status:Int",
+        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -30216,7 +30433,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -30237,7 +30454,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTREPLACEREF`, but with `i` a signed `n`-bit integer.",
+        "long": "Sets the value associated with `n`-bit key represented by a (big-endian) signed `n`-bit integer `i` in dictionary `D` to a reference to _Cell_ `c` only if the key `i` was already present in `D`. Returns the resulting dictionary as `D'`.",
         "operands": []
       },
       "layout": {
@@ -30255,7 +30472,7 @@
         "prefix_str": "F425"
       },
       "signature": {
-        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Cell -1) status:Int",
+        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -30301,7 +30518,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -30322,7 +30539,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTREPLACE`, but with `i` an unsigned `n`-bit integer.",
+        "long": "Sets the value associated with `n`-bit key represented by an unsigned (big-endian) `n`-bit integer `i` in dictionary `D` to value `x` only if the key `i` was already present in `D`. Returns the resulting dictionary as `D'`.",
         "operands": []
       },
       "layout": {
@@ -30340,7 +30557,7 @@
         "prefix_str": "F426"
       },
       "signature": {
-        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Cell -1) status:Int",
+        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -30386,7 +30603,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -30407,7 +30624,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTREPLACEREF`, but with `i` an unsigned `n`-bit integer.",
+        "long": "Sets the value associated with `n`-bit key represented by an unsigned (big-endian) `n`-bit integer `i` in dictionary `D` to a reference to _Cell_ `c` only if the key `i` was already present in `D`. Returns the resulting dictionary as `D'`.",
         "operands": []
       },
       "layout": {
@@ -30425,7 +30642,7 @@
         "prefix_str": "F427"
       },
       "signature": {
-        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Cell -1) status:Int",
+        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -30471,7 +30688,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -30510,7 +30727,7 @@
         "prefix_str": "F42A"
       },
       "signature": {
-        "stack_string": "x:Slice k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Cell y:Slice -1) status:Int",
+        "stack_string": "x:Slice k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell y:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -30556,7 +30773,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     },
                     {
@@ -30600,7 +30817,7 @@
         "prefix_str": "F42B"
       },
       "signature": {
-        "stack_string": "c:Cell k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Cell c2:Cell -1) status:Int",
+        "stack_string": "c:Cell k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell c2:Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -30646,7 +30863,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     },
                     {
@@ -30672,7 +30889,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTREPLACEGET`, but with `i` a signed `n`-bit integer.",
+        "long": "Sets the value associated with `n`-bit key represented by a (big-endian) signed `n`-bit integer `i` in dictionary `D` to value `x` only if the key `i` was already present in `D`. Returns the resulting dictionary `D'` and the old value associated with the key in question.",
         "operands": []
       },
       "layout": {
@@ -30690,7 +30907,7 @@
         "prefix_str": "F42C"
       },
       "signature": {
-        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Cell y:Slice -1) status:Int",
+        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell y:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -30736,7 +30953,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     },
                     {
@@ -30762,7 +30979,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTREPLACEGETREF`, but with `i` a signed `n`-bit integer.",
+        "long": "Sets the value associated with `n`-bit key represented by a (big-endian) signed `n`-bit integer `i` in dictionary `D` to a reference to _Cell_ `c` only if the key `i` was already present in `D`. Returns the resulting dictionary `D'` and the old value's reference as a _Cell_.",
         "operands": []
       },
       "layout": {
@@ -30780,7 +30997,7 @@
         "prefix_str": "F42D"
       },
       "signature": {
-        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Cell c2:Cell -1) status:Int",
+        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell c2:Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -30826,7 +31043,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     },
                     {
@@ -30852,7 +31069,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTREPLACEGET`, but with `i` an unsigned `n`-bit integer.",
+        "long": "Sets the value associated with `n`-bit key represented by an unsigned (big-endian) `n`-bit integer `i` in dictionary `D` to value `x` only if the key `i` was already present in `D`. Returns the resulting dictionary `D'` and the old value associated with the key in question.",
         "operands": []
       },
       "layout": {
@@ -30870,7 +31087,7 @@
         "prefix_str": "F42E"
       },
       "signature": {
-        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Cell y:Slice -1) status:Int",
+        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell y:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -30916,7 +31133,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     },
                     {
@@ -30942,7 +31159,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTREPLACEGETREF`, but with `i` an unsigned `n`-bit integer.",
+        "long": "Sets the value associated with `n`-bit key represented by an unsigned (big-endian) `n`-bit integer `i` in dictionary `D` to a reference to _Cell_ `c` only if the key `i` was already present in `D`. Returns the resulting dictionary `D'` and the old value's reference as a _Cell_.",
         "operands": []
       },
       "layout": {
@@ -30960,7 +31177,7 @@
         "prefix_str": "F42F"
       },
       "signature": {
-        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Cell c2:Cell -1) status:Int",
+        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell c2:Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -31006,7 +31223,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     },
                     {
@@ -31050,7 +31267,7 @@
         "prefix_str": "F432"
       },
       "signature": {
-        "stack_string": "x:Slice k:Slice D:Cell|Null n:Int -> (D:Cell 0)|(D2:Cell -1) status:Int",
+        "stack_string": "x:Slice k:Slice D:Cell|Null n:Int -> (D:Cell 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -31096,7 +31313,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -31135,7 +31352,7 @@
         "prefix_str": "F433"
       },
       "signature": {
-        "stack_string": "c:Cell k:Slice D:Cell|Null n:Int -> (D:Cell 0)|(D2:Cell -1) status:Int",
+        "stack_string": "c:Cell k:Slice D:Cell|Null n:Int -> (D:Cell 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -31181,7 +31398,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -31202,7 +31419,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTADD`, but with `i` a signed `n`-bit integer.",
+        "long": "Sets the value associated with `n`-bit key represented by a (big-endian) signed `n`-bit integer `i` in dictionary `D` to value `x`, but only if key `i` is not already present in `D`. Returns the resulting dictionary `D'`.",
         "operands": []
       },
       "layout": {
@@ -31220,7 +31437,7 @@
         "prefix_str": "F434"
       },
       "signature": {
-        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> (D:Cell 0)|(D2:Cell -1) status:Int",
+        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> (D:Cell 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -31266,7 +31483,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -31287,7 +31504,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTADDREF`, but with `i` a signed `n`-bit integer.",
+        "long": "Sets the value associated with `n`-bit key represented by a (big-endian) signed `n`-bit integer `i` in dictionary `D` to a reference to _Cell_ `c`, but only if key `i` is not already present in `D`. Returns the resulting dictionary `D'`.",
         "operands": []
       },
       "layout": {
@@ -31305,7 +31522,7 @@
         "prefix_str": "F435"
       },
       "signature": {
-        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Cell 0)|(D2:Cell -1) status:Int",
+        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Cell 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -31351,7 +31568,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -31372,7 +31589,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTADD`, but with `i` an unsigned `n`-bit integer.",
+        "long": "Sets the value associated with `n`-bit key represented by an unsigned (big-endian) `n`-bit integer `i` in dictionary `D` to value `x`, but only if key `i` is not already present in `D`. Returns the resulting dictionary `D'`.",
         "operands": []
       },
       "layout": {
@@ -31390,7 +31607,7 @@
         "prefix_str": "F436"
       },
       "signature": {
-        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> (D:Cell 0)|(D2:Cell -1) status:Int",
+        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> (D:Cell 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -31436,7 +31653,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -31457,7 +31674,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTADDREF`, but with `i` an unsigned `n`-bit integer.",
+        "long": "Sets the value associated with `n`-bit key represented by an unsigned (big-endian) `n`-bit integer `i` in dictionary `D` to a reference to _Cell_ `c`, but only if key `i` is not already present in `D`. Returns the resulting dictionary `D'`.",
         "operands": []
       },
       "layout": {
@@ -31475,7 +31692,7 @@
         "prefix_str": "F437"
       },
       "signature": {
-        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Cell 0)|(D2:Cell -1) status:Int",
+        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Cell 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -31521,7 +31738,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -31560,7 +31777,7 @@
         "prefix_str": "F43A"
       },
       "signature": {
-        "stack_string": "x:Slice k:Slice D:Cell|Null n:Int -> (D:Cell y:Slice 0)|(D2:Cell -1) status:Int",
+        "stack_string": "x:Slice k:Slice D:Cell|Null n:Int -> (D:Cell y:Slice 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -31611,7 +31828,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -31650,7 +31867,7 @@
         "prefix_str": "F43B"
       },
       "signature": {
-        "stack_string": "c:Cell k:Slice D:Cell|Null n:Int -> (D:Cell c2:Cell 0)|(D2:Cell -1) status:Int",
+        "stack_string": "c:Cell k:Slice D:Cell|Null n:Int -> (D:Cell c2:Cell 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -31701,7 +31918,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -31722,7 +31939,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTADDGET`, but with `i` a signed `n`-bit integer.",
+        "long": "Sets the value associated with `n`-bit key represented by a (big-endian) signed `n`-bit integer `i` in dictionary `D` to value `x`, but only if key `i` is not already present in `D`. Otherwise, returns the old value `y` without changing the dictionary.",
         "operands": []
       },
       "layout": {
@@ -31740,7 +31957,7 @@
         "prefix_str": "F43C"
       },
       "signature": {
-        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> (D:Cell y:Slice 0)|(D2:Cell -1) status:Int",
+        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> (D:Cell y:Slice 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -31791,7 +32008,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -31812,7 +32029,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTADDGETREF`, but with `i` a signed `n`-bit integer.",
+        "long": "Sets the value associated with `n`-bit key represented by a (big-endian) signed `n`-bit integer `i` in dictionary `D` to a reference to _Cell_ `c`, but only if key `i` is not already present in `D`. Otherwise, returns the old value's reference as a _Cell_ without changing the dictionary.",
         "operands": []
       },
       "layout": {
@@ -31830,7 +32047,7 @@
         "prefix_str": "F43D"
       },
       "signature": {
-        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Cell c2:Cell 0)|(D2:Cell -1) status:Int",
+        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Cell c2:Cell 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -31881,7 +32098,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -31902,7 +32119,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTADDGET`, but with `i` an unsigned `n`-bit integer.",
+        "long": "Sets the value associated with `n`-bit key represented by an unsigned (big-endian) `n`-bit integer `i` in dictionary `D` to value `x`, but only if key `i` is not already present in `D`. Otherwise, returns the old value `y` without changing the dictionary.",
         "operands": []
       },
       "layout": {
@@ -31920,7 +32137,7 @@
         "prefix_str": "F43E"
       },
       "signature": {
-        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> (D:Cell y:Slice 0)|(D2:Cell -1) status:Int",
+        "stack_string": "x:Slice i:Int D:Cell|Null n:Int -> (D:Cell y:Slice 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -31971,7 +32188,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -31992,7 +32209,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTADDGETREF`, but with `i` an unsigned `n`-bit integer.",
+        "long": "Sets the value associated with `n`-bit key represented by an unsigned (big-endian) `n`-bit integer `i` in dictionary `D` to a reference to _Cell_ `c`, but only if key `i` is not already present in `D`. Otherwise, returns the old value's reference as a _Cell_ without changing the dictionary.",
         "operands": []
       },
       "layout": {
@@ -32010,7 +32227,7 @@
         "prefix_str": "F43F"
       },
       "signature": {
-        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Cell c2:Cell 0)|(D2:Cell -1) status:Int",
+        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Cell c2:Cell 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -32061,7 +32278,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -32100,7 +32317,7 @@
         "prefix_str": "F462"
       },
       "signature": {
-        "stack_string": "k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null x:Slice -1) status:Int",
+        "stack_string": "k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null x:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -32141,8 +32358,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     },
                     {
                       "type": "simple",
@@ -32167,7 +32384,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTDELGET`, but with `LDREF` `ENDS` applied to `x` on success, so that the value returned `c` is a _Cell_.",
+        "long": "Deletes `n`-bit key, represented by a _Slice_ `k`, from dictionary `D`. If the key is present, returns the modified dictionary `D'`, applies `LDREF` `ENDS` to the original value associated with the key `k` so that the value returned `c` is a _Cell_, and returns the success flag `-1`. Otherwise, returns the original dictionary `D` and `0`.",
         "operands": []
       },
       "layout": {
@@ -32185,7 +32402,7 @@
         "prefix_str": "F463"
       },
       "signature": {
-        "stack_string": "k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null c:Cell -1) status:Int",
+        "stack_string": "k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null c:Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -32226,8 +32443,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     },
                     {
                       "type": "simple",
@@ -32252,7 +32469,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTDELGET`, but with `i` a signed `n`-bit integer.",
+        "long": "Deletes `n`-bit key represented by a (big-endian) signed `n`-bit integer `i` from dictionary `D`. If the key is present, returns the modified dictionary `D'`, the original value `x` associated with the key `i` (represented by a _Slice_), and the success flag `-1`. Otherwise, returns the original dictionary `D` and `0`.",
         "operands": []
       },
       "layout": {
@@ -32270,7 +32487,7 @@
         "prefix_str": "F464"
       },
       "signature": {
-        "stack_string": "i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null x:Slice -1) status:Int",
+        "stack_string": "i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null x:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -32311,8 +32528,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     },
                     {
                       "type": "simple",
@@ -32337,7 +32554,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTDELGETREF`, but with `i` a signed `n`-bit integer.",
+        "long": "Deletes `n`-bit key represented by a (big-endian) signed `n`-bit integer `i` from dictionary `D`. If the key is present, returns the modified dictionary `D'`, applies `LDREF` `ENDS` to the original value associated with the key `i` so that the value returned `c` is a _Cell_, and returns the success flag `-1`. Otherwise, returns the original dictionary `D` and `0`.",
         "operands": []
       },
       "layout": {
@@ -32355,7 +32572,7 @@
         "prefix_str": "F465"
       },
       "signature": {
-        "stack_string": "i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null c:Cell -1) status:Int",
+        "stack_string": "i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null c:Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -32396,8 +32613,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     },
                     {
                       "type": "simple",
@@ -32422,7 +32639,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTDELGET`, but with `i` an unsigned `n`-bit integer.",
+        "long": "Deletes `n`-bit key represented by an unsigned (big-endian) `n`-bit integer `i` from dictionary `D`. If the key is present, returns the modified dictionary `D'`, the original value `x` associated with the key `i` (represented by a _Slice_), and the success flag `-1`. Otherwise, returns the original dictionary `D` and `0`.",
         "operands": []
       },
       "layout": {
@@ -32440,7 +32657,7 @@
         "prefix_str": "F466"
       },
       "signature": {
-        "stack_string": "i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null x:Slice -1) status:Int",
+        "stack_string": "i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null x:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -32481,8 +32698,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     },
                     {
                       "type": "simple",
@@ -32507,7 +32724,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTDELGETREF`, but with `i` an unsigned `n`-bit integer.",
+        "long": "Deletes `n`-bit key represented by an unsigned (big-endian) `n`-bit integer `i` from dictionary `D`. If the key is present, returns the modified dictionary `D'`, applies `LDREF` `ENDS` to the original value associated with the key `i` so that the value returned `c` is a _Cell_, and returns the success flag `-1`. Otherwise, returns the original dictionary `D` and `0`.",
         "operands": []
       },
       "layout": {
@@ -32525,7 +32742,7 @@
         "prefix_str": "F467"
       },
       "signature": {
-        "stack_string": "i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null c:Cell -1) status:Int",
+        "stack_string": "i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null c:Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -32566,8 +32783,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     },
                     {
                       "type": "simple",
@@ -32666,7 +32883,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTMIN`, but returns the only reference in the value as a _Cell_ `c`.",
+        "long": "Computes the minimal key `k` (represented by a _Slice_ with `n` data bits) in dictionary `D`, and returns `k` along with the only reference in the associated value as a _Cell_ `c`.",
         "operands": []
       },
       "layout": {
@@ -32740,7 +32957,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTMIN`, but computes the minimal key `i` under the assumption that all keys are big-endian signed `n`-bit integers. Notice that the key and value returned may differ from those computed by `DICTMIN` and `DICTUMIN`.",
+        "long": "Computes the minimal key `i` in dictionary `D` under the assumption that all keys are big-endian signed `n`-bit integers, and returns `i` along with the associated value `x`. Notice that the key and value returned may differ from those computed by `DICTMIN` and `DICTUMIN`.",
         "operands": []
       },
       "layout": {
@@ -32814,7 +33031,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTIMIN`, but returns the only reference in the value.",
+        "long": "Computes the minimal key `i` in dictionary `D` under the assumption that all keys are big-endian signed `n`-bit integers, and returns `i` along with the only reference in the associated value as a _Cell_ `c`.",
         "operands": []
       },
       "layout": {
@@ -32888,7 +33105,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTMIN`, but returns the key as an unsigned `n`-bit _Integer_ `i`.",
+        "long": "Computes the minimal key in dictionary `D` under the assumption that all keys are big-endian unsigned `n`-bit integers, and returns the key as an unsigned `n`-bit _Integer_ `i` along with the associated value `x`.",
         "operands": []
       },
       "layout": {
@@ -32962,7 +33179,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTUMIN`, but returns the only reference in the value.",
+        "long": "Computes the minimal key in dictionary `D` under the assumption that all keys are big-endian unsigned `n`-bit integers, and returns the key as an unsigned `n`-bit _Integer_ `i` along with the only reference in the associated value as a _Cell_ `c`.",
         "operands": []
       },
       "layout": {
@@ -33110,7 +33327,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTMAX`, but returns the only reference in the value.",
+        "long": "Computes the maximal key `k` (represented by a _Slice_ with `n` data bits) in dictionary `D`, and returns `k` along with the only reference in the associated value as a _Cell_ `c`.",
         "operands": []
       },
       "layout": {
@@ -33184,7 +33401,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTMAX`, but computes the maximal key `i` under the assumption that all keys are big-endian signed `n`-bit integers. Notice that the key and value returned may differ from those computed by `DICTMAX` and `DICTUMAX`.",
+        "long": "Computes the maximal key `i` in dictionary `D` under the assumption that all keys are big-endian signed `n`-bit integers, and returns `i` along with the associated value `x`. Notice that the key and value returned may differ from those computed by `DICTMAX` and `DICTUMAX`.",
         "operands": []
       },
       "layout": {
@@ -33258,7 +33475,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTIMAX`, but returns the only reference in the value.",
+        "long": "Computes the maximal key `i` in dictionary `D` under the assumption that all keys are big-endian signed `n`-bit integers, and returns `i` along with the only reference in the associated value as a _Cell_ `c`.",
         "operands": []
       },
       "layout": {
@@ -33332,7 +33549,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTMAX`, but returns the key as an unsigned `n`-bit _Integer_ `i`.",
+        "long": "Computes the maximal key in dictionary `D` under the assumption that all keys are big-endian unsigned `n`-bit integers, and returns the key as an unsigned `n`-bit _Integer_ `i` along with the associated value `x`.",
         "operands": []
       },
       "layout": {
@@ -33406,7 +33623,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTUMAX`, but returns the only reference in the value.",
+        "long": "Computes the maximal key in dictionary `D` under the assumption that all keys are big-endian unsigned `n`-bit integers, and returns the key as an unsigned `n`-bit _Integer_ `i` along with the only reference in the associated value as a _Cell_ `c`.",
         "operands": []
       },
       "layout": {
@@ -33498,7 +33715,7 @@
         "prefix_str": "F492"
       },
       "signature": {
-        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null x:Slice k:Slice -1) status:Int",
+        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null x:Slice k:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -33534,8 +33751,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     },
                     {
                       "type": "simple",
@@ -33565,7 +33782,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTREMMIN`, but returns the only reference in the value as a _Cell_ `c`.",
+        "long": "Computes the minimal key `k` (represented by a _Slice_ with `n` data bits) in dictionary `D`, removes `k` from the dictionary, and returns `k` along with the only reference in the associated value as a _Cell_ `c` and the modified dictionary `D'`.",
         "operands": []
       },
       "layout": {
@@ -33583,7 +33800,7 @@
         "prefix_str": "F493"
       },
       "signature": {
-        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null c:Cell k:Slice -1) status:Int",
+        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null c:Cell k:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -33619,8 +33836,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     },
                     {
                       "type": "simple",
@@ -33650,7 +33867,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTREMMIN`, but computes the minimal key `i` under the assumption that all keys are big-endian signed `n`-bit integers. Notice that the key and value returned may differ from those computed by `DICTREMMIN` and `DICTUREMMIN`.",
+        "long": "Computes the minimal key `i` in dictionary `D` under the assumption that all keys are big-endian signed `n`-bit integers, removes `i` from the dictionary, and returns `i` along with the associated value `x` and the modified dictionary `D'`. Notice that the key and value returned may differ from those computed by `DICTREMMIN` and `DICTUREMMIN`.",
         "operands": []
       },
       "layout": {
@@ -33668,7 +33885,7 @@
         "prefix_str": "F494"
       },
       "signature": {
-        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null x:Slice i:Int -1) status:Int",
+        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null x:Slice i:Int -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -33704,8 +33921,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     },
                     {
                       "type": "simple",
@@ -33735,7 +33952,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTIREMMIN`, but returns the only reference in the value.",
+        "long": "Computes the minimal key `i` in dictionary `D` under the assumption that all keys are big-endian signed `n`-bit integers, removes `i` from the dictionary, and returns `i` along with the only reference in the associated value as a _Cell_ `c` and the modified dictionary `D'`.",
         "operands": []
       },
       "layout": {
@@ -33753,7 +33970,7 @@
         "prefix_str": "F495"
       },
       "signature": {
-        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null c:Cell i:Int -1) status:Int",
+        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null c:Cell i:Int -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -33789,8 +34006,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     },
                     {
                       "type": "simple",
@@ -33820,7 +34037,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTREMMIN`, but returns the key as an unsigned `n`-bit _Integer_ `i`.",
+        "long": "Computes the minimal key in dictionary `D` under the assumption that all keys are big-endian unsigned `n`-bit integers, removes it from the dictionary, and returns the key as an unsigned `n`-bit _Integer_ `i` along with the associated value `x` and the modified dictionary `D'`.",
         "operands": []
       },
       "layout": {
@@ -33838,7 +34055,7 @@
         "prefix_str": "F496"
       },
       "signature": {
-        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null x:Slice i:Int -1) status:Int",
+        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null x:Slice i:Int -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -33874,8 +34091,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     },
                     {
                       "type": "simple",
@@ -33905,7 +34122,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTUREMMIN`, but returns the only reference in the value.",
+        "long": "Computes the minimal key in dictionary `D` under the assumption that all keys are big-endian unsigned `n`-bit integers, removes it from the dictionary, and returns the key as an unsigned `n`-bit _Integer_ `i` along with the only reference in the associated value as a _Cell_ `c` and the modified dictionary `D'`.",
         "operands": []
       },
       "layout": {
@@ -33923,7 +34140,7 @@
         "prefix_str": "F497"
       },
       "signature": {
-        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null c:Cell i:Int -1) status:Int",
+        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null c:Cell i:Int -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -33959,8 +34176,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     },
                     {
                       "type": "simple",
@@ -34008,7 +34225,7 @@
         "prefix_str": "F49A"
       },
       "signature": {
-        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null x:Slice k:Slice -1) status:Int",
+        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null x:Slice k:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -34044,8 +34261,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     },
                     {
                       "type": "simple",
@@ -34075,7 +34292,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTREMMAX`, but returns the only reference in the value as a _Cell_ `c`.",
+        "long": "Computes the maximal key `k` (represented by a _Slice_ with `n` data bits) in dictionary `D`, removes `k` from the dictionary, and returns `k` along with the only reference in the associated value as a _Cell_ `c` and the modified dictionary `D'`.",
         "operands": []
       },
       "layout": {
@@ -34093,7 +34310,7 @@
         "prefix_str": "F49B"
       },
       "signature": {
-        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null c:Cell k:Slice -1) status:Int",
+        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null c:Cell k:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -34129,8 +34346,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     },
                     {
                       "type": "simple",
@@ -34160,7 +34377,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTREMMAX`, but computes the minimal key `i` under the assumption that all keys are big-endian signed `n`-bit integers. Notice that the key and value returned may differ from those computed by `DICTREMMAX` and `DICTUREMMAX`.",
+        "long": "Computes the maximal key `i` in dictionary `D` under the assumption that all keys are big-endian signed `n`-bit integers, removes `i` from the dictionary, and returns `i` along with the associated value `x` and the modified dictionary `D'`. Notice that the key and value returned may differ from those computed by `DICTREMMAX` and `DICTUREMMAX`.",
         "operands": []
       },
       "layout": {
@@ -34178,7 +34395,7 @@
         "prefix_str": "F49C"
       },
       "signature": {
-        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null x:Slice i:Int -1) status:Int",
+        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null x:Slice i:Int -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -34214,8 +34431,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     },
                     {
                       "type": "simple",
@@ -34245,7 +34462,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTIREMMAX`, but returns the only reference in the value.",
+        "long": "Computes the maximal key `i` in dictionary `D` under the assumption that all keys are big-endian signed `n`-bit integers, removes `i` from the dictionary, and returns `i` along with the only reference in the associated value as a _Cell_ `c` and the modified dictionary `D'`.",
         "operands": []
       },
       "layout": {
@@ -34263,7 +34480,7 @@
         "prefix_str": "F49D"
       },
       "signature": {
-        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null c:Cell i:Int -1) status:Int",
+        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null c:Cell i:Int -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -34299,8 +34516,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     },
                     {
                       "type": "simple",
@@ -34330,7 +34547,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTREMMAX`, but returns the key as an unsigned `n`-bit _Integer_ `i`.",
+        "long": "Computes the maximal key in dictionary `D` under the assumption that all keys are big-endian unsigned `n`-bit integers, removes it from the dictionary, and returns the key as an unsigned `n`-bit _Integer_ `i` along with the associated value `x` and the modified dictionary `D'`.",
         "operands": []
       },
       "layout": {
@@ -34348,7 +34565,7 @@
         "prefix_str": "F49E"
       },
       "signature": {
-        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null x:Slice i:Int -1) status:Int",
+        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null x:Slice i:Int -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -34384,8 +34601,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     },
                     {
                       "type": "simple",
@@ -34415,7 +34632,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTUREMMAX`, but returns the only reference in the value.",
+        "long": "Computes the maximal key in dictionary `D` under the assumption that all keys are big-endian unsigned `n`-bit integers, removes it from the dictionary, and returns the key as an unsigned `n`-bit _Integer_ `i` along with the only reference in the associated value as a _Cell_ `c` and the modified dictionary `D'`.",
         "operands": []
       },
       "layout": {
@@ -34433,7 +34650,7 @@
         "prefix_str": "F49F"
       },
       "signature": {
-        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null c:Cell i:Int -1) status:Int",
+        "stack_string": "D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null c:Cell i:Int -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -34469,8 +34686,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     },
                     {
                       "type": "simple",
@@ -34500,7 +34717,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Sets the value associated with `n`-bit key `k` (represented by a _Slice_ as in `DICTGET`) in dictionary `D` to value `x` (represented by a _Builder_), and returns the resulting dictionary as `D'`.",
         "operands": []
       },
       "layout": {
@@ -34518,12 +34735,12 @@
         "prefix_str": "F441"
       },
       "signature": {
-        "stack_string": "b:Builder k:Slice D:Cell|Null n:Int -> D2:Slice",
+        "stack_string": "x:Builder k:Slice D:Cell|Null n:Int -> D':Cell",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "b",
+              "name": "x",
               "value_types": ["Builder"]
             },
             {
@@ -34547,8 +34764,8 @@
           "stack": [
             {
               "type": "simple",
-              "name": "D2",
-              "value_types": ["Slice"]
+              "name": "D'",
+              "value_types": ["Cell"]
             }
           ]
         }
@@ -34559,7 +34776,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Sets the value associated with `n`-bit key represented by a (big-endian) signed `n`-bit integer `i` in dictionary `D` to value `x` (represented by a _Builder_), and returns the resulting dictionary as `D'`.",
         "operands": []
       },
       "layout": {
@@ -34577,12 +34794,12 @@
         "prefix_str": "F442"
       },
       "signature": {
-        "stack_string": "b:Builder i:Int D:Cell|Null n:Int -> D2:Slice",
+        "stack_string": "x:Builder i:Int D:Cell|Null n:Int -> D':Cell",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "b",
+              "name": "x",
               "value_types": ["Builder"]
             },
             {
@@ -34606,8 +34823,8 @@
           "stack": [
             {
               "type": "simple",
-              "name": "D2",
-              "value_types": ["Slice"]
+              "name": "D'",
+              "value_types": ["Cell"]
             }
           ]
         }
@@ -34618,7 +34835,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Sets the value associated with `n`-bit key represented by an unsigned (big-endian) `n`-bit integer `i` in dictionary `D` to value `x` (represented by a _Builder_), and returns the resulting dictionary as `D'`.",
         "operands": []
       },
       "layout": {
@@ -34636,12 +34853,12 @@
         "prefix_str": "F443"
       },
       "signature": {
-        "stack_string": "b:Builder i:Int D:Cell|Null n:Int -> D2:Slice",
+        "stack_string": "x:Builder i:Int D:Cell|Null n:Int -> D':Cell",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "b",
+              "name": "x",
               "value_types": ["Builder"]
             },
             {
@@ -34665,8 +34882,8 @@
           "stack": [
             {
               "type": "simple",
-              "name": "D2",
-              "value_types": ["Slice"]
+              "name": "D'",
+              "value_types": ["Cell"]
             }
           ]
         }
@@ -34677,7 +34894,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Sets the value associated with `n`-bit key `k` (represented by a _Slice_ as in `DICTGET`) in dictionary `D` to value `x` (represented by a _Builder_), and returns the resulting dictionary `D'` along with the old value `y` associated with the key in question, if present.",
         "operands": []
       },
       "layout": {
@@ -34695,12 +34912,12 @@
         "prefix_str": "F445"
       },
       "signature": {
-        "stack_string": "b:Builder k:Slice D:Cell|Null n:Int -> (D2:Cell 0)|(D2:Cell y:Slice -1) status:Int",
+        "stack_string": "x:Builder k:Slice D:Cell|Null n:Int -> (D':Cell 0)|(D':Cell y:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "b",
+              "name": "x",
               "value_types": ["Builder"]
             },
             {
@@ -34731,7 +34948,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -34741,7 +34958,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     },
                     {
@@ -34767,7 +34984,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Sets the value associated with `n`-bit key represented by a (big-endian) signed `n`-bit integer `i` in dictionary `D` to value `x` (represented by a _Builder_), and returns the resulting dictionary `D'` along with the old value `y` associated with the key in question, if present.",
         "operands": []
       },
       "layout": {
@@ -34785,12 +35002,12 @@
         "prefix_str": "F446"
       },
       "signature": {
-        "stack_string": "b:Builder i:Int D:Cell|Null n:Int -> (D2:Cell 0)|(D2:Cell y:Slice -1) status:Int",
+        "stack_string": "x:Builder i:Int D:Cell|Null n:Int -> (D':Cell 0)|(D':Cell y:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "b",
+              "name": "x",
               "value_types": ["Builder"]
             },
             {
@@ -34821,7 +35038,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -34831,7 +35048,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     },
                     {
@@ -34857,7 +35074,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Sets the value associated with `n`-bit key represented by an unsigned (big-endian) `n`-bit integer `i` in dictionary `D` to value `x` (represented by a _Builder_), and returns the resulting dictionary `D'` along with the old value `y` associated with the key in question, if present.",
         "operands": []
       },
       "layout": {
@@ -34875,12 +35092,12 @@
         "prefix_str": "F447"
       },
       "signature": {
-        "stack_string": "b:Builder i:Int D:Cell|Null n:Int -> (D2:Cell 0)|(D2:Cell y:Slice -1) status:Int",
+        "stack_string": "x:Builder i:Int D:Cell|Null n:Int -> (D':Cell 0)|(D':Cell y:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "b",
+              "name": "x",
               "value_types": ["Builder"]
             },
             {
@@ -34911,7 +35128,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -34921,7 +35138,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     },
                     {
@@ -34947,7 +35164,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Sets the value associated with `n`-bit key `k` (represented by a _Slice_ as in `DICTGET`) in dictionary `D` to value `x` (represented by a _Builder_) only if the key `k` was already present in `D`. Returns the resulting dictionary as `D'`.",
         "operands": []
       },
       "layout": {
@@ -34965,12 +35182,12 @@
         "prefix_str": "F449"
       },
       "signature": {
-        "stack_string": "b:Builder k:Slice D:Cell|Null n:Int -> (D:Cell 0)|(D2:Cell -1) status:Int",
+        "stack_string": "x:Builder k:Slice D:Cell|Null n:Int -> (D:Cell 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "b",
+              "name": "x",
               "value_types": ["Builder"]
             },
             {
@@ -35011,7 +35228,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -35032,7 +35249,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Sets the value associated with `n`-bit key represented by a (big-endian) signed `n`-bit integer `i` in dictionary `D` to value `x` (represented by a _Builder_) only if the key `i` was already present in `D`. Returns the resulting dictionary as `D'`.",
         "operands": []
       },
       "layout": {
@@ -35050,12 +35267,12 @@
         "prefix_str": "F44A"
       },
       "signature": {
-        "stack_string": "b:Builder i:Int D:Cell|Null n:Int -> (D:Cell 0)|(D2:Cell -1) status:Int",
+        "stack_string": "x:Builder i:Int D:Cell|Null n:Int -> (D:Cell 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "b",
+              "name": "x",
               "value_types": ["Builder"]
             },
             {
@@ -35096,7 +35313,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -35117,7 +35334,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Sets the value associated with `n`-bit key represented by an unsigned (big-endian) `n`-bit integer `i` in dictionary `D` to value `x` (represented by a _Builder_) only if the key `i` was already present in `D`. Returns the resulting dictionary as `D'`.",
         "operands": []
       },
       "layout": {
@@ -35135,12 +35352,12 @@
         "prefix_str": "F44B"
       },
       "signature": {
-        "stack_string": "b:Builder i:Int D:Cell|Null n:Int -> (D:Cell 0)|(D2:Cell -1) status:Int",
+        "stack_string": "x:Builder i:Int D:Cell|Null n:Int -> (D:Cell 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "b",
+              "name": "x",
               "value_types": ["Builder"]
             },
             {
@@ -35181,7 +35398,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -35202,7 +35419,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Sets the value associated with `n`-bit key `k` (represented by a _Slice_ as in `DICTGET`) in dictionary `D` to value `x` (represented by a _Builder_) only if the key `k` was already present in `D`. Returns the resulting dictionary `D'` and the old value associated with the key in question.",
         "operands": []
       },
       "layout": {
@@ -35220,12 +35437,12 @@
         "prefix_str": "F44D"
       },
       "signature": {
-        "stack_string": "b:Builder k:Slice D:Cell|Null n:Int -> (D:Cell 0)|(D2:Cell y:Slice -1) status:Int",
+        "stack_string": "x:Builder k:Slice D:Cell|Null n:Int -> (D:Cell 0)|(D':Cell y:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "b",
+              "name": "x",
               "value_types": ["Builder"]
             },
             {
@@ -35266,7 +35483,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     },
                     {
@@ -35292,7 +35509,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Sets the value associated with `n`-bit key represented by a (big-endian) signed `n`-bit integer `i` in dictionary `D` to value `x` (represented by a _Builder_) only if the key `i` was already present in `D`. Returns the resulting dictionary `D'` and the old value associated with the key in question.",
         "operands": []
       },
       "layout": {
@@ -35310,12 +35527,12 @@
         "prefix_str": "F44E"
       },
       "signature": {
-        "stack_string": "b:Builder i:Int D:Cell|Null n:Int -> (D:Cell 0)|(D2:Cell y:Slice -1) status:Int",
+        "stack_string": "x:Builder i:Int D:Cell|Null n:Int -> (D:Cell 0)|(D':Cell y:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "b",
+              "name": "x",
               "value_types": ["Builder"]
             },
             {
@@ -35356,7 +35573,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     },
                     {
@@ -35382,7 +35599,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Sets the value associated with `n`-bit key represented by an unsigned (big-endian) `n`-bit integer `i` in dictionary `D` to value `x` (represented by a _Builder_) only if the key `i` was already present in `D`. Returns the resulting dictionary `D'` and the old value associated with the key in question.",
         "operands": []
       },
       "layout": {
@@ -35400,12 +35617,12 @@
         "prefix_str": "F44F"
       },
       "signature": {
-        "stack_string": "b:Builder i:Int D:Cell|Null n:Int -> (D:Cell 0)|(D2:Cell y:Slice -1) status:Int",
+        "stack_string": "x:Builder i:Int D:Cell|Null n:Int -> (D:Cell 0)|(D':Cell y:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "b",
+              "name": "x",
               "value_types": ["Builder"]
             },
             {
@@ -35446,7 +35663,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     },
                     {
@@ -35472,7 +35689,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Sets the value associated with `n`-bit key `k` (represented by a _Slice_ as in `DICTGET`) in dictionary `D` to value `x` (represented by a _Builder_), but only if key `k` is not already present in `D`. Returns the resulting dictionary `D'`.",
         "operands": []
       },
       "layout": {
@@ -35490,12 +35707,12 @@
         "prefix_str": "F451"
       },
       "signature": {
-        "stack_string": "b:Builder k:Slice D:Cell|Null n:Int -> (D:Cell 0)|(D2:Cell -1) status:Int",
+        "stack_string": "x:Builder k:Slice D:Cell|Null n:Int -> (D:Cell 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "b",
+              "name": "x",
               "value_types": ["Builder"]
             },
             {
@@ -35536,7 +35753,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -35557,7 +35774,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Sets the value associated with `n`-bit key represented by a (big-endian) signed `n`-bit integer `i` in dictionary `D` to value `x` (represented by a _Builder_), but only if key `i` is not already present in `D`. Returns the resulting dictionary `D'`.",
         "operands": []
       },
       "layout": {
@@ -35575,12 +35792,12 @@
         "prefix_str": "F452"
       },
       "signature": {
-        "stack_string": "b:Builder i:Int D:Cell|Null n:Int -> (D:Cell 0)|(D2:Cell -1) status:Int",
+        "stack_string": "x:Builder i:Int D:Cell|Null n:Int -> (D:Cell 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "b",
+              "name": "x",
               "value_types": ["Builder"]
             },
             {
@@ -35621,7 +35838,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -35642,7 +35859,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Sets the value associated with `n`-bit key represented by an unsigned (big-endian) `n`-bit integer `i` in dictionary `D` to value `x` (represented by a _Builder_), but only if key `i` is not already present in `D`. Returns the resulting dictionary `D'`.",
         "operands": []
       },
       "layout": {
@@ -35660,12 +35877,12 @@
         "prefix_str": "F453"
       },
       "signature": {
-        "stack_string": "b:Builder i:Int D:Cell|Null n:Int -> (D:Cell 0)|(D2:Cell -1) status:Int",
+        "stack_string": "x:Builder i:Int D:Cell|Null n:Int -> (D:Cell 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "b",
+              "name": "x",
               "value_types": ["Builder"]
             },
             {
@@ -35706,7 +35923,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -35727,7 +35944,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Sets the value associated with `n`-bit key `k` (represented by a _Slice_ as in `DICTGET`) in dictionary `D` to value `x` (represented by a _Builder_), but only if key `k` is not already present in `D`. Otherwise, returns the old value `y` without changing the dictionary.",
         "operands": []
       },
       "layout": {
@@ -35745,12 +35962,12 @@
         "prefix_str": "F455"
       },
       "signature": {
-        "stack_string": "b:Builder k:Slice D:Cell|Null n:Int -> (D:Cell y:Slice 0)|(D2:Cell -1) status:Int",
+        "stack_string": "x:Builder k:Slice D:Cell|Null n:Int -> (D:Cell y:Slice 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "b",
+              "name": "x",
               "value_types": ["Builder"]
             },
             {
@@ -35796,7 +36013,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -35817,7 +36034,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Sets the value associated with `n`-bit key represented by a (big-endian) signed `n`-bit integer `i` in dictionary `D` to value `x` (represented by a _Builder_), but only if key `i` is not already present in `D`. Otherwise, returns the old value `y` without changing the dictionary.",
         "operands": []
       },
       "layout": {
@@ -35835,12 +36052,12 @@
         "prefix_str": "F456"
       },
       "signature": {
-        "stack_string": "b:Builder i:Int D:Cell|Null n:Int -> (D:Cell y:Slice 0)|(D2:Cell -1) status:Int",
+        "stack_string": "x:Builder i:Int D:Cell|Null n:Int -> (D:Cell y:Slice 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "b",
+              "name": "x",
               "value_types": ["Builder"]
             },
             {
@@ -35886,7 +36103,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -35907,7 +36124,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Sets the value associated with `n`-bit key represented by an unsigned (big-endian) `n`-bit integer `i` in dictionary `D` to value `x` (represented by a _Builder_), but only if key `i` is not already present in `D`. Otherwise, returns the old value `y` without changing the dictionary.",
         "operands": []
       },
       "layout": {
@@ -35925,12 +36142,12 @@
         "prefix_str": "F457"
       },
       "signature": {
-        "stack_string": "b:Builder i:Int D:Cell|Null n:Int -> (D:Cell y:Slice 0)|(D2:Cell -1) status:Int",
+        "stack_string": "x:Builder i:Int D:Cell|Null n:Int -> (D:Cell y:Slice 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "b",
+              "name": "x",
               "value_types": ["Builder"]
             },
             {
@@ -35976,7 +36193,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
+                      "name": "D'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -36015,7 +36232,7 @@
         "prefix_str": "F459"
       },
       "signature": {
-        "stack_string": "k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null -1) status:Int",
+        "stack_string": "k:Slice D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -36056,8 +36273,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     }
                   ]
                 }
@@ -36095,7 +36312,7 @@
         "prefix_str": "F45A"
       },
       "signature": {
-        "stack_string": "i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null -1) status:Int",
+        "stack_string": "i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -36136,8 +36353,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     }
                   ]
                 }
@@ -36157,7 +36374,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTIDEL`, but with `i` an unsigned `n`-bit integer.",
+        "long": "Deletes `n`-bit key, represented by an unsigned `n`-bit _Integer_ `i`, from dictionary `D`. If the key is present, returns the modified dictionary `D'` and the success flag `-1`. Otherwise, returns the original dictionary `D` and `0`. If `i` does not fit into `n` bits, simply returns `D` `0` (''key not found, dictionary unmodified'').",
         "operands": []
       },
       "layout": {
@@ -36175,7 +36392,7 @@
         "prefix_str": "F45B"
       },
       "signature": {
-        "stack_string": "i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D2:Slice|Null -1) status:Int",
+        "stack_string": "i:Int D:Cell|Null n:Int -> (D:Slice|Null 0)|(D':Cell|Null -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -36216,8 +36433,8 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "D2",
-                      "value_types": ["Slice", "Null"]
+                      "name": "D'",
+                      "value_types": ["Cell", "Null"]
                     }
                   ]
                 }
@@ -36291,7 +36508,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTGETOPTREF`, but with `i` a signed `n`-bit integer. If the key `i` is out of range, also returns _Null_.",
+        "long": "Looks up key represented by a signed (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. Returns _Null_ if the key `i` is absent from dictionary `D` or if `i` is out of range. Otherwise, returns the value found as a _Cell_ `c`.",
         "operands": []
       },
       "layout": {
@@ -36345,7 +36562,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "`DICTGETOPTREF`, but with `i` an unsigned `n`-bit integer. If the key `i` is out of range, also returns _Null_.",
+        "long": "Looks up key represented by an unsigned (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. Returns _Null_ if the key `i` is absent from dictionary `D` or if `i` is out of range. Otherwise, returns the value found as a _Cell_ `c`.",
         "operands": []
       },
       "layout": {
@@ -36417,7 +36634,7 @@
         "prefix_str": "F46D"
       },
       "signature": {
-        "stack_string": "c:Cell|Null k:Slice D:Cell|Null n:Int -> D2:Slice|Null c2:Cell|Null",
+        "stack_string": "c:Cell|Null k:Slice D:Cell|Null n:Int -> D':Cell|Null c2:Cell|Null",
         "inputs": {
           "stack": [
             {
@@ -36446,8 +36663,8 @@
           "stack": [
             {
               "type": "simple",
-              "name": "D2",
-              "value_types": ["Slice", "Null"]
+              "name": "D'",
+              "value_types": ["Cell", "Null"]
             },
             {
               "type": "simple",
@@ -36463,8 +36680,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to primitive `DICTSETGETOPTREF`, but using signed `n`-bit _Integer_ `i` as a key. If `i` does not fit into `n` bits, throws a range checking exception.",
-        "operands": []
+        "long": "Sets the value corresponding to key represented by a signed `n`-bit _Integer_ `i` in dictionary `D` to `c^?` (if `c^?` is _Null_, then the key is deleted instead), and returns the old value `~c^?` (if the key `i` was absent before, returns _Null_ instead).",
+        "operands": [],
+        "exit_codes": [
+          {
+            "errno": "5",
+            "condition": "Integer does not fit into `n` bits."
+          }
+        ]
       },
       "layout": {
         "min": 16018944,
@@ -36481,7 +36704,7 @@
         "prefix_str": "F46E"
       },
       "signature": {
-        "stack_string": "c:Cell|Null i:Int D:Cell|Null n:Int -> D2:Slice|Null c2:Cell|Null",
+        "stack_string": "c:Cell|Null i:Int D:Cell|Null n:Int -> D':Cell|Null c2:Cell|Null",
         "inputs": {
           "stack": [
             {
@@ -36510,8 +36733,8 @@
           "stack": [
             {
               "type": "simple",
-              "name": "D2",
-              "value_types": ["Slice", "Null"]
+              "name": "D'",
+              "value_types": ["Cell", "Null"]
             },
             {
               "type": "simple",
@@ -36527,8 +36750,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to primitive `DICTSETGETOPTREF`, but using unsigned `n`-bit _Integer_ `i` as a key.",
-        "operands": []
+        "long": "Sets the value corresponding to key represented by an unsigned `n`-bit _Integer_ `i` in dictionary `D` to `c^?` (if `c^?` is _Null_, then the key is deleted instead), and returns the old value `~c^?` (if the key `i` was absent before, returns _Null_ instead).",
+        "operands": [],
+        "exit_codes": [
+          {
+            "errno": "5",
+            "condition": "Integer does not fit into `n` bits."
+          }
+        ]
       },
       "layout": {
         "min": 16019200,
@@ -36545,7 +36774,7 @@
         "prefix_str": "F46F"
       },
       "signature": {
-        "stack_string": "c:Cell|Null i:Int D:Cell|Null n:Int -> D2:Slice|Null c2:Cell|Null",
+        "stack_string": "c:Cell|Null i:Int D:Cell|Null n:Int -> D':Cell|Null c2:Cell|Null",
         "inputs": {
           "stack": [
             {
@@ -36574,8 +36803,8 @@
           "stack": [
             {
               "type": "simple",
-              "name": "D2",
-              "value_types": ["Slice", "Null"]
+              "name": "D'",
+              "value_types": ["Cell", "Null"]
             },
             {
               "type": "simple",
@@ -36609,7 +36838,7 @@
         "prefix_str": "F4B1"
       },
       "signature": {
-        "stack_string": "k:Slice l:Int D:Cell|Null n:Int -> D2:Slice|Null",
+        "stack_string": "k:Slice l:Int D:Cell|Null n:Int -> D':Cell|Null",
         "inputs": {
           "stack": [
             {
@@ -36638,8 +36867,8 @@
           "stack": [
             {
               "type": "simple",
-              "name": "D2",
-              "value_types": ["Slice", "Null"]
+              "name": "D'",
+              "value_types": ["Cell", "Null"]
             }
           ]
         }
@@ -36650,7 +36879,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Variant of `SUBDICTGET` with the prefix represented by a signed big-endian `l`-bit _Integer_ `x`, where necessarily `l <= 257`.",
+        "long": "Constructs a subdictionary consisting of all keys beginning with prefix represented by a signed big-endian `l`-bit _Integer_ `x` (where necessarily `l <= 257`) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, returns the new subdictionary of the same type `HashmapE(n,X)` as a _Slice_ `D'`.",
         "operands": []
       },
       "layout": {
@@ -36668,7 +36897,7 @@
         "prefix_str": "F4B2"
       },
       "signature": {
-        "stack_string": "x:Int l:Int D:Cell|Null n:Int -> D2:Slice|Null",
+        "stack_string": "x:Int l:Int D:Cell|Null n:Int -> D':Cell|Null",
         "inputs": {
           "stack": [
             {
@@ -36697,8 +36926,8 @@
           "stack": [
             {
               "type": "simple",
-              "name": "D2",
-              "value_types": ["Slice", "Null"]
+              "name": "D'",
+              "value_types": ["Cell", "Null"]
             }
           ]
         }
@@ -36709,7 +36938,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Variant of `SUBDICTGET` with the prefix represented by an unsigned big-endian `l`-bit _Integer_ `x`, where necessarily `l <= 256`.",
+        "long": "Constructs a subdictionary consisting of all keys beginning with prefix represented by an unsigned big-endian `l`-bit _Integer_ `x` (where necessarily `l <= 256`) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, returns the new subdictionary of the same type `HashmapE(n,X)` as a _Slice_ `D'`.",
         "operands": []
       },
       "layout": {
@@ -36727,7 +36956,7 @@
         "prefix_str": "F4B3"
       },
       "signature": {
-        "stack_string": "x:Int l:Int D:Cell|Null n:Int -> D2:Slice|Null",
+        "stack_string": "x:Int l:Int D:Cell|Null n:Int -> D':Cell|Null",
         "inputs": {
           "stack": [
             {
@@ -36756,8 +36985,8 @@
           "stack": [
             {
               "type": "simple",
-              "name": "D2",
-              "value_types": ["Slice", "Null"]
+              "name": "D'",
+              "value_types": ["Cell", "Null"]
             }
           ]
         }
@@ -36768,7 +36997,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `SUBDICTGET`, but removes the common prefix `k` from all keys of the new dictionary `D'`, which becomes of type `HashmapE(n-l,X)`.",
+        "long": "Constructs a subdictionary consisting of all keys beginning with prefix `k` (represented by a _Slice_, the first `0 <= l <= n <= 1023` data bits of which are used as a key) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. Removes the common prefix from all keys of the new dictionary `D'`, which becomes of type `HashmapE(n-l,X)`.",
         "operands": []
       },
       "layout": {
@@ -36786,7 +37015,7 @@
         "prefix_str": "F4B5"
       },
       "signature": {
-        "stack_string": "k:Slice l:Int D:Cell|Null n:Int -> D2:Slice|Null",
+        "stack_string": "k:Slice l:Int D:Cell|Null n:Int -> D':Cell|Null",
         "inputs": {
           "stack": [
             {
@@ -36815,8 +37044,8 @@
           "stack": [
             {
               "type": "simple",
-              "name": "D2",
-              "value_types": ["Slice", "Null"]
+              "name": "D'",
+              "value_types": ["Cell", "Null"]
             }
           ]
         }
@@ -36827,7 +37056,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Variant of `SUBDICTRPGET` with the prefix represented by a signed big-endian `l`-bit _Integer_ `x`, where necessarily `l <= 257`.",
+        "long": "Constructs a subdictionary consisting of all keys beginning with prefix represented by a signed big-endian `l`-bit _Integer_ `x` (where necessarily `l <= 257`) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. Removes the common prefix from all keys of the new dictionary `D'`, which becomes of type `HashmapE(n-l,X)`.",
         "operands": []
       },
       "layout": {
@@ -36845,7 +37074,7 @@
         "prefix_str": "F4B6"
       },
       "signature": {
-        "stack_string": "x:Int l:Int D:Cell|Null n:Int -> D2:Slice|Null",
+        "stack_string": "x:Int l:Int D:Cell|Null n:Int -> D':Cell|Null",
         "inputs": {
           "stack": [
             {
@@ -36874,8 +37103,8 @@
           "stack": [
             {
               "type": "simple",
-              "name": "D2",
-              "value_types": ["Slice", "Null"]
+              "name": "D'",
+              "value_types": ["Cell", "Null"]
             }
           ]
         }
@@ -36886,7 +37115,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Variant of `SUBDICTRPGET` with the prefix represented by an unsigned big-endian `l`-bit _Integer_ `x`, where necessarily `l <= 256`.",
+        "long": "Constructs a subdictionary consisting of all keys beginning with prefix represented by an unsigned big-endian `l`-bit _Integer_ `x` (where necessarily `l <= 256`) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. Removes the common prefix from all keys of the new dictionary `D'`, which becomes of type `HashmapE(n-l,X)`.",
         "operands": []
       },
       "layout": {
@@ -36904,7 +37133,7 @@
         "prefix_str": "F4B7"
       },
       "signature": {
-        "stack_string": "x:Int l:Int D:Cell|Null n:Int -> D2:Slice|Null",
+        "stack_string": "x:Int l:Int D:Cell|Null n:Int -> D':Cell|Null",
         "inputs": {
           "stack": [
             {
@@ -36933,8 +37162,8 @@
           "stack": [
             {
               "type": "simple",
-              "name": "D2",
-              "value_types": ["Slice", "Null"]
+              "name": "D'",
+              "value_types": ["Cell", "Null"]
             }
           ]
         }
@@ -37220,7 +37449,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTGETNEXT`, but computes the minimal key `k'` that is lexicographically greater than or equal to `k`.",
+        "long": "Computes the minimal key `k'` in dictionary `D` that is lexicographically greater than or equal to `k`, and returns `k'` (represented by a _Slice_) along with associated value `x'` (also represented by a _Slice_).",
         "operands": []
       },
       "layout": {
@@ -37299,7 +37528,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTGETNEXT`, but computes the maximal key `k'` lexicographically smaller than `k`.",
+        "long": "Computes the maximal key `k'` in dictionary `D` that is lexicographically smaller than `k`, and returns `k'` (represented by a _Slice_) along with associated value `x'` (also represented by a _Slice_).",
         "operands": []
       },
       "layout": {
@@ -37378,7 +37607,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTGETPREV`, but computes the maximal key `k'` lexicographically smaller than or equal to `k`.",
+        "long": "Computes the maximal key `k'` in dictionary `D` that is lexicographically smaller than or equal to `k`, and returns `k'` (represented by a _Slice_) along with associated value `x'` (also represented by a _Slice_).",
         "operands": []
       },
       "layout": {
@@ -37457,7 +37686,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTGETNEXT`, but interprets all keys in dictionary `D` as big-endian signed `n`-bit integers, and computes the minimal key `i'` that is larger than _Integer_ `i` (which does not necessarily fit into `n` bits).",
+        "long": "Interprets all keys in dictionary `D` as big-endian signed `n`-bit integers, computes the minimal key `i'` that is larger than _Integer_ `i` (which does not necessarily fit into `n` bits), and returns `i'` along with associated value `x'` (represented by a _Slice_).",
         "operands": []
       },
       "layout": {
@@ -37536,7 +37765,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTGETNEXTEQ`, but interprets keys as signed `n`-bit integers.",
+        "long": "Interprets all keys in dictionary `D` as big-endian signed `n`-bit integers, computes the minimal key `i'` that is larger than or equal to _Integer_ `i` (which does not necessarily fit into `n` bits), and returns `i'` along with associated value `x'` (represented by a _Slice_).",
         "operands": []
       },
       "layout": {
@@ -37615,7 +37844,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTGETPREV`, but interprets keys as signed `n`-bit integers.",
+        "long": "Interprets all keys in dictionary `D` as big-endian signed `n`-bit integers, computes the maximal key `i'` that is smaller than _Integer_ `i` (which does not necessarily fit into `n` bits), and returns `i'` along with associated value `x'` (represented by a _Slice_).",
         "operands": []
       },
       "layout": {
@@ -37694,7 +37923,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTGETPREVEQ`, but interprets keys as signed `n`-bit integers.",
+        "long": "Interprets all keys in dictionary `D` as big-endian signed `n`-bit integers, computes the maximal key `i'` that is smaller than or equal to _Integer_ `i` (which does not necessarily fit into `n` bits), and returns `i'` along with associated value `x'` (represented by a _Slice_).",
         "operands": []
       },
       "layout": {
@@ -37773,7 +38002,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTGETNEXT`, but interprets all keys in dictionary `D` as big-endian unsigned `n`-bit integers, and computes the minimal key `i'` that is larger than _Integer_ `i` (which does not necessarily fit into `n` bits, and is not necessarily non-negative).",
+        "long": "Interprets all keys in dictionary `D` as big-endian unsigned `n`-bit integers, computes the minimal key `i'` that is larger than _Integer_ `i` (which does not necessarily fit into `n` bits, and is not necessarily non-negative), and returns `i'` along with associated value `x'` (represented by a _Slice_).",
         "operands": []
       },
       "layout": {
@@ -37852,7 +38081,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTGETNEXTEQ`, but interprets keys as unsigned `n`-bit integers.",
+        "long": "Interprets all keys in dictionary `D` as big-endian unsigned `n`-bit integers, computes the minimal key `i'` that is larger than or equal to _Integer_ `i` (which does not necessarily fit into `n` bits, and is not necessarily non-negative), and returns `i'` along with associated value `x'` (represented by a _Slice_).",
         "operands": []
       },
       "layout": {
@@ -37931,7 +38160,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTGETPREV`, but interprets keys as unsigned `n`-bit integers.",
+        "long": "Interprets all keys in dictionary `D` as big-endian unsigned `n`-bit integers, computes the maximal key `i'` that is smaller than _Integer_ `i` (which does not necessarily fit into `n` bits, and is not necessarily non-negative), and returns `i'` along with associated value `x'` (represented by a _Slice_).",
         "operands": []
       },
       "layout": {
@@ -38010,7 +38239,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTGETPREVEQ`, but interprets keys a unsigned `n`-bit integers.",
+        "long": "Interprets all keys in dictionary `D` as big-endian unsigned `n`-bit integers, computes the maximal key `i'` that is smaller than or equal to _Integer_ `i` (which does not necessarily fit into `n` bits, and is not necessarily non-negative), and returns `i'` along with associated value `x'` (represented by a _Slice_).",
         "operands": []
       },
       "layout": {
@@ -38673,7 +38902,7 @@
       "subCategory": "int_const",
       "description": {
         "short": "",
-        "long": "Pushes `2 ^ (x + 1) - 1`.",
+        "long": "Pushes `(2 ^ x) - 1`.",
         "operands": ["x"]
       },
       "layout": {
@@ -38721,7 +38950,7 @@
       "subCategory": "int_const",
       "description": {
         "short": "",
-        "long": "Pushes `-2 ^ (x + 1)`.",
+        "long": "Pushes `-2 ^ x`.",
         "operands": ["x"]
       },
       "layout": {
@@ -38895,8 +39124,8 @@
       "subCategory": "shift_logic",
       "description": {
         "short": "",
-        "long": "Replaces `x` with a `NaN` if x is not a `cc+1`-bit signed integer, leaves it intact otherwise.",
-        "operands": ["c"]
+        "long": "Replaces `x` with a `NaN` if x is not a `width`-bit signed integer, leaves it intact otherwise.",
+        "operands": ["width"]
       },
       "layout": {
         "min": 12039168,
@@ -38952,8 +39181,8 @@
       "subCategory": "shift_logic",
       "description": {
         "short": "",
-        "long": "Replaces `x` with a `NaN` if x is not a `cc+1`-bit unsigned integer, leaves it intact otherwise.",
-        "operands": ["c"]
+        "long": "Replaces `x` with a `NaN` if x is not a `width`-bit unsigned integer, leaves it intact otherwise.",
+        "operands": ["width"]
       },
       "layout": {
         "min": 12039424,
@@ -39056,7 +39285,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Calls_ continuation `c` with `p` parameters, but unlike `CALLXARGS` which only passes parameters, this instruction also pushes the old value of the current continuation `cс` (along with the top `0 <= p <= 15` values from the original stack) into the stack of newly-invoked continuation `c`, setting `cc.nargs` to `-1 <= r <= 14`. This allows the called continuation to later return to the caller with the specified number of return values.",
+        "long": "_Calls_ continuation `c` with `p` parameters, but unlike `CALLXARGS` which only passes parameters, this instruction also pushes the old value of the current continuation `cс` (along with the top `0 <= p <= 15` values from the original stack) onto the stack of newly-invoked continuation `c`, setting `cc.nargs` to `-1 <= r <= 14`. This allows the called continuation to later return to the caller with the specified number of return values.",
         "operands": ["p", "r"]
       },
       "layout": {
@@ -39781,7 +40010,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `DROP` performed `i` times.",
+        "long": "Removes the top `i` elements from the stack. Equivalent to `DROP` performed `i` times.",
         "operands": ["i"]
       },
       "layout": {
@@ -41142,8 +41371,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Permutes two blocks `s[j+i+1] ... s[j+1]` and `s[j] ... s0`.\nEquivalent to `[i+1] [j+1] REVERSE` `[j+1] 0 REVERSE` `[i+j+2] 0 REVERSE`.",
-        "operands": ["i", "j"]
+        "long": "Permutes two blocks `s[j+i+1] ... s[j+1]` and `s[j] ... s0`.",
+        "operands": ["i", "j"],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["[i+1] [j+1] REVERSE", "[j+1] 0 REVERSE", "[i+j+2] 0 REVERSE"]
+          }
+        ]
       },
       "layout": {
         "min": 5570560,
@@ -43018,7 +43253,7 @@
       "category": "arithmetic",
       "subCategory": "int_const",
       "description": {
-        "short": "Quietly pushes `2 ^ (x + 1)`.",
+        "short": "Quietly pushes `2 ^ x`.",
         "long": "Note that `2^256` is a `NaN`.",
         "operands": ["x"]
       },
@@ -43067,7 +43302,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `PUSH s(j)` performed `i` times.\n`1 <= i <= 15`, `0 <= j <= 15`.",
+        "long": "Equivalent to `PUSH s(j)` performed `i` times.",
         "operands": ["i", "j"]
       },
       "layout": {
@@ -43118,8 +43353,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Drops `i` stack elements under the top `j` elements.\n`1 <= i <= 15`, `0 <= j <= 15`\nEquivalent to `[i+j] 0 REVERSE` `[i] BLKDROP` `[j] 0 REVERSE`.",
-        "operands": ["i", "j"]
+        "long": "Drops `i` stack elements under the top `j` elements.",
+        "operands": ["i", "j"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["[i+j] 0 REVERSE", "[i] BLKDROP", "[j] 0 REVERSE"]
+          }
+        ]
       },
       "layout": {
         "min": 7081984,
@@ -43169,12 +43410,12 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Returns the `k`-th global variable.",
-        "operands": ["k"],
+        "long": "Returns the `i`-th global variable.",
+        "operands": ["i"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["PUSHCTR c7", "INDEXQ [k]"]
+            "instructions": ["PUSHCTR c7", "INDEXQ [i]"]
           }
         ]
       },
@@ -43227,12 +43468,12 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Assigns `x` from the stack to the `k`-th global variable.",
-        "operands": ["k"],
+        "long": "Assigns `x` from the stack to the `i`-th global variable.",
+        "operands": ["i"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["PUSHCTR c7", "SWAP", "k SETINDEXQ", "POPCTR c7"]
+            "instructions": ["PUSHCTR c7", "SWAP", "SETINDEXQ [i]", "POPCTR c7"]
           }
         ]
       },
@@ -43291,8 +43532,24 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Returns the `i`-th parameter from the _Tuple_ provided at `c7`. Equivalent to `c7 PUSHCTR` `FIRST` `[i] INDEX`.\nIf one of these internal operations fails, throws an appropriate type checking or range checking exception.",
-        "operands": ["i"]
+        "long": "Returns the `i`-th parameter from the _Tuple_ provided at `c7`.",
+        "operands": ["i"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["c7 PUSHCTR", "FIRST", "[i] INDEX"]
+          }
+        ],
+        "exit_codes": [
+          {
+            "errno": "7",
+            "condition": "Value in `c7` is not a Tuple."
+          },
+          {
+            "errno": "5",
+            "condition": "Index `i` is greater than or equal to tuple from `c7` length."
+          }
+        ]
       },
       "layout": {
         "min": 16261120,
@@ -43344,7 +43601,7 @@
       "subCategory": "cell_const",
       "description": {
         "short": "",
-        "long": "Pushes the reference `ref` into the stack.\n_Details:_ Pushes the first reference of `cc.code` into the stack as a _Cell_ (and removes this reference from the current continuation).",
+        "long": "Pushes the reference `ref` onto the stack.\n_Details:_ Pushes the first reference of `cc.code` onto the stack as a _Cell_ (and removes this reference from the current continuation).",
         "operands": ["c"]
       },
       "layout": {
@@ -43473,8 +43730,8 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Calls the continuation stored in cell reference `c`.",
-        "operands": ["c"],
+        "long": "Calls the continuation stored in cell reference `ref`.",
+        "operands": ["ref"],
         "other_implementations": [
           {
             "exact": true,
@@ -43573,7 +43830,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Jumps to the continuation stored in cell reference `c`, converting the remainder of the current continuation into a _Slice_ before pushing it into the stack of `c`.",
+        "long": "Jumps to the continuation stored in cell reference `c`, converting the remainder of the current continuation into a _Slice_ before pushing it onto the stack of `c`.",
         "operands": ["c"],
         "other_implementations": [
           {
@@ -43733,7 +43990,7 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Transfers control to the continuation stored in cell reference `body` if `cond` is non-zero.",
+        "long": "Transfers control to the continuation stored in cell reference `body` if `cond` is non-zero. The remainder of the current continuation is discarded which means that after `body` completes, control will not return to instruction immediately following the `IFJMPREF`. Instead, it will return to the instruction immediately following the instruction that started current continuation. If such continuation is not present, the program will exit.",
         "operands": ["body"],
         "other_implementations": [
           {
@@ -44149,7 +44406,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Pushes a non-empty constant dictionary `D` (as a `Cell^?`) along with its key length `0 <= n <= 1023`, stored as a part of the instruction. The dictionary itself is created from the first of remaining references of the current continuation. In this way, the complete `DICTPUSHCONST` instruction can be obtained by first serializing `xF4A4_`, then the non-empty dictionary itself (one `1` bit and a cell reference), and then the unsigned 10-bit integer `n` (as if by a `STU 10` instruction). An empty dictionary can be pushed by a `NEWDICT` primitive instead.",
+        "long": "Pushes a non-empty constant dictionary `D` (as a `Cell^?`) along with its key length `0 <= n <= 1023`, stored as a part of the instruction. The dictionary itself is created from the first of remaining references of the current continuation. In this way, the complete `DICTPUSHCONST` instruction can be obtained by first serializing `xF4A4_`, then the non-empty dictionary itself (one `1` bit and a `Cell` reference), and then the unsigned 10-bit integer `n` (as if by a `STU 10` instruction). An empty dictionary can be pushed by a `NEWDICT` primitive instead.",
         "operands": ["d", "n"]
       },
       "layout": {
@@ -48314,7 +48571,7 @@
       "subCategory": "shift_logic",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Shift the top element of the stack left by a number of bits equal to the second element of the stack.",
         "operands": []
       },
       "layout": {
@@ -48368,7 +48625,7 @@
       "subCategory": "shift_logic",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Shift the top element of the stack left by `c` bits.",
         "operands": ["c"]
       },
       "layout": {
@@ -48742,7 +48999,7 @@
       "subCategory": "shift_logic",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Shift the top element of the stack right by a number of bits equal to the second element of the stack.",
         "operands": []
       },
       "layout": {
@@ -48796,7 +49053,7 @@
       "subCategory": "shift_logic",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Shift the top element of the stack right by `c` bits.",
         "operands": ["c"]
       },
       "layout": {
@@ -49030,8 +49287,8 @@
       "subCategory": "continuation_dict_jump",
       "description": {
         "short": "",
-        "long": "Calls the continuation in `c3`, pushing integer `0 <= nn <= 255` into its stack as an argument.",
-        "operands": ["n"],
+        "long": "Calls the continuation in `c3`, pushing integer `num` into its stack as an argument.",
+        "operands": ["num"],
         "other_implementations": [
           {
             "exact": true,
@@ -49063,7 +49320,7 @@
         "prefix_str": "F0"
       },
       "signature": {
-        "stack_string": "∅ -> n:Int",
+        "stack_string": "∅ -> num:Int",
         "inputs": {
           "stack": [],
           "registers": [
@@ -49077,7 +49334,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "n",
+              "name": "num",
               "value_types": ["Int"]
             }
           ]
@@ -49439,7 +49696,7 @@
       "category": "arithmetic",
       "subCategory": "int_const",
       "description": {
-        "short": "Pushes tiny signed integer `x` into the stack. Note that the instruction does not have the usual 4-bit range for the argument, but `-5 <= x <= 10`!",
+        "short": "Pushes tiny signed integer `x` onto the stack. Note that the instruction does not have the usual 4-bit range for the argument, but `-5 <= x <= 10`!",
         "exit_codes": [],
         "operands": ["i"]
       },
@@ -49482,7 +49739,7 @@
       "category": "arithmetic",
       "subCategory": "int_const",
       "description": {
-        "short": "Pushes small 8-bit signed integer `x` into the stack.",
+        "short": "Pushes small 8-bit signed integer `x` onto the stack.",
         "exit_codes": [],
         "operands": ["x"]
       },
@@ -49526,7 +49783,7 @@
       "category": "arithmetic",
       "subCategory": "int_const",
       "description": {
-        "short": "Pushes 16-bit signed integer `x` into the stack.",
+        "short": "Pushes 16-bit signed integer `x` onto the stack.",
         "exit_codes": [],
         "operands": ["x"]
       },
@@ -49609,12 +49866,21 @@
         }
       }
     },
-    "XCHG_01_LONG": {
+    "XCHG_0I_LONG": {
       "category": "stack",
       "subCategory": "",
       "description": {
-        "short": "",
-        "long": ""
+        "short": "Interchanges top element with element at index `i`.",
+        "long": "This instruction is equivalent to `XCHG_0I` except that it operates on a integer value with bigger range.",
+        "tags": ["stack"],
+        "related_instructions": ["XCHG_0I"],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Count of elements on the stack is less or equal to `i`"
+          }
+        ],
+        "operands": ["i"]
       },
       "layout": {
         "min": 1114112,
@@ -50274,7 +50540,13 @@
       "description": {
         "short": "",
         "long": "Pops a value `x` from the stack and stores it into control register `c(i)`, if supported in the current codepage. Notice that if a control register accepts only values of a specific type, a type-checking exception may occur.",
-        "operands": ["i"]
+        "operands": ["i"],
+        "exit_codes": [
+          {
+            "errno": "7",
+            "condition": "Invalid value type for control register."
+          }
+        ]
       },
       "layout": {
         "min": 15552512,
@@ -50413,7 +50685,7 @@
       "subCategory": "",
       "description": {
         "short": "Removes the top element from the stack and stores it in `s(i).`",
-        "long": "Removes the top element from the stack and stores it in `s(i)`. If `i` equal to 0, POP is effectively a `DROP`, i.e. the top element is removed from the stack. This instruction is equivalent to `POP` except that it operates on a integer value with bigger range.",
+        "long": "Removes the top element from the stack and stores it in `s(i)`. If `i` equal to 0, `POP_LONG` is effectively a `DROP`, i.e. the top element is removed from the stack. This instruction is equivalent to `POP` except that it operates on a integer value with bigger range.",
         "tags": ["stack"],
         "exit_codes": [
           {
@@ -50571,8 +50843,8 @@
       "category": "cell",
       "subCategory": "cell_const",
       "description": {
-        "short": "",
-        "long": "Pushes the slice `slice` into the stack.\n_Details:_ Pushes the (prefix) subslice of `cc.code` consisting of its first `8x+4` bits and no references (i.e., essentially a bitstring), where `0 <= x <= 15`.\nA completion tag is assumed, meaning that all trailing zeroes and the last binary one (if present) are removed from this bitstring.\nIf the original bitstring consists only of zeroes, an empty slice will be pushed.",
+        "short": "Pushes the `slice` onto the stack.",
+        "long": "Pushes the slice `slice` onto the stack.\n_Details:_ Pushes the (prefix) subslice of `cc.code` consisting of its first `8x+4` bits and no references (i.e., essentially a bitstring), where `0 <= x <= 15`.\nA completion tag is assumed, meaning that all trailing zeroes and the last binary one (if present) are removed from this bitstring.\nIf the original bitstring consists only of zeroes, an empty slice will be pushed.",
         "operands": ["s"]
       },
       "layout": {
@@ -50624,7 +50896,7 @@
       "subCategory": "cell_const",
       "description": {
         "short": "",
-        "long": "Pushes the slice `slice` into the stack.\n_Details:_ Pushes the (prefix) subslice of `cc.code` consisting of its first `1 <= r+1 <= 4` references and up to first `8xx+1` bits of data, with `0 <= xx <= 31`.\nA completion tag is also assumed.",
+        "long": "Pushes the `slice` onto the stack.\n_Details:_ Pushes the (prefix) subslice of `cc.code` consisting of its first `1 <= r+1 <= 4` references and up to first `8xx+1` bits of data, with `0 <= xx <= 31`.\nA completion tag is also assumed.",
         "operands": ["slice"]
       },
       "layout": {
@@ -50683,8 +50955,8 @@
       "category": "cell",
       "subCategory": "cell_const",
       "description": {
-        "short": "",
-        "long": "Pushes the slice `slice` into the stack.\n_Details:_ Pushes the subslice of `cc.code` consisting of `0 <= r <= 4` references and up to `8xx+6` bits of data, with `0 <= xx <= 127`.\nA completion tag is assumed.",
+        "short": "Pushes the `slice` onto the stack.",
+        "long": "Pushes the `slice` onto the stack.\n_Details:_ Pushes the subslice of `cc.code` consisting of `0 <= r <= 4` references and up to `8xx+6` bits of data, with `0 <= xx <= 127`.\nA completion tag is assumed.",
         "operands": ["slice"]
       },
       "layout": {

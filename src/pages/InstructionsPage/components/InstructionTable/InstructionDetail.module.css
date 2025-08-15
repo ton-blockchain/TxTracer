@@ -52,6 +52,14 @@
   color: var(--color-text-primary);
 }
 
+.descriptionText code {
+  font-size: var(--font-size-sm);
+  background-color: var(--color-background-secondary);
+  padding: var(--spacing-xss) var(--spacing-xs);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--border-radius-sm);
+}
+
 .descriptionText p:last-child {
   margin-bottom: 0;
   max-width: 800px;
@@ -183,6 +191,14 @@
   margin-bottom: var(--spacing-xs);
   display: flex;
   gap: var(--spacing-sm);
+}
+
+.exitCodeItem code {
+  font-size: var(--font-size-sm);
+  background-color: var(--color-background-secondary);
+  padding: var(--spacing-xss) var(--spacing-xs);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--border-radius-sm);
 }
 
 .exitCodeErrno {
@@ -364,5 +380,10 @@
 @media (max-width: 768px) {
   .implementationsGridContainer {
     grid-template-columns: 1fr;
+  }
+
+  .exitCodeItem,
+  .descriptionText {
+    font-size: var(--font-size-sm);
   }
 }
