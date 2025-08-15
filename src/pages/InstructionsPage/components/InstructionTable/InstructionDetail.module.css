@@ -381,4 +381,9 @@
   .implementationsGridContainer {
     grid-template-columns: 1fr;
   }
+
+  .exitCodeItem,
+  .descriptionText {
+    font-size: var(--font-size-sm);
+  }
 }
