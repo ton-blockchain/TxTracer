@@ -7813,7 +7813,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Transfers control_ to continuation `c`, converting the remainder of the current continuation (the old value of `cс`) into a _Slice_ before pushing it into the stack of `c`. Unlike `CALLCC` which pushes the old continuation as is, this instruction converts it to a _Slice_ first.",
+        "long": "_Transfers control_ to continuation `c`, converting the remainder of the current continuation (the old value of `cс`) into a _Slice_ before pushing it onto the stack of `c`. Unlike `CALLCC` which pushes the old continuation as is, this instruction converts it to a _Slice_ first.",
         "operands": []
       },
       "layout": {
@@ -8011,7 +8011,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Calls_ continuation `c` with parameters and pushes the old value of the current continuation, but unlike `CALLCCARGS` which takes the number of parameters and return values from the instruction itself, this instruction takes `-1 <= p,r <= 254` from the stack. The old value of the current continuation `cс` (along with the top `p` values from the original stack) is pushed into the stack of the newly-invoked continuation `c`, setting `cc.nargs` to `r`. This allows the called continuation to later return to the caller with the specified number of return values.",
+        "long": "_Calls_ continuation `c` with parameters and pushes the old value of the current continuation, but unlike `CALLCCARGS` which takes the number of parameters and return values from the instruction itself, this instruction takes `-1 <= p,r <= 254` from the stack. The old value of the current continuation `cс` (along with the top `p` values from the original stack) is pushed onto the stack of the newly-invoked continuation `c`, setting `cc.nargs` to `r`. This allows the called continuation to later return to the caller with the specified number of return values.",
         "operands": []
       },
       "layout": {
@@ -8067,7 +8067,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Returns to the continuation at `c0`, converting the remainder of the current continuation into a _Slice_ and pushing it into the stack of `c0`.",
+        "long": "Returns to the continuation at `c0`, converting the remainder of the current continuation into a _Slice_ and pushing it onto the stack of `c0`.",
         "operands": [],
         "other_implementations": [
           {
@@ -9374,7 +9374,7 @@
       "subCategory": "continuation_change",
       "description": {
         "short": "",
-        "long": "Pushes values into the stack of a continuation and optionally sets the number of missing arguments. Unlike `SETCONTARGS` which takes the number of values to push and the number of missing arguments from the instruction itself, this instruction takes `0 <= r <= 255` and `-1 <= n <= 255` from the stack. It pushes `r` values from the current stack into the stack of continuation `c`, and for `n` not equal to -1, sets `c.nargs` to the final size of the stack of `c` plus `n`, effectively creating a closure with `n` missing arguments.",
+        "long": "Pushes values onto the stack of a continuation and optionally sets the number of missing arguments. Unlike `SETCONTARGS` which takes the number of values to push and the number of missing arguments from the instruction itself, this instruction takes `0 <= r <= 255` and `-1 <= n <= 255` from the stack. It pushes `r` values from the current stack onto the stack of continuation `c`, and for `n` not equal to -1, sets `c.nargs` to the final size of the stack of `c` plus `n`, effectively creating a closure with `n` missing arguments.",
         "operands": []
       },
       "layout": {
@@ -10212,7 +10212,7 @@
       "subCategory": "continuation_change",
       "description": {
         "short": "",
-        "long": "Performs `cc:=compose1(compose0(c, compose0(-1 PUSHINT, cc)), compose0(0 PUSHINT, cc))`. If `c` represents a boolean circuit, the net effect is to evaluate it and push either `-1` or `0` into the stack before continuing.",
+        "long": "Performs `cc:=compose1(compose0(c, compose0(-1 PUSHINT, cc)), compose0(0 PUSHINT, cc))`. If `c` represents a boolean circuit, the net effect is to evaluate it and push either `-1` or `0` onto the stack before continuing.",
         "operands": []
       },
       "layout": {
@@ -39147,7 +39147,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Calls_ continuation `c` with `p` parameters, but unlike `CALLXARGS` which only passes parameters, this instruction also pushes the old value of the current continuation `cс` (along with the top `0 <= p <= 15` values from the original stack) into the stack of newly-invoked continuation `c`, setting `cc.nargs` to `-1 <= r <= 14`. This allows the called continuation to later return to the caller with the specified number of return values.",
+        "long": "_Calls_ continuation `c` with `p` parameters, but unlike `CALLXARGS` which only passes parameters, this instruction also pushes the old value of the current continuation `cс` (along with the top `0 <= p <= 15` values from the original stack) onto the stack of newly-invoked continuation `c`, setting `cc.nargs` to `-1 <= r <= 14`. This allows the called continuation to later return to the caller with the specified number of return values.",
         "operands": ["p", "r"]
       },
       "layout": {
@@ -43463,7 +43463,7 @@
       "subCategory": "cell_const",
       "description": {
         "short": "",
-        "long": "Pushes the reference `ref` into the stack.\n_Details:_ Pushes the first reference of `cc.code` into the stack as a _Cell_ (and removes this reference from the current continuation).",
+        "long": "Pushes the reference `ref` onto the stack.\n_Details:_ Pushes the first reference of `cc.code` onto the stack as a _Cell_ (and removes this reference from the current continuation).",
         "operands": ["c"]
       },
       "layout": {
@@ -43692,7 +43692,7 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Jumps to the continuation stored in cell reference `c`, converting the remainder of the current continuation into a _Slice_ before pushing it into the stack of `c`.",
+        "long": "Jumps to the continuation stored in cell reference `c`, converting the remainder of the current continuation into a _Slice_ before pushing it onto the stack of `c`.",
         "operands": ["c"],
         "other_implementations": [
           {
@@ -49558,7 +49558,7 @@
       "category": "arithmetic",
       "subCategory": "int_const",
       "description": {
-        "short": "Pushes tiny signed integer `x` into the stack. Note that the instruction does not have the usual 4-bit range for the argument, but `-5 <= x <= 10`!",
+        "short": "Pushes tiny signed integer `x` onto the stack. Note that the instruction does not have the usual 4-bit range for the argument, but `-5 <= x <= 10`!",
         "exit_codes": [],
         "operands": ["i"]
       },
@@ -49601,7 +49601,7 @@
       "category": "arithmetic",
       "subCategory": "int_const",
       "description": {
-        "short": "Pushes small 8-bit signed integer `x` into the stack.",
+        "short": "Pushes small 8-bit signed integer `x` onto the stack.",
         "exit_codes": [],
         "operands": ["x"]
       },
@@ -49645,7 +49645,7 @@
       "category": "arithmetic",
       "subCategory": "int_const",
       "description": {
-        "short": "Pushes 16-bit signed integer `x` into the stack.",
+        "short": "Pushes 16-bit signed integer `x` onto the stack.",
         "exit_codes": [],
         "operands": ["x"]
       },
@@ -50705,8 +50705,8 @@
       "category": "cell",
       "subCategory": "cell_const",
       "description": {
-        "short": "Pushes the `slice` into the stack.",
-        "long": "Pushes the slice `slice` into the stack.\n_Details:_ Pushes the (prefix) subslice of `cc.code` consisting of its first `8x+4` bits and no references (i.e., essentially a bitstring), where `0 <= x <= 15`.\nA completion tag is assumed, meaning that all trailing zeroes and the last binary one (if present) are removed from this bitstring.\nIf the original bitstring consists only of zeroes, an empty slice will be pushed.",
+        "short": "Pushes the `slice` onto the stack.",
+        "long": "Pushes the slice `slice` onto the stack.\n_Details:_ Pushes the (prefix) subslice of `cc.code` consisting of its first `8x+4` bits and no references (i.e., essentially a bitstring), where `0 <= x <= 15`.\nA completion tag is assumed, meaning that all trailing zeroes and the last binary one (if present) are removed from this bitstring.\nIf the original bitstring consists only of zeroes, an empty slice will be pushed.",
         "operands": ["s"]
       },
       "layout": {
@@ -50758,7 +50758,7 @@
       "subCategory": "cell_const",
       "description": {
         "short": "",
-        "long": "Pushes the `slice` into the stack.\n_Details:_ Pushes the (prefix) subslice of `cc.code` consisting of its first `1 <= r+1 <= 4` references and up to first `8xx+1` bits of data, with `0 <= xx <= 31`.\nA completion tag is also assumed.",
+        "long": "Pushes the `slice` onto the stack.\n_Details:_ Pushes the (prefix) subslice of `cc.code` consisting of its first `1 <= r+1 <= 4` references and up to first `8xx+1` bits of data, with `0 <= xx <= 31`.\nA completion tag is also assumed.",
         "operands": ["slice"]
       },
       "layout": {
@@ -50817,8 +50817,8 @@
       "category": "cell",
       "subCategory": "cell_const",
       "description": {
-        "short": "Pushes the `slice` into the stack.",
-        "long": "Pushes the `slice` into the stack.\n_Details:_ Pushes the subslice of `cc.code` consisting of `0 <= r <= 4` references and up to `8xx+6` bits of data, with `0 <= xx <= 127`.\nA completion tag is assumed.",
+        "short": "Pushes the `slice` onto the stack.",
+        "long": "Pushes the `slice` onto the stack.\n_Details:_ Pushes the subslice of `cc.code` consisting of `0 <= r <= 4` references and up to `8xx+6` bits of data, with `0 <= xx <= 127`.\nA completion tag is assumed.",
         "operands": ["slice"]
       },
       "layout": {
