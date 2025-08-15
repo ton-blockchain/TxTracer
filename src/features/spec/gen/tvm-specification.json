@@ -3110,8 +3110,14 @@
       "subCategory": "cell_cmp",
       "description": {
         "short": "",
-        "long": "Checks whether the data parts of `s` and `s'` coincide, equivalent to `SDLEXCMP` `ISZERO`.",
-        "operands": []
+        "long": "Checks if the data parts of `s` and `s'` are bitwise equal.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["SDLEXCMP", "ISZERO"]
+          }
+        ]
       },
       "layout": {
         "min": 13042944,
@@ -5823,9 +5829,15 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns the first `0 <= length <= 1023` bits of `s`. It is equivalent to `PLDSLICEX`.",
+        "long": "Returns the first `0 <= length <= 1023` bits of `s`.",
         "tags": ["slice parsing"],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["PLDSLICEX"]
+          }
+        ]
       },
       "layout": {
         "min": 14098432,
@@ -5873,9 +5885,15 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns all but the first `0 <= length <= 1023` bits of `s`. It is equivalent to `LDSLICEX` `NIP`.",
+        "long": "Returns all but the first `0 <= length <= 1023` bits of `s`.",
         "tags": ["slice parsing"],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["LDSLICEX", "NIP"]
+          }
+        ]
       },
       "layout": {
         "min": 14098688,
@@ -5892,7 +5910,7 @@
         "prefix_str": "D721"
       },
       "signature": {
-        "stack_string": "s:Slice length:Int -> s2:Slice",
+        "stack_string": "s:Slice length:Int -> s':Slice",
         "inputs": {
           "stack": [
             {
@@ -5911,7 +5929,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -6258,7 +6276,7 @@
         "prefix_str": "D733"
       },
       "signature": {
-        "stack_string": "s:Slice length:Int refs:Int -> s;:Slice",
+        "stack_string": "s:Slice length:Int refs:Int -> s':Slice",
         "inputs": {
           "stack": [
             {
@@ -6282,7 +6300,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s;",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -10436,8 +10454,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `LDDICT` `NIP`.",
-        "operands": []
+        "long": "Loads a dictionary and discards its value.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["LDDICT", "NIP"]
+          }
+        ]
       },
       "layout": {
         "min": 15991040,
@@ -10480,7 +10504,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Loads (parses) a (_Slice_-represented) dictionary `s'` from _Slice_ `s`, and returns the remainder of `s` as `s'`.\nThis is a 'split function' for all `HashmapE(n,X)` dictionary types.",
+        "long": "Loads a (_Slice_-represented) dictionary `s'` from _Slice_ `s`, and returns the remainder of `s` as `s'`.\nThis is a 'split function' for all `HashmapE(n,X)` dictionary types.",
         "operands": []
       },
       "layout": {
@@ -10529,8 +10553,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Preloads a (_Slice_-represented) dictionary `s'` from _Slice_ `s`.\nApproximately equivalent to `LDDICTS` `DROP`.",
-        "operands": []
+        "long": "Preloads a (_Slice_-represented) dictionary `s'` from _Slice_ `s`.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["LDDICTS", "DROP"]
+          }
+        ]
       },
       "layout": {
         "min": 15991552,
@@ -10573,7 +10603,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Loads (parses) a dictionary `D` from _Slice_ `s`, and returns the remainder of `s` as `s'`. May be applied to dictionaries or to values of arbitrary `(^Y)?` types.",
+        "long": "Loads a dictionary `D` from _Slice_ `s`, and returns the remainder of `s` as `s'`. May be applied to dictionaries or to values of arbitrary `(^Y)?` types.",
         "operands": []
       },
       "layout": {
@@ -10622,8 +10652,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Preloads a dictionary `D` from _Slice_ `s`.\nApproximately equivalent to `LDDICT` `DROP`.",
-        "operands": []
+        "long": "Preloads a dictionary `D` from _Slice_ `s`.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["LDDICT", "DROP"]
+          }
+        ]
       },
       "layout": {
         "min": 15992064,
@@ -11718,7 +11754,17 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `1 2 BLKSWAP` or to `s2 s1 XCHG2`.",
+        "long": "Rearranges the top three elements. Moves the third element to the top of the stack: `1 2 3 -> 2 3 1`",
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["1 2 BLKSWAP"]
+          },
+          {
+            "exact": true,
+            "instructions": ["s2 s1 XCHG2"]
+          }
+        ],
         "examples": [
           {
             "instructions": [
@@ -11775,8 +11821,41 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `2 1 BLKSWAP` or to `s2 s2 XCHG2`.",
-        "operands": []
+        "long": "Rearranges the top three elements. Places the top element below the first two following elements.: `1 2 3 -> 3 1 2`",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["2 1 BLKSWAP"]
+          },
+          {
+            "exact": true,
+            "instructions": ["s2 s2 XCHG2"]
+          }
+        ],
+        "examples": [
+          {
+            "instructions": [
+              {
+                "instruction": "PUSHINT_4 1"
+              },
+              {
+                "instruction": "PUSHINT_4 2"
+              },
+              {
+                "instruction": "PUSHINT_4 3"
+              },
+              {
+                "instruction": "ROTREV",
+                "comment": "Rotates in reverse the top three elements: (1,2,3) -> (3,1,2)"
+              }
+            ],
+            "stack": {
+              "input": ["1", "2", "3"],
+              "output": ["3", "1", "2"]
+            }
+          }
+        ]
       },
       "layout": {
         "min": 5832704,
@@ -12214,8 +12293,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Pops integer `i` from the stack, then leaves only the bottom `i` elements. Approximately equivalent to `DEPTH` `SWAP` `SUB` `DROPX`.",
-        "operands": []
+        "long": "Pops integer `i` from the stack, then leaves only the bottom `i` elements.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["DEPTH", "SWAP", "SUB", "DROPX"]
+          }
+        ]
       },
       "layout": {
         "min": 7012352,
@@ -13941,7 +14026,7 @@
       "subCategory": "crypto_common",
       "description": {
         "short": "",
-        "long": "Computes the representation hash of a _Cell_ `c` and returns it as a 256-bit unsigned integer `x`. Useful for signing and checking signatures of arbitrary entities represented by a tree of cells.",
+        "long": "Computes the representation hash of a _Cell_ `c` and returns it as a 256-bit unsigned integer `hash`. Useful for signing and checking signatures of arbitrary entities represented by a tree of cells.",
         "operands": []
       },
       "layout": {
@@ -13959,7 +14044,7 @@
         "prefix_str": "F900"
       },
       "signature": {
-        "stack_string": "c:Cell -> x:Int",
+        "stack_string": "c:Cell -> hash:Int",
         "inputs": {
           "stack": [
             {
@@ -13973,7 +14058,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "x",
+              "name": "hash",
               "value_types": ["Int"]
             }
           ]
@@ -13985,8 +14070,14 @@
       "subCategory": "crypto_common",
       "description": {
         "short": "",
-        "long": "Computes the hash of a _Slice_ `s` and returns it as a 256-bit unsigned integer `x`. The result is the same as if an ordinary cell containing only data and references from `s` had been created and its hash computed by `HASHCU`.",
-        "operands": []
+        "long": "Computes the hash of a _Slice_ `s` and returns it as a 256-bit unsigned integer `hash`. The result is the same as if an ordinary cell containing only data and references from `s` had been created and its hash computed by `HASHCU`.",
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["ENDC", "HASHCU"]
+          }
+        ]
       },
       "layout": {
         "min": 16318720,
@@ -14009,7 +14100,7 @@
         }
       ],
       "signature": {
-        "stack_string": "s:Slice -> x:Int",
+        "stack_string": "s:Slice -> hash:Int",
         "inputs": {
           "stack": [
             {
@@ -14023,7 +14114,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "x",
+              "name": "hash",
               "value_types": ["Int"]
             }
           ]
@@ -14035,7 +14126,7 @@
       "subCategory": "crypto_common",
       "description": {
         "short": "",
-        "long": "Computes `Sha` of the data bits of _Slice_ `s`. If the bit length of `s` is not divisible by eight, throws a cell underflow exception. The hash value is returned as a 256-bit unsigned integer `x`.",
+        "long": "Computes `Sha` of the data bits of _Slice_ `s`. If the bit length of `s` is not divisible by eight, throws a cell underflow exception. The hash value is returned as a 256-bit unsigned integer `hash`.",
         "operands": []
       },
       "layout": {
@@ -14053,7 +14144,7 @@
         "prefix_str": "F902"
       },
       "signature": {
-        "stack_string": "s:Slice -> x:Int",
+        "stack_string": "s:Slice -> hash:Int",
         "inputs": {
           "stack": [
             {
@@ -14067,7 +14158,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "x",
+              "name": "hash",
               "value_types": ["Int"]
             }
           ]
@@ -16543,7 +16634,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads (deserializes) a `Gram` or `VarUInteger 16` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, followed by an `8l`-bit unsigned big-endian representation of `x`.",
+        "long": "Loads a `Gram` or `VarUInteger 16` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, followed by an `8l`-bit unsigned big-endian representation of `x`.",
         "tags": ["variable-size integer", "slice parsing"],
         "operands": [],
         "other_implementations": [
@@ -16599,7 +16690,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads (deserializes) a `VarInteger 16` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, followed by an `8l`-bit signed big-endian representation of `x`.",
+        "long": "Loads a `VarInteger 16` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, followed by an `8l`-bit signed big-endian representation of `x`.",
         "tags": ["variable-size integer", "slice parsing"],
         "operands": [],
         "other_implementations": [
@@ -16755,7 +16846,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads (deserializes) a `VarUInteger 32` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 5-bit unsigned big-endian integer `l`, followed by an `8l`-bit unsigned big-endian representation of `x`.",
+        "long": "Loads a `VarUInteger 32` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 5-bit unsigned big-endian integer `l`, followed by an `8l`-bit unsigned big-endian representation of `x`.",
         "tags": ["variable-size integer", "slice parsing"],
         "operands": [],
         "other_implementations": [
@@ -16811,7 +16902,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads (deserializes) a `VarInteger 32` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 5-bit unsigned big-endian integer `l`, followed by an `8l`-bit signed big-endian representation of `x`.",
+        "long": "Loads a `VarInteger 32` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 5-bit unsigned big-endian integer `l`, followed by an `8l`-bit signed big-endian representation of `x`.",
         "tags": ["variable-size integer", "slice parsing"],
         "operands": [],
         "other_implementations": [
@@ -16967,7 +17058,7 @@
       "subCategory": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads from _Slice_ `s` the only prefix that is a valid `MsgAddress`, and returns both this prefix `addr` and the remainder `s'` of `s` as slices.",
+        "long": "Loads a valid `MsgAddress` from _Slice_ `s` and pushes the loaded `addr` value onto the stack along with _Slice_ `s'` with the remaining data.",
         "tags": ["address", "slice parsing"],
         "operands": []
       },
@@ -17437,7 +17528,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Sends a raw message contained in _Cell `c`_, which should contain a correctly serialized object `Message X`, with the only exception that the source address is allowed to have dummy value `addr_none` (to be automatically replaced with the current smart-contract address), and `ihr_fee`, `fwd_fee`, `created_lt` and `created_at` fields can have arbitrary values (to be rewritten with correct values during the action phase of the current transaction). Integer parameter `x` contains the flags. Currently `x == 0` is used for ordinary messages; `x=128` is used for messages that are to carry all the remaining balance of the current smart contract (instead of the value originally indicated in the message); `x=64` is used for messages that carry all the remaining value of the inbound message in addition to the value initially indicated in the new message (if bit 0 is not set, the gas fees are deducted from this amount); `x'=x+1` means that the sender wants to pay transfer fees separately; `x'=x+2` means that any errors arising while processing this message during the action phase should be ignored. Finally, `x'=x+32` means that the current account must be destroyed if its resulting balance is zero. This flag is usually employed together with `+128`.",
+        "long": "Sends a raw message contained in _Cell `c`_, which should contain a correctly serialized object `Message X`, with the only exception that the source address is allowed to have dummy value `addr_none` (to be automatically replaced with the current smart-contract address), and `ihr_fee`, `fwd_fee`, `created_lt` and `created_at` fields can have arbitrary values (to be rewritten with correct values during the action phase of the current transaction).\n\nInteger parameter `x` contains the flags.\n\nCurrently `x == 0` is used for ordinary messages.\n\n`x=128` is used for messages that are to carry all the remaining balance of the current smart contract (instead of the value originally indicated in the message).\n\n`x=64` is used for messages that carry all the remaining value of the inbound message in addition to the value initially indicated in the new message (if bit 0 is not set, the gas fees are deducted from this amount).\n\n`x'=x+1` means that the sender wants to pay transfer fees separately.\n\n`x'=x+2` means that any errors arising while processing this message during the action phase should be ignored.\n\nFinally, `x'=x+32` means that the current account must be destroyed if its resulting balance is zero. This flag is usually employed together with `+128`.",
         "operands": []
       },
       "layout": {
@@ -28940,7 +29031,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Similar to `DICTIGET`, but with _unsigned_ (big-endian) `n`-bit _Integer_ `i` used as a key.",
+        "long": "Similar to `DICTGET`, but with a unsigned (big-endian) `n`-bit _Integer_ `i` as a key. If `i` does not fit into `n` bits, returns `0`. If `i` is a `NaN`, throws an integer overflow exception.",
         "operands": []
       },
       "layout": {
@@ -38673,7 +38764,7 @@
       "subCategory": "int_const",
       "description": {
         "short": "",
-        "long": "Pushes `2 ^ (x + 1) - 1`.",
+        "long": "Pushes `(2 ^ x) - 1`.",
         "operands": ["x"]
       },
       "layout": {
@@ -38721,7 +38812,7 @@
       "subCategory": "int_const",
       "description": {
         "short": "",
-        "long": "Pushes `-2 ^ (x + 1)`.",
+        "long": "Pushes `-2 ^ x`.",
         "operands": ["x"]
       },
       "layout": {
@@ -39781,7 +39872,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `DROP` performed `i` times.",
+        "long": "Removes the top `i` elements from the stack. Equivalent to `DROP` performed `i` times.",
         "operands": ["i"]
       },
       "layout": {
@@ -41142,8 +41233,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Permutes two blocks `s[j+i+1] ... s[j+1]` and `s[j] ... s0`.\nEquivalent to `[i+1] [j+1] REVERSE` `[j+1] 0 REVERSE` `[i+j+2] 0 REVERSE`.",
-        "operands": ["i", "j"]
+        "long": "Permutes two blocks `s[j+i+1] ... s[j+1]` and `s[j] ... s0`.",
+        "operands": ["i", "j"],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["[i+1] [j+1] REVERSE", "[j+1] 0 REVERSE", "[i+j+2] 0 REVERSE"]
+          }
+        ]
       },
       "layout": {
         "min": 5570560,
@@ -43018,7 +43115,7 @@
       "category": "arithmetic",
       "subCategory": "int_const",
       "description": {
-        "short": "Quietly pushes `2 ^ (x + 1)`.",
+        "short": "Quietly pushes `2 ^ x`.",
         "long": "Note that `2^256` is a `NaN`.",
         "operands": ["x"]
       },
@@ -43067,7 +43164,7 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `PUSH s(j)` performed `i` times.\n`1 <= i <= 15`, `0 <= j <= 15`.",
+        "long": "Equivalent to `PUSH s(j)` performed `i` times.",
         "operands": ["i", "j"]
       },
       "layout": {
@@ -43118,8 +43215,14 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Drops `i` stack elements under the top `j` elements.\n`1 <= i <= 15`, `0 <= j <= 15`\nEquivalent to `[i+j] 0 REVERSE` `[i] BLKDROP` `[j] 0 REVERSE`.",
-        "operands": ["i", "j"]
+        "long": "Drops `i` stack elements under the top `j` elements.",
+        "operands": ["i", "j"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["[i+j] 0 REVERSE", "[i] BLKDROP", "[j] 0 REVERSE"]
+          }
+        ]
       },
       "layout": {
         "min": 7081984,
@@ -43169,12 +43272,12 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Returns the `k`-th global variable.",
-        "operands": ["k"],
+        "long": "Returns the `i`-th global variable.",
+        "operands": ["i"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["PUSHCTR c7", "INDEXQ [k]"]
+            "instructions": ["PUSHCTR c7", "INDEXQ [i]"]
           }
         ]
       },
@@ -43227,12 +43330,12 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Assigns `x` from the stack to the `k`-th global variable.",
-        "operands": ["k"],
+        "long": "Assigns `x` from the stack to the `i`-th global variable.",
+        "operands": ["i"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["PUSHCTR c7", "SWAP", "k SETINDEXQ", "POPCTR c7"]
+            "instructions": ["PUSHCTR c7", "SWAP", "SETINDEXQ [i]", "POPCTR c7"]
           }
         ]
       },
@@ -43291,8 +43394,24 @@
       "subCategory": "",
       "description": {
         "short": "",
-        "long": "Returns the `i`-th parameter from the _Tuple_ provided at `c7`. Equivalent to `c7 PUSHCTR` `FIRST` `[i] INDEX`.\nIf one of these internal operations fails, throws an appropriate type checking or range checking exception.",
-        "operands": ["i"]
+        "long": "Returns the `i`-th parameter from the _Tuple_ provided at `c7`.",
+        "operands": ["i"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["c7 PUSHCTR", "FIRST", "[i] INDEX"]
+          }
+        ],
+        "exit_codes": [
+          {
+            "errno": "7",
+            "condition": "Value in `c7` is not a Tuple."
+          },
+          {
+            "errno": "5",
+            "condition": "Index `i` is greater than or equal to tuple from `c7` length."
+          }
+        ]
       },
       "layout": {
         "min": 16261120,
@@ -43473,8 +43592,8 @@
       "subCategory": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Calls the continuation stored in cell reference `c`.",
-        "operands": ["c"],
+        "long": "Calls the continuation stored in cell reference `ref`.",
+        "operands": ["ref"],
         "other_implementations": [
           {
             "exact": true,
@@ -43733,7 +43852,7 @@
       "subCategory": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Transfers control to the continuation stored in cell reference `body` if `cond` is non-zero.",
+        "long": "Transfers control to the continuation stored in cell reference `body` if `cond` is non-zero. The remainder of the current continuation is discarded which means that after `body` completes, control will not return to instruction immediately following the `IFJMPREF`. Instead, it will return to the instruction immediately following the instruction that started current continuation. If such continuation is not present, the program will exit.",
         "operands": ["body"],
         "other_implementations": [
           {
@@ -49030,8 +49149,8 @@
       "subCategory": "continuation_dict_jump",
       "description": {
         "short": "",
-        "long": "Calls the continuation in `c3`, pushing integer `0 <= nn <= 255` into its stack as an argument.",
-        "operands": ["n"],
+        "long": "Calls the continuation in `c3`, pushing integer `num` into its stack as an argument.",
+        "operands": ["num"],
         "other_implementations": [
           {
             "exact": true,
@@ -49063,7 +49182,7 @@
         "prefix_str": "F0"
       },
       "signature": {
-        "stack_string": "∅ -> n:Int",
+        "stack_string": "∅ -> num:Int",
         "inputs": {
           "stack": [],
           "registers": [
@@ -49077,7 +49196,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "n",
+              "name": "num",
               "value_types": ["Int"]
             }
           ]
@@ -50274,7 +50393,13 @@
       "description": {
         "short": "",
         "long": "Pops a value `x` from the stack and stores it into control register `c(i)`, if supported in the current codepage. Notice that if a control register accepts only values of a specific type, a type-checking exception may occur.",
-        "operands": ["i"]
+        "operands": ["i"],
+        "exit_codes": [
+          {
+            "errno": "7",
+            "condition": "Invalid value type for control register."
+          }
+        ]
       },
       "layout": {
         "min": 15552512,
@@ -50413,7 +50538,7 @@
       "subCategory": "",
       "description": {
         "short": "Removes the top element from the stack and stores it in `s(i).`",
-        "long": "Removes the top element from the stack and stores it in `s(i)`. If `i` equal to 0, POP is effectively a `DROP`, i.e. the top element is removed from the stack. This instruction is equivalent to `POP` except that it operates on a integer value with bigger range.",
+        "long": "Removes the top element from the stack and stores it in `s(i)`. If `i` equal to 0, `POP_LONG` is effectively a `DROP`, i.e. the top element is removed from the stack. This instruction is equivalent to `POP` except that it operates on a integer value with bigger range.",
         "tags": ["stack"],
         "exit_codes": [
           {
@@ -50571,7 +50696,7 @@
       "category": "cell",
       "subCategory": "cell_const",
       "description": {
-        "short": "",
+        "short": "Pushes the `slice` into the stack.",
         "long": "Pushes the slice `slice` into the stack.\n_Details:_ Pushes the (prefix) subslice of `cc.code` consisting of its first `8x+4` bits and no references (i.e., essentially a bitstring), where `0 <= x <= 15`.\nA completion tag is assumed, meaning that all trailing zeroes and the last binary one (if present) are removed from this bitstring.\nIf the original bitstring consists only of zeroes, an empty slice will be pushed.",
         "operands": ["s"]
       },
@@ -50624,7 +50749,7 @@
       "subCategory": "cell_const",
       "description": {
         "short": "",
-        "long": "Pushes the slice `slice` into the stack.\n_Details:_ Pushes the (prefix) subslice of `cc.code` consisting of its first `1 <= r+1 <= 4` references and up to first `8xx+1` bits of data, with `0 <= xx <= 31`.\nA completion tag is also assumed.",
+        "long": "Pushes the `slice` into the stack.\n_Details:_ Pushes the (prefix) subslice of `cc.code` consisting of its first `1 <= r+1 <= 4` references and up to first `8xx+1` bits of data, with `0 <= xx <= 31`.\nA completion tag is also assumed.",
         "operands": ["slice"]
       },
       "layout": {
@@ -50683,8 +50808,8 @@
       "category": "cell",
       "subCategory": "cell_const",
       "description": {
-        "short": "",
-        "long": "Pushes the slice `slice` into the stack.\n_Details:_ Pushes the subslice of `cc.code` consisting of `0 <= r <= 4` references and up to `8xx+6` bits of data, with `0 <= xx <= 127`.\nA completion tag is assumed.",
+        "short": "Pushes the `slice` into the stack.",
+        "long": "Pushes the `slice` into the stack.\n_Details:_ Pushes the subslice of `cc.code` consisting of `0 <= r <= 4` references and up to `8xx+6` bits of data, with `0 <= xx <= 127`.\nA completion tag is assumed.",
         "operands": ["slice"]
       },
       "layout": {
