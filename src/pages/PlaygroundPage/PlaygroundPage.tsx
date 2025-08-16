@@ -1,22 +1,33 @@
-import React, {Suspense, useCallback, useEffect, useMemo, useState} from "react"
+import React, {Suspense, useCallback, useEffect, useMemo, useRef, useState} from "react"
 import type {StackElement} from "ton-assembly/dist/trace"
+import type * as monaco from "monaco-editor"
+import {logs} from "ton-assembly"
 
 import InlineLoader from "@shared/ui/InlineLoader"
 import TraceSidePanel from "@shared/ui/TraceSidePanel"
 
 import {type AssemblyExecutionResult, executeAssemblyCode} from "@features/tasm/lib/executor.ts"
 import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
-import {useLineExecutionData, useTraceStepper} from "@features/txTrace/hooks"
+import {useLineExecutionData, useTraceStepper, useFuncLineStepper} from "@features/txTrace/hooks"
 import {normalizeGas} from "@features/txTrace/lib/traceTx"
 import type {InstructionDetail} from "@features/txTrace/ui/StepInstructionBlock"
+import {useFuncCompilation, useSourceMapHighlight} from "@app/pages/GodboltPage/hooks"
+import {CompilerErrors} from "@app/pages/GodboltPage/components"
 
 import PageHeader from "@shared/ui/PageHeader"
 import Tutorial, {useTutorial} from "@shared/ui/Tutorial"
 
 import ShareButton from "@shared/ui/ShareButton/ShareButton.tsx"
-import {decodeCodeFromUrl} from "@app/pages/GodboltPage/urlCodeSharing.ts"
+import SettingsDropdown from "@shared/ui/SettingsDropdown/SettingsDropdown.tsx"
+import {usePlaygroundSettings} from "@app/pages/PlaygroundPage/hooks/usePlaygroundSettings.ts"
+import {
+  decodeCodeFromUrl,
+  decodeLanguageFromUrl,
+  decodeStackFromUrl,
+} from "@app/pages/GodboltPage/urlCodeSharing.ts"
 
 import {ExecuteButton} from "@app/pages/PlaygroundPage/components/ExecuteButton.tsx"
+import {CustomSegmentedSelector} from "@app/pages/GodboltPage/components"
 
 import {TUTORIAL_STEPS} from "@app/pages/PlaygroundPage/Tutorial.ts"
 
@@ -35,21 +46,77 @@ SUB
 NOP
 `
 
-const LOCAL_STORAGE_KEY = "txtracer-playground-assembly-code"
+const DEFAULT_FUNC_CODE = `#include "stdlib.fc";
+
+;; Add two values to stack first! For example: 10 and 20
+() recv_internal(int a, int b) impure {
+    if (a > b) {
+        throw(10);
+    }
+    
+    ;; create some data
+    var data = begin_cell()
+        .store_int(1, 32)
+        .end_cell();
+
+    if (a == b) {
+        var c = a + b;
+        throw(20 + c);
+    }
+
+    throw(data.cell_hash() % 10);
+}
+`
+
+type LanguageMode = "func" | "tasm"
+type SteppingMode = "instructions" | "lines"
+
+const LOCAL_STORAGE_KEY_ASM = "txtracer-playground-assembly-code"
+const LOCAL_STORAGE_KEY_FUNC = "txtracer-playground-func-code"
+const LOCAL_STORAGE_KEY_MODE = "txtracer-playground-language-mode"
+const LOCAL_STORAGE_KEY_STEPPING = "txtracer-playground-stepping-mode"
 const INITIAL_STACK_STORAGE_KEY = "txtracer-playground-initial-stack"
 
 function PlaygroundPage() {
-  const [assemblyCode, setAssemblyCode] = useState(() => {
-    const sharedCode = decodeCodeFromUrl()
-    if (sharedCode) {
-      return sharedCode
-    }
-    return localStorage.getItem(LOCAL_STORAGE_KEY) ?? DEFAULT_ASSEMBLY_CODE
+  const [languageMode, setLanguageMode] = useState<LanguageMode>(() => {
+    const fromUrl = decodeLanguageFromUrl()
+    if (fromUrl === "func" || fromUrl === "tasm") return fromUrl
+    return (localStorage.getItem(LOCAL_STORAGE_KEY_MODE) as LanguageMode) ?? "tasm"
   })
+
+  const [steppingMode, setSteppingMode] = useState<SteppingMode>(() => {
+    return (localStorage.getItem(LOCAL_STORAGE_KEY_STEPPING) as SteppingMode) ?? "instructions"
+  })
+
+  const [assemblyCode, setAssemblyCode] = useState(() => {
+    const fromUrl = decodeLanguageFromUrl()
+    if (fromUrl === "tasm") {
+      const sharedCode = decodeCodeFromUrl()
+      if (sharedCode) return sharedCode
+    }
+    return localStorage.getItem(LOCAL_STORAGE_KEY_ASM) ?? DEFAULT_ASSEMBLY_CODE
+  })
+
+  const [funcCode, setFuncCode] = useState(() => {
+    const fromUrl = decodeLanguageFromUrl()
+    if (fromUrl === "func") {
+      const sharedCode = decodeCodeFromUrl()
+      if (sharedCode) return sharedCode
+    }
+    return localStorage.getItem(LOCAL_STORAGE_KEY_FUNC) ?? DEFAULT_FUNC_CODE
+  })
+
   const [result, setResult] = useState<AssemblyExecutionResult | undefined>(undefined)
   const [loading, setLoading] = useState(false)
   const [initialStack, setInitialStack] = useState<StackElement[]>(() => {
     try {
+      const fromUrl = decodeStackFromUrl()
+      if (fromUrl) {
+        const parsedStack = logs.parseStack(fromUrl)
+        if (parsedStack) {
+          return logs.processStack(parsedStack)
+        }
+      }
       const saved = localStorage.getItem(INITIAL_STACK_STORAGE_KEY)
       if (!saved) return []
 
@@ -74,8 +141,40 @@ function PlaygroundPage() {
   const {setError, clearError} = useGlobalError()
 
   const tutorial = useTutorial({tutorialKey: "playground-page", autoStart: true})
+  const settings = usePlaygroundSettings()
 
-  const trace = result?.traceInfo
+  const funcEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
+  const asmViewerRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
+
+  const {
+    result: funcResult,
+    compiling: funcCompiling,
+    errorMarkers: funcMarkers,
+    handleCompile: handleCompileFuncCode,
+    clearError: clearCompilationError,
+  } = useFuncCompilation()
+
+  const sourceMap = funcResult?.sourceMap
+
+  const {
+    funcHighlightGroups,
+    asmHighlightGroups,
+    asmHoveredLines,
+    funcPreciseHighlightRanges,
+    handleAsmLineHover,
+    filteredAsmCode,
+    mapOriginalAsmToFiltered,
+  } = useSourceMapHighlight(
+    sourceMap,
+    funcResult?.mapping,
+    funcEditorRef,
+    asmViewerRef,
+    funcResult?.assembly,
+  )
+
+  const traceInfo = result?.traceInfo
+  const baseStepperReturn = useTraceStepper(traceInfo)
+  const isLineStepping = languageMode === "func" && steppingMode === "lines"
 
   const {
     selectedStep,
@@ -91,57 +190,220 @@ function PlaygroundPage() {
     findStepByLine,
     highlightLine,
     transitionType,
-  } = useTraceStepper(trace)
+    handlePrevFunc,
+    handleNextFunc,
+    currentFuncStepIndex,
+    funcSteps,
+  } = useFuncLineStepper(baseStepperReturn, {
+    sourceMap,
+    compilationResult: funcResult,
+    traceInfo,
+    isEnabled: isLineStepping,
+  })
 
-  const lineExecutionData = useLineExecutionData(trace)
+  const lineExecutionData = useLineExecutionData(traceInfo)
+
+  const filteredAsmLineExecutionData = useMemo(() => {
+    if (!filteredAsmCode || !settings.dimNeverExecutedLines) return undefined
+    const remapped: Record<number, {gas?: number; executions?: number}> = {}
+    for (const [key, data] of Object.entries(lineExecutionData)) {
+      const originalLine = Number(key)
+      const mapped = mapOriginalAsmToFiltered(originalLine)
+      if (mapped === undefined) continue
+      const prev = remapped[mapped] ?? {}
+      remapped[mapped] = {
+        gas: (prev.gas ?? 0) + (data.gas ?? 0),
+        executions: (prev.executions ?? 0) + (data.executions ?? 0),
+      }
+    }
+    return remapped
+  }, [filteredAsmCode, lineExecutionData, mapOriginalAsmToFiltered, settings.dimNeverExecutedLines])
+
+  const [funcHighlightLine, setFuncHighlightLine] = useState<number | undefined>(undefined)
+  const currentAsmLine = useMemo(() => {
+    if (languageMode !== "func") return undefined
+    const step = traceInfo?.steps?.[selectedStep]
+    if (step?.loc?.line !== undefined) {
+      const original = step.loc.line + 1
+      const mapped = mapOriginalAsmToFiltered(original)
+      return mapped ?? undefined
+    }
+    return undefined
+  }, [languageMode, traceInfo, selectedStep, mapOriginalAsmToFiltered])
+
+  useEffect(() => {
+    if (languageMode === "func" && traceInfo && selectedStep > 0) {
+      const stepIndex = selectedStep
+      if (stepIndex >= 0 && stepIndex < traceInfo.steps.length) {
+        const step = traceInfo.steps[stepIndex]
+        console.log(`Step ${selectedStep}: step.loc.line=${step.loc?.line}`)
+
+        if (step?.loc?.line !== undefined && sourceMap && funcResult?.mapping) {
+          const asmLine = step.loc.line + 1
+          let foundLocation = false
+
+          for (const [debugSection, instructions] of funcResult.mapping.entries()) {
+            for (const instr of instructions) {
+              if (instr.loc?.line !== undefined && instr.loc.line + 1 === asmLine) {
+                for (const [debugId, location] of sourceMap.locations.entries()) {
+                  if (debugId === debugSection && location.file === "main.fc") {
+                    console.log(
+                      `Found FunC location: line=${location.line}, pos=${location.pos}, length=${location.length}`,
+                    )
+                    setFuncHighlightLine(location.line)
+                    foundLocation = true
+                    break
+                  }
+                }
+                if (foundLocation) break
+              }
+            }
+            if (foundLocation) break
+          }
+
+          if (!foundLocation) {
+            console.log(`No FunC location found for assembly line ${asmLine}`)
+            setFuncHighlightLine(undefined)
+          }
+        } else {
+          setFuncHighlightLine(undefined)
+        }
+
+        if (step.loc?.line !== undefined) {
+          const originalAsmLine = step.loc.line + 1
+          const filteredAsmLine = mapOriginalAsmToFiltered(originalAsmLine)
+          handleAsmLineHover(filteredAsmLine ?? null)
+        } else {
+          handleAsmLineHover(null)
+        }
+      } else {
+        setFuncHighlightLine(undefined)
+        handleAsmLineHover(null)
+      }
+    } else {
+      handleAsmLineHover(null)
+      setFuncHighlightLine(undefined)
+    }
+  }, [
+    selectedStep,
+    traceInfo,
+    languageMode,
+    handleAsmLineHover,
+    sourceMap,
+    funcResult?.mapping,
+    mapOriginalAsmToFiltered,
+  ])
 
   const instructionDetails: InstructionDetail[] = useMemo(() => {
-    if (!trace) return []
-    return trace.steps.map(step => ({
+    if (!traceInfo) return []
+    return traceInfo.steps.map(step => ({
       name: step.instructionName,
       gasCost: normalizeGas(step),
     }))
-  }, [trace])
+  }, [traceInfo])
 
   const cumulativeGas = useMemo(() => {
-    if (!trace) return 0
+    if (!traceInfo) return 0
     let totalGas = 0
     for (let i = 0; i < selectedStep; i++) {
-      const step = trace.steps[i]
+      const step = traceInfo.steps[i]
       if (step) {
         totalGas += normalizeGas(step)
       }
     }
     return totalGas
-  }, [trace, selectedStep])
+  }, [traceInfo, selectedStep])
 
   const handleExecute = useCallback(async () => {
-    if (!assemblyCode.trim()) {
+    if (languageMode === "func") {
+      if (!funcCode.trim()) {
+        return
+      }
+
+      setLoading(true)
+      clearError()
+      clearCompilationError()
+
+      try {
+        await handleCompileFuncCode(funcCode)
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : "Unknown error"
+        setError(`Failed to compile FunC code: ${errorMessage}`)
+        setLoading(false)
+      }
+    } else {
+      if (!assemblyCode.trim()) {
+        return
+      }
+
+      setLoading(true)
+      clearError()
+
+      try {
+        const result = await executeAssemblyCode(assemblyCode, initialStack)
+        setResult(result)
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : "Unknown error"
+        setError(`Failed to execute assembly code: ${errorMessage}`)
+        setResult(undefined)
+      } finally {
+        setLoading(false)
+      }
+    }
+  }, [
+    languageMode,
+    funcCode,
+    assemblyCode,
+    initialStack,
+    clearError,
+    clearCompilationError,
+    handleCompileFuncCode,
+    setError,
+  ])
+
+  useEffect(() => {
+    if (languageMode !== "func" || !loading || funcCompiling) return
+
+    const assembly = funcResult?.assembly
+    if (assembly) {
+      const executeCompiledCode = async () => {
+        try {
+          const result = await executeAssemblyCode(assembly, initialStack)
+          setResult(result)
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : "Unknown error"
+          setError(`Failed to execute compiled code: ${errorMessage}`)
+          setResult(undefined)
+        } finally {
+          setLoading(false)
+        }
+      }
+      void executeCompiledCode()
       return
     }
 
-    setLoading(true)
-    clearError()
-
-    try {
-      const result = await executeAssemblyCode(assemblyCode, initialStack)
-      setResult(result)
-      console.log(result.vmLogs)
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Unknown error"
-      setError(`Failed to execute assembly code: ${errorMessage}`)
-      setResult(undefined)
-    } finally {
-      setLoading(false)
-    }
-  }, [assemblyCode, clearError, initialStack, setError])
+    setLoading(false)
+  }, [languageMode, loading, funcCompiling, funcResult?.assembly, setError, initialStack])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
         event.preventDefault()
-        if (!loading) {
+        if (!loading && !funcCompiling) {
           void handleExecute()
+        }
+        return
+      }
+      if (languageMode === "func" && isLineStepping) {
+        if (event.key === "ArrowLeft") {
+          event.preventDefault()
+          handlePrevFunc?.()
+          return
+        }
+        if (event.key === "ArrowRight") {
+          event.preventDefault()
+          handleNextFunc?.()
+          return
         }
       }
     }
@@ -150,11 +412,31 @@ function PlaygroundPage() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown)
     }
-  }, [handleExecute, loading])
+  }, [
+    handleExecute,
+    loading,
+    funcCompiling,
+    languageMode,
+    isLineStepping,
+    handlePrevFunc,
+    handleNextFunc,
+  ])
 
   useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, assemblyCode)
+    localStorage.setItem(LOCAL_STORAGE_KEY_ASM, assemblyCode)
   }, [assemblyCode])
+
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_KEY_FUNC, funcCode)
+  }, [funcCode])
+
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_KEY_MODE, languageMode)
+  }, [languageMode])
+
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_KEY_STEPPING, steppingMode)
+  }, [steppingMode])
 
   useEffect(() => {
     try {
@@ -172,16 +454,35 @@ function PlaygroundPage() {
 
   const handleCodeChange = useCallback(
     (newCode: string) => {
-      setAssemblyCode(newCode)
+      if (languageMode === "func") {
+        setFuncCode(newCode)
+      } else {
+        setAssemblyCode(newCode)
+      }
       setResult(undefined)
       clearError()
+      clearCompilationError()
     },
-    [clearError],
+    [languageMode, clearError, clearCompilationError],
   )
 
   const handleStackChange = useCallback((newStack: StackElement[]) => {
     setInitialStack(newStack)
     setResult(undefined)
+  }, [])
+
+  const handleLanguageModeChange = useCallback(
+    (newMode: LanguageMode) => {
+      setLanguageMode(newMode)
+      setResult(undefined)
+      clearError()
+      clearCompilationError()
+    },
+    [clearError, clearCompilationError],
+  )
+
+  const handleSteppingModeChange = useCallback((newMode: SteppingMode) => {
+    setSteppingMode(newMode)
   }, [])
 
   const implicitRet = (() => {
@@ -203,6 +504,37 @@ function PlaygroundPage() {
     return {line, approx}
   })()
 
+  const implicitRetAsmLine = useMemo(() => {
+    if (implicitRet.line === undefined) return undefined
+    return mapOriginalAsmToFiltered(implicitRet.line)
+  }, [implicitRet.line, mapOriginalAsmToFiltered])
+
+  const funcGasByLine = useMemo(() => {
+    const map = new Map<number, number>()
+    if (!traceInfo || !sourceMap || !funcResult?.mapping) return map
+
+    for (const step of traceInfo.steps ?? []) {
+      if (step?.loc?.line === undefined) continue
+      const asmLine = step.loc.line + 1
+
+      for (const [debugSection, instructions] of funcResult.mapping.entries()) {
+        for (const instr of instructions) {
+          if (instr.loc?.line !== undefined && instr.loc.line + 1 === asmLine) {
+            const location = sourceMap.locations[debugSection]
+            if (location && location.file === "main.fc") {
+              const funcLine = location.line
+              const prev = map.get(funcLine) ?? 0
+              map.set(funcLine, prev + normalizeGas(step))
+              break
+            }
+          }
+        }
+      }
+    }
+
+    return map
+  }, [traceInfo, sourceMap, funcResult?.mapping])
+
   const txStatus: StatusType | undefined = useMemo(() => {
     if (!result) return undefined
 
@@ -214,6 +546,9 @@ function PlaygroundPage() {
 
   const shouldShowStatusContainer = txStatus !== undefined
   const txStatusText = `Exit code: ${result?.exitCode?.num ?? 0}`
+  const currentCode = languageMode === "func" ? funcCode : assemblyCode
+
+  const stackToShare = useMemo(() => logs.serializeStack(initialStack), [initialStack])
 
   return (
     <div className={styles.traceViewWrapper}>
@@ -226,55 +561,183 @@ function PlaygroundPage() {
           </div>
         )}
         <div className={styles.headerContent}>
-          <div
-            className={styles.mainActionContainer}
-            role="toolbar"
-            aria-label="Assembly code actions"
-          >
-            <ExecuteButton onClick={() => void handleExecute()} loading={loading} />
-            <ShareButton value={assemblyCode} />
+          <div className={styles.languageSwitcherContainer}>
+            <div className={styles.languageSwitcher}>
+              <CustomSegmentedSelector
+                options={[
+                  {value: "tasm", label: "Assembly"},
+                  {value: "func", label: "FunC", badge: "beta"},
+                ]}
+                value={languageMode}
+                onChange={val => handleLanguageModeChange(val as "func" | "tasm")}
+                ariaLabel="Select Playground language"
+              />
+            </div>
+            {languageMode === "func" && (
+              <div className={styles.steppingSwitcher}>
+                <span className={styles.steppingLabel}>Stepping mode:</span>
+                <CustomSegmentedSelector
+                  options={[
+                    {value: "instructions", label: "Instructions"},
+                    {value: "lines", label: "Source Lines"},
+                  ]}
+                  value={steppingMode}
+                  onChange={val => handleSteppingModeChange(val as "instructions" | "lines")}
+                  ariaLabel="Select stepping mode"
+                />
+              </div>
+            )}
+          </div>
+          <div className={styles.mainActionContainer} role="toolbar" aria-label="Code actions">
+            <ExecuteButton
+              onClick={() => void handleExecute()}
+              loading={loading || funcCompiling}
+            />
+            <ShareButton value={currentCode} lang={languageMode} stack={stackToShare} />
+            <SettingsDropdown
+              items={[
+                {
+                  id: "mapping",
+                  label: "Show color mapping",
+                  checked: settings.showMappingHighlight && !isLineStepping,
+                  onToggle: settings.toggleShowMappingHighlight,
+                },
+                {
+                  id: "dim-never-executed",
+                  label: "Dim never executed lines",
+                  checked: settings.dimNeverExecutedLines,
+                  onToggle: settings.toggleDimNeverExecutedLines,
+                },
+              ]}
+            />
           </div>
         </div>
       </PageHeader>
 
       <div id="execution-status" className="sr-only" aria-live="polite" aria-atomic="true">
-        {loading && "Executing assembly code..."}
-        {result && !loading && "Assembly code executed successfully"}
+        {(loading || funcCompiling) &&
+          `${languageMode === "func" ? "Compiling and executing" : "Executing"} code...`}
+        {result && !loading && !funcCompiling && "Code executed successfully"}
         {result?.exitCode &&
           result.exitCode.num !== 0 &&
           !loading &&
+          !funcCompiling &&
           `Execution completed with exit code ${result.exitCode.num}`}
       </div>
 
-      <div className="sr-only">Press Ctrl+Enter or Cmd+Enter to execute the assembly code</div>
+      <div className="sr-only">
+        Press Ctrl+Enter or Cmd+Enter to{" "}
+        {languageMode === "func" ? "compile and execute" : "execute"} the code
+      </div>
 
-      <main className={styles.appContainer} role="main" aria-label="Assembly code playground">
+      <main className={styles.appContainer} role="main" aria-label="Code playground">
         <div className={styles.mainContent}>
           <div className={styles.editorContainer}>
             <h2 id="code-editor-heading" className="sr-only">
-              Assembly Code Editor
+              {languageMode === "func" ? "FunC" : "Assembly"} Code Editor
             </h2>
             <Suspense fallback={<InlineLoader message="Loading Editor..." loading={true} />}>
-              <CodeEditor
-                code={assemblyCode}
-                onChange={handleCodeChange}
-                readOnly={false}
-                highlightLine={highlightLine}
-                lineExecutionData={lineExecutionData}
-                implicitRetLine={implicitRet.line}
-                implicitRetLabel={
-                  implicitRet.approx ? "↵ implicit RET (approximate position)" : undefined
+              <div
+                className={
+                  languageMode === "func" && steppingMode === "instructions" && funcResult?.assembly
+                    ? styles.funcEditorWrapper
+                    : styles.fullEditorWrapper
                 }
-                shouldCenter={transitionType === "button"}
-                exitCode={result?.exitCode}
-                onLineClick={findStepByLine}
-                language={"tasm"}
-              />
+              >
+                <CodeEditor
+                  code={currentCode}
+                  onChange={handleCodeChange}
+                  readOnly={false}
+                  modelPath={languageMode === "func" ? "playground-func.fc" : "playground-asm.tasm"}
+                  markers={languageMode === "func" ? funcMarkers : []}
+                  highlightLine={languageMode === "tasm" ? highlightLine : funcHighlightLine}
+                  highlightGroups={
+                    languageMode === "func" && settings.showMappingHighlight && !isLineStepping
+                      ? funcHighlightGroups
+                      : undefined
+                  }
+                  highlightRanges={
+                    languageMode === "func" && steppingMode === "instructions"
+                      ? funcPreciseHighlightRanges
+                      : undefined
+                  }
+                  lineExecutionData={languageMode === "tasm" ? lineExecutionData : undefined}
+                  implicitRetLine={implicitRet.line}
+                  implicitRetLabel={
+                    implicitRet.approx ? "↵ implicit RET (approximate position)" : undefined
+                  }
+                  shouldCenter={transitionType === "button"}
+                  exitCode={result?.exitCode}
+                  onLineClick={languageMode === "tasm" ? findStepByLine : undefined}
+                  language={languageMode}
+                  funcGasByLine={languageMode === "func" ? funcGasByLine : undefined}
+                  onEditorMount={editor => {
+                    if (languageMode === "func") {
+                      funcEditorRef.current = editor
+                    }
+                  }}
+                />
+                {languageMode === "func" &&
+                  steppingMode === "instructions" &&
+                  funcResult?.assembly && (
+                    <div className={styles.asmViewerWrapper}>
+                      <CodeEditor
+                        code={filteredAsmCode ?? funcResult.assembly}
+                        readOnly={true}
+                        language="tasm"
+                        modelPath="playground-func-output.tasm"
+                        needFloatingTip={false}
+                        highlightLine={currentAsmLine}
+                        lineExecutionData={filteredAsmLineExecutionData}
+                        highlightGroups={
+                          settings.showMappingHighlight && !isLineStepping
+                            ? asmHighlightGroups
+                            : undefined
+                        }
+                        hoveredLines={
+                          settings.showMappingHighlight && !isLineStepping
+                            ? asmHoveredLines
+                            : undefined
+                        }
+                        onLineHover={
+                          settings.showMappingHighlight && !isLineStepping
+                            ? handleAsmLineHover
+                            : undefined
+                        }
+                        implicitRetLine={implicitRetAsmLine}
+                        implicitRetLabel={
+                          implicitRet.approx ? "↵ implicit RET (approximate position)" : undefined
+                        }
+                        shouldCenter={true}
+                        onEditorMount={editor => {
+                          asmViewerRef.current = editor
+                        }}
+                      />
+                    </div>
+                  )}
+              </div>
+              {languageMode === "func" && (
+                <CompilerErrors
+                  markers={funcMarkers}
+                  filename="main.fc"
+                  onNavigate={(line, column) => {
+                    const editor = funcEditorRef.current
+                    if (!editor) return
+                    editor.revealPositionInCenter({lineNumber: line, column})
+                    editor.setPosition({lineNumber: line, column})
+                    editor.focus()
+                  }}
+                />
+              )}
             </Suspense>
           </div>
           <TraceSidePanel
-            selectedStep={selectedStep}
-            totalSteps={totalSteps}
+            selectedStep={
+              isLineStepping && currentFuncStepIndex !== undefined
+                ? currentFuncStepIndex
+                : selectedStep
+            }
+            totalSteps={isLineStepping ? funcSteps.length : totalSteps}
             currentStep={currentStep}
             currentStack={currentStack}
             canGoPrev={canGoPrev}

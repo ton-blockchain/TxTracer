@@ -2,9 +2,9 @@ import type {TutorialStep} from "@shared/ui/Tutorial"
 
 export const TUTORIAL_STEPS: TutorialStep[] = [
   {
-    title: "Welcome to Assembly Playground",
+    title: "Welcome to Playground",
     content:
-      "This tool lets you write and execute TON Assembly (TVM) code step by step.\n\nPerfect for learning TVM instructions and debugging smart contracts!\n\nPress Esc to close this tutorial at any time.",
+      "This tool lets you write and execute TON Assembly (TASM) and FunC code step by step.\n\nPerfect for learning TVM instructions and debugging smart contracts!\n\nPress Esc to close this tutorial at any time.",
     target: "",
     placement: "bottom",
   },
@@ -80,6 +80,13 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
       "Look at the stack section below - see how values changed!\n\nTVM is a stack-based virtual machine. Instructions push/pop values to/from the stack.\n\nTry clicking Next/Prev buttons to see the stack evolve.",
     target: `[class*="stack-viewer"]`,
     placement: "left",
+  },
+  {
+    title: "Switch to FunC (beta)",
+    content:
+      "You can switch between Assembly and FunC using this segmented control.\n\nSelect FunC (beta) to write high-level code and see the compiled assembly alongside.\n\nMapping highlight and stepping by source lines are available in FunC mode.",
+    target: `[class*="languageSwitcher"]`,
+    placement: "bottom",
   },
   {
     title: "Share Your Code",

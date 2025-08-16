@@ -9,7 +9,7 @@ export interface FuncCompilationResult {
   readonly instructions: i.Instr[]
   readonly code: string
   readonly assembly: string
-  readonly funcSourceMap?: string
+  readonly sourceMap?: trace.FuncMapping
   readonly mapping: Map<number, trace.InstructionInfo[]>
 }
 
@@ -64,7 +64,7 @@ export const compileFuncCode = async (code: string): Promise<FuncCompilationResu
     instructions: initialInstructions,
     code: code,
     assembly: text.print(initialInstructions),
-    funcSourceMap: result.sourceMap ? JSON.stringify(result.sourceMap) : undefined,
+    sourceMap: result.sourceMap,
     mapping: debugSectionToInstructions,
   }
 }

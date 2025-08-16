@@ -20,6 +20,7 @@ import {
   useTasmCodeLensProvider,
   useTasmCompletionProvider,
   useTasmInlayProvider,
+  useImplicitRetInlayProvider,
   useFuncLanguageProviders,
   useFolding,
   type SupportedLanguage,
@@ -95,6 +96,15 @@ interface CodeEditorProps {
 
   /** Error markers to display in the editor. Used for compilation errors in FunC on the Code Explorer page */
   readonly markers?: readonly monaco.editor.IMarkerData[]
+
+  /** Optional gas summation per FunC line to display as inlay hints */
+  readonly funcGasByLine?: ReadonlyMap<number, number>
+
+  /** Whether to show the floating tip for the editor */
+  readonly needFloatingTip?: boolean
+
+  /** Optional explicit Monaco model path to avoid sharing models between editors */
+  readonly modelPath?: string
 }
 
 // use local instance of monaco
@@ -129,6 +139,9 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   showVariablesDocs = true,
   showInstructionDocs = true,
   onEditorMount,
+  funcGasByLine,
+  needFloatingTip = lineExecutionData && language === "tasm",
+  modelPath,
 }) => {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
   const [editorReady, setEditorReady] = useState(false)
@@ -199,6 +212,16 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     enabled: language === "func",
   })
 
+  useImplicitRetInlayProvider({
+    monaco,
+    editorRef,
+    languageId: "func",
+    implicitRetLine,
+    implicitRetLabel,
+    editorReady,
+    enabled: language === "func",
+  })
+
   useTolkLanguageProviders({
     monaco,
     editorRef,
@@ -211,6 +234,82 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     editorRef,
     lineExecutionData,
   })
+
+  useEffect(() => {
+    if (!editorRef.current) return
+    try {
+      editorRef.current.trigger("unfold", "editor.unfoldAll", {})
+    } catch {
+      /* ignore */
+    }
+    setIsFolded(true)
+  }, [code, language])
+
+  useEffect(() => {
+    setIsFolded(false)
+  }, [lineExecutionData])
+
+  // display gas sum for FunC line of code
+  useEffect(() => {
+    if (language !== "func" || !editorReady || !editorRef.current || !funcGasByLine) return
+    const editor = editorRef.current
+    const domNode = editor.getDomNode()
+    if (!domNode) return
+
+    const container = document.createElement("div")
+    container.style.position = "absolute"
+    container.style.pointerEvents = "none"
+    container.style.zIndex = "5"
+    domNode.appendChild(container)
+
+    const render = () => {
+      const layout = editor.getLayoutInfo()
+      const scrollTop = editor.getScrollTop()
+      const ranges = editor.getVisibleRanges() ?? []
+      container.style.left = `${layout.glyphMarginLeft}px`
+      container.style.width = `${layout.glyphMarginWidth}px`
+      container.style.top = "0px"
+      container.innerHTML = ""
+
+      const lines = new Set<number>()
+      for (const r of ranges) {
+        for (let ln = r.startLineNumber; ln <= r.endLineNumber; ln++) lines.add(ln)
+      }
+
+      for (const ln of lines) {
+        const gas = funcGasByLine.get(ln)
+        if (!gas || gas <= 0) continue
+        const top = editor.getTopForLineNumber(ln) - scrollTop
+        const el = document.createElement("div")
+        el.style.position = "absolute"
+        el.style.left = "0"
+        el.style.top = `${top}px`
+        el.style.height = `${editor.getOption(monaco?.editor.EditorOption.lineHeight ?? 40)}px`
+        el.style.display = "flex"
+        el.style.alignItems = "center"
+        el.style.justifyContent = "end"
+        el.style.width = "100%"
+        el.style.fontSize = "10px"
+        el.style.color = "var(--color-text-secondary)"
+        el.style.opacity = "0.9"
+        el.style.pointerEvents = "none"
+        el.textContent = String(gas)
+        container.appendChild(el)
+      }
+    }
+
+    const disposeScroll = editor.onDidScrollChange(() => render())
+    const disposeLayout = editor.onDidLayoutChange(() => render())
+    const disposeContent = editor.onDidChangeModelContent(() => render())
+    render()
+
+    return () => {
+      disposeScroll?.dispose()
+      disposeLayout?.dispose()
+      disposeContent?.dispose()
+      container.remove()
+    }
+  }, [language, editorReady, editorRef, funcGasByLine, monaco])
 
   /* ----------------------- folding inactive blocks ----------------------- */
   const handleCollapseInactiveBlocks = useCallback(() => {
@@ -261,8 +360,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   }, [editorReady])
 
   /* -------------------------------- render ------------------------------- */
-  const needFloatingTip = lineExecutionData && language === "tasm"
-
   return (
     <>
       <div
@@ -276,7 +373,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
           height="100%"
           width="100%"
           language={language}
-          path={language === "func" ? "main.fc" : language === "tolk" ? "main.tolk" : "out.tasm"}
+          path={
+            modelPath ??
+            (language === "func" ? "main.fc" : language === "tolk" ? "main.tolk" : "out.tasm")
+          }
           value={code}
           options={{
             minimap: {enabled: false},
