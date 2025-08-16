@@ -37,7 +37,6 @@ function appendFiftInstructions(
   for (const [fiftName, fiftInstr] of Object.entries(spec.fift_instructions)) {
     const actualInstr = instructions[fiftInstr.actual_name]
     if (actualInstr) {
-      // Create extended instruction with Fift metadata
       to[fiftName] = {
         ...actualInstr,
         isFift: true,
@@ -91,12 +90,10 @@ function InstructionsPage() {
     }
     const sorted = Array.from(s).sort((a, b) => a.localeCompare(b))
 
-    if (spec?.fift_instructions && Object.keys(spec.fift_instructions).length > 0) {
-      sorted.push("Fift-specific")
-    }
+    sorted.push("Fift-specific")
 
     return sorted
-  }, [instructions, spec?.fift_instructions])
+  }, [instructions])
 
   const subCategories = useMemo(() => {
     if (selectedCategory === "All") return [] as string[]
