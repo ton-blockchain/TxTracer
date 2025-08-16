@@ -39650,9 +39650,15 @@
       "sub_category": "shift_logic",
       "description": {
         "short": "",
-        "long": "Checks whether `x` is a `cc+1`-bit signed integer for `0 <= cc <= 255` (i.e., whether `-2^cc <= x < 2^cc`).\nIf not, either triggers an integer overflow exception, or replaces `x` with a `NaN` (quiet version).",
+        "long": "Checks whether `x` is a `width`-bit signed integer for `0 <= width <= 255` (i.e., whether `-2 ^ width <= x < 2 ^ width`).",
         "tags": [],
-        "operands": ["c"]
+        "operands": ["width"],
+        "exit_codes": [
+          {
+            "errno": "4",
+            "condition": "Integer does not fit into `width` bits."
+          }
+        ]
       },
       "layout": {
         "min": 11796480,
@@ -39709,9 +39715,15 @@
       "sub_category": "shift_logic",
       "description": {
         "short": "",
-        "long": "Checks whether `x` is a `cc+1`-bit unsigned integer for `0 <= cc <= 255` (i.e., whether `0 <= x < 2^(cc+1)`).",
+        "long": "Checks whether `x` is a `width`-bit unsigned integer for `0 <= width <= 255` (i.e., whether `0 <= x < 2 ^ width`).",
         "tags": [],
-        "operands": ["c"]
+        "operands": ["width"],
+        "exit_codes": [
+          {
+            "errno": "4",
+            "condition": "Integer does not fit into `width` bits."
+          }
+        ]
       },
       "layout": {
         "min": 11862016,
@@ -39768,7 +39780,7 @@
       "sub_category": "shift_logic",
       "description": {
         "short": "",
-        "long": "Replaces `x` with a `NaN` if x is not a `width`-bit signed integer, leaves it intact otherwise.",
+        "long": "Replaces `x` with a `NaN` if x does not fit into a `width`-bit signed integer, leaves it intact otherwise.",
         "tags": [],
         "operands": ["width"]
       },
@@ -39826,7 +39838,7 @@
       "sub_category": "shift_logic",
       "description": {
         "short": "",
-        "long": "Replaces `x` with a `NaN` if x is not a `width`-bit unsigned integer, leaves it intact otherwise.",
+        "long": "Replaces `x` with a `NaN` if x does not fit into a `width`-bit unsigned integer, leaves it intact otherwise.",
         "tags": [],
         "operands": ["width"]
       },
@@ -53080,12 +53092,12 @@
     },
     "CHKBOOL": {
       "actual_name": "FITS",
-      "arguments": [0],
+      "arguments": [1],
       "description": "Checks whether `x` is a \"boolean value\" (i.e., either 0 or -1)"
     },
     "CHKBIT": {
       "actual_name": "UFITS",
-      "arguments": [0],
+      "arguments": [1],
       "description": "Checks whether `x` is a binary digit (i.e., 0 or 1)"
     },
     "STZERO": {

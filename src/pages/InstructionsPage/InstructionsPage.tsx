@@ -89,16 +89,19 @@ function InstructionsPage() {
         s.add(String(instr.category))
       }
     }
-    if (spec?.fift_instructions) {
-      s.add("Fift")
+    const sorted = Array.from(s).sort((a, b) => a.localeCompare(b))
+
+    if (spec?.fift_instructions && Object.keys(spec.fift_instructions).length > 0) {
+      sorted.push("Fift-specific")
     }
-    return Array.from(s).sort((a, b) => a.localeCompare(b))
+
+    return sorted
   }, [instructions, spec?.fift_instructions])
 
   const subCategories = useMemo(() => {
     if (selectedCategory === "All") return [] as string[]
 
-    if (selectedCategory === "Fift" && spec) {
+    if (selectedCategory === "Fift-specific" && spec) {
       // For Fift, subcategories are the categories of the aliased instructions
       const s = new Set<string>()
       for (const [, fiftInstr] of Object.entries(spec.fift_instructions)) {
@@ -126,7 +129,7 @@ function InstructionsPage() {
       base = {...spec.instructions}
       // Show Fift instructions as well
       appendFiftInstructions(base, spec.instructions, spec)
-    } else if (selectedCategory === "Fift" && spec) {
+    } else if (selectedCategory === "Fift-specific" && spec) {
       // Show only Fift instructions
       appendFiftInstructions(base, spec.instructions, spec)
     } else if (spec) {
@@ -140,7 +143,7 @@ function InstructionsPage() {
     if (selectedSubCategory !== "All") {
       const tmp: Record<string, ExtendedInstruction> = {}
       for (const [name, instr] of Object.entries(base)) {
-        if (selectedCategory === "Fift") {
+        if (selectedCategory === "Fift-specific") {
           // For Fift instructions, filter by actual instruction category
           const actualCategory = instr.actualInstruction?.category
           if (String(actualCategory) === selectedSubCategory) {
