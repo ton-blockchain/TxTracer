@@ -3,11 +3,20 @@ import type {InstructionSignature} from "./signatures/stack-signatures-schema"
 
 export interface TvmSpec {
   readonly instructions: {[key: string]: Instruction}
+  readonly fift_instructions: Record<string, FiftInstruction>
+}
+
+export type FiftArgument = number | string
+
+export interface FiftInstruction {
+  readonly actual_name: string
+  readonly arguments: readonly FiftArgument[]
+  readonly description?: string
 }
 
 export interface Instruction {
   readonly category: Category
-  readonly subCategory: SubCategory
+  readonly sub_category: SubCategory
   readonly description: Description
   readonly layout: Layout
   readonly signature: InstructionSignature

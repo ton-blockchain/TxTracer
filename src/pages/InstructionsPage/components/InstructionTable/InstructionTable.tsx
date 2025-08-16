@@ -4,13 +4,21 @@ import ReactMarkdown from "react-markdown"
 
 import {calculateGasConsumption, infoOf} from "ton-assembly/dist/generator/instructions"
 
-import type {TvmSpec, Instruction} from "@features/spec/tvm-specification.types"
+import type {Instruction, FiftInstruction} from "@features/spec/tvm-specification.types"
+
+type ExtendedInstruction = Instruction & {
+  readonly isFift?: boolean
+  readonly fiftName?: string
+  readonly actualInstruction?: Instruction
+  readonly fiftInstruction?: FiftInstruction
+}
 
 import {useProcessedMarkdown} from "../../hooks/useProcessedMarkdown"
 
 import {prettySubCategoryName} from "../../lib/formatCategory"
 
 import InstructionDetail from "./InstructionDetail"
+import FiftInstructionDetail from "./FiftInstructionDetail"
 import StackDisplay from "./StackDisplay"
 import InlineOperand from "./InlineOperand"
 
@@ -31,7 +39,7 @@ const DescriptionCell: React.FC<DescriptionCellProps> = ({instruction}: Descript
 }
 
 interface InstructionTableProps {
-  readonly instructions: TvmSpec["instructions"]
+  readonly instructions: Record<string, ExtendedInstruction>
   readonly expandedRows: Record<string, boolean>
   readonly onRowClick: (instructionName: string) => void
   readonly groupByCategory?: boolean
@@ -90,7 +98,11 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
           </div>
         )}
         {instructionEntries.slice(0, shownCount).map(([name, instruction], idx) => {
-          const opcode = infoOf(name)
+          const instructionName =
+            instruction.isFift && instruction.fiftInstruction
+              ? instruction.fiftInstruction.actual_name
+              : name
+          const opcode = infoOf(instructionName)
           if (!opcode) return null
 
           const gas = calculateGasConsumption(opcode)
@@ -98,7 +110,14 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
           const inputs = instruction.signature.inputs?.stack
           const outputs = instruction.signature.outputs?.stack
 
-          const displayedOperands = instruction.operands || instruction.description.operands
+          let displayedOperands = instruction.operands ?? instruction.description.operands
+          if (instruction.isFift && instruction.fiftInstruction) {
+            const fiftArgsCount = instruction.fiftInstruction.arguments?.length || 0
+            const originalOperandsCount = displayedOperands?.length || 0
+            if (fiftArgsCount === originalOperandsCount) {
+              displayedOperands = [] // Hide inline operands
+            }
+          }
 
           const currentCategory = String(instruction.category ?? "")
           const prevCategory =
@@ -163,7 +182,18 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
                     className={`${styles.divTd} full ${styles.instructionDetailCell}`}
                     role="cell"
                   >
-                    <InstructionDetail instruction={instruction} instructionName={name} />
+                    {instruction.isFift &&
+                    instruction.fiftName &&
+                    instruction.actualInstruction &&
+                    instruction.fiftInstruction ? (
+                      <FiftInstructionDetail
+                        fiftName={instruction.fiftName}
+                        fiftInstruction={instruction.fiftInstruction}
+                        actualInstruction={instruction.actualInstruction}
+                      />
+                    ) : (
+                      <InstructionDetail instruction={instruction} instructionName={name} />
+                    )}
                   </div>
                 </div>
               )}
