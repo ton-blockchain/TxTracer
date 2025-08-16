@@ -12,7 +12,14 @@ import Button from "@shared/ui/Button"
 import tvmSpecData from "@features/spec/gen/tvm-specification.json"
 import {POPULARITY} from "@features/spec/popularity/popularity.ts"
 
-import type {TvmSpec} from "@features/spec/tvm-specification.types.ts"
+import type {TvmSpec, FiftInstruction, Instruction} from "@features/spec/tvm-specification.types.ts"
+
+type ExtendedInstruction = Instruction & {
+  readonly isFift?: boolean
+  readonly fiftName?: string
+  readonly actualInstruction?: Instruction
+  readonly fiftInstruction?: FiftInstruction
+}
 
 import {
   loadStoredSettings,
@@ -21,6 +28,31 @@ import {
 } from "@app/pages/InstructionsPage/settings.ts"
 
 import styles from "./InstructionsPage.module.css"
+
+function appendFiftInstructions(
+  to: Record<string, ExtendedInstruction>,
+  instructions: {[p: string]: Instruction},
+  spec: TvmSpec,
+) {
+  for (const [fiftName, fiftInstr] of Object.entries(spec.fift_instructions)) {
+    const actualInstr = instructions[fiftInstr.actual_name]
+    if (actualInstr) {
+      // Create extended instruction with Fift metadata
+      to[fiftName] = {
+        ...actualInstr,
+        isFift: true,
+        fiftName,
+        actualInstruction: actualInstr,
+        fiftInstruction: fiftInstr,
+        description: {
+          ...actualInstr.description,
+          short: "",
+          long: fiftInstr.description ? fiftInstr.description + "." : actualInstr.description.long,
+        },
+      }
+    }
+  }
+}
 
 function InstructionsPage() {
   const [spec, setSpec] = useState<TvmSpec | null>(null)
@@ -57,39 +89,73 @@ function InstructionsPage() {
         s.add(String(instr.category))
       }
     }
+    if (spec?.fift_instructions) {
+      s.add("Fift")
+    }
     return Array.from(s).sort((a, b) => a.localeCompare(b))
-  }, [instructions])
+  }, [instructions, spec?.fift_instructions])
 
   const subCategories = useMemo(() => {
     if (selectedCategory === "All") return [] as string[]
+
+    if (selectedCategory === "Fift" && spec) {
+      // For Fift, subcategories are the categories of the aliased instructions
+      const s = new Set<string>()
+      for (const [, fiftInstr] of Object.entries(spec.fift_instructions)) {
+        const actualInstr = instructions[fiftInstr.actual_name]
+        if (actualInstr?.category) {
+          s.add(String(actualInstr.category))
+        }
+      }
+      return Array.from(s).sort((a, b) => a.localeCompare(b))
+    }
+
     const s = new Set<string>()
     for (const [, instr] of Object.entries(instructions)) {
-      if (String(instr.category) === selectedCategory && instr?.subCategory) {
-        s.add(String(instr.subCategory))
+      if (String(instr.category) === selectedCategory && instr?.sub_category) {
+        s.add(String(instr.sub_category))
       }
     }
     return Array.from(s).sort((a, b) => a.localeCompare(b))
-  }, [instructions, selectedCategory])
+  }, [instructions, selectedCategory, spec])
 
   const filteredByCategory = useMemo(() => {
-    let base: typeof instructions = instructions
-    if (selectedCategory !== "All") {
-      const tmp: typeof instructions = {}
-      for (const [name, instr] of Object.entries(instructions)) {
-        if (String(instr.category) === selectedCategory) tmp[name] = instr
+    let base: Record<string, ExtendedInstruction> = {}
+
+    if (selectedCategory === "All" && spec) {
+      base = {...spec.instructions}
+      // Show Fift instructions as well
+      appendFiftInstructions(base, spec.instructions, spec)
+    } else if (selectedCategory === "Fift" && spec) {
+      // Show only Fift instructions
+      appendFiftInstructions(base, spec.instructions, spec)
+    } else if (spec) {
+      for (const [name, instr] of Object.entries(spec.instructions)) {
+        if (String(instr.category) === selectedCategory) {
+          base[name] = instr
+        }
       }
-      base = tmp
     }
 
     if (selectedSubCategory !== "All") {
-      const tmp: typeof instructions = {}
+      const tmp: Record<string, ExtendedInstruction> = {}
       for (const [name, instr] of Object.entries(base)) {
-        if (String(instr.subCategory) === selectedSubCategory) tmp[name] = instr
+        if (selectedCategory === "Fift") {
+          // For Fift instructions, filter by actual instruction category
+          const actualCategory = instr.actualInstruction?.category
+          if (String(actualCategory) === selectedSubCategory) {
+            tmp[name] = instr
+          }
+        } else {
+          if (String(instr.sub_category) === selectedSubCategory) {
+            tmp[name] = instr
+          }
+        }
       }
       return tmp
     }
     return base
-  }, [instructions, selectedCategory, selectedSubCategory])
+  }, [selectedCategory, selectedSubCategory, spec])
 
   const filteredInstructions = useMemo(() => {
     const q = query.trim().toLowerCase()

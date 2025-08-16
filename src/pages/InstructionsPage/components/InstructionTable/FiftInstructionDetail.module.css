@@ -1,0 +1,35 @@
+.fiftDetailContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-md);
+}
+
+.aliasInfo {
+  border-radius: var(--border-radius-md);
+}
+
+.aliasDescription {
+  font-size: var(--font-size-lg);
+}
+
+.fiftDescription {
+  color: var(--color-text-primary);
+}
+
+.fiftDescription p {
+  margin: 0;
+}
+
+.fiftDescription code {
+  font-size: var(--font-size-sm);
+  background-color: var(--color-background-secondary);
+  padding: var(--spacing-xss) var(--spacing-xs);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--border-radius-sm);
+}
+
+.originalInstruction {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--spacing-md);
+}
