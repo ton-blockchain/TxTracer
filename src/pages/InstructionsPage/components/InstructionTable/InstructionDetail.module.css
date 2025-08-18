@@ -1,5 +1,7 @@
 .detailContainer {
   background-color: var(--color-background-primary);
+  display: flex;
+  justify-content: space-between;
 }
 
 .detailHeader {
@@ -374,6 +376,11 @@
 @media (max-width: 1200px) {
   .implementationsGridContainer {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .detailContainer {
+    flex-wrap: wrap;
+    flex-direction: row;
   }
 }
 

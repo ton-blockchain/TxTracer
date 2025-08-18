@@ -1,0 +1,99 @@
+.calculator {
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  margin-top: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  width: max-content;
+  min-width: 400px;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.inputGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  min-width: 200px;
+}
+
+.labelText {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.labelText code {
+  font-family: var(--font-family-mono), "monospace";
+  font-weight: var(--font-weight-semibold);
+}
+
+.input {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-background-input);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-xs) var(--spacing-sms);
+  transition:
+    border-color var(--transition-duration-fast) ease,
+    box-shadow var(--transition-duration-fast) ease;
+  position: relative;
+  color: var(--color-text-primary);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.2);
+}
+
+.input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.actions {
+  margin-bottom: var(--spacing-md);
+}
+
+.error {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-error-bg);
+  border-radius: var(--border-radius-sm);
+  color: var(--color-error-text);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.result {
+  padding: var(--spacing-sm);
+  background-color: var(--color-success-bg);
+  border-radius: var(--border-radius-sm);
+  color: var(--color-success-text);
+  font-size: var(--font-size-xsm);
+  margin-bottom: var(--spacing-md);
+}
+
+.resultValue {
+  font-family: var(--font-family-mono), "monospace";
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+}
+
+@media (max-width: 768px) {
+  .calculator {
+    min-width: 200px;
+    margin-top: var(--spacing-xs);
+  }
+}
