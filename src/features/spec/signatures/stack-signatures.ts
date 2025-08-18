@@ -24,7 +24,7 @@ const entryString = (entry: StackEntry): string => {
     if (types.length === 0) {
       return entry.name + ":Any"
     }
-    const typesStr = types.map(it => (it === "Integer" ? "Int" : it)).join("|")
+    const typesStr = types.map(it => (it === "Int" ? "Int" : it)).join("|")
     return entry.name + ":" + typesStr
   }
 

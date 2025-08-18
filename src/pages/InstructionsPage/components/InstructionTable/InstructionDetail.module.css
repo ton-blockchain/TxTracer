@@ -1,5 +1,7 @@
 .detailContainer {
   background-color: var(--color-background-primary);
+  display: flex;
+  justify-content: space-between;
 }
 
 .detailHeader {
