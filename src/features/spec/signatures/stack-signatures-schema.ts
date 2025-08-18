@@ -32,7 +32,7 @@ export type StackEntry =
       array_entry: ArraySingleEntryDefinition
     }
 export type PossibleValueTypes = (
-  | "Integer"
+  | "Int"
   | "Bool"
   | "Cell"
   | "Builder"
@@ -41,7 +41,7 @@ export type PossibleValueTypes = (
   | "Continuation"
   | "Null"
 )[]
-export type ConstantType = "Integer" | "Null"
+export type ConstantType = "Int" | "Null"
 export type ConstantValue = number | null
 /**
  * Allowed chars are `a-zA-Z0-9_`, must not begin with digit or underscore and must not end with underscore.
