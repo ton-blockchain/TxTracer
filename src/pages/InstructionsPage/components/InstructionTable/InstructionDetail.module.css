@@ -377,6 +377,11 @@
   .implementationsGridContainer {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .detailContainer {
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
 }
 
 @media (max-width: 768px) {
