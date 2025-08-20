@@ -298,10 +298,10 @@
 
 .featureCards {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: var(--spacing-md);
   margin-top: 5rem;
-  max-width: 900px;
+  max-width: 1200px;
   width: 100%;
 }
 
@@ -349,6 +349,11 @@
 
 .explorerIcon {
   background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+.specIcon {
+  background: linear-gradient(135deg, #a855f7 0%, #3b82f6 100%);
   color: white;
 }
 

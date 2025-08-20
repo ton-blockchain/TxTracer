@@ -18,7 +18,7 @@ const SUB_CATEGORIES_DISPLAY_NAMES: Record<string, string> = {
   crypto_rist255: "Crypto: RIST255",
   crypto_common: "Crypto: Common",
   debug: "Debugging",
-  dictionary: "Dictionary Operations",
+  dictionary: "Dictionary",
   div: "Division",
   exception: "Exceptions",
   int_cmp: "Integer Comparison",

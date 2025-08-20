@@ -7882,6 +7882,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "JMPX": {
@@ -7918,6 +7937,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "RET": {
@@ -7953,12 +7980,25 @@
         "stack_string": "∅ -> ∅",
         "inputs": {
           "stack": [],
-          "registers": []
+          "registers": [
+            {
+              "type": "constant",
+              "index": 0
+            }
+          ]
         },
         "outputs": {
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 0
+          }
+        ]
       }
     },
     "RETALT": {
@@ -7994,12 +8034,25 @@
         "stack_string": "∅ -> ∅",
         "inputs": {
           "stack": [],
-          "registers": []
+          "registers": [
+            {
+              "type": "constant",
+              "index": 1
+            }
+          ]
         },
         "outputs": {
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 1
+          }
+        ]
       }
     },
     "RETBOOL": {
@@ -8035,7 +8088,16 @@
               "value_types": ["Bool"]
             }
           ],
-          "registers": []
+          "registers": [
+            {
+              "type": "constant",
+              "index": 0
+            },
+            {
+              "type": "constant",
+              "index": 1
+            }
+          ]
         },
         "outputs": {
           "stack": [],
@@ -8077,6 +8139,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "JMPXDATA": {
@@ -8113,6 +8183,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "CALLXVARARGS": {
@@ -8170,6 +8248,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "RETVARARGS": {
@@ -8222,6 +8319,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "JMPXVARARGS": {
@@ -8279,6 +8395,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "CALLCCVARARGS": {
@@ -8336,6 +8460,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "RETDATA": {
@@ -8371,12 +8503,25 @@
         "stack_string": "∅ -> ∅",
         "inputs": {
           "stack": [],
-          "registers": []
+          "registers": [
+            {
+              "type": "constant",
+              "index": 0
+            }
+          ]
         },
         "outputs": {
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 0
+          }
+        ]
       }
     },
     "RUNVMX": {
@@ -8384,7 +8529,7 @@
       "sub_category": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Runs child VM with code `code` and stack `x_1...x_n`. Returns the resulting stack `x'_1...x'_m` and exitcode. Other arguments and return values are enabled by flags.",
+        "long": "Runs child VM with `code` and stack `x_1...x_n`. Returns the resulting stack `x'_1...x'_m` and exitcode. Other arguments and return values are enabled by flags.",
         "tags": [],
         "operands": []
       },
@@ -8447,8 +8592,22 @@
               "name": "cond",
               "value_types": ["Int"]
             }
+          ],
+          "registers": [
+            {
+              "type": "constant",
+              "index": 0
+            }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 0
+          }
+        ]
       }
     },
     "IFNOTRET": {
@@ -8483,8 +8642,22 @@
               "name": "cond",
               "value_types": ["Int"]
             }
+          ],
+          "registers": [
+            {
+              "type": "constant",
+              "index": 0
+            }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 0
+          }
+        ]
       }
     },
     "IF": {
@@ -8568,6 +8741,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "IFNOT": {
@@ -8609,6 +8801,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "IFJMP": {
@@ -8676,6 +8887,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "IFNOTJMP": {
@@ -8683,7 +8902,7 @@
       "sub_category": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Jumps to `body` (similarly to `JMPX`), but only if `cond` is zero.",
+        "long": "Transfers control to `body` if `cond` is zero. The remainder of the current continuation is discarded which means that after `body` completes, control will not return to instruction immediately following the `IFJMP`. Instead, it will return to the instruction immediately following the instruction that started current continuation. If such continuation is not present, the program will exit.",
         "tags": [],
         "operands": []
       },
@@ -8717,6 +8936,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "IFELSE": {
@@ -8769,6 +8996,40 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "variable",
+            "var_name": "c2",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "CONDSEL": {
@@ -8776,9 +9037,15 @@
       "sub_category": "continuation_cond",
       "description": {
         "short": "",
-        "long": "If integer `f` is non-zero, returns `x`, otherwise returns `y`. Notice that no type checks are performed on `x` and `y`; as such, it is more like a conditional stack operation. Roughly equivalent to `ROT` `ISZERO` `INC` `ROLLX` `NIP`.",
+        "long": "If integer `f` is non-zero, returns `x`, otherwise returns `y`. Notice that no type checks are performed on `x` and `y`, so, it is more like a conditional stack operation.",
         "tags": [],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["ROT", "ISZERO", "INC", "ROLLX", "NIP"]
+          }
+        ]
       },
       "layout": {
         "min": 14877696,
@@ -8828,7 +9095,7 @@
       "sub_category": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Same as `CONDSEL`, but first checks whether `x` and `y` have the same type.",
+        "long": "If integer `f` is non-zero, returns `x`, otherwise returns `y`. Unlike `CONDSEL` this instruction checks whether `x` and `y` have the same type.",
         "tags": [],
         "operands": []
       },
@@ -8907,8 +9174,22 @@
               "name": "cond",
               "value_types": ["Int"]
             }
+          ],
+          "registers": [
+            {
+              "type": "constant",
+              "index": 1
+            }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 1
+          }
+        ]
       }
     },
     "IFNOTRETALT": {
@@ -8943,8 +9224,22 @@
               "name": "cond",
               "value_types": ["Int"]
             }
+          ],
+          "registers": [
+            {
+              "type": "constant",
+              "index": 1
+            }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 1
+          }
+        ]
       }
     },
     "REPEAT": {
@@ -9037,6 +9332,30 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "special",
+            "name": "repeat",
+            "args": {
+              "count": "n",
+              "body": {
+                "type": "variable",
+                "var_name": "c"
+              },
+              "after": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "REPEATEND": {
@@ -9073,6 +9392,24 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "special",
+            "name": "repeat",
+            "args": {
+              "count": "n",
+              "body": {
+                "type": "cc"
+              },
+              "after": {
+                "type": "register",
+                "index": 0
+              }
+            }
+          }
+        ]
       }
     },
     "UNTIL": {
@@ -9109,6 +9446,35 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "special",
+                "name": "until",
+                "args": {
+                  "body": {
+                    "type": "variable",
+                    "var_name": "c"
+                  },
+                  "after": {
+                    "type": "cc",
+                    "save": {
+                      "c0": {
+                        "type": "register",
+                        "index": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "UNTILEND": {
@@ -9144,6 +9510,28 @@
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "cc",
+            "save": {
+              "c0": {
+                "type": "special",
+                "name": "until",
+                "args": {
+                  "body": {
+                    "type": "cc"
+                  },
+                  "after": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "WHILE": {
@@ -9211,6 +9599,39 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c2",
+            "save": {
+              "c0": {
+                "type": "special",
+                "name": "while",
+                "args": {
+                  "cond": {
+                    "type": "variable",
+                    "var_name": "c2"
+                  },
+                  "body": {
+                    "type": "variable",
+                    "var_name": "c"
+                  },
+                  "after": {
+                    "type": "cc",
+                    "save": {
+                      "c0": {
+                        "type": "register",
+                        "index": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "WHILEEND": {
@@ -9247,6 +9668,33 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c2",
+            "save": {
+              "c0": {
+                "type": "special",
+                "name": "while",
+                "args": {
+                  "cond": {
+                    "type": "variable",
+                    "var_name": "c2"
+                  },
+                  "body": {
+                    "type": "cc"
+                  },
+                  "after": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "AGAIN": {
@@ -9283,6 +9731,20 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "special",
+            "name": "again",
+            "args": {
+              "body": {
+                "type": "variable",
+                "var_name": "c"
+              }
+            }
+          }
+        ]
       }
     },
     "AGAINEND": {
@@ -9318,6 +9780,19 @@
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "special",
+            "name": "again",
+            "args": {
+              "body": {
+                "type": "cc"
+              }
+            }
+          }
+        ]
       }
     },
     "REPEATBRK": {
@@ -9359,6 +9834,49 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "special",
+            "name": "repeat",
+            "args": {
+              "count": "n",
+              "body": {
+                "type": "variable",
+                "var_name": "c",
+                "save": {
+                  "c1": {
+                    "type": "cc",
+                    "save": {
+                      "c0": {
+                        "type": "register",
+                        "index": 0
+                      },
+                      "c1": {
+                        "type": "register",
+                        "index": 1
+                      }
+                    }
+                  }
+                }
+              },
+              "after": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  },
+                  "c1": {
+                    "type": "register",
+                    "index": 1
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "REPEATENDBRK": {
@@ -9401,6 +9919,30 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "special",
+            "name": "repeat",
+            "args": {
+              "count": "n",
+              "body": {
+                "type": "cc",
+                "save": {
+                  "c1": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              },
+              "after": {
+                "type": "register",
+                "index": 0
+              }
+            }
+          }
+        ]
       }
     },
     "UNTILBRK": {
@@ -9437,6 +9979,67 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "special",
+                "name": "until",
+                "args": {
+                  "body": {
+                    "type": "variable",
+                    "var_name": "c",
+                    "save": {
+                      "c1": {
+                        "type": "cc",
+                        "save": {
+                          "c0": {
+                            "type": "register",
+                            "index": 0
+                          },
+                          "c1": {
+                            "type": "register",
+                            "index": 1
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "after": {
+                    "type": "cc",
+                    "save": {
+                      "c0": {
+                        "type": "register",
+                        "index": 0
+                      },
+                      "c1": {
+                        "type": "register",
+                        "index": 1
+                      }
+                    }
+                  }
+                }
+              },
+              "c1": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  },
+                  "c1": {
+                    "type": "register",
+                    "index": 1
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "UNTILENDBRK": {
@@ -9478,6 +10081,38 @@
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "cc",
+            "save": {
+              "c0": {
+                "type": "special",
+                "name": "until",
+                "args": {
+                  "body": {
+                    "type": "cc",
+                    "save": {
+                      "c1": {
+                        "type": "register",
+                        "index": 0
+                      }
+                    }
+                  },
+                  "after": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              },
+              "c1": {
+                "type": "register",
+                "index": 0
+              }
+            }
+          }
+        ]
       }
     },
     "WHILEBRK": {
@@ -9519,6 +10154,43 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c2",
+            "save": {
+              "c0": {
+                "type": "special",
+                "name": "while",
+                "args": {
+                  "cond": {
+                    "type": "variable",
+                    "var_name": "c2"
+                  },
+                  "body": {
+                    "type": "variable",
+                    "var_name": "c"
+                  },
+                  "after": {
+                    "type": "cc",
+                    "save": {
+                      "c0": {
+                        "type": "register",
+                        "index": 0
+                      },
+                      "c1": {
+                        "type": "register",
+                        "index": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "WHILEENDBRK": {
@@ -9917,7 +10589,7 @@
       "sub_category": "continuation_change",
       "description": {
         "short": "",
-        "long": "Pushes the current value of control register `c(i)` onto the stack, where `i`, `0 <= i <= 255`, is taken from the stack. Unlike `c(i) PUSHCTR` which takes the register index from the instruction itself, this instruction takes this index from the stack. If the control register is not supported in the current codepage, or if it does not have a value, an exception is triggered.\nNotice that this primitive is one of the few ''exotic'' primitives, which are not polymorphic like stack manipulation primitives, and at the same time do not have well-defined types of parameters and return values, because the type of `x` depends on `i`.",
+        "long": "Pushes the current value of control register `c(i)` onto the stack, where `i`, `0 <= i <= 255`, is taken from the stack. Unlike `c(i) PUSHCTR` which takes the register index from the instruction itself, this instruction takes this index from the stack. If the control register is not supported in the current codepage, or if it does not have a value, an exception is triggered.\nNotice that this primitive is one of the few \"exotic\" primitives, which are not polymorphic like stack manipulation primitives, and at the same time do not have well-defined types of parameters and return values, because the type of `x` depends on `i`.",
         "tags": [],
         "operands": []
       },
@@ -10250,7 +10922,7 @@
       "sub_category": "continuation_change",
       "description": {
         "short": "",
-        "long": "Computes composition `compose1(compose0(c, c'), c')`, which has the meaning of ''compute boolean circuit `c`, then compute `c'`, regardless of the result of `c`''.",
+        "long": "Computes composition `compose1(compose0(c, c'), c')`, which has the meaning of \"compute boolean circuit `c`, then compute `c'`, regardless of the result of `c`\".",
         "tags": [],
         "operands": []
       },
@@ -10650,6 +11322,56 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "special",
+                "name": "pushint",
+                "args": {
+                  "next": {
+                    "type": "cc",
+                    "save": {
+                      "c0": {
+                        "type": "register",
+                        "index": 0
+                      },
+                      "c1": {
+                        "type": "register",
+                        "index": 1
+                      }
+                    }
+                  },
+                  "value": -1
+                }
+              },
+              "c1": {
+                "type": "special",
+                "name": "pushint",
+                "args": {
+                  "next": {
+                    "type": "cc",
+                    "save": {
+                      "c0": {
+                        "type": "register",
+                        "index": 0
+                      },
+                      "c1": {
+                        "type": "register",
+                        "index": 1
+                      }
+                    }
+                  },
+                  "value": 0
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "SAMEALT": {
@@ -10688,7 +11410,7 @@
           "registers": [
             {
               "type": "constant",
-              "index": 0
+              "index": 1
             }
           ]
         },
@@ -10767,7 +11489,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Sets `c2` to `c'`, first saving the old value of `c2` both into the savelist of `c'` and into the savelist of the current continuation, which is stored into `c.c0` and `c'.c0`. Then runs `c` similarly to `EXECUTE`. If `c` does not throw any exceptions, the original value of `c2` is automatically restored on return from `c`. If an exception occurs, the execution is transferred to `c'`, but the original value of `c2` is restored in the process, so that `c'` can re-throw the exception by `THROWANY` if it cannot handle it by itself.",
+        "long": "Sets `c2` to `handler`, first saving the old value of `c2` both into the savelist of `handler` and into the savelist of the current continuation `cc`, which is stored into `body.c0` and `handler.c0`. Then runs `body` similarly to `EXECUTE`. If `body` does not throw any exceptions, the original value of `c2` is automatically restored on return from `body`. If an exception occurs, the execution is transferred to `handler`, but the original value of `c2` is restored in the process, so that `handler` can re-throw the exception by `THROWANY` if it cannot handle it by itself.",
         "tags": ["exception_handling", "control_flow"],
         "operands": []
       },
@@ -10801,6 +11523,60 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  },
+                  "c1": {
+                    "type": "register",
+                    "index": 1
+                  },
+                  "c2": {
+                    "type": "register",
+                    "index": 2
+                  }
+                }
+              },
+              "c2": {
+                "type": "variable",
+                "var_name": "c2",
+                "save": {
+                  "c0": {
+                    "type": "cc",
+                    "save": {
+                      "c0": {
+                        "type": "register",
+                        "index": 0
+                      },
+                      "c1": {
+                        "type": "register",
+                        "index": 1
+                      },
+                      "c2": {
+                        "type": "register",
+                        "index": 2
+                      }
+                    }
+                  },
+                  "c2": {
+                    "type": "register",
+                    "index": 2
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "STDICT": {
@@ -11117,7 +11893,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "A quiet version of `LDDICT`.",
+        "long": "Loads a dictionary `D` from _Slice_ `s`, and returns the remainder of `s` as `s'`. May be applied to dictionaries or to values of arbitrary `(^Y)?` types. This is a quiet version of `LDDICT` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": [],
         "operands": []
       },
@@ -11136,7 +11912,7 @@
         "prefix_str": "F406"
       },
       "signature": {
-        "stack_string": "s:Slice -> (s:Int 0)|(D:Cell|Null s2:Slice -1) status:Int",
+        "stack_string": "s:Slice -> (∅ 0)|(D:Cell|Null s':Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -11154,13 +11930,7 @@
               "match": [
                 {
                   "value": 0,
-                  "stack": [
-                    {
-                      "type": "simple",
-                      "name": "s",
-                      "value_types": ["Int"]
-                    }
-                  ]
+                  "stack": []
                 },
                 {
                   "value": -1,
@@ -11172,7 +11942,7 @@
                     },
                     {
                       "type": "simple",
-                      "name": "s2",
+                      "name": "s'",
                       "value_types": ["Slice"]
                     }
                   ]
@@ -11778,15 +12548,39 @@
         "prefix_str": "F4AA"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "s:Slice D:Cell|Null n:Int -> ∅",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "s",
+              "value_types": ["Slice"]
+            },
+            {
+              "type": "simple",
+              "name": "D",
+              "value_types": ["Cell", "Null"]
+            },
+            {
+              "type": "simple",
+              "name": "n",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "x"
+          }
+        ]
       }
     },
     "PFXDICTGETEXEC": {
@@ -11853,6 +12647,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "x",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "NOP": {
@@ -13634,7 +14447,7 @@
         "prefix_str": "F82A"
       },
       "signature": {
-        "stack_string": "∅ -> value:Int",
+        "stack_string": "∅ -> value:Cell",
         "inputs": {
           "stack": [],
           "registers": []
@@ -13644,7 +14457,7 @@
             {
               "type": "simple",
               "name": "value",
-              "value_types": ["Int"]
+              "value_types": ["Cell"]
             }
           ],
           "registers": []
@@ -29584,6 +30397,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "x"
+          }
+        ]
       }
     },
     "DICTUGETJMP": {
@@ -29630,6 +30451,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "x"
+          }
+        ]
       }
     },
     "DICTIGETEXEC": {
@@ -29676,6 +30505,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "x",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "DICTUGETEXEC": {
@@ -29722,6 +30570,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "x",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "DICTIGETJMPZ": {
@@ -29748,15 +30615,38 @@
         "prefix_str": "F4BC"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "i:Int D:Cell|Null n:Int -> ∅",
         "inputs": {
-          "stack": [],
-          "registers": []
+          "stack": [
+            {
+              "type": "simple",
+              "name": "i",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "D",
+              "value_types": ["Cell", "Null"]
+            },
+            {
+              "type": "simple",
+              "name": "n",
+              "value_types": ["Int"]
+            }
+          ]
         },
         "outputs": {
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "x"
+          }
+        ]
       }
     },
     "DICTUGETJMPZ": {
@@ -29783,15 +30673,39 @@
         "prefix_str": "F4BD"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "i:Int D:Cell|Null n:Int -> ∅",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "i",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "D",
+              "value_types": ["Cell", "Null"]
+            },
+            {
+              "type": "simple",
+              "name": "n",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "x"
+          }
+        ]
       }
     },
     "DICTIGETEXECZ": {
@@ -29827,6 +30741,25 @@
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "x",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "DICTUGETEXECZ": {
@@ -29862,6 +30795,25 @@
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "x",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "DICTGET": {
@@ -37411,7 +38363,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "A version of `DICTDEL` with the key represented by a signed `n`-bit _Integer_ `i`. If `i` does not fit into `n` bits, simply returns `D` `0` (''key not found, dictionary unmodified'').",
+        "long": "A version of `DICTDEL` with the key represented by a signed `n`-bit _Integer_ `i`. If `i` does not fit into `n` bits, simply returns `D` `0` (\"key not found, dictionary unmodified\").",
         "tags": [],
         "operands": []
       },
@@ -37492,7 +38444,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Deletes `n`-bit key, represented by an unsigned `n`-bit _Integer_ `i`, from dictionary `D`. If the key is present, returns the modified dictionary `D'` and the success flag `-1`. Otherwise, returns the original dictionary `D` and `0`. If `i` does not fit into `n` bits, simply returns `D` `0` (''key not found, dictionary unmodified'').",
+        "long": "Deletes `n`-bit key, represented by an unsigned `n`-bit _Integer_ `i`, from dictionary `D`. If the key is present, returns the modified dictionary `D'` and the success flag `-1`. Otherwise, returns the original dictionary `D` and `0`. If `i` does not fit into `n` bits, simply returns `D` `0` (\"key not found, dictionary unmodified\").",
         "tags": [],
         "operands": []
       },
@@ -40638,6 +41590,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "TRYARGS": {
@@ -40645,7 +41605,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Similar to `TRY`, but with `[p] [r] CALLXARGS` internally used instead of `EXECUTE`.\nIn this way, all but the top `0 <= p <= 15` stack elements will be saved into current continuation's stack, and then restored upon return from either `c` or `c'`, with the top `0 <= r <= 15` values of the resulting stack of `c` or `c'` copied as return values.",
+        "long": "Similar to `TRY`, but with `[p] [r] CALLXARGS` internally used instead of `EXECUTE`.\nIn this way, all but the top `0 <= p <= 15` stack elements will be saved into current continuation's stack, and then restored upon return from either `body` or `handler`, with the top `0 <= r <= 15` values of the resulting stack of `body` or `handler` copied as return values.",
         "tags": ["exception_handling", "control_flow"],
         "operands": ["p", "r"]
       },
@@ -40707,6 +41667,60 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  },
+                  "c1": {
+                    "type": "register",
+                    "index": 1
+                  },
+                  "c2": {
+                    "type": "register",
+                    "index": 2
+                  }
+                }
+              },
+              "c2": {
+                "type": "variable",
+                "var_name": "c2",
+                "save": {
+                  "c0": {
+                    "type": "cc",
+                    "save": {
+                      "c0": {
+                        "type": "register",
+                        "index": 0
+                      },
+                      "c1": {
+                        "type": "register",
+                        "index": 1
+                      },
+                      "c2": {
+                        "type": "register",
+                        "index": 2
+                      }
+                    }
+                  },
+                  "c2": {
+                    "type": "register",
+                    "index": 2
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "PLDREFIDX": {
@@ -40932,6 +41946,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 3
+          }
+        ]
       }
     },
     "PREPAREDICT": {
@@ -41202,6 +42224,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "RETARGS": {
@@ -41251,8 +42281,22 @@
                 }
               ]
             }
+          ],
+          "registers": [
+            {
+              "type": "constant",
+              "index": 0
+            }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 0
+          }
+        ]
       }
     },
     "RETURNARGS": {
@@ -42921,8 +43965,8 @@
       "category": "continuation",
       "sub_category": "continuation_change",
       "description": {
-        "short": "",
-        "long": "Transforms a _Slice_ into a simple ordinary continuation and sets `r` arguments and `n` missing arguments.\nThe value of `n` is represented inside the instruction by the 4-bit integer `n mod 16`.",
+        "short": "Transforms a _Slice_ into a simple ordinary continuation and sets `r` arguments and `n` missing arguments.",
+        "long": "The value of `n` is represented inside the instruction by the 4-bit integer `n mod 16`.",
         "tags": [],
         "operands": ["r", "n"],
         "other_implementations": [
@@ -44414,6 +45458,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "IFNBITJMP": {
@@ -44473,6 +45525,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "INDEX2": {
@@ -45152,6 +46212,25 @@
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "JMPREF": {
@@ -45198,6 +46277,14 @@
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "JMPREFDATA": {
@@ -45244,6 +46331,14 @@
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "IFREF": {
@@ -45291,6 +46386,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "IFNOTREF": {
@@ -45338,6 +46452,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "IFJMPREF": {
@@ -45385,6 +46518,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "IFNOTJMPREF": {
@@ -45432,6 +46573,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "IFREFELSE": {
@@ -45484,6 +46633,40 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "variable",
+            "var_name": "c2",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "IFELSEREF": {
@@ -45536,6 +46719,40 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "variable",
+            "var_name": "c2",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "IFREFELSEREF": {
@@ -45586,6 +46803,40 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c1",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "variable",
+            "var_name": "c2",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "IFBITJMPREF": {
@@ -45644,6 +46895,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "IFNBITJMPREF": {
@@ -45702,6 +46961,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "DICTPUSHCONST": {
@@ -46744,7 +48011,7 @@
       "sub_category": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Runs child VM with code `code` and stack `x_1...x_n`. Returns the resulting stack `x'_1...x'_m` and exitcode. Other arguments and return values are enabled by flags.",
+        "long": "Runs child VM with `code` and stack `x_1...x_n`. Returns the resulting stack `x'_1...x'_m` and exitcode. Other arguments and return values are enabled by flags.",
         "tags": [],
         "operands": ["flags"]
       },
@@ -51062,6 +52329,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 3,
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "CALLDICT_LONG": {
@@ -51117,6 +52403,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 3,
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "THROW_SHORT": {
@@ -52522,6 +53827,25 @@
           ],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "CALLXARGS_1": {

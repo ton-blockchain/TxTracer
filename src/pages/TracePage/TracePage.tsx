@@ -1,5 +1,5 @@
 import React, {Suspense, useCallback, useEffect, useState} from "react"
-import {FiClock, FiGithub, FiPlay, FiSearch, FiX, FiZap} from "react-icons/fi"
+import {FiBook, FiClock, FiGithub, FiPlay, FiSearch, FiX, FiZap} from "react-icons/fi"
 
 import {type StackElement} from "ton-assembly/dist/trace"
 
@@ -392,6 +392,18 @@ function TracePage() {
                     Perfect for understanding how your smart contracts work under the hood.
                   </p>
                   <span className={styles.featureCardBadge}>Explore</span>
+                </a>
+
+                <a href="/spec/" className={styles.featureCard}>
+                  <div className={`${styles.featureCardIcon} ${styles.specIcon}`}>
+                    <FiBook aria-hidden="true" />
+                  </div>
+                  <h3 className={styles.featureCardTitle}>TVM Specification</h3>
+                  <p className={styles.featureCardDescription}>
+                    Browse the complete TVM instruction reference with detailed descriptions,
+                    opcodes, stack effects, and control flow information for every instruction.
+                  </p>
+                  <span className={styles.featureCardBadge}>Reference</span>
                 </a>
 
                 <a href="/sandbox/" className={styles.featureCard}>
