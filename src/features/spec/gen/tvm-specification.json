@@ -8529,7 +8529,7 @@
       "sub_category": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Runs child VM with code `code` and stack `x_1...x_n`. Returns the resulting stack `x'_1...x'_m` and exitcode. Other arguments and return values are enabled by flags.",
+        "long": "Runs child VM with `code` and stack `x_1...x_n`. Returns the resulting stack `x'_1...x'_m` and exitcode. Other arguments and return values are enabled by flags.",
         "tags": [],
         "operands": []
       },
@@ -8902,7 +8902,7 @@
       "sub_category": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Jumps to `body` (similarly to `JMPX`), but only if `cond` is zero.",
+        "long": "Transfers control to `body` if `cond` is zero. The remainder of the current continuation is discarded which means that after `body` completes, control will not return to instruction immediately following the `IFJMP`. Instead, it will return to the instruction immediately following the instruction that started current continuation. If such continuation is not present, the program will exit.",
         "tags": [],
         "operands": []
       },
@@ -9037,9 +9037,15 @@
       "sub_category": "continuation_cond",
       "description": {
         "short": "",
-        "long": "If integer `f` is non-zero, returns `x`, otherwise returns `y`. Notice that no type checks are performed on `x` and `y`; as such, it is more like a conditional stack operation. Roughly equivalent to `ROT` `ISZERO` `INC` `ROLLX` `NIP`.",
+        "long": "If integer `f` is non-zero, returns `x`, otherwise returns `y`. Notice that no type checks are performed on `x` and `y`, so, it is more like a conditional stack operation.",
         "tags": [],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["ROT", "ISZERO", "INC", "ROLLX", "NIP"]
+          }
+        ]
       },
       "layout": {
         "min": 14877696,
@@ -9089,7 +9095,7 @@
       "sub_category": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Same as `CONDSEL`, but first checks whether `x` and `y` have the same type.",
+        "long": "If integer `f` is non-zero, returns `x`, otherwise returns `y`. Unlike `CONDSEL` this instruction checks whether `x` and `y` have the same type.",
         "tags": [],
         "operands": []
       },
@@ -10583,7 +10589,7 @@
       "sub_category": "continuation_change",
       "description": {
         "short": "",
-        "long": "Pushes the current value of control register `c(i)` onto the stack, where `i`, `0 <= i <= 255`, is taken from the stack. Unlike `c(i) PUSHCTR` which takes the register index from the instruction itself, this instruction takes this index from the stack. If the control register is not supported in the current codepage, or if it does not have a value, an exception is triggered.\nNotice that this primitive is one of the few ''exotic'' primitives, which are not polymorphic like stack manipulation primitives, and at the same time do not have well-defined types of parameters and return values, because the type of `x` depends on `i`.",
+        "long": "Pushes the current value of control register `c(i)` onto the stack, where `i`, `0 <= i <= 255`, is taken from the stack. Unlike `c(i) PUSHCTR` which takes the register index from the instruction itself, this instruction takes this index from the stack. If the control register is not supported in the current codepage, or if it does not have a value, an exception is triggered.\nNotice that this primitive is one of the few \"exotic\" primitives, which are not polymorphic like stack manipulation primitives, and at the same time do not have well-defined types of parameters and return values, because the type of `x` depends on `i`.",
         "tags": [],
         "operands": []
       },
@@ -10916,7 +10922,7 @@
       "sub_category": "continuation_change",
       "description": {
         "short": "",
-        "long": "Computes composition `compose1(compose0(c, c'), c')`, which has the meaning of ''compute boolean circuit `c`, then compute `c'`, regardless of the result of `c`''.",
+        "long": "Computes composition `compose1(compose0(c, c'), c')`, which has the meaning of \"compute boolean circuit `c`, then compute `c'`, regardless of the result of `c`\".",
         "tags": [],
         "operands": []
       },
@@ -11404,7 +11410,7 @@
           "registers": [
             {
               "type": "constant",
-              "index": 0
+              "index": 1
             }
           ]
         },
@@ -11483,7 +11489,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Sets `c2` to `c'`, first saving the old value of `c2` both into the savelist of `c'` and into the savelist of the current continuation, which is stored into `c.c0` and `c'.c0`. Then runs `c` similarly to `EXECUTE`. If `c` does not throw any exceptions, the original value of `c2` is automatically restored on return from `c`. If an exception occurs, the execution is transferred to `c'`, but the original value of `c2` is restored in the process, so that `c'` can re-throw the exception by `THROWANY` if it cannot handle it by itself.",
+        "long": "Sets `c2` to `handler`, first saving the old value of `c2` both into the savelist of `handler` and into the savelist of the current continuation `cc`, which is stored into `body.c0` and `handler.c0`. Then runs `body` similarly to `EXECUTE`. If `body` does not throw any exceptions, the original value of `c2` is automatically restored on return from `body`. If an exception occurs, the execution is transferred to `handler`, but the original value of `c2` is restored in the process, so that `handler` can re-throw the exception by `THROWANY` if it cannot handle it by itself.",
         "tags": ["exception_handling", "control_flow"],
         "operands": []
       },
@@ -11887,7 +11893,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "A quiet version of `LDDICT`.",
+        "long": "Loads a dictionary `D` from _Slice_ `s`, and returns the remainder of `s` as `s'`. May be applied to dictionaries or to values of arbitrary `(^Y)?` types. This is a quiet version of `LDDICT` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": [],
         "operands": []
       },
@@ -11906,7 +11912,7 @@
         "prefix_str": "F406"
       },
       "signature": {
-        "stack_string": "s:Slice -> (s:Int 0)|(D:Cell|Null s2:Slice -1) status:Int",
+        "stack_string": "s:Slice -> (∅ 0)|(D:Cell|Null s':Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -11924,13 +11930,7 @@
               "match": [
                 {
                   "value": 0,
-                  "stack": [
-                    {
-                      "type": "simple",
-                      "name": "s",
-                      "value_types": ["Int"]
-                    }
-                  ]
+                  "stack": []
                 },
                 {
                   "value": -1,
@@ -11942,7 +11942,7 @@
                     },
                     {
                       "type": "simple",
-                      "name": "s2",
+                      "name": "s'",
                       "value_types": ["Slice"]
                     }
                   ]
@@ -12548,9 +12548,25 @@
         "prefix_str": "F4AA"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "s:Slice D:Cell|Null n:Int -> ∅",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "s",
+              "value_types": ["Slice"]
+            },
+            {
+              "type": "simple",
+              "name": "D",
+              "value_types": ["Cell", "Null"]
+            },
+            {
+              "type": "simple",
+              "name": "n",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
@@ -30599,10 +30615,25 @@
         "prefix_str": "F4BC"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "i:Int D:Cell|Null n:Int -> ∅",
         "inputs": {
-          "stack": [],
-          "registers": []
+          "stack": [
+            {
+              "type": "simple",
+              "name": "i",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "D",
+              "value_types": ["Cell", "Null"]
+            },
+            {
+              "type": "simple",
+              "name": "n",
+              "value_types": ["Int"]
+            }
+          ]
         },
         "outputs": {
           "stack": [],
@@ -30642,9 +30673,25 @@
         "prefix_str": "F4BD"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "i:Int D:Cell|Null n:Int -> ∅",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "i",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "D",
+              "value_types": ["Cell", "Null"]
+            },
+            {
+              "type": "simple",
+              "name": "n",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
@@ -38316,7 +38363,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "A version of `DICTDEL` with the key represented by a signed `n`-bit _Integer_ `i`. If `i` does not fit into `n` bits, simply returns `D` `0` (''key not found, dictionary unmodified'').",
+        "long": "A version of `DICTDEL` with the key represented by a signed `n`-bit _Integer_ `i`. If `i` does not fit into `n` bits, simply returns `D` `0` (\"key not found, dictionary unmodified\").",
         "tags": [],
         "operands": []
       },
@@ -38397,7 +38444,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Deletes `n`-bit key, represented by an unsigned `n`-bit _Integer_ `i`, from dictionary `D`. If the key is present, returns the modified dictionary `D'` and the success flag `-1`. Otherwise, returns the original dictionary `D` and `0`. If `i` does not fit into `n` bits, simply returns `D` `0` (''key not found, dictionary unmodified'').",
+        "long": "Deletes `n`-bit key, represented by an unsigned `n`-bit _Integer_ `i`, from dictionary `D`. If the key is present, returns the modified dictionary `D'` and the success flag `-1`. Otherwise, returns the original dictionary `D` and `0`. If `i` does not fit into `n` bits, simply returns `D` `0` (\"key not found, dictionary unmodified\").",
         "tags": [],
         "operands": []
       },
@@ -41558,7 +41605,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Similar to `TRY`, but with `[p] [r] CALLXARGS` internally used instead of `EXECUTE`.\nIn this way, all but the top `0 <= p <= 15` stack elements will be saved into current continuation's stack, and then restored upon return from either `c` or `c'`, with the top `0 <= r <= 15` values of the resulting stack of `c` or `c'` copied as return values.",
+        "long": "Similar to `TRY`, but with `[p] [r] CALLXARGS` internally used instead of `EXECUTE`.\nIn this way, all but the top `0 <= p <= 15` stack elements will be saved into current continuation's stack, and then restored upon return from either `body` or `handler`, with the top `0 <= r <= 15` values of the resulting stack of `body` or `handler` copied as return values.",
         "tags": ["exception_handling", "control_flow"],
         "operands": ["p", "r"]
       },
@@ -42233,6 +42280,12 @@
                   "name": "arg"
                 }
               ]
+            }
+          ],
+          "registers": [
+            {
+              "type": "constant",
+              "index": 0
             }
           ]
         }
@@ -43912,8 +43965,8 @@
       "category": "continuation",
       "sub_category": "continuation_change",
       "description": {
-        "short": "",
-        "long": "Transforms a _Slice_ into a simple ordinary continuation and sets `r` arguments and `n` missing arguments.\nThe value of `n` is represented inside the instruction by the 4-bit integer `n mod 16`.",
+        "short": "Transforms a _Slice_ into a simple ordinary continuation and sets `r` arguments and `n` missing arguments.",
+        "long": "The value of `n` is represented inside the instruction by the 4-bit integer `n mod 16`.",
         "tags": [],
         "operands": ["r", "n"],
         "other_implementations": [
@@ -47958,7 +48011,7 @@
       "sub_category": "continuation_jump",
       "description": {
         "short": "",
-        "long": "Runs child VM with code `code` and stack `x_1...x_n`. Returns the resulting stack `x'_1...x'_m` and exitcode. Other arguments and return values are enabled by flags.",
+        "long": "Runs child VM with `code` and stack `x_1...x_n`. Returns the resulting stack `x'_1...x'_m` and exitcode. Other arguments and return values are enabled by flags.",
         "tags": [],
         "operands": ["flags"]
       },
