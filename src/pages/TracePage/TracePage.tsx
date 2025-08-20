@@ -248,7 +248,7 @@ function TracePage() {
 
           <div className={styles.externalLinksContainer}>
             <a
-              href="https://github.com/tact-lang/txtracer"
+              href="https://github.com/ton-blockchain/txtracer"
               target="_blank"
               rel="noopener noreferrer"
               title="GitHub Repository"
