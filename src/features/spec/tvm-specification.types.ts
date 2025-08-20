@@ -22,6 +22,7 @@ export interface Instruction {
   readonly signature: InstructionSignature
   readonly effects?: Effect[]
   readonly operands?: string[]
+  readonly control_flow?: ControlFlowOfInstruction
 }
 
 export enum Category {
@@ -175,4 +176,87 @@ export enum Kind {
   Fixed = "fixed",
   FixedRange = "fixed-range",
   Simple = "simple",
+}
+
+/**
+ * Information related to current cc modification by instruction
+ */
+export interface ControlFlowOfInstruction {
+  readonly branches: PossibleBranchesOfAnInstruction
+  readonly nobranch?: boolean
+}
+
+/**
+ * Array of current continuation possible values after current instruction execution
+ */
+export type PossibleBranchesOfAnInstruction = Continuation[]
+
+/**
+ * Description of a continuation with static savelist
+ */
+export type Continuation =
+  | {
+      readonly type: "cc"
+      readonly save?: ContinuationSavelist
+    }
+  | {
+      readonly type: "variable"
+      readonly var_name: string
+      readonly save?: ContinuationSavelist
+    }
+  | {
+      readonly type: "register"
+      readonly index: number
+      readonly save?: ContinuationSavelist
+    }
+  | {
+      readonly type: "special"
+      readonly name: "until"
+      readonly args: {
+        readonly body: Continuation
+        readonly after: Continuation
+      }
+    }
+  | {
+      readonly type: "special"
+      readonly name: "while"
+      readonly args: {
+        readonly cond: Continuation
+        readonly body: Continuation
+        readonly after: Continuation
+      }
+    }
+  | {
+      readonly type: "special"
+      readonly name: "again"
+      readonly args: {
+        readonly body: Continuation
+      }
+    }
+  | {
+      readonly type: "special"
+      readonly name: "repeat"
+      readonly args: {
+        readonly count: string
+        readonly body: Continuation
+        readonly after: Continuation
+      }
+    }
+  | {
+      readonly type: "special"
+      readonly name: "pushint"
+      readonly args: {
+        readonly value: number
+        readonly next: Continuation
+      }
+    }
+
+/**
+ * Values of saved control flow registers c0-c3
+ */
+export interface ContinuationSavelist {
+  readonly c0?: Continuation
+  readonly c1?: Continuation
+  readonly c2?: Continuation
+  readonly c3?: Continuation
 }

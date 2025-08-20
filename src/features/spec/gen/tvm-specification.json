@@ -7882,6 +7882,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "JMPX": {
@@ -7918,6 +7937,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "RET": {
@@ -7953,12 +7980,25 @@
         "stack_string": "∅ -> ∅",
         "inputs": {
           "stack": [],
-          "registers": []
+          "registers": [
+            {
+              "type": "constant",
+              "index": 0
+            }
+          ]
         },
         "outputs": {
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 0
+          }
+        ]
       }
     },
     "RETALT": {
@@ -7994,12 +8034,25 @@
         "stack_string": "∅ -> ∅",
         "inputs": {
           "stack": [],
-          "registers": []
+          "registers": [
+            {
+              "type": "constant",
+              "index": 1
+            }
+          ]
         },
         "outputs": {
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 1
+          }
+        ]
       }
     },
     "RETBOOL": {
@@ -8035,7 +8088,16 @@
               "value_types": ["Bool"]
             }
           ],
-          "registers": []
+          "registers": [
+            {
+              "type": "constant",
+              "index": 0
+            },
+            {
+              "type": "constant",
+              "index": 1
+            }
+          ]
         },
         "outputs": {
           "stack": [],
@@ -8077,6 +8139,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "JMPXDATA": {
@@ -8113,6 +8183,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "CALLXVARARGS": {
@@ -8170,6 +8248,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "RETVARARGS": {
@@ -8222,6 +8319,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "JMPXVARARGS": {
@@ -8279,6 +8395,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "CALLCCVARARGS": {
@@ -8336,6 +8460,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "RETDATA": {
@@ -8371,12 +8503,25 @@
         "stack_string": "∅ -> ∅",
         "inputs": {
           "stack": [],
-          "registers": []
+          "registers": [
+            {
+              "type": "constant",
+              "index": 0
+            }
+          ]
         },
         "outputs": {
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 0
+          }
+        ]
       }
     },
     "RUNVMX": {
@@ -8447,8 +8592,22 @@
               "name": "cond",
               "value_types": ["Int"]
             }
+          ],
+          "registers": [
+            {
+              "type": "constant",
+              "index": 0
+            }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 0
+          }
+        ]
       }
     },
     "IFNOTRET": {
@@ -8483,8 +8642,22 @@
               "name": "cond",
               "value_types": ["Int"]
             }
+          ],
+          "registers": [
+            {
+              "type": "constant",
+              "index": 0
+            }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 0
+          }
+        ]
       }
     },
     "IF": {
@@ -8568,6 +8741,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "IFNOT": {
@@ -8609,6 +8801,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "IFJMP": {
@@ -8676,6 +8887,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "IFNOTJMP": {
@@ -8717,6 +8936,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "IFELSE": {
@@ -8769,6 +8996,40 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "variable",
+            "var_name": "c2",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "CONDSEL": {
@@ -8907,8 +9168,22 @@
               "name": "cond",
               "value_types": ["Int"]
             }
+          ],
+          "registers": [
+            {
+              "type": "constant",
+              "index": 1
+            }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 1
+          }
+        ]
       }
     },
     "IFNOTRETALT": {
@@ -8943,8 +9218,22 @@
               "name": "cond",
               "value_types": ["Int"]
             }
+          ],
+          "registers": [
+            {
+              "type": "constant",
+              "index": 1
+            }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 1
+          }
+        ]
       }
     },
     "REPEAT": {
@@ -9037,6 +9326,30 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "special",
+            "name": "repeat",
+            "args": {
+              "count": "n",
+              "body": {
+                "type": "variable",
+                "var_name": "c"
+              },
+              "after": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "REPEATEND": {
@@ -9073,6 +9386,24 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "special",
+            "name": "repeat",
+            "args": {
+              "count": "n",
+              "body": {
+                "type": "cc"
+              },
+              "after": {
+                "type": "register",
+                "index": 0
+              }
+            }
+          }
+        ]
       }
     },
     "UNTIL": {
@@ -9109,6 +9440,35 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "special",
+                "name": "until",
+                "args": {
+                  "body": {
+                    "type": "variable",
+                    "var_name": "c"
+                  },
+                  "after": {
+                    "type": "cc",
+                    "save": {
+                      "c0": {
+                        "type": "register",
+                        "index": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "UNTILEND": {
@@ -9144,6 +9504,28 @@
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "cc",
+            "save": {
+              "c0": {
+                "type": "special",
+                "name": "until",
+                "args": {
+                  "body": {
+                    "type": "cc"
+                  },
+                  "after": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "WHILE": {
@@ -9211,6 +9593,39 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c2",
+            "save": {
+              "c0": {
+                "type": "special",
+                "name": "while",
+                "args": {
+                  "cond": {
+                    "type": "variable",
+                    "var_name": "c2"
+                  },
+                  "body": {
+                    "type": "variable",
+                    "var_name": "c"
+                  },
+                  "after": {
+                    "type": "cc",
+                    "save": {
+                      "c0": {
+                        "type": "register",
+                        "index": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "WHILEEND": {
@@ -9247,6 +9662,33 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c2",
+            "save": {
+              "c0": {
+                "type": "special",
+                "name": "while",
+                "args": {
+                  "cond": {
+                    "type": "variable",
+                    "var_name": "c2"
+                  },
+                  "body": {
+                    "type": "cc"
+                  },
+                  "after": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "AGAIN": {
@@ -9283,6 +9725,20 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "special",
+            "name": "again",
+            "args": {
+              "body": {
+                "type": "variable",
+                "var_name": "c"
+              }
+            }
+          }
+        ]
       }
     },
     "AGAINEND": {
@@ -9318,6 +9774,19 @@
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "special",
+            "name": "again",
+            "args": {
+              "body": {
+                "type": "cc"
+              }
+            }
+          }
+        ]
       }
     },
     "REPEATBRK": {
@@ -9359,6 +9828,49 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "special",
+            "name": "repeat",
+            "args": {
+              "count": "n",
+              "body": {
+                "type": "variable",
+                "var_name": "c",
+                "save": {
+                  "c1": {
+                    "type": "cc",
+                    "save": {
+                      "c0": {
+                        "type": "register",
+                        "index": 0
+                      },
+                      "c1": {
+                        "type": "register",
+                        "index": 1
+                      }
+                    }
+                  }
+                }
+              },
+              "after": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  },
+                  "c1": {
+                    "type": "register",
+                    "index": 1
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "REPEATENDBRK": {
@@ -9401,6 +9913,30 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "special",
+            "name": "repeat",
+            "args": {
+              "count": "n",
+              "body": {
+                "type": "cc",
+                "save": {
+                  "c1": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              },
+              "after": {
+                "type": "register",
+                "index": 0
+              }
+            }
+          }
+        ]
       }
     },
     "UNTILBRK": {
@@ -9437,6 +9973,67 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "special",
+                "name": "until",
+                "args": {
+                  "body": {
+                    "type": "variable",
+                    "var_name": "c",
+                    "save": {
+                      "c1": {
+                        "type": "cc",
+                        "save": {
+                          "c0": {
+                            "type": "register",
+                            "index": 0
+                          },
+                          "c1": {
+                            "type": "register",
+                            "index": 1
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "after": {
+                    "type": "cc",
+                    "save": {
+                      "c0": {
+                        "type": "register",
+                        "index": 0
+                      },
+                      "c1": {
+                        "type": "register",
+                        "index": 1
+                      }
+                    }
+                  }
+                }
+              },
+              "c1": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  },
+                  "c1": {
+                    "type": "register",
+                    "index": 1
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "UNTILENDBRK": {
@@ -9478,6 +10075,38 @@
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "cc",
+            "save": {
+              "c0": {
+                "type": "special",
+                "name": "until",
+                "args": {
+                  "body": {
+                    "type": "cc",
+                    "save": {
+                      "c1": {
+                        "type": "register",
+                        "index": 0
+                      }
+                    }
+                  },
+                  "after": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              },
+              "c1": {
+                "type": "register",
+                "index": 0
+              }
+            }
+          }
+        ]
       }
     },
     "WHILEBRK": {
@@ -9519,6 +10148,43 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c2",
+            "save": {
+              "c0": {
+                "type": "special",
+                "name": "while",
+                "args": {
+                  "cond": {
+                    "type": "variable",
+                    "var_name": "c2"
+                  },
+                  "body": {
+                    "type": "variable",
+                    "var_name": "c"
+                  },
+                  "after": {
+                    "type": "cc",
+                    "save": {
+                      "c0": {
+                        "type": "register",
+                        "index": 0
+                      },
+                      "c1": {
+                        "type": "register",
+                        "index": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "WHILEENDBRK": {
@@ -10650,6 +11316,56 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "special",
+                "name": "pushint",
+                "args": {
+                  "next": {
+                    "type": "cc",
+                    "save": {
+                      "c0": {
+                        "type": "register",
+                        "index": 0
+                      },
+                      "c1": {
+                        "type": "register",
+                        "index": 1
+                      }
+                    }
+                  },
+                  "value": -1
+                }
+              },
+              "c1": {
+                "type": "special",
+                "name": "pushint",
+                "args": {
+                  "next": {
+                    "type": "cc",
+                    "save": {
+                      "c0": {
+                        "type": "register",
+                        "index": 0
+                      },
+                      "c1": {
+                        "type": "register",
+                        "index": 1
+                      }
+                    }
+                  },
+                  "value": 0
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "SAMEALT": {
@@ -10801,6 +11517,60 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  },
+                  "c1": {
+                    "type": "register",
+                    "index": 1
+                  },
+                  "c2": {
+                    "type": "register",
+                    "index": 2
+                  }
+                }
+              },
+              "c2": {
+                "type": "variable",
+                "var_name": "c2",
+                "save": {
+                  "c0": {
+                    "type": "cc",
+                    "save": {
+                      "c0": {
+                        "type": "register",
+                        "index": 0
+                      },
+                      "c1": {
+                        "type": "register",
+                        "index": 1
+                      },
+                      "c2": {
+                        "type": "register",
+                        "index": 2
+                      }
+                    }
+                  },
+                  "c2": {
+                    "type": "register",
+                    "index": 2
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "STDICT": {
@@ -11787,6 +12557,14 @@
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "x"
+          }
+        ]
       }
     },
     "PFXDICTGETEXEC": {
@@ -11853,6 +12631,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "x",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "NOP": {
@@ -13634,7 +14431,7 @@
         "prefix_str": "F82A"
       },
       "signature": {
-        "stack_string": "∅ -> value:Int",
+        "stack_string": "∅ -> value:Cell",
         "inputs": {
           "stack": [],
           "registers": []
@@ -13644,7 +14441,7 @@
             {
               "type": "simple",
               "name": "value",
-              "value_types": ["Int"]
+              "value_types": ["Cell"]
             }
           ],
           "registers": []
@@ -29584,6 +30381,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "x"
+          }
+        ]
       }
     },
     "DICTUGETJMP": {
@@ -29630,6 +30435,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "x"
+          }
+        ]
       }
     },
     "DICTIGETEXEC": {
@@ -29676,6 +30489,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "x",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "DICTUGETEXEC": {
@@ -29722,6 +30554,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "x",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "DICTIGETJMPZ": {
@@ -29757,6 +30608,14 @@
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "x"
+          }
+        ]
       }
     },
     "DICTUGETJMPZ": {
@@ -29792,6 +30651,14 @@
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "x"
+          }
+        ]
       }
     },
     "DICTIGETEXECZ": {
@@ -29827,6 +30694,25 @@
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "x",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "DICTUGETEXECZ": {
@@ -29862,6 +30748,25 @@
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "x",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "DICTGET": {
@@ -40638,6 +41543,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "TRYARGS": {
@@ -40707,6 +41620,60 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  },
+                  "c1": {
+                    "type": "register",
+                    "index": 1
+                  },
+                  "c2": {
+                    "type": "register",
+                    "index": 2
+                  }
+                }
+              },
+              "c2": {
+                "type": "variable",
+                "var_name": "c2",
+                "save": {
+                  "c0": {
+                    "type": "cc",
+                    "save": {
+                      "c0": {
+                        "type": "register",
+                        "index": 0
+                      },
+                      "c1": {
+                        "type": "register",
+                        "index": 1
+                      },
+                      "c2": {
+                        "type": "register",
+                        "index": 2
+                      }
+                    }
+                  },
+                  "c2": {
+                    "type": "register",
+                    "index": 2
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "PLDREFIDX": {
@@ -40932,6 +41899,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 3
+          }
+        ]
       }
     },
     "PREPAREDICT": {
@@ -41202,6 +42177,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "RETARGS": {
@@ -41253,6 +42236,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 0
+          }
+        ]
       }
     },
     "RETURNARGS": {
@@ -44414,6 +45405,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "IFNBITJMP": {
@@ -44473,6 +45472,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "INDEX2": {
@@ -45152,6 +46159,25 @@
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "JMPREF": {
@@ -45198,6 +46224,14 @@
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "JMPREFDATA": {
@@ -45244,6 +46278,14 @@
           "stack": [],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "IFREF": {
@@ -45291,6 +46333,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "IFNOTREF": {
@@ -45338,6 +46399,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "IFJMPREF": {
@@ -45385,6 +46465,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "IFNOTJMPREF": {
@@ -45432,6 +46520,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "IFREFELSE": {
@@ -45484,6 +46580,40 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "variable",
+            "var_name": "c2",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "IFELSEREF": {
@@ -45536,6 +46666,40 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "variable",
+            "var_name": "c2",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "IFREFELSEREF": {
@@ -45586,6 +46750,40 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c1",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "variable",
+            "var_name": "c2",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "IFBITJMPREF": {
@@ -45644,6 +46842,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "IFNBITJMPREF": {
@@ -45702,6 +46908,14 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c"
+          }
+        ]
       }
     },
     "DICTPUSHCONST": {
@@ -51062,6 +52276,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 3,
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "CALLDICT_LONG": {
@@ -51117,6 +52350,25 @@
             }
           ]
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "register",
+            "index": 3,
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "THROW_SHORT": {
@@ -52522,6 +53774,25 @@
           ],
           "registers": []
         }
+      },
+      "control_flow": {
+        "branches": [
+          {
+            "type": "variable",
+            "var_name": "c",
+            "save": {
+              "c0": {
+                "type": "cc",
+                "save": {
+                  "c0": {
+                    "type": "register",
+                    "index": 0
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "CALLXARGS_1": {

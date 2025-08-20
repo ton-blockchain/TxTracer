@@ -13,6 +13,10 @@ import {Category, type Instruction} from "@features/spec/tvm-specification.types
 
 import {prettySubCategoryName} from "@app/pages/InstructionsPage/lib/formatCategory.ts"
 
+import {RegisterSquare} from "@app/pages/InstructionsPage/components/InstructionTable/RegisterSquare.tsx"
+
+import type {Register} from "@features/spec/signatures/stack-signatures-schema.ts"
+
 import {useProcessedMarkdown} from "../../hooks/useProcessedMarkdown"
 
 import styles from "./InstructionDetail.module.css"
@@ -48,6 +52,16 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
     !instructionName.startsWith("PUSHINT_") &&
     stackInputs.every(input => input.type === "simple" && input.value_types?.[0] === "Int")
 
+  const registerPresentation = (reg: Register) => {
+    if (reg.type === "constant") {
+      return <RegisterSquare key={reg.index} index={reg.index} />
+    }
+    if (reg.type === "variable") {
+      return <RegisterSquare key={reg.var_name} variable={reg.var_name} />
+    }
+    return null
+  }
+
   return (
     <div className={styles.detailContainer}>
       <div className={styles.leftColumn}>
@@ -77,6 +91,25 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
               <span className={styles.metadataLabel}>Gas:</span>
               <span className={styles.metadataValue}>{formattedGas}</span>
             </div>
+
+            {(instruction.signature.inputs?.registers?.length ?? 0) > 0 && (
+              <div className={styles.metadataItem}>
+                <span className={styles.metadataLabel}>Read registers:</span>
+                <span className={styles.metadataValue}>
+                  {instruction.signature.inputs?.registers?.map(reg => registerPresentation(reg))}
+                </span>
+              </div>
+            )}
+
+            {(instruction.signature.outputs?.registers?.length ?? 0) > 0 && (
+              <div className={styles.metadataItem}>
+                <span className={styles.metadataLabel}>Write registers:</span>
+                <span className={styles.metadataValue}>
+                  {instruction.signature.outputs?.registers?.map(reg => registerPresentation(reg))}
+                </span>
+              </div>
+            )}
+
             {description.tags && description.tags.length > 0 && (
               <div className={styles.metadataItem}>
                 <span className={styles.metadataLabel}>Tags:</span>
