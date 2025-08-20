@@ -53018,7 +53018,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Selects TVM codepage `num` for `1 <= num <= 15`. Negative codepages `-13...-1` are reserved for restricted versions of TVM needed to validate runs of TVM in other codepages. Negative codepage `-14` is reserved for experimental codepages, not necessarily compatible between different TVM implementations, and should be disabled in the production versions of TVM.",
+        "long": "Selects TVM codepage `num` for `-256 <= num <= -1`. Negative codepages `-13...-1` are reserved for restricted versions of TVM needed to validate runs of TVM in other codepages. Negative codepage `-14` is reserved for experimental codepages, not necessarily compatible between different TVM implementations, and should be disabled in the production versions of TVM.",
         "tags": [],
         "operands": ["num"]
       },
