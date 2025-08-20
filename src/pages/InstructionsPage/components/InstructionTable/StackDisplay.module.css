@@ -141,6 +141,12 @@
   border-color: var(--stack-item-integer-text);
 }
 
+.stackItemBool {
+  background-color: var(--stack-item-integer-bg);
+  color: var(--stack-item-integer-text);
+  border-color: var(--stack-item-integer-text);
+}
+
 .stackItemCell {
   background-color: var(--stack-item-cell-bg);
   color: var(--stack-item-cell-text);

@@ -2,7 +2,7 @@ import React from "react"
 
 import styles from "./SearchColumnsSelector.module.css"
 
-export type InstructionColumnKey = "name" | "opcode" | "gas" | "description"
+export type InstructionColumnKey = "name" | "opcode" | "description"
 
 interface SearchColumnsSelectorProps {
   readonly value: ReadonlyArray<InstructionColumnKey>
@@ -12,17 +12,17 @@ interface SearchColumnsSelectorProps {
 const LABELS: Record<InstructionColumnKey, string> = {
   opcode: "Opcode",
   name: "Name",
-  gas: "Gas",
   description: "Description",
 }
 
-const ORDER: InstructionColumnKey[] = ["opcode", "name", "gas", "description"]
+const ORDER: InstructionColumnKey[] = ["opcode", "name", "description"]
 
 const SearchColumnsSelector: React.FC<SearchColumnsSelectorProps> = ({value, onToggle}) => {
   const isSelected = (key: InstructionColumnKey) => value.includes(key)
 
   return (
     <div className={styles.container}>
+      <span>Search in:</span>
       <div className={styles.segmented} role="group" aria-label="Search in columns">
         {ORDER.map((key, index) => (
           <label key={key} className={styles.option}>

@@ -1,6 +1,16 @@
 .container {
   display: flex;
   align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+
+.container span {
+  align-self: start;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xsss);
+  position: absolute;
+  top: -14px;
 }
 
 .segmented {
