@@ -232,7 +232,7 @@
       "sub_category": "add_mul",
       "description": {
         "short": "Negates an integer and pushes the result back onto the stack.",
-        "long": "",
+        "long": "Pops an integer from the stack, negates it and pushes the result back onto the stack.",
         "tags": [],
         "operands": [],
         "exit_codes": [
@@ -775,7 +775,7 @@
       "sub_category": "shift_logic",
       "description": {
         "short": "",
-        "long": "Checks whether `x` is a `c`-bit signed integer for `0 <= c <= 1023`.",
+        "long": "Checks whether `x` is a `width`-bit signed integer for `0 <= width <= 1023`.",
         "tags": [],
         "operands": []
       },
@@ -795,7 +795,7 @@
       },
       "effects": ["CanThrow"],
       "signature": {
-        "stack_string": "x:Int c:Int -> x:Int",
+        "stack_string": "x:Int width:Int -> x:Int",
         "inputs": {
           "stack": [
             {
@@ -805,7 +805,7 @@
             },
             {
               "type": "simple",
-              "name": "c",
+              "name": "width",
               "value_types": ["Int"]
             }
           ]
@@ -826,7 +826,7 @@
       "sub_category": "shift_logic",
       "description": {
         "short": "",
-        "long": "Checks whether `x` is a `c`-bit unsigned integer for `0 <= c <= 1023`.",
+        "long": "Checks whether `x` is a `width`-bit unsigned integer for `0 <= width <= 1023`.",
         "tags": [],
         "operands": []
       },
@@ -846,7 +846,7 @@
       },
       "effects": ["CanThrow"],
       "signature": {
-        "stack_string": "x:Int c:Int -> x:Int",
+        "stack_string": "x:Int width:Int -> x:Int",
         "inputs": {
           "stack": [
             {
@@ -856,7 +856,7 @@
             },
             {
               "type": "simple",
-              "name": "c",
+              "name": "width",
               "value_types": ["Int"]
             }
           ]
@@ -877,7 +877,7 @@
       "sub_category": "shift_logic",
       "description": {
         "short": "",
-        "long": "Computes smallest `c >= 0` such that `x` fits into a `c`-bit signed integer (`-2^(c-1) <= c < 2^(c-1)`).",
+        "long": "Computes smallest `width >= 0` such that `x` fits into a `width`-bit signed integer (`-2^(width-1) <= x < 2^(width-1)`).",
         "tags": [],
         "operands": []
       },
@@ -896,7 +896,7 @@
         "prefix_str": "B602"
       },
       "signature": {
-        "stack_string": "x:Int -> c:Int",
+        "stack_string": "x:Int -> width:Int",
         "inputs": {
           "stack": [
             {
@@ -910,7 +910,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "c",
+              "name": "width",
               "value_types": ["Int"]
             }
           ]
@@ -922,7 +922,7 @@
       "sub_category": "shift_logic",
       "description": {
         "short": "",
-        "long": "Computes smallest `c >= 0` such that `x` fits into a `c`-bit unsigned integer (`0 <= x < 2^c`), or throws a range check exception.",
+        "long": "Computes smallest `width >= 0` such that `x` fits into a `width`-bit unsigned integer (`0 <= x < 2^width`), or throws a range check exception.",
         "tags": [],
         "operands": []
       },
@@ -941,7 +941,7 @@
         "prefix_str": "B603"
       },
       "signature": {
-        "stack_string": "x:Int -> c:Int",
+        "stack_string": "x:Int -> width:Int",
         "inputs": {
           "stack": [
             {
@@ -955,7 +955,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "c",
+              "name": "width",
               "value_types": ["Int"]
             }
           ]
@@ -1166,8 +1166,8 @@
       "category": "arithmetic",
       "sub_category": "add_mul",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Adds two integers and pushes the result back onto the stack. Returns `NaN` if any operand is `NaN`.",
+        "long": "Pops two integers from the stack, adds them and pushes the result back onto the stack. If any of the operands is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
         "operands": []
       },
@@ -1216,8 +1216,8 @@
       "category": "arithmetic",
       "sub_category": "add_mul",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Subtracts two integers and pushes the result back onto the stack. Returns `NaN` if any operand is `NaN`.",
+        "long": "Pops two integers from the stack, subtracts the second one from the first one and pushes the result back onto the stack. If any of the operands is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
         "operands": []
       },
@@ -1266,8 +1266,8 @@
       "category": "arithmetic",
       "sub_category": "add_mul",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Subtracts two integers in reverse order and pushes the result back onto the stack. Returns `NaN` if any operand is `NaN`.",
+        "long": "Pops two integers from the stack, subtracts the first one from the second one and pushes the result back onto the stack. If any of the operands is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
         "operands": []
       },
@@ -1316,8 +1316,8 @@
       "category": "arithmetic",
       "sub_category": "add_mul",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Negates an integer and pushes the result back onto the stack. Returns `NaN` if operand is `NaN`.",
+        "long": "Pops an integer from the stack, negates it and pushes the result back onto the stack. If the operand is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
         "operands": []
       },
@@ -1361,8 +1361,8 @@
       "category": "arithmetic",
       "sub_category": "add_mul",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Increments an integer and pushes the result back onto the stack. Returns `NaN` if operand is `NaN`.",
+        "long": "Pops an integer from the stack, increments it by 1 and pushes the result back onto the stack. If the operand is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
         "operands": []
       },
@@ -1406,8 +1406,8 @@
       "category": "arithmetic",
       "sub_category": "add_mul",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Decrements an integer and pushes the result back onto the stack. Returns `NaN` if operand is `NaN`.",
+        "long": "Pops an integer from the stack, decrements it by 1 and pushes the result back onto the stack. If the operand is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
         "operands": []
       },
@@ -1451,8 +1451,8 @@
       "category": "arithmetic",
       "sub_category": "add_mul",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Multiplies two integers and pushes the result back onto the stack. Returns `NaN` if any operand is `NaN`.",
+        "long": "Pops two integers from the stack, multiplies them and pushes the result back onto the stack. If any of the operands is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
         "operands": []
       },
@@ -1501,8 +1501,8 @@
       "category": "arithmetic",
       "sub_category": "shift_logic",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Raises 2 to the power of `x` and pushes the result back onto the stack. Returns `NaN` if operand is `NaN`.",
+        "long": "Pops an integer from the stack, raises 2 to the power of it and pushes the result back onto the stack. If the operand is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
         "operands": []
       },
@@ -1546,8 +1546,8 @@
       "category": "arithmetic",
       "sub_category": "shift_logic",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Bitwise AND of two signed integers `x` and `$y`, sign-extended to infinity and pushes the result back onto the stack. Returns `NaN` if any operand is `NaN`.",
+        "long": "Pops two signed integers from the stack, performs a bitwise AND operation on them and pushes the result back onto the stack. If any of the operands is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
         "operands": []
       },
@@ -1596,8 +1596,8 @@
       "category": "arithmetic",
       "sub_category": "shift_logic",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Bitwise OR of two signed integers `x` and `y`, sign-extended to infinity and pushes the result back onto the stack. Returns `NaN` if any operand is `NaN`.",
+        "long": "Pops two signed integers from the stack, performs a bitwise OR operation on them and pushes the result back onto the stack. If any of the operands is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
         "operands": []
       },
@@ -1646,8 +1646,8 @@
       "category": "arithmetic",
       "sub_category": "shift_logic",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Bitwise XOR of two signed integers `x` and `y`, sign-extended to infinity and pushes the result back onto the stack. Returns `NaN` if any operand is `NaN`.",
+        "long": "Pops two signed integers from the stack, performs a bitwise XOR operation on them and pushes the result back onto the stack. If any of the operands is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
         "operands": []
       },
@@ -1696,8 +1696,8 @@
       "category": "arithmetic",
       "sub_category": "shift_logic",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Bitwise NOT of an integer, sign-extended to infinity and pushes the result back onto the stack. Returns `NaN` if operand is `NaN`.",
+        "long": "Pops an integer from the stack, performs a bitwise NOT operation on it and pushes the result back onto the stack. If the operand is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
         "operands": []
       },
@@ -1841,8 +1841,8 @@
       "category": "arithmetic",
       "sub_category": "shift_logic",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Computes smallest `width >= 0` such that `x` fits into a `width`-bit signed integer. Returns `NaN` if operand is `NaN`.",
+        "long": "Computes smallest `width >= 0` such that `x` fits into a `width`-bit signed integer (`-2^(width-1) <= x < 2^(width-1)`). If the operand is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
         "operands": []
       },
@@ -1861,14 +1861,24 @@
         "prefix_str": "B7B602"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int -> width:Int",
         "inputs": {
-          "stack": [],
-          "registers": []
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            }
+          ]
         },
         "outputs": {
-          "stack": [],
-          "registers": []
+          "stack": [
+            {
+              "type": "simple",
+              "name": "width",
+              "value_types": ["Int"]
+            }
+          ]
         }
       }
     },
@@ -1876,8 +1886,8 @@
       "category": "arithmetic",
       "sub_category": "shift_logic",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Computes smallest `width >= 0` such that `x` fits into a `width`-bit unsigned integer. Returns `NaN` if operand is `NaN`.",
+        "long": "Computes smallest `width >= 0` such that `x` fits into a `width`-bit unsigned integer (`0 <= x < 2^width`). If the operand is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
         "operands": []
       },
@@ -1896,14 +1906,24 @@
         "prefix_str": "B7B603"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int -> width:Int",
         "inputs": {
-          "stack": [],
-          "registers": []
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            }
+          ]
         },
         "outputs": {
-          "stack": [],
-          "registers": []
+          "stack": [
+            {
+              "type": "simple",
+              "name": "width",
+              "value_types": ["Int"]
+            }
+          ]
         }
       }
     },
@@ -2067,7 +2087,7 @@
       "sub_category": "other_arith",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Computes the absolute value of an integer `x`. Returns `NaN` if any of the arguments is `NaN`.",
         "tags": [],
         "operands": []
       },
@@ -2086,14 +2106,24 @@
         "prefix_str": "B7B60B"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int -> result:Int",
         "inputs": {
-          "stack": [],
-          "registers": []
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            }
+          ]
         },
         "outputs": {
-          "stack": [],
-          "registers": []
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Int"]
+            }
+          ]
         }
       }
     },
@@ -2663,8 +2693,8 @@
       "category": "arithmetic",
       "sub_category": "int_cmp",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Computes the sign of an integer `x`. Returns `NaN` if operand is `NaN`.",
+        "long": "Computes the sign of an integer `x`:\n`-1` if `x < 0`, `0` if `x == 0`, `1` if `x > 0`. If the operand is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
         "operands": []
       },
@@ -2683,13 +2713,25 @@
         "prefix_str": "B7B8"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int -> result:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       }
@@ -2698,9 +2740,9 @@
       "category": "arithmetic",
       "sub_category": "int_cmp",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Compares `x` and `y` for less than and returns `-1` if true and `0` otherwise. Returns `NaN` if any operand is `NaN`.",
+        "long": "Compares two integers from the stack for less than and returns `-1` if true and `0` otherwise. If any of the operands is `NaN`, returns `NaN` instead of throwing an exception.",
+        "tags": ["comparisons"],
         "operands": []
       },
       "layout": {
@@ -2718,13 +2760,31 @@
         "prefix_str": "B7B9"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> result:Bool",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "presentation": "x < y",
+              "value_types": ["Bool"]
+            }
+          ],
           "registers": []
         }
       }
@@ -2733,9 +2793,9 @@
       "category": "arithmetic",
       "sub_category": "int_cmp",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Compares `x` and `y` for equality and returns `-1` if equal and `0` otherwise. Returns `NaN` if any operand is `NaN`.",
+        "long": "Compares two integers from the stack for equality and returns `-1` if equal and `0` otherwise. If any of the operands is `NaN`, returns `NaN` instead of throwing an exception.",
+        "tags": ["comparisons"],
         "operands": []
       },
       "layout": {
@@ -2753,13 +2813,31 @@
         "prefix_str": "B7BA"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> result:Bool",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "presentation": "x == y",
+              "value_types": ["Bool"]
+            }
+          ],
           "registers": []
         }
       }
@@ -2768,9 +2846,9 @@
       "category": "arithmetic",
       "sub_category": "int_cmp",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Compares `x` and `y` for less than or equal to and returns `-1` if true and `0` otherwise. Returns `NaN` if any operand is `NaN`.",
+        "long": "Compares two integers from the stack for less than or equal to and returns `-1` if true and `0` otherwise. If any of the operands is `NaN`, returns `NaN` instead of throwing an exception.",
+        "tags": ["comparisons"],
         "operands": []
       },
       "layout": {
@@ -2788,13 +2866,31 @@
         "prefix_str": "B7BB"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> result:Bool",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "presentation": "x <= y",
+              "value_types": ["Bool"]
+            }
+          ],
           "registers": []
         }
       }
@@ -2803,9 +2899,9 @@
       "category": "arithmetic",
       "sub_category": "int_cmp",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Compares `x` and `y` for greater than and returns `-1` if true and `0` otherwise. Returns `NaN` if any operand is `NaN`.",
+        "long": "Compares two integers from the stack for greater than and returns `-1` if true and `0` otherwise. If any of the operands is `NaN`, returns `NaN` instead of throwing an exception.",
+        "tags": ["comparisons"],
         "operands": []
       },
       "layout": {
@@ -2823,13 +2919,31 @@
         "prefix_str": "B7BC"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> result:Bool",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "presentation": "x >= y",
+              "value_types": ["Bool"]
+            }
+          ],
           "registers": []
         }
       }
@@ -2838,9 +2952,9 @@
       "category": "arithmetic",
       "sub_category": "int_cmp",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Compares `x` and `y` for inequality and returns `-1` if true and `0` otherwise. Returns `NaN` if any operand is `NaN`.",
+        "long": "Compares two integers from the stack for inequality and returns `-1` if true and `0` otherwise. If any of the operands is `NaN`, returns `NaN` instead of throwing an exception.",
+        "tags": ["comparisons"],
         "operands": []
       },
       "layout": {
@@ -2858,13 +2972,31 @@
         "prefix_str": "B7BD"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> result:Bool",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "presentation": "x != y",
+              "value_types": ["Bool"]
+            }
+          ],
           "registers": []
         }
       }
@@ -2873,9 +3005,9 @@
       "category": "arithmetic",
       "sub_category": "int_cmp",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Compares `x` and `y` for greater than or equal to and returns `-1` if true and `0` otherwise. Returns `NaN` if any operand is `NaN`.",
+        "long": "Compares two integers from the stack for greater than or equal to and returns `-1` if true and `0` otherwise. If any of the operands is `NaN`, returns `NaN` instead of throwing an exception.",
+        "tags": ["comparisons"],
         "operands": []
       },
       "layout": {
@@ -2893,13 +3025,31 @@
         "prefix_str": "B7BE"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> result:Bool",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "presentation": "x >= y",
+              "value_types": ["Bool"]
+            }
+          ],
           "registers": []
         }
       }
@@ -2908,9 +3058,9 @@
       "category": "arithmetic",
       "sub_category": "int_cmp",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Computes the sign of `x-y`. Returns `NaN` if any operand is `NaN`.",
+        "long": "Computes the sign of `x-y`:\n`-1` if `x<y`, `0` if `x=y`, `1` if `x>y`. If any of the operands is `NaN`, returns `NaN` instead of throwing an exception.",
+        "tags": ["comparisons"],
         "operands": []
       },
       "layout": {
@@ -2928,13 +3078,30 @@
         "prefix_str": "B7BF"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> result:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       }
@@ -3894,9 +4061,15 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "",
-        "tags": [],
-        "operands": []
+        "long": "Converts a _Builder_ to _Cell_ and stores a reference to it into another _Builder_.",
+        "tags": ["builder building"],
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["ENDC", "SWAP", "STREF"]
+          }
+        ]
       },
       "layout": {
         "min": 13434880,
@@ -3914,14 +4087,29 @@
       },
       "effects": ["CellCreate"],
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "b:Builder child:Builder -> b':Builder",
         "inputs": {
-          "stack": [],
-          "registers": []
+          "stack": [
+            {
+              "type": "simple",
+              "name": "b",
+              "value_types": ["Builder"]
+            },
+            {
+              "type": "simple",
+              "name": "child",
+              "value_types": ["Builder"]
+            }
+          ]
         },
         "outputs": {
-          "stack": [],
-          "registers": []
+          "stack": [
+            {
+              "type": "simple",
+              "name": "b'",
+              "value_types": ["Builder"]
+            }
+          ]
         }
       }
     },
@@ -7036,7 +7224,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns the `n`-th cell reference of _Slice_ `s` for `0 <= n <= 3`.",
+        "long": "Returns the `n`-th cell reference of _Slice_ `s`.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -7563,7 +7751,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns `i`th hash of the cell.",
+        "long": "Returns `i`-th hash of the cell.",
         "tags": [],
         "operands": []
       },
@@ -7614,7 +7802,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns `i`th depth of the cell.",
+        "long": "Returns `i`-th depth of the cell.",
         "tags": [],
         "operands": []
       },
@@ -7665,7 +7853,7 @@
       "sub_category": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Calls_, or _executes_, continuation `c`.",
+        "long": "_Calls_ or _executes_, continuation `c` from the stack. After the call old `cc` is restored and execution continues.",
         "tags": [],
         "operands": []
       },
@@ -7701,7 +7889,7 @@
       "sub_category": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Jumps_, or transfers control, to continuation `c`.\nThe remainder of the previous current continuation `cс` is discarded.",
+        "long": "_Jumps_, or transfers control, to continuation `c` from the stack.\nThe remainder of the previous current continuation `cc` is discarded.",
         "tags": [],
         "operands": []
       },
@@ -7737,7 +7925,7 @@
       "sub_category": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Returns_ to the continuation at `c0`. The remainder of the current continuation `cc` is discarded.",
+        "long": "_Returns_ to the continuation from `c0`. The remainder of the current continuation `cc` is discarded.",
         "tags": [],
         "operands": [],
         "other_implementations": [
@@ -7778,7 +7966,7 @@
       "sub_category": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Returns_ to the continuation at `c1`. The remainder of the current continuation `cc` is discarded.",
+        "long": "_Returns_ to the continuation from `c1`. The remainder of the current continuation `cc` is discarded.",
         "tags": [],
         "operands": [],
         "other_implementations": [
@@ -7860,7 +8048,7 @@
       "sub_category": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Call with current continuation_, transfers control to `c`, pushing the old value of `c` into `c`'s stack (instead of discarding it or writing it into new `c0`).",
+        "long": "_Call with current continuation_, transfers control to `c` from the stack, pushing the old value of `cc` into `c`'s stack (instead of discarding it or writing it into new `c0`).",
         "tags": [],
         "operands": []
       },
@@ -7896,7 +8084,7 @@
       "sub_category": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Transfers control_ to continuation `c`, converting the remainder of the current continuation (the old value of `cс`) into a _Slice_ before pushing it onto the stack of `c`. Unlike `CALLCC` which pushes the old continuation as is, this instruction converts it to a _Slice_ first.",
+        "long": "_Transfers control_ to continuation `c` from the stack, converting the remainder of the current continuation (the old value of `cc`) into a _Slice_ before pushing it onto the stack of `c`. Unlike `CALLCC` which pushes the old continuation as is, this instruction converts it to a _Slice_ first.",
         "tags": [],
         "operands": []
       },
@@ -11679,7 +11867,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Exchanges the top two stack items. Takes two elements from the stack and pushes them back in reverse order.",
+        "long": "Interchanges the top two stack items. Takes two elements from the stack and pushes them back in reverse order.",
         "tags": ["stack"],
         "operands": [],
         "exit_codes": [
@@ -11724,13 +11912,35 @@
         "prefix_str": "1"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Any y:Any -> y:Any x:Any",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         }
       }
@@ -11782,13 +11992,30 @@
         "prefix_str": "20"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Any -> x:Any x:Any",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         }
       }
@@ -11843,13 +12070,40 @@
         "prefix_str": "21"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "y:Any x:Any -> y:Any x:Any y:Any",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         }
       }
@@ -11904,9 +12158,15 @@
         "prefix_str": "30"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Any -> ∅",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
@@ -11965,13 +12225,30 @@
         "prefix_str": "31"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "y:Any x:Any -> x:Any",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         }
       }
@@ -11982,7 +12259,7 @@
       "description": {
         "short": "",
         "long": "Rearranges the top three elements. Moves the third element to the top of the stack: `1 2 3 -> 2 3 1`",
-        "tags": [],
+        "tags": ["stack"],
         "operands": [],
         "other_implementations": [
           {
@@ -12033,13 +12310,45 @@
         "prefix_str": "58"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "z:Any y:Any x:Any -> y:Any x:Any z:Any",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "z",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "z",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         }
       }
@@ -12050,7 +12359,7 @@
       "description": {
         "short": "",
         "long": "Rearranges the top three elements. Places the top element below the first two following elements.: `1 2 3 -> 3 1 2`",
-        "tags": [],
+        "tags": ["stack"],
         "operands": [],
         "other_implementations": [
           {
@@ -12101,13 +12410,45 @@
         "prefix_str": "59"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "z:Any y:Any x:Any -> x:Any z:Any y:Any",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "z",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "z",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         }
       }
@@ -12117,8 +12458,8 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Pops integer `i` from the stack, then performs `s[i] PUSH`.",
-        "tags": [],
+        "long": "Pops integer `i` from the stack, then performs `s(i) PUSH`.",
+        "tags": ["stack"],
         "operands": []
       },
       "layout": {
@@ -12136,9 +12477,15 @@
         "prefix_str": "60"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "i:Int -> ∅",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "i",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
@@ -12153,7 +12500,7 @@
       "description": {
         "short": "",
         "long": "Takes integer `x` from the top of the stack and moves the `x`-th element from the top to the top of the stack. For example, `ROLL 2` is equivalent to `ROT` (`1 2 3 -> 2 3 1`).",
-        "tags": [],
+        "tags": ["stack"],
         "operands": [],
         "exit_codes": [
           {
@@ -12216,9 +12563,15 @@
         "prefix_str": "61"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int -> ∅",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
@@ -12296,9 +12649,15 @@
         "prefix_str": "62"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int -> ∅",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
@@ -12313,7 +12672,7 @@
       "description": {
         "short": "",
         "long": "Pops integers `i`,`j` from the stack, then performs `[i] [j] BLKSWAP`.",
-        "tags": [],
+        "tags": ["stack"],
         "operands": []
       },
       "layout": {
@@ -12331,9 +12690,20 @@
         "prefix_str": "63"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "i:Int j:Int -> ∅",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "i",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "j",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
@@ -12348,7 +12718,7 @@
       "description": {
         "short": "",
         "long": "Pops integers `i`,`j` from the stack, then performs `[i] [j] REVERSE`.",
-        "tags": [],
+        "tags": ["stack"],
         "operands": []
       },
       "layout": {
@@ -12366,9 +12736,20 @@
         "prefix_str": "64"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "i:Int j:Int -> ∅",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "i",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "j",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
@@ -12383,7 +12764,7 @@
       "description": {
         "short": "",
         "long": "Pops integer `i` from the stack, then performs `[i] BLKDROP`.",
-        "tags": [],
+        "tags": ["stack"],
         "operands": []
       },
       "layout": {
@@ -12401,9 +12782,15 @@
         "prefix_str": "65"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "i:Int -> ∅",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "i",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
@@ -12417,9 +12804,19 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `SWAP` `OVER` or to `s1 s1 XCPU`.",
-        "tags": [],
-        "operands": []
+        "long": "Copies the top stack item below the second item. For example, `1 2 -> 2 1 2`.",
+        "tags": ["stack"],
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["SWAP", "OVER"]
+          },
+          {
+            "exact": true,
+            "instructions": ["s1", "s1", "XCPU"]
+          }
+        ]
       },
       "layout": {
         "min": 6684672,
@@ -12436,13 +12833,40 @@
         "prefix_str": "66"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "y:Any x:Any -> x:Any y:Any x:Any",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         }
       }
@@ -12452,8 +12876,8 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Pops integer `i` from the stack, then performs `s[i] XCHG`.",
-        "tags": [],
+        "long": "Pops integer `i` from the stack, then performs `s(i) XCHG`.",
+        "tags": ["stack"],
         "operands": []
       },
       "layout": {
@@ -12471,9 +12895,15 @@
         "prefix_str": "67"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "i:Int -> ∅",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "i",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
@@ -12546,9 +12976,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Pops integer `i` from the stack, then checks whether there are at least `i` elements, generating a stack underflow exception otherwise.",
-        "tags": [],
-        "operands": []
+        "long": "Pops integer `i` from the stack and checks whether there are at least `i` elements, generating a stack underflow exception otherwise.",
+        "tags": ["stack"],
+        "operands": [],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `i` elements."
+          }
+        ]
       },
       "layout": {
         "min": 6881280,
@@ -12574,7 +13010,12 @@
               "name": "i",
               "value_types": ["Int"]
             }
-          ]
+          ],
+          "registers": []
+        },
+        "outputs": {
+          "stack": [],
+          "registers": []
         }
       }
     },
@@ -12584,7 +13025,7 @@
       "description": {
         "short": "",
         "long": "Pops integer `i` from the stack, then removes all but the top `i` elements.",
-        "tags": [],
+        "tags": ["stack"],
         "operands": []
       },
       "layout": {
@@ -12602,9 +13043,15 @@
         "prefix_str": "6A"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "i:Int -> ∅",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "i",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
@@ -12619,7 +13066,7 @@
       "description": {
         "short": "",
         "long": "Pops integer `i` from the stack, then leaves only the bottom `i` elements.",
-        "tags": [],
+        "tags": ["stack"],
         "operands": [],
         "other_implementations": [
           {
@@ -12643,9 +13090,15 @@
         "prefix_str": "6B"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "i:Int -> ∅",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "i",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
@@ -19097,7 +19550,13 @@
         "short": "",
         "long": "Returns the last element of a non-empty _Tuple_ `t`.",
         "tags": [],
-        "operands": []
+        "operands": [],
+        "exit_codes": [
+          {
+            "errno": "7",
+            "condition": "Tuple is empty."
+          }
+        ]
       },
       "layout": {
         "min": 7310080,
@@ -20208,7 +20667,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Divides two integers and pushes the remainder back onto the stack.",
         "tags": [],
         "operands": []
       },
@@ -20259,7 +20718,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Divides two integers (in reverse order) and pushes the remainder back onto the stack.",
         "tags": [],
         "operands": []
       },
@@ -20359,7 +20818,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Divides two integers and pushes the quotient and remainder back onto the stack.",
         "tags": [],
         "operands": []
       },
@@ -20414,7 +20873,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Divides two integers (in reverse order) and pushes the quotient and remainder back onto the stack.",
         "tags": [],
         "operands": []
       },
@@ -29460,7 +29919,7 @@
         "exit_codes": [
           {
             "errno": "5",
-            "condition": "Integer is NaN."
+            "condition": "Integer is `NaN`."
           }
         ]
       },
@@ -29616,7 +30075,7 @@
         "exit_codes": [
           {
             "errno": "5",
-            "condition": "Integer is NaN."
+            "condition": "Integer is `NaN`."
           }
         ]
       },
@@ -29697,7 +30156,7 @@
         "exit_codes": [
           {
             "errno": "5",
-            "condition": "Integer is NaN."
+            "condition": "Integer is `NaN`."
           }
         ]
       },
@@ -38886,7 +39345,7 @@
         "exit_codes": [
           {
             "errno": "4",
-            "condition": "Top element is a NaN."
+            "condition": "Top element is a `NaN`."
           }
         ]
       },
@@ -38949,7 +39408,7 @@
         "exit_codes": [
           {
             "errno": "4",
-            "condition": "Top element is a NaN."
+            "condition": "Top element is a `NaN`."
           }
         ]
       },
@@ -39375,10 +39834,10 @@
       "category": "arithmetic",
       "sub_category": "int_cmp",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Compares `x` from stack and `y` from arguments for equality and returns `-1` if equal and `0` otherwise. Returns `NaN` if operand is `NaN`.",
+        "long": "Compares integer from stack with argument for equality and returns `-1` if equal and `0` otherwise. If the operand is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
-        "operands": []
+        "operands": ["y"]
       },
       "layout": {
         "min": 12042240,
@@ -39404,13 +39863,25 @@
         "prefix_str": "B7C0"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int -> result:Bool",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Bool"]
+            }
+          ],
           "registers": []
         }
       }
@@ -39419,10 +39890,10 @@
       "category": "arithmetic",
       "sub_category": "int_cmp",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Compares `x` from stack and `y` from arguments for less than and returns `-1` if true and `0` otherwise. Returns `NaN` if operand is `NaN`.",
+        "long": "Compares integer from stack with argument for less than and returns `-1` if true and `0` otherwise. If the operand is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
-        "operands": []
+        "operands": ["y"]
       },
       "layout": {
         "min": 12042496,
@@ -39448,13 +39919,25 @@
         "prefix_str": "B7C1"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int -> result:Bool",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Bool"]
+            }
+          ],
           "registers": []
         }
       }
@@ -39463,10 +39946,10 @@
       "category": "arithmetic",
       "sub_category": "int_cmp",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Compares `x` from stack and `y` from arguments for greater than and returns `-1` if true and `0` otherwise. Returns `NaN` if operand is `NaN`.",
+        "long": "Compares integer from stack with argument for greater than and returns `-1` if true and `0` otherwise. If the operand is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
-        "operands": []
+        "operands": ["y"]
       },
       "layout": {
         "min": 12042752,
@@ -39492,13 +39975,25 @@
         "prefix_str": "B7C2"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int -> result:Bool",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Bool"]
+            }
+          ],
           "registers": []
         }
       }
@@ -39507,10 +40002,10 @@
       "category": "arithmetic",
       "sub_category": "int_cmp",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Compares `x` from stack and `y` from arguments for inequality and returns `-1` if true and `0` otherwise. Returns `NaN` if operand is `NaN`.",
+        "long": "Compares integer from stack with argument for inequality and returns `-1` if true and `0` otherwise. If the operand is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
-        "operands": []
+        "operands": ["y"]
       },
       "layout": {
         "min": 12043008,
@@ -39536,13 +40031,25 @@
         "prefix_str": "B7C3"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int -> result:Bool",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Bool"]
+            }
+          ],
           "registers": []
         }
       }
@@ -40078,7 +40585,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns the `n`-th cell reference of _Slice_ `s`, where `0 <= n <= 3`.",
+        "long": "Returns the `n`-th cell reference of _Slice_ `s`.",
         "tags": ["slice parsing"],
         "operands": ["n"]
       },
@@ -40132,7 +40639,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns `i`th hash of the cell.",
+        "long": "Returns `i`-th hash of the cell.",
         "tags": [],
         "operands": ["n"]
       },
@@ -40187,7 +40694,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns `i`th depth of the cell.",
+        "long": "Returns `i`-th depth of the cell.",
         "tags": [],
         "operands": ["n"]
       },
@@ -40242,13 +40749,14 @@
       "sub_category": "continuation_dict_jump",
       "description": {
         "short": "",
-        "long": "Jumps to the continuation in `c3`, pushing integer `0 <= n < 2^14` as its argument.",
+        "long": "Jumps to the continuation in `c3`, pushing integer `num` as its argument. Essentially it's a jump to method with `num` ID in the dictionary.",
         "tags": [],
-        "operands": ["n"],
+        "related_instructions": ["CALLDICT"],
+        "operands": ["num"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["n PUSHINT", "c3 PUSHCTR", "JMPX"]
+            "instructions": ["num PUSHINT", "c3 PUSHCTR", "JMPX"]
           }
         ]
       },
@@ -40276,7 +40784,7 @@
         "prefix_str": "3C5"
       },
       "signature": {
-        "stack_string": "∅ -> n:Int",
+        "stack_string": "∅ -> num:Int",
         "inputs": {
           "stack": [],
           "registers": [
@@ -40290,7 +40798,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "n",
+              "name": "num",
               "value_types": ["Int"]
             }
           ]
@@ -40302,13 +40810,14 @@
       "sub_category": "continuation_dict_jump",
       "description": {
         "short": "",
-        "long": "Equivalent to `n PUSHINT` `c3 PUSHCTR`, for `0 <= n < 2^14`.\nOne might use, for instance, `CALLXARGS` or `CALLCC` instead of `EXECUTE` here.",
+        "long": "Prepares the continuation in `c3` for execution along with the integer `num` as an argument. Useful if you want to call continuation with `CALLXARGS` or `CALLCC` instead of `EXECUTE` as `CALLDICT` does. Essentially it's a preparation for method call with `num` ID in the dictionary.",
         "tags": [],
-        "operands": ["n"],
+        "related_instructions": ["CALLDICT"],
+        "operands": ["num"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["n PUSHINT", "c3 PUSHCTR"]
+            "instructions": ["num PUSHINT", "c3 PUSHCTR"]
           }
         ]
       },
@@ -40336,7 +40845,7 @@
         "prefix_str": "3C6"
       },
       "signature": {
-        "stack_string": "∅ -> n:Int c:Continuation",
+        "stack_string": "∅ -> num:Int c:Continuation",
         "inputs": {
           "stack": [],
           "registers": [
@@ -40350,7 +40859,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "n",
+              "name": "num",
               "value_types": ["Int"]
             },
             {
@@ -40515,7 +41024,7 @@
       "sub_category": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Jumps_ to continuation `c`, passing only the top `0 <= p <= 15` values from the current stack to it (the remainder of the current stack is discarded).",
+        "long": "_Jumps_ to continuation `c`, passing only the top `0 <= p <= 15` values from the current stack to it, the remainder of the current stack is discarded.",
         "tags": [],
         "operands": ["p"]
       },
@@ -41357,9 +41866,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `s[i] s[j] XCHG2` `s[k] PUSH`.",
-        "tags": [],
-        "operands": ["i", "j", "k"]
+        "long": "Performs a double exchange (`s(i) s(j) XCHG2`) followed by pushing a value (`s(k) PUSH`).",
+        "tags": ["stack"],
+        "operands": ["i", "j", "k"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["s(i) s(j) XCHG2", "s(k) PUSH"]
+          }
+        ]
       },
       "layout": {
         "min": 5509120,
@@ -41417,9 +41932,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `s[i] XCHG0` `s[j] s[k] PUSH2`.",
-        "tags": [],
-        "operands": ["i", "j", "k"]
+        "long": "Exchanges `i`-th element with top (`s(i) XCHG0`) and pushes two values (`s(j) s(k) PUSH2`).",
+        "tags": ["stack"],
+        "operands": ["i", "j", "k"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["s(i) XCHG0", "s(j) s(k) PUSH2"]
+          }
+        ]
       },
       "layout": {
         "min": 5517312,
@@ -41477,9 +41998,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `s[i] PUSH` `s[j+1] s[k+1] PUSH2`.",
-        "tags": [],
-        "operands": ["i", "j", "k"]
+        "long": "Pushes three values from different stack positions (`s(i) PUSH`, `s[j+1] s[k+1] PUSH2`).",
+        "tags": ["stack"],
+        "operands": ["i", "j", "k"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["s(i) PUSH", "s[j+1] s[k+1] PUSH2"]
+          }
+        ]
       },
       "layout": {
         "min": 5533696,
@@ -41537,9 +42064,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `s1 s[i] XCHG` `s[j] XCHG0`.",
-        "tags": [],
-        "operands": ["i", "j"]
+        "long": "Performs two stack element exchanges in sequence (`s1 s(i) XCHG`, `s(j) XCHG0`).",
+        "tags": ["stack"],
+        "operands": ["i", "j"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["s1 s(i) XCHG", "s(j) XCHG0"]
+          }
+        ]
       },
       "layout": {
         "min": 5242880,
@@ -41589,9 +42122,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `s[i] XCHG0` `s[j] PUSH`.",
-        "tags": [],
-        "operands": ["i", "j"]
+        "long": "Exchanges `i`-th element with top (`s(i) XCHG0`) and pushes `j`-th element (`s(j) PUSH`).",
+        "tags": ["stack"],
+        "operands": ["i", "j"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["s(i) XCHG0", "s(j) PUSH"]
+          }
+        ]
       },
       "layout": {
         "min": 5308416,
@@ -41641,9 +42180,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `s[i] PUSH` `s[j+1] PUSH`.",
-        "tags": [],
-        "operands": ["i", "j"]
+        "long": "Pushes two values from `i`-th and `j`-th positions (`s(i) PUSH`, `s[j+1] PUSH`).",
+        "tags": ["stack"],
+        "operands": ["i", "j"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["s(i) PUSH", "s[j+1] PUSH"]
+          }
+        ]
       },
       "layout": {
         "min": 5439488,
@@ -41693,9 +42238,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `s[i] PUSH` `SWAP` `s[j] XCHG0`.",
-        "tags": [],
-        "operands": ["i", "j"]
+        "long": "Pushes `i`-th element, swaps it, and exchanges with `j`-th element (`s(i) PUSH`, `SWAP`, `s(j) XCHG0`).",
+        "tags": ["stack"],
+        "operands": ["i", "j"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["s(i) PUSH", "SWAP", "s(j) XCHG0"]
+          }
+        ]
       },
       "layout": {
         "min": 5373952,
@@ -41749,9 +42300,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `s1 s[i] XCHG` `s[j] s[k-1] PUXC`.",
-        "tags": [],
-        "operands": ["i", "j", "k"]
+        "long": "Exchanges second with `i`-th element, then performs PUXC with `j` and `k-1` (`s1 s(i) XCHG`, `s(j) s[k-1] PUXC`).",
+        "tags": ["stack"],
+        "operands": ["i", "j", "k"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["s1 s(i) XCHG", "s(j) s[k-1] PUXC"]
+          }
+        ]
       },
       "layout": {
         "min": 5513216,
@@ -41813,9 +42370,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `s[i] PUSH` `s2 XCHG0` `s[j] s[k] XCHG2`.",
-        "tags": [],
-        "operands": ["i", "j", "k"]
+        "long": "Pushes `i`-th element, exchanges with third, then performs XCHG2 with `j` and `k` (`s(i) PUSH`, `s2 XCHG0`, `s(j) s(k) XCHG2`).",
+        "tags": ["stack"],
+        "operands": ["i", "j", "k"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["s(i) PUSH", "s2 XCHG0", "s(j) s(k) XCHG2"]
+          }
+        ]
       },
       "layout": {
         "min": 5521408,
@@ -41881,9 +42444,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `s[i] s[j-1] PUXC` `s[k] PUSH`.",
-        "tags": [],
-        "operands": ["i", "j", "k"]
+        "long": "Performs PUXC with `i` and `j-1`, then pushes `k`-th element (`s(i) s[j-1] PUXC`, `s(k) PUSH`).",
+        "tags": ["stack"],
+        "operands": ["i", "j", "k"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["s(i) s[j-1] PUXC", "s(k) PUSH"]
+          }
+        ]
       },
       "layout": {
         "min": 5525504,
@@ -41949,9 +42518,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `s[i] PUSH` `SWAP` `s[j] s[k-1] PUXC`.",
-        "tags": [],
-        "operands": ["i", "j", "k"]
+        "long": "Pushes `i`-th element, swaps it, then performs PUXC with `j` and `k-1` (`s(i) PUSH`, `SWAP`, `s(j) s[k-1] PUXC`).",
+        "tags": ["stack"],
+        "operands": ["i", "j", "k"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["s(i) PUSH", "SWAP", "s(j) s[k-1] PUXC"]
+          }
+        ]
       },
       "layout": {
         "min": 5529600,
@@ -42017,7 +42592,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Permutes two blocks `s[j+i+1] ... s[j+1]` and `s[j] ... s0`.",
+        "long": "Permutes two blocks `s[j+i+1] ... s[j+1]` and `s(j) ... s0`.",
         "tags": [],
         "operands": ["i", "j"],
         "other_implementations": [
@@ -42083,7 +42658,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Reverses the order of `s[j+i+1] ... s[j]`.",
+        "long": "Reverses the order of `s[j+i+1] ... s(j)`.",
         "tags": [],
         "operands": ["i", "j"]
       },
@@ -42325,7 +42900,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["SWAP [c+1]", "STI"]
+            "instructions": ["SWAP", "STI"]
           }
         ]
       },
@@ -42419,7 +42994,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["SWAP [c+1]", "STU"]
+            "instructions": ["SWAP", "STU"]
           }
         ]
       },
@@ -43375,7 +43950,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Preloads the first `32(c+1)` bits of _Slice_ `s` into an unsigned integer `x`, for `0 <= c <= 7`. If `s` is shorter than necessary, missing bits are assumed to be zero. This operation is intended to be used along with `IFBITJMP` and similar instructions.",
+        "long": "Preloads the first `32 * (c + 1)` bits of _Slice_ `s` into an unsigned integer `x`, for `0 <= c <= 7`. If `s` is shorter than necessary, missing bits are assumed to be zero. This operation is intended to be used along with `IFBITJMP` and similar instructions.",
         "tags": ["slice parsing", "preload"],
         "operands": ["c"]
       },
@@ -43717,7 +44292,7 @@
       "sub_category": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Jumps to `body` if bit `0 <= num <= 31` is not set in integer `x`.",
+        "long": "Checks whether bit `0 <= num <= 31` is NOT set in integer `x`, and if so, performs `JMPX` to continuation `body`. Value `x` is left in the stack.",
         "tags": [],
         "operands": ["num"]
       },
@@ -43983,7 +44558,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `PUSH s(j)` performed `i` times.",
+        "long": "Performs `PUSH s(j)` `i` times.",
         "tags": [],
         "operands": ["i", "j"]
       },
@@ -44327,7 +44902,7 @@
       "sub_category": "cell_const",
       "description": {
         "short": "",
-        "long": "Similar to `PUSHREF`, but converts the cell into a _Slice_.",
+        "long": "Pushes the reference `ref` onto the stack and converts the pushed cell into a _Slice_.",
         "tags": [],
         "operands": ["c"]
       },
@@ -44368,7 +44943,7 @@
       "sub_category": "cell_const",
       "description": {
         "short": "",
-        "long": "Similar to `PUSHREFSLICE`, but makes a simple ordinary _Continuation_ out of the cell.",
+        "long": "Pushes the reference `ref` onto the stack and converts the pushed cell into a _Continuation_.",
         "tags": [],
         "operands": ["c"]
       },
@@ -44889,7 +45464,7 @@
       "sub_category": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Performs a `JMPREF` if bit `0 <= num <= 31` is set in integer `x`.",
+        "long": "Performs a `JMPREF` if bit `0 <= num <= 31` is set in integer `x`. Value `x` is left in the stack.",
         "tags": [],
         "operands": ["num", "body"]
       },
@@ -44947,7 +45522,7 @@
       "sub_category": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Performs a `JMPREF` if bit `0 <= num <= 31` is not set in integer `x`.",
+        "long": "Performs a `JMPREF` if bit `0 <= num <= 31` is NOT set in integer `x`. Value `x` is left in the stack.",
         "tags": [],
         "operands": ["num", "body"]
       },
@@ -45004,8 +45579,8 @@
       "category": "dictionary",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "Pushes a non-empty constant dictionary `D` (as a `Cell^?`) along with its key length `0 <= n <= 1023`, stored as a part of the instruction. The dictionary itself is created from the first of remaining references of the current continuation. In this way, the complete `DICTPUSHCONST` instruction can be obtained by first serializing `xF4A4_`, then the non-empty dictionary itself (one `1` bit and a `Cell` reference), and then the unsigned 10-bit integer `n` (as if by a `STU 10` instruction). An empty dictionary can be pushed by a `NEWDICT` primitive instead.",
+        "short": "Pushes a non-empty constant dictionary `D` (as a `Cell^?`) along with its key length `0 <= n <= 1023`, stored as a part of the instruction. An empty dictionary can be pushed by a `PUSHNULL` instruction instead.",
+        "long": "The dictionary itself is created from the first of remaining references of the current continuation. In this way, the complete `DICTPUSHCONST` instruction can be obtained by first serializing `xF4A4_`, then the non-empty dictionary itself (one `1` bit and a `Cell` reference), and then the unsigned 10-bit integer `n` (as if by a `STU 10` instruction).",
         "tags": [],
         "operands": ["d", "n"]
       },
@@ -46080,9 +46655,19 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `2 2 BLKSWAP` or to `s3 s2 XCHG2`.",
-        "tags": [],
-        "operands": []
+        "long": "Swaps two pairs of stack elements like `2 2 BLKSWAP` or `s3 s2 XCHG2`.",
+        "tags": ["stack"],
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["2", "2", "BLKSWAP"]
+          },
+          {
+            "exact": true,
+            "instructions": ["s3", "s2", "XCHG2"]
+          }
+        ]
       },
       "layout": {
         "min": 5898240,
@@ -46099,13 +46684,55 @@
         "prefix_str": "5A"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "z:Any y:Any x:Any k:Any -> x:Any k:Any z:Any y:Any",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "z",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "k",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "k",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "z",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         }
       }
@@ -46115,9 +46742,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `DROP` `DROP`.",
-        "tags": [],
-        "operands": []
+        "long": "Removes top two elements from the stack.",
+        "tags": ["stack"],
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["DROP", "DROP"]
+          }
+        ]
       },
       "layout": {
         "min": 5963776,
@@ -46134,9 +46767,20 @@
         "prefix_str": "5B"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "y:Any x:Any -> ∅",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
@@ -46150,9 +46794,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `s1 s0 PUSH2`.",
-        "tags": [],
+        "long": "Duplicates top two stack elements.",
+        "tags": ["stack"],
         "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["s1", "s0", "PUSH2"]
+          }
+        ],
         "examples": [
           {
             "instructions": [
@@ -46189,13 +46839,45 @@
         "prefix_str": "5C"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "y:Any x:Any -> y:Any x:Any y:Any x:Any",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         }
       }
@@ -46205,9 +46887,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `s3 s2 PUSH2`.",
-        "tags": [],
-        "operands": []
+        "long": "Copies third and fourth stack elements to the top.",
+        "tags": ["stack"],
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["s3", "s2", "PUSH2"]
+          }
+        ]
       },
       "layout": {
         "min": 6094848,
@@ -46224,13 +46912,65 @@
         "prefix_str": "5D"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "z:Any y:Any x:Any k:Any -> z:Any y:Any x:Any k:Any z:Any y:Any",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "z",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "k",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "z",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "k",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "z",
+              "value_types": ["Any"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Any"]
+            }
+          ],
           "registers": []
         }
       }
@@ -48457,9 +49197,16 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Equivalent to `s2 s[i] XCHG` `s1 s[j] XCHG` `s[k] XCHG0`.",
+        "long": "Performs `s2 s(i) XCHG`, `s1 s(j) XCHG`, and finally `s(k) XCHG0`.",
         "tags": [],
-        "operands": ["i", "j", "k"]
+        "operands": ["i", "j", "k"],
+        "related_instructions": ["XCHG3_ALT"],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["s2 s(i) XCHG", "s1 s(j) XCHG", "s(k) XCHG0"]
+          }
+        ]
       },
       "layout": {
         "min": 4194304,
@@ -48517,9 +49264,16 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Long form of `XCHG3`.",
+        "long": "Performs `s2 s(i) XCHG`, `s1 s(j) XCHG`, and finally `s(k) XCHG0`. This is a long form of `XCHG3`.",
         "tags": [],
-        "operands": ["i", "j", "k"]
+        "operands": ["i", "j", "k"],
+        "related_instructions": ["XCHG3"],
+        "other_implementations": [
+          {
+            "exact": false,
+            "instructions": ["s2 s(i) XCHG", "s1 s(j) XCHG", "s(k) XCHG0"]
+          }
+        ]
       },
       "layout": {
         "min": 5505024,
@@ -48664,7 +49418,7 @@
       "category": "cell",
       "sub_category": "cell_serialize",
       "description": {
-        "short": "Stores a signed `width`-bit integer `x` into _Builder_ `b` and returns the resulting _Builder_ `b'`. A longer version of `[c+1] STI`.",
+        "short": "Stores a signed `width`-bit integer `x` into _Builder_ `b` and returns the resulting _Builder_ `b'`. A longer version of `[width] STI`.",
         "long": "",
         "tags": ["builder building"],
         "operands": ["width"],
@@ -48840,7 +49594,7 @@
       "category": "cell",
       "sub_category": "cell_serialize",
       "description": {
-        "short": "Stores an unsigned `width`-bit integer `x` into _Builder_ `b` and returns the resulting _Builder_ `b'`. A longer version of `[c+1] STU`.",
+        "short": "Stores an unsigned `width`-bit integer `x` into _Builder_ `b` and returns the resulting _Builder_ `b'`. A longer version of `[width] STU`.",
         "long": "",
         "tags": ["builder building"],
         "operands": ["width"],
@@ -49279,9 +50033,9 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Cuts the next `c + 1` bits of `s` into a separate _Slice_ `loaded`.",
+        "long": "Cuts the next `count` bits of `s` into a separate _Slice_ `loaded`.",
         "tags": ["slice parsing"],
-        "operands": ["c"]
+        "operands": ["count"]
       },
       "layout": {
         "min": 14024704,
@@ -49516,8 +50270,8 @@
       "category": "arithmetic",
       "sub_category": "shift_logic",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Shift the top element of the stack left by a number of bits equal to the second element of the stack. Returns `NaN` if any operand is `NaN`.",
+        "long": "Shift the top element of the stack left by a number of bits equal to the second element of the stack. If any of the operands is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
         "operands": []
       },
@@ -49566,8 +50320,8 @@
       "category": "arithmetic",
       "sub_category": "shift_logic",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Shift the top element of the stack left by `c` bits. Returns `NaN` if operand is `NaN`.",
+        "long": "Shift the top element of the stack left by `c` bits. If the operand is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
         "operands": ["c"]
       },
@@ -49976,8 +50730,8 @@
       "category": "arithmetic",
       "sub_category": "shift_logic",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Shift the top element of the stack right by a number of bits equal to the second element of the stack. Returns `NaN` if any operand is `NaN`.",
+        "long": "Shift the top element of the stack right by a number of bits equal to the second element of the stack. If any of the operands is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
         "operands": []
       },
@@ -50026,8 +50780,8 @@
       "category": "arithmetic",
       "sub_category": "shift_logic",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Shift the top element of the stack right by `c` bits. Returns `NaN` if operand is `NaN`.",
+        "long": "Shift the top element of the stack right by `c` bits. If the operand is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
         "operands": ["c"]
       },
@@ -50125,13 +50879,14 @@
       "sub_category": "continuation_dict_jump",
       "description": {
         "short": "",
-        "long": "Calls the continuation in `c3`, pushing integer `num` into its stack as an argument.",
+        "long": "Calls the continuation in `c3`, pushing integer `num` into its stack as an argument. Essentially it's a call to method with `num` ID in the dictionary.",
         "tags": [],
+        "related_instructions": ["CALLDICT_LONG"],
         "operands": ["num"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["[n] PUSHINT", "c3 PUSHCTR", "EXECUTE"]
+            "instructions": ["[num] PUSHINT", "c3 PUSHCTR", "EXECUTE"]
           }
         ]
       },
@@ -50185,9 +50940,10 @@
       "sub_category": "continuation_dict_jump",
       "description": {
         "short": "",
-        "long": "For `0 <= n < 2^14`, an encoding of `[n] CALL` for larger values of `n`.",
+        "long": "Calls the continuation in `c3`, pushing integer `num` into its stack as an argument. Long version of `CALLDICT` where `0 <= num < 2^14`. Essentially it's a call to method with `num` ID in the dictionary.",
         "tags": [],
-        "operands": ["n"]
+        "related_instructions": ["CALLDICT"],
+        "operands": ["num"]
       },
       "layout": {
         "min": 15794176,
@@ -50213,7 +50969,7 @@
         "prefix_str": "3C4"
       },
       "signature": {
-        "stack_string": "∅ -> n:Int",
+        "stack_string": "∅ -> num:Int",
         "inputs": {
           "stack": [],
           "registers": [
@@ -50227,7 +50983,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "n",
+              "name": "num",
               "value_types": ["Int"]
             }
           ]
@@ -51578,9 +52334,9 @@
       "sub_category": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Calls_ continuation `c` with `p` parameters and expecting `r` return values\n`0 <= p <= 15`, `0 <= r <= 15`",
+        "long": "_Calls_ continuation `c` with `0 <= p <= 15` parameters, expecting an arbitrary number of return values.",
         "tags": [],
-        "operands": ["p", "r"]
+        "operands": ["p"]
       },
       "layout": {
         "min": 14352384,
@@ -51628,7 +52384,8 @@
               "name": "c",
               "value_types": ["Continuation"]
             }
-          ]
+          ],
+          "registers": []
         }
       }
     },
@@ -51637,9 +52394,9 @@
       "sub_category": "continuation_jump",
       "description": {
         "short": "",
-        "long": "",
+        "long": "_Calls_ continuation `c` with `p` parameters and expecting `r` return values.",
         "tags": [],
-        "operands": []
+        "operands": ["p", "r"]
       },
       "layout": {
         "min": 14286848,
@@ -51673,9 +52430,26 @@
         "prefix_str": "DA"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x_1...x_p c:Continuation -> ∅",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "array",
+              "name": "args",
+              "length_var": "p",
+              "array_entry": [
+                {
+                  "type": "simple",
+                  "name": "arg"
+                }
+              ]
+            },
+            {
+              "type": "simple",
+              "name": "c",
+              "value_types": ["Continuation"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
@@ -51691,7 +52465,7 @@
         "short": "Pushes the `slice` onto the stack.",
         "long": "Pushes the slice `slice` onto the stack.\n_Details:_ Pushes the (prefix) subslice of `cc.code` consisting of its first `8x+4` bits and no references (i.e., essentially a bitstring), where `0 <= x <= 15`.\nA completion tag is assumed, meaning that all trailing zeroes and the last binary one (if present) are removed from this bitstring.\nIf the original bitstring consists only of zeroes, an empty slice will be pushed.",
         "tags": [],
-        "operands": ["s"]
+        "operands": ["slice"]
       },
       "layout": {
         "min": 9109504,
@@ -52938,12 +53712,12 @@
     "SETSECOND": {
       "actual_name": "SETINDEX",
       "arguments": [1],
-      "description": "Sets the first component of _Tuple_ `t` to `x` and returns the resulting _Tuple_ `t'`"
+      "description": "Sets the second component of _Tuple_ `t` to `x` and returns the resulting _Tuple_ `t'`"
     },
     "SETTHIRD": {
       "actual_name": "SETINDEX",
       "arguments": [2],
-      "description": "Sets the first component of _Tuple_ `t` to `x` and returns the resulting _Tuple_ `t'`"
+      "description": "Sets the third component of _Tuple_ `t` to `x` and returns the resulting _Tuple_ `t'`"
     },
     "SETFIRSTQ": {
       "actual_name": "SETINDEXQ",
@@ -52953,12 +53727,12 @@
     "SETSECONDQ": {
       "actual_name": "SETINDEXQ",
       "arguments": [1],
-      "description": "Sets the first component of _Tuple_ `t` to `x` and returns the resulting _Tuple_ `t'`"
+      "description": "Sets the second component of _Tuple_ `t` to `x` and returns the resulting _Tuple_ `t'`"
     },
     "SETTHIRDQ": {
       "actual_name": "SETINDEXQ",
       "arguments": [2],
-      "description": "Sets the first component of _Tuple_ `t` to `x` and returns the resulting _Tuple_ `t'`"
+      "description": "Sets the third component of _Tuple_ `t` to `x` and returns the resulting _Tuple_ `t'`"
     },
     "UNCONS": {
       "actual_name": "UNTUPLE",
@@ -53137,22 +53911,28 @@
       "actual_name": "PFXDICTSWITCH"
     },
     "PUSHINT": {
-      "actual_name": "PUSHINT_LONG"
+      "actual_name": "PUSHINT_LONG",
+      "description": "Pushes integer `num` onto the stack."
     },
     "INT": {
-      "actual_name": "PUSHINT_LONG"
+      "actual_name": "PUSHINT_LONG",
+      "description": "Pushes integer `num` onto the stack."
     },
     "INTX": {
-      "actual_name": "PUSHINT_LONG"
+      "actual_name": "PUSHINT_LONG",
+      "description": "Pushes integer `num` onto the stack."
     },
     "NEWDICT": {
-      "actual_name": "PUSHNULL"
+      "actual_name": "PUSHNULL",
+      "description": "Creates a new empty dictionary which is a null value"
     },
     "DICTEMPTY": {
-      "actual_name": "ISNULL"
+      "actual_name": "ISNULL",
+      "description": "Checks whether dictionary is empty, i.e. is null"
     },
     "STDICTS": {
-      "actual_name": "STSLICE"
+      "actual_name": "STSLICE",
+      "description": "Stores the dictionary represented as a slice into _Builder_ `b`"
     },
     "SETNUMARGS": {
       "actual_name": "SETCONTARGS",

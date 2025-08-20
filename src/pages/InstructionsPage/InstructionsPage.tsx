@@ -12,7 +12,6 @@ import Button from "@shared/ui/Button"
 import tvmSpecData from "@features/spec/gen/tvm-specification.json"
 import {POPULARITY} from "@features/spec/popularity/popularity.ts"
 
-
 import type {TvmSpec, FiftInstruction, Instruction} from "@features/spec/tvm-specification.types.ts"
 
 import {
