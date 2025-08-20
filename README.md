@@ -5,7 +5,7 @@ It provides developers and users with tools to visualize and understand transact
 debug smart contracts. The application features a code editor for viewing TVM assembly and a user-friendly interface
 for navigating complex transactions.
 
-Based on [TxTracer-core](https://github.com/tact-lang/txtracer-core).
+Based on [TxTracer-core](https://github.com/ton-blockchain/txtracer-core).
 
 ![cover.png](docs/cover.png)
 
@@ -64,4 +64,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for local setup, build, test, and lint in
 
 ## License
 
-MIT © TON Studio
+MIT © TON Studio, TON Core

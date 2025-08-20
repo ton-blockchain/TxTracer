@@ -75,7 +75,7 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({
           <FiBookOpen size={20} aria-hidden="true" />
         </a>
         <a
-          href="https://github.com/tact-lang/txtracer"
+          href="https://github.com/ton-blockchain/txtracer"
           target="_blank"
           rel="noopener noreferrer"
           title="GitHub Repository"
