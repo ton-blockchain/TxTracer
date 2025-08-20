@@ -5097,7 +5097,7 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "Creates an exotic or ordinary _Cell_ from _Builder_.",
-        "long": "If ` x!= 0`, creates a _special_ or _exotic_ cell from _Builder_ `b`.\nThe type of the exotic cell must be stored in the first 8 bits of `b`.\nIf `x == 0`, it is equivalent to `ENDC`. Otherwise some validity checks on the data and references of `b` are performed before creating the exotic cell.",
+        "long": "If `x != 0`, creates a _special_ or _exotic_ cell from _Builder_ `b`.\nThe type of the exotic cell must be stored in the first 8 bits of `b`.\nIf `x == 0`, it is equivalent to `ENDC`. Otherwise some validity checks on the data and references of `b` are performed before creating the exotic cell.",
         "tags": [],
         "operands": []
       },
@@ -10069,9 +10069,9 @@
       "category": "continuation",
       "sub_category": "continuation_change",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Sets multiple control registers in a continuation.",
+        "long": "Takes a list of values and their corresponding control register indices from the stack and stores them into the savelist of continuation `c`. Returns the modified continuation. This is a more efficient version of multiple `SETCONTCTRX` calls.",
+        "tags": ["continuation", "control"],
         "operands": []
       },
       "layout": {
@@ -10090,13 +10090,41 @@
         "prefix_str": "EDE4"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x_1...x_count count:Int c:Continuation -> c':Continuation",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "array",
+              "name": "values",
+              "length_var": "count",
+              "array_entry": [
+                {
+                  "type": "simple",
+                  "name": "x"
+                }
+              ]
+            },
+            {
+              "type": "simple",
+              "name": "count",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "c",
+              "value_types": ["Continuation"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "c'",
+              "value_types": ["Continuation"]
+            }
+          ],
           "registers": []
         }
       }
@@ -10584,7 +10612,7 @@
       "sub_category": "continuation_change",
       "description": {
         "short": "",
-        "long": "Performs `cc:=compose1(compose0(c, compose0(-1 PUSHINT, cc)), compose0(0 PUSHINT, cc))`. If `c` represents a boolean circuit, the net effect is to evaluate it and push either `-1` or `0` onto the stack before continuing.",
+        "long": "Performs `cc := compose1(compose0(c, compose0(-1 PUSHINT, cc)), compose0(0 PUSHINT, cc))`. If `c` represents a boolean circuit, the net effect is to evaluate it and push either `-1` or `0` onto the stack before continuing.",
         "tags": [],
         "operands": []
       },
@@ -11229,9 +11257,9 @@
       "category": "dictionary",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Sets or updates a key-value pair in a prefix dictionary.",
+        "long": "Sets or updates a value `x` for key `k` in prefix dictionary `D` with key length `n`. If the key already exists, its value is updated. Returns the modified dictionary and a status flag.",
+        "tags": ["dictionary", "prefix"],
         "operands": []
       },
       "layout": {
@@ -11315,9 +11343,9 @@
       "category": "dictionary",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Replaces a value in prefix dictionary if key exists.",
+        "long": "Replaces the value `x` for key `k` in prefix dictionary `D` with key length `n`. Operation succeeds only if the key already exists. Returns the modified dictionary and a status flag.",
+        "tags": ["dictionary", "prefix"],
         "operands": []
       },
       "layout": {
@@ -11401,9 +11429,9 @@
       "category": "dictionary",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Adds a new key-value pair to prefix dictionary.",
+        "long": "Adds a new value `x` for key `k` in prefix dictionary `D` with key length `n`. Operation succeeds only if the key does not exist. Returns the modified dictionary and a status flag.",
+        "tags": ["dictionary", "prefix"],
         "operands": []
       },
       "layout": {
@@ -11487,9 +11515,9 @@
       "category": "dictionary",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Deletes a key-value pair from prefix dictionary.",
+        "long": "Removes the key-value pair with key `k` from prefix dictionary `D` with key length `n`. Returns the modified dictionary and a status flag indicating success or failure.",
+        "tags": ["dictionary", "prefix"],
         "operands": []
       },
       "layout": {
@@ -13299,9 +13327,9 @@
       "category": "config",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Returns current Unix timestamp.",
+        "long": "Returns the current Unix timestamp in seconds since epoch. This value is taken from the parameter 3 of the c7 tuple.",
+        "tags": ["time"],
         "operands": []
       },
       "layout": {
@@ -13319,13 +13347,19 @@
         "prefix_str": "F823"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "∅ -> timestamp:Int",
         "inputs": {
           "stack": [],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "timestamp",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       }
@@ -13334,9 +13368,9 @@
       "category": "config",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Returns current block's logical time.",
+        "long": "Returns the logical time of the current block. This value is taken from the parameter 4 of the c7 tuple.",
+        "tags": ["time"],
         "operands": []
       },
       "layout": {
@@ -13354,13 +13388,19 @@
         "prefix_str": "F824"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "∅ -> lt:Int",
         "inputs": {
           "stack": [],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "lt",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       }
@@ -13369,9 +13409,9 @@
       "category": "config",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Returns current transaction's logical time.",
+        "long": "Returns the logical time of the current transaction. This value is taken from the parameter 5 of the c7 tuple.",
+        "tags": ["time"],
         "operands": []
       },
       "layout": {
@@ -13389,13 +13429,19 @@
         "prefix_str": "F825"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "∅ -> lt:Int",
         "inputs": {
           "stack": [],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "lt",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       }
@@ -13404,9 +13450,9 @@
       "category": "config",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Returns current random seed.",
+        "long": "Returns the current random seed used for PRNG operations. This value is taken from the parameter 6 of the c7 tuple.",
+        "tags": ["random"],
         "operands": []
       },
       "layout": {
@@ -13424,13 +13470,19 @@
         "prefix_str": "F826"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "∅ -> seed:Int",
         "inputs": {
           "stack": [],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "seed",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       }
@@ -13439,9 +13491,9 @@
       "category": "config",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Returns current smart contract balance.",
+        "long": "Returns the current balance of the smart contract in nanotons. This value is taken from the parameter 7 of the c7 tuple.",
+        "tags": ["balance"],
         "operands": []
       },
       "layout": {
@@ -13459,13 +13511,19 @@
         "prefix_str": "F827"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "∅ -> balance:Int",
         "inputs": {
           "stack": [],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "balance",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       }
@@ -13474,9 +13532,9 @@
       "category": "config",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Returns current smart contract address.",
+        "long": "Returns the address of the current smart contract as a _Slice_. This is the same address that is used for sending messages to this contract. This value is taken from the parameter 8 of the c7 tuple.",
+        "tags": ["address"],
         "operands": []
       },
       "layout": {
@@ -13494,13 +13552,19 @@
         "prefix_str": "F828"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "∅ -> address:Slice",
         "inputs": {
           "stack": [],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "address",
+              "value_types": ["Slice"]
+            }
+          ],
           "registers": []
         }
       }
@@ -13509,9 +13573,9 @@
       "category": "config",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Returns global configuration dictionary.",
+        "long": "Returns the root cell of the global configuration dictionary. This dictionary contains various blockchain parameters and settings. This value is taken from the parameter 9 of the c7 tuple.",
+        "tags": ["config"],
         "operands": []
       },
       "layout": {
@@ -13529,13 +13593,19 @@
         "prefix_str": "F829"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "∅ -> config:Cell",
         "inputs": {
           "stack": [],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "config",
+              "value_types": ["Cell"]
+            }
+          ],
           "registers": []
         }
       }
@@ -13544,9 +13614,9 @@
       "category": "config",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Returns current smart contract code.",
+        "long": "Returns the code of the current smart contract as a _Cell_. This is the same code that is currently being executed. This value is taken from the parameter 10 of the c7 tuple.",
+        "tags": ["code"],
         "operands": []
       },
       "layout": {
@@ -13564,13 +13634,19 @@
         "prefix_str": "F82A"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "∅ -> value:Int",
         "inputs": {
           "stack": [],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "value",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       }
@@ -13579,9 +13655,9 @@
       "category": "config",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Returns value attached to incoming message.",
+        "long": "Returns the amount of nanotons attached to the incoming message that initiated this transaction. For external messages and tick-tock transactions returns 0. This value is taken from the parameter 11 of the c7 tuple.",
+        "tags": ["message", "value"],
         "operands": []
       },
       "layout": {
@@ -13599,13 +13675,19 @@
         "prefix_str": "F82B"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "∅ -> value:Int",
         "inputs": {
           "stack": [],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "value",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       }
@@ -13614,9 +13696,9 @@
       "category": "config",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Returns accumulated storage fees.",
+        "long": "Returns the amount of storage fees that have been accumulated since the last transaction. This value is deducted from the contract's balance during transaction execution. This value is taken from the parameter 12 of the c7 tuple.",
+        "tags": ["fees"],
         "operands": []
       },
       "layout": {
@@ -13634,13 +13716,19 @@
         "prefix_str": "F82C"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "∅ -> fees:Int",
         "inputs": {
           "stack": [],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "fees",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       }
@@ -13649,9 +13737,9 @@
       "category": "config",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Returns information about previous blocks.",
+        "long": "Returns a tuple containing information about previous blocks in the blockchain. This includes masterchain blocks and the previous key block. This value is taken from the parameter 13 of the c7 tuple.",
+        "tags": ["block", "info"],
         "operands": []
       },
       "layout": {
@@ -13669,13 +13757,19 @@
         "prefix_str": "F82D"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "∅ -> info:Tuple",
         "inputs": {
           "stack": [],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "info",
+              "value_types": ["Tuple"]
+            }
+          ],
           "registers": []
         }
       }
@@ -13684,9 +13778,9 @@
       "category": "config",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Returns unpacked configuration parameters.",
+        "long": "Returns a tuple containing unpacked global configuration parameters. This provides easier access to commonly used configuration values without manual dictionary lookup. This value is taken from the parameter 14 of the c7 tuple.",
+        "tags": ["config"],
         "operands": []
       },
       "layout": {
@@ -13704,13 +13798,19 @@
         "prefix_str": "F82E"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "∅ -> info:Tuple",
         "inputs": {
           "stack": [],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "info",
+              "value_types": ["Tuple"]
+            }
+          ],
           "registers": []
         }
       }
@@ -13719,9 +13819,9 @@
       "category": "config",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Returns required payment amount.",
+        "long": "Returns the amount of nanotons that must be paid for the current operation. This value is taken from the parameter 15 of the c7 tuple.",
+        "tags": ["payment"],
         "operands": []
       },
       "layout": {
@@ -13739,13 +13839,19 @@
         "prefix_str": "F82F"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "∅ -> payment:Int",
         "inputs": {
           "stack": [],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "payment",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       }
@@ -40402,10 +40508,10 @@
       "category": "continuation",
       "sub_category": "continuation_change",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
-        "operands": []
+        "short": "Sets multiple control registers in a continuation with fixed indices.",
+        "long": "Takes a list of values from the stack and stores them into the savelist of continuation `c` using predefined control register indices. Returns the modified continuation. This is similar to `SETCONTCTRMANYX` but uses fixed indices specified in the instruction.",
+        "tags": ["continuation", "control"],
+        "operands": ["count"]
       },
       "layout": {
         "min": 15590144,
@@ -40436,13 +40542,36 @@
         "prefix_str": "EDE3"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x_1...x_count c:Continuation -> c':Continuation",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "array",
+              "name": "values",
+              "length_var": "count",
+              "array_entry": [
+                {
+                  "type": "simple",
+                  "name": "x"
+                }
+              ]
+            },
+            {
+              "type": "simple",
+              "name": "c",
+              "value_types": ["Continuation"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "c'",
+              "value_types": ["Continuation"]
+            }
+          ],
           "registers": []
         }
       }
@@ -43872,9 +44001,9 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Preloads an unsigned `cc+1`-bit integer from `s`. This is a quiet version of `PLDU` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
+        "long": "Preloads an unsigned `width`-bit integer from `s`. This is a quiet version of `PLDU` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["slice parsing", "preload"],
-        "operands": ["c"]
+        "operands": ["width"]
       },
       "layout": {
         "min": 14094080,
@@ -45619,9 +45748,9 @@
       "category": "dictionary",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Performs prefix dictionary lookup and control transfer.",
+        "long": "Looks up a prefix in dictionary `D` and if found, transfers control to the corresponding continuation. Similar to PFXDICTGETJMP but with predefined dictionary and key length.",
+        "tags": ["dictionary", "prefix", "control"],
         "operands": []
       },
       "layout": {
@@ -50426,9 +50555,9 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Checks whether `cc+1` bits can be stored into `b`, where `0 <= cc <= 255`.",
+        "long": "Checks whether `count` bits can be stored into `b`, where `0 <= count <= 255`.",
         "tags": [],
-        "operands": ["c"]
+        "operands": ["count"]
       },
       "layout": {
         "min": 13580288,
@@ -50526,9 +50655,9 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Checks whether `cc+1` bits can be stored into `b`, where `0 <= cc <= 255`.",
+        "long": "Checks whether `count` bits can be stored into `b`, where `0 <= count <= 255`.",
         "tags": [],
-        "operands": ["c"]
+        "operands": ["count"]
       },
       "layout": {
         "min": 13581312,
@@ -51695,9 +51824,9 @@
       "category": "debug",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Dumps the entire contents of the stack for debugging.",
+        "long": "Outputs the entire contents of the stack to debug output without modifying the stack. Useful for debugging and stack inspection.",
+        "tags": ["debug", "stack"],
         "operands": []
       },
       "layout": {
@@ -51774,9 +51903,9 @@
       "category": "debug",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
+        "short": "Dumps slice value as a UTF-8 encoded string to debug output.",
+        "long": "Takes a string value as a slice from the stack and outputs it to debug output. The string is interpreted as a UTF-8 encoded text.",
+        "tags": ["debug", "string"],
         "operands": []
       },
       "layout": {
@@ -51794,9 +51923,15 @@
         "prefix_str": "FE14"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "str:Slice -> ∅",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "str",
+              "value_types": ["Slice"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
@@ -51853,10 +51988,10 @@
       "category": "debug",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
-        "tags": [],
-        "operands": []
+        "short": "Dumps a `i`-th value from stack to debug output.",
+        "long": "Takes a value from the stack at position `i` and outputs it to debug output. The value is formatted according to its type.",
+        "tags": ["debug", "stack"],
+        "operands": ["i"]
       },
       "layout": {
         "min": 16654336,
@@ -52808,9 +52943,9 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Selects TVM codepage `0 <= nn < 240`. If the codepage is not supported, throws an invalid opcode exception.",
+        "long": "Selects TVM codepage `0 <= num < 240`. If the codepage is not supported, throws an invalid opcode exception.",
         "tags": [],
-        "operands": ["n"]
+        "operands": ["num"]
       },
       "layout": {
         "min": 16711680,
@@ -52847,7 +52982,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Selects codepage `c` with `-2^15 <= c < 2^15` passed in the top of the stack.",
+        "long": "Selects codepage `num` with `-2^15 <= num < 2^15` passed in the top of the stack.",
         "tags": [],
         "operands": []
       },
@@ -52866,12 +53001,12 @@
         "prefix_str": "FFF0"
       },
       "signature": {
-        "stack_string": "c:Int -> ∅",
+        "stack_string": "num:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "c",
+              "name": "num",
               "value_types": ["Int"]
             }
           ]
@@ -52883,9 +53018,9 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Selects TVM codepage `z-16` for `1 <= z <= 15`. Negative codepages `-13...-1` are reserved for restricted versions of TVM needed to validate runs of TVM in other codepages. Negative codepage `-14` is reserved for experimental codepages, not necessarily compatible between different TVM implementations, and should be disabled in the production versions of TVM.",
+        "long": "Selects TVM codepage `num` for `1 <= num <= 15`. Negative codepages `-13...-1` are reserved for restricted versions of TVM needed to validate runs of TVM in other codepages. Negative codepage `-14` is reserved for experimental codepages, not necessarily compatible between different TVM implementations, and should be disabled in the production versions of TVM.",
         "tags": [],
-        "operands": []
+        "operands": ["num"]
       },
       "layout": {
         "min": 16773376,
