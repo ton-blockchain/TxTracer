@@ -24,7 +24,7 @@ export const RegisterSquare: React.FC<RegisterSquareProps> = ({index, variable})
               : ""
 
   const crInfo = CONTROL_REGISTERS[`c${index}`]
-  const tooltipContent = crInfo ? <p>{crInfo.description}</p> : null
+  const tooltipContent = <p>{crInfo?.description ?? "Unknown control register"}</p>
 
   return (
     <Tooltip content={tooltipContent} variant="hover">
