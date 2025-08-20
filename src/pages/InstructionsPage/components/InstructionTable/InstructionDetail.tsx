@@ -113,10 +113,10 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
 
         <div className={styles.detailSection}>
           <div className={styles.descriptionText}>
-            <ReactMarkdown components={markdownComponents}>{description.long}</ReactMarkdown>
             {description.short && description.short !== description.long && (
               <ReactMarkdown components={markdownComponents}>{description.short}</ReactMarkdown>
             )}
+            <ReactMarkdown components={markdownComponents}>{description.long}</ReactMarkdown>
           </div>
         </div>
 
