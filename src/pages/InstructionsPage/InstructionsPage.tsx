@@ -12,14 +12,8 @@ import Button from "@shared/ui/Button"
 import tvmSpecData from "@features/spec/gen/tvm-specification.json"
 import {POPULARITY} from "@features/spec/popularity/popularity.ts"
 
-import type {TvmSpec, FiftInstruction, Instruction} from "@features/spec/tvm-specification.types.ts"
 
-type ExtendedInstruction = Instruction & {
-  readonly isFift?: boolean
-  readonly fiftName?: string
-  readonly actualInstruction?: Instruction
-  readonly fiftInstruction?: FiftInstruction
-}
+import type {TvmSpec, FiftInstruction, Instruction} from "@features/spec/tvm-specification.types.ts"
 
 import {
   loadStoredSettings,
@@ -27,7 +21,16 @@ import {
   type StoredSettings,
 } from "@app/pages/InstructionsPage/settings.ts"
 
+import Footer from "./components/Footer"
+
 import styles from "./InstructionsPage.module.css"
+
+type ExtendedInstruction = Instruction & {
+  readonly isFift?: boolean
+  readonly fiftName?: string
+  readonly actualInstruction?: Instruction
+  readonly fiftInstruction?: FiftInstruction
+}
 
 function appendFiftInstructions(
   to: Record<string, ExtendedInstruction>,
@@ -169,10 +172,6 @@ function InstructionsPage() {
 
       if (searchColumns.includes("name")) haystacks.push(name)
       if (searchColumns.includes("opcode")) haystacks.push(instruction.layout.prefix_str)
-      if (searchColumns.includes("gas")) {
-        // join gas min-max if available via layout/args/effects is complex; use displayed value source in table utils if needed later
-        // keep simple: rely on string from calculate function not accessible here; skip heavy compute here
-      }
       if (searchColumns.includes("description")) {
         haystacks.push(instruction.description.short ?? "")
         haystacks.push(instruction.description.long ?? "")
@@ -328,6 +327,7 @@ function InstructionsPage() {
             }
           />
         </div>
+        <Footer />
       </main>
     </div>
   )
