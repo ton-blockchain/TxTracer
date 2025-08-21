@@ -3310,7 +3310,7 @@
         "prefix_str": "C704"
       },
       "signature": {
-        "stack_string": "s:Slice s2:Slice -> result:Int",
+        "stack_string": "s:Slice s':Slice -> result:Int",
         "inputs": {
           "stack": [
             {
@@ -3320,7 +3320,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -3397,9 +3397,31 @@
       "sub_category": "cell_cmp",
       "description": {
         "short": "",
-        "long": "Checks whether `s` is a prefix of `s'`.",
+        "long": "Checks whether `prefix` is a prefix of `s`.",
         "tags": [],
-        "operands": []
+        "operands": [],
+        "examples": [
+          {
+            "instructions": [
+              {
+                "instruction": "PUSHSLICE b{1001}",
+                "comment": "prefix"
+              },
+              {
+                "instruction": "PUSHSLICE b{10010}",
+                "comment": "where to search (s)"
+              },
+              {
+                "instruction": "SDPFX",
+                "is_main": true
+              }
+            ],
+            "stack": {
+              "input": [],
+              "output": ["-1"]
+            }
+          }
+        ]
       },
       "layout": {
         "min": 13043712,
@@ -3416,17 +3438,17 @@
         "prefix_str": "C708"
       },
       "signature": {
-        "stack_string": "s:Slice s2:Slice -> result:Bool",
+        "stack_string": "prefix:Slice s:Slice -> result:Bool",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "s",
+              "name": "prefix",
               "value_types": ["Slice"]
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s",
               "value_types": ["Slice"]
             }
           ]
@@ -3447,9 +3469,37 @@
       "sub_category": "cell_cmp",
       "description": {
         "short": "",
-        "long": "Checks whether `s'` is a prefix of `s`, equivalent to `SWAP` `SDPFX`.",
+        "long": "Checks whether `prefix` is a prefix of `s`. Same as `SDPFX`, but with arguments in a reverse order.",
         "tags": [],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["SWAP", "SDPFX"]
+          }
+        ],
+        "examples": [
+          {
+            "instructions": [
+              {
+                "instruction": "PUSHSLICE b{10010}",
+                "comment": "where to search (s)"
+              },
+              {
+                "instruction": "PUSHSLICE b{1001}",
+                "comment": "prefix"
+              },
+              {
+                "instruction": "SDPFXREV",
+                "is_main": true
+              }
+            ],
+            "stack": {
+              "input": [],
+              "output": ["-1"]
+            }
+          }
+        ]
       },
       "layout": {
         "min": 13043968,
@@ -3466,7 +3516,7 @@
         "prefix_str": "C709"
       },
       "signature": {
-        "stack_string": "s:Slice s2:Slice -> result:Bool",
+        "stack_string": "s:Slice prefix:Slice -> result:Bool",
         "inputs": {
           "stack": [
             {
@@ -3476,7 +3526,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "prefix",
               "value_types": ["Slice"]
             }
           ]
@@ -3497,7 +3547,7 @@
       "sub_category": "cell_cmp",
       "description": {
         "short": "",
-        "long": "Checks whether `s` is a proper prefix of `s'` (i.e., a prefix distinct from `s'`).",
+        "long": "Checks whether `prefix` is a proper prefix of `s` (i.e., a prefix distinct from `s`).",
         "tags": [],
         "operands": []
       },
@@ -3516,17 +3566,17 @@
         "prefix_str": "C70A"
       },
       "signature": {
-        "stack_string": "s:Slice s2:Slice -> result:Bool",
+        "stack_string": "prefix:Slice s:Slice -> result:Bool",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "s",
+              "name": "prefix",
               "value_types": ["Slice"]
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s",
               "value_types": ["Slice"]
             }
           ]
@@ -3547,7 +3597,7 @@
       "sub_category": "cell_cmp",
       "description": {
         "short": "",
-        "long": "Checks whether `s'` is a proper prefix of `s`.",
+        "long": "Checks whether `prefix` is a proper prefix of `s` (i.e., a prefix distinct from `s`).",
         "tags": [],
         "operands": []
       },
@@ -3566,7 +3616,7 @@
         "prefix_str": "C70B"
       },
       "signature": {
-        "stack_string": "s:Slice s2:Slice -> result:Bool",
+        "stack_string": "s:Slice prefix:Slice -> result:Bool",
         "inputs": {
           "stack": [
             {
@@ -3576,7 +3626,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "prefix",
               "value_types": ["Slice"]
             }
           ]
@@ -3597,7 +3647,7 @@
       "sub_category": "cell_cmp",
       "description": {
         "short": "",
-        "long": "Checks whether `s` is a suffix of `s'`.",
+        "long": "Checks whether `suffix` is a suffix of `s`.",
         "tags": [],
         "operands": []
       },
@@ -3616,17 +3666,17 @@
         "prefix_str": "C70C"
       },
       "signature": {
-        "stack_string": "s:Slice s2:Slice -> result:Bool",
+        "stack_string": "suffix:Slice s:Slice -> result:Bool",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "s",
+              "name": "suffix",
               "value_types": ["Slice"]
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s",
               "value_types": ["Slice"]
             }
           ]
@@ -3647,7 +3697,7 @@
       "sub_category": "cell_cmp",
       "description": {
         "short": "",
-        "long": "Checks whether `s'` is a suffix of `s`.",
+        "long": "Checks whether `suffix` is a suffix of `s`. Same as `SDSFX`, but with arguments in a reverse order.",
         "tags": [],
         "operands": []
       },
@@ -3666,7 +3716,7 @@
         "prefix_str": "C70D"
       },
       "signature": {
-        "stack_string": "s:Slice s2:Slice -> result:Bool",
+        "stack_string": "s:Slice suffix:Slice -> result:Bool",
         "inputs": {
           "stack": [
             {
@@ -3676,7 +3726,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "suffix",
               "value_types": ["Slice"]
             }
           ]
@@ -3697,7 +3747,7 @@
       "sub_category": "cell_cmp",
       "description": {
         "short": "",
-        "long": "Checks whether `s` is a proper suffix of `s'`.",
+        "long": "Checks whether `suffix` is a proper suffix of `s` (i.e., a suffix distinct from `s`).",
         "tags": [],
         "operands": []
       },
@@ -3716,17 +3766,17 @@
         "prefix_str": "C70E"
       },
       "signature": {
-        "stack_string": "s:Slice s2:Slice -> result:Bool",
+        "stack_string": "suffix:Slice s:Slice -> result:Bool",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "s",
+              "name": "suffix",
               "value_types": ["Slice"]
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s",
               "value_types": ["Slice"]
             }
           ]
@@ -3747,7 +3797,7 @@
       "sub_category": "cell_cmp",
       "description": {
         "short": "",
-        "long": "Checks whether `s'` is a proper suffix of `s`.",
+        "long": "Checks whether `suffix` is a proper suffix of `s` (i.e., a suffix distinct from `s`). Same as `SDPSFX`, but with arguments in a reverse order.",
         "tags": [],
         "operands": []
       },
@@ -3766,7 +3816,7 @@
         "prefix_str": "C70F"
       },
       "signature": {
-        "stack_string": "s:Slice s2:Slice -> result:Bool",
+        "stack_string": "s:Slice suffix:Slice -> result:Bool",
         "inputs": {
           "stack": [
             {
@@ -3776,7 +3826,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "suffix",
               "value_types": ["Slice"]
             }
           ]
@@ -4175,7 +4225,7 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Appends all data from _Builder_ `b'` to _Builder_ `b`.",
+        "long": "Appends all data from _Builder_ `from` to _Builder_ `to`.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -4194,7 +4244,7 @@
         "prefix_str": "CF13"
       },
       "signature": {
-        "stack_string": "from:Builder to:Builder -> b':Builder",
+        "stack_string": "from:Builder to:Builder -> from':Builder",
         "inputs": {
           "stack": [
             {
@@ -4213,7 +4263,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b'",
+              "name": "from'",
               "value_types": ["Builder"]
             }
           ]
@@ -6286,7 +6336,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns `0 <= l' <= 1023` bits of `s` starting from offset `0 <= length <= 1023`, thus extracting a bit substring out of the data of `s`.",
+        "long": "Returns `0 <= length <= 1023` bits of `s` starting from offset `0 <= offset <= 1023`, thus extracting a bit substring out of the data of `s`.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -6305,7 +6355,7 @@
         "prefix_str": "D724"
       },
       "signature": {
-        "stack_string": "s:Slice length:Int l2:Int -> s2:Slice",
+        "stack_string": "s:Slice offset:Int length:Int -> s2:Slice",
         "inputs": {
           "stack": [
             {
@@ -6315,12 +6365,12 @@
             },
             {
               "type": "simple",
-              "name": "length",
+              "name": "offset",
               "value_types": ["Int"]
             },
             {
               "type": "simple",
-              "name": "l2",
+              "name": "length",
               "value_types": ["Int"]
             }
           ]
@@ -8528,8 +8578,8 @@
       "category": "continuation",
       "sub_category": "continuation_jump",
       "description": {
-        "short": "",
-        "long": "Runs child VM with `code` and stack `x_1...x_n`. Returns the resulting stack `x'_1...x'_m` and exitcode. Other arguments and return values are enabled by flags.",
+        "short": "Runs child VM with `code` and stack `x_1...x_n`. Returns the resulting stack `x'_1...x'_m` and exitcode. Other arguments and return values are enabled by flags taken from the stack.",
+        "long": "Flags:\n\n- **+1** — same_c3 (set c3 to code)\n- **+2** — push_0 (push an implicit 0 before running the code); only works with +1 enabled\n- **+4** — load c4 (persistent data) from stack and return its final value\n- **+8** — load gas limit from stack and return consumed gas\n- **+16** — load c7 (smart-contract context)\n- **+32** — return c5 (actions)\n- **+64** — pop hard gas limit (enabled by ACCEPT) from stack as well\n- **+128** — isolated gas consumption (separate set of visited cells, reset chksgn counter)\n- **+256** — pop number N, return exactly N values from stack (only if res=0 or 1; if not enough then res=stk_und)",
         "tags": [],
         "operands": []
       },
@@ -8549,9 +8599,15 @@
         "prefix_str": "DB50"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "flags:Int -> ∅",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "flags",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
@@ -10972,7 +11028,7 @@
       "sub_category": "continuation_change",
       "description": {
         "short": "",
-        "long": "Sets `c0` to `compose0(c, c0)`. In other words, `c` will be executed before exiting current subroutine.",
+        "long": "Sets `c0` to `compose0(c, c0)`. In other words, `c` will be executed before exiting current continuation.",
         "tags": [],
         "operands": []
       },
@@ -11023,7 +11079,7 @@
       "sub_category": "continuation_change",
       "description": {
         "short": "",
-        "long": "Sets `c1` to `compose1(c, c1)`. In other words, `c` will be executed before exiting current subroutine by its alternative return path.",
+        "long": "Sets `c1` to `compose1(c, c1)`. In other words, `c` will be executed before exiting current continuation by its alternative return path.",
         "tags": [],
         "operands": []
       },
@@ -11963,7 +12019,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "A quiet version of `PLDDICT`.",
+        "long": "Preloads a dictionary `D` from _Slice_ `s`. This is a quiet version of `PLDDICT` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": [],
         "operands": []
       },
@@ -14674,9 +14730,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Returns the global configuration dictionary along with its key length (32).\nEquivalent to `CONFIGROOT` `32 PUSHINT`.",
+        "long": "Returns the global configuration dictionary along with its key length (32).",
         "tags": [],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["CONFIGROOT", "32 PUSHINT"]
+          }
+        ]
       },
       "layout": {
         "min": 16265216,
@@ -14724,9 +14786,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Returns the value of the global configuration parameter with integer index `i` as a _Cell_ `c`, and a flag to indicate success.\nEquivalent to `CONFIGDICT` `DICTIGETREF`.",
+        "long": "Returns the value of the global configuration parameter with integer index `i` as a _Cell_ `c`, and a flag to indicate success.",
         "tags": [],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["CONFIGDICT", "DICTIGETREF"]
+          }
+        ]
       },
       "layout": {
         "min": 16265728,
@@ -14795,9 +14863,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Returns the value of the global configuration parameter with integer index `i` as a _Maybe Cell_ `c^?`.\nEquivalent to `CONFIGDICT` `DICTIGETOPTREF`.",
+        "long": "Returns the value of the global configuration parameter with integer index `i` as a _Maybe Cell_ `c^?`.",
         "tags": [],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["CONFIGDICT", "DICTIGETOPTREF"]
+          }
+        ]
       },
       "layout": {
         "min": 16265984,
@@ -15606,9 +15680,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Generates a new pseudo-random integer `z` in the range `0...y-1` (or `y...-1`, if `y<0`). More precisely, an unsigned random value `x` is generated as in `RAND256U`; then `z:=floor(x*y/2^256)` is computed.\nEquivalent to `RANDU256` `256 MULRSHIFT`.",
+        "long": "Generates a new pseudo-random integer `z` in the range `0...y-1` (or `y...-1`, if `y<0`). More precisely, an unsigned random value `x` is generated as in `RAND256U`; then `z:=floor(x*y/2^256)` is computed.",
         "tags": [],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["RANDU256", "256 MULRSHIFT"]
+          }
+        ]
       },
       "layout": {
         "min": 16257280,
@@ -18892,7 +18972,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "A quiet version of `LDMSGADDR`: on success, pushes an extra `-1`; on failure, pushes the original `s` and a zero.",
+        "long": "Loads a valid `MsgAddress` from _Slice_ `s` and pushes the loaded `addr` value onto the stack along with _Slice_ `s'` with the remaining data. This is a quiet version of `LDMSGADDR` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["address", "slice parsing"],
         "operands": []
       },
@@ -19013,7 +19093,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "A quiet version of `PARSEMSGADDR`: returns a zero on error instead of throwing an exception.",
+        "long": "Decomposes _Slice_ `s` containing a valid `MsgAddress` into a _Tuple_ `t` with separate fields of this `MsgAddress`. If `s` is not a valid `MsgAddress`, returns a zero instead throwing an exception as for `PARSEMSGADDR`.",
         "tags": [],
         "operands": []
       },
@@ -20422,7 +20502,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Returns `-1` or `0` depending on whether `t` is a _Tuple_.",
+        "long": "Returns `-1` (true) or `0` (false) depending on whether `t` is a _Tuple_.",
         "tags": [],
         "operands": []
       },
@@ -20938,9 +21018,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Pushes two nulls under the topmost _Integer_ `x`, but only if `x != 0`.\nEquivalent to `NULLSWAPIF` `NULLSWAPIF`.",
+        "long": "Pushes two nulls under the topmost _Integer_ `x`, but only if `x != 0`.",
         "tags": [],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["NULLSWAPIF", "NULLSWAPIF"]
+          }
+        ]
       },
       "layout": {
         "min": 7316480,
@@ -21005,9 +21091,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Pushes two nulls under the topmost _Integer_ `x`, but only if `x == 0`.\nEquivalent to `NULLSWAPIFNOT` `NULLSWAPIFNOT`.",
+        "long": "Pushes two nulls under the topmost _Integer_ `x`, but only if `x == 0`.",
         "tags": [],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["NULLSWAPIFNOT", "NULLSWAPIFNOT"]
+          }
+        ]
       },
       "layout": {
         "min": 7316736,
@@ -21072,9 +21164,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Pushes two nulls under the second stack entry from the top, but only if the topmost _Integer_ `y` is non-zero.\nEquivalent to `NULLROTRIF` `NULLROTRIF`.",
+        "long": "Pushes two nulls under the second stack entry from the top, but only if the topmost _Integer_ `y` is non-zero.",
         "tags": [],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["NULLROTRIF", "NULLROTRIF"]
+          }
+        ]
       },
       "layout": {
         "min": 7316992,
@@ -21147,9 +21245,15 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Pushes two nulls under the second stack entry from the top, but only if the topmost _Integer_ `y` is zero.\nEquivalent to `NULLROTRIFNOT` `NULLROTRIFNOT`.",
+        "long": "Pushes two nulls under the second stack entry from the top, but only if the topmost _Integer_ `y` is zero.",
         "tags": [],
-        "operands": []
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["NULLROTRIFNOT", "NULLROTRIFNOT"]
+          }
+        ]
       },
       "layout": {
         "min": 7317248,
@@ -28042,7 +28146,7 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "A quiet version of `STIX`. If there is no space in `b`, sets `b'=b` and `f=-1`.\nIf `x` does not fit into `width` bits, sets `b'=b` and `f=1`.\nIf the operation succeeds, `b'` is the new _Builder_ and `f=0`.\nHowever, `0 <= width <= 257`, with a range check exception if this is not so.",
+        "long": "Stores a signed `width`-bit integer `x` into `b` for `0 <= width <= 257`. If there is no space in `b`, sets `b' = b` and `f = -1`.\nIf `x` does not fit into `width` bits, sets `b' = b` and `f = 1`.\nIf the operation succeeds, `b'` is the new _Builder_ and `f=0`.\nHowever, `0 <= width <= 257`, with a range check exception if this is not so.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -28856,7 +28960,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Quiet version of `LDIX`: loads a signed `width`-bit integer from `s` similarly to `LDIX`, but returns a success flag, equal to `-1` on success or to `0` on failure (if `s` does not have `width` bits), instead of throwing a cell underflow exception.",
+        "long": "Loads a signed `width`-bit (`0 <= width <= 257`) integer `x` from _Slice_ `s`, and returns the remainder of `s` as `s'`. This is a quiet version of `LDIX` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -30358,7 +30462,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Looks up key represented by a signed (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the value found into a continuation and transfers control to it as if by a `JMPX`. On failure, does nothing. This is useful for implementing `switch`/`case` constructions.",
+        "long": "Looks up key represented by a signed (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the found value into a continuation and transfers control to it as if by a `JMPX`. On failure, does nothing. This is useful for implementing `switch`/`case` constructions.",
         "tags": [],
         "operands": []
       },
@@ -30412,7 +30516,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Looks up key represented by an unsigned (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the value found into a continuation and transfers control to it as if by a `JMPX`. On failure, does nothing. This is useful for implementing `switch`/`case` constructions.",
+        "long": "Looks up key represented by an unsigned (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the found value into a continuation and transfers control to it as if by a `JMPX`. On failure, does nothing. This is useful for implementing `switch`/`case` constructions.",
         "tags": [],
         "operands": []
       },
@@ -30466,7 +30570,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Looks up key represented by a signed (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the value found into a continuation and executes it as if by `EXECUTE`. On failure, does nothing. This is useful for implementing `switch`/`case` constructions.",
+        "long": "Looks up key represented by a signed (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the found value into a continuation and executes it as if by `EXECUTE`. On failure, does nothing. This is useful for implementing `switch`/`case` constructions.",
         "tags": [],
         "operands": []
       },
@@ -30531,7 +30635,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Looks up key represented by an unsigned (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the value found into a continuation and executes it as if by `EXECUTE`. On failure, does nothing. This is useful for implementing `switch`/`case` constructions.",
+        "long": "Looks up key represented by an unsigned (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the found value into a continuation and executes it as if by `EXECUTE`. On failure, does nothing. This is useful for implementing `switch`/`case` constructions.",
         "tags": [],
         "operands": []
       },
@@ -30596,7 +30700,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Looks up key represented by a signed (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the value found into a continuation and transfers control to it as if by a `JMPX`. On failure, returns the index `i` and continues execution. This is useful for implementing `switch`/`case` constructions with a default case.",
+        "long": "Looks up key represented by a signed (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the found value into a continuation and transfers control to it as if by a `JMPX`. On failure, returns the index `i` and continues execution. This is useful for implementing `switch`/`case` constructions with a default case.",
         "tags": [],
         "operands": []
       },
@@ -30654,7 +30758,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Looks up key represented by an unsigned (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the value found into a continuation and transfers control to it as if by a `JMPX`. On failure, returns the index `i` and continues execution. This is useful for implementing `switch`/`case` constructions with a default case.",
+        "long": "Looks up key represented by an unsigned (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the found value into a continuation and transfers control to it as if by a `JMPX`. On failure, returns the index `i` and continues execution. This is useful for implementing `switch`/`case` constructions with a default case.",
         "tags": [],
         "operands": []
       },
@@ -30713,7 +30817,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Looks up key represented by a signed (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the value found into a continuation and executes it as if by `EXECUTE`. On failure, returns the index `i` and continues execution. This is useful for implementing function dispatch with a default handler.",
+        "long": "Looks up key represented by a signed (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the found value into a continuation and executes it as if by `EXECUTE`. On failure, returns the index `i` and continues execution. This is useful for implementing function dispatch with a default handler.",
         "tags": [],
         "operands": []
       },
@@ -30767,7 +30871,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Looks up key represented by an unsigned (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the value found into a continuation and executes it as if by `EXECUTE`. On failure, returns the index `i` and continues execution. This is useful for implementing function dispatch with a default handler.",
+        "long": "Looks up key represented by an unsigned (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. On success, `BLESS`es the found value into a continuation and executes it as if by `EXECUTE`. On failure, returns the index `i` and continues execution. This is useful for implementing function dispatch with a default handler.",
         "tags": [],
         "operands": []
       },
@@ -30821,7 +30925,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Looks up key `k` (represented by a _Slice_, the first `0 <= n <= 1023` data bits of which are used as a key) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys.\nOn success, returns the value found as a _Slice_ `x`.",
+        "long": "Looks up key `k` (represented by a _Slice_, the first `0 <= n <= 1023` data bits of which are used as a key) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys.\nOn success, returns the found value as a _Slice_ `x`.",
         "tags": [],
         "operands": []
       },
@@ -30896,7 +31000,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Looks up key `k` (represented by a _Slice_, the first `0 <= n <= 1023` data bits of which are used as a key) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, applies `LDREF` `ENDS` to the value found, returning a _Cell_ `c` instead of a _Slice_.\nThis operation is useful for dictionaries of type `HashmapE(n,^Y)`.",
+        "long": "Looks up key `k` (represented by a _Slice_, the first `0 <= n <= 1023` data bits of which are used as a key) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, applies `LDREF` `ENDS` to the found value, returning a _Cell_ `c` instead of a _Slice_.\nThis operation is useful for dictionaries of type `HashmapE(n,^Y)`.",
         "tags": [],
         "operands": []
       },
@@ -30971,7 +31075,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Looks up key represented by a signed (big-endian) `n`-bit _Integer_ `i` in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, returns the value found as a _Slice_ `x`. If `i` does not fit into `n` bits, returns `0`.",
+        "long": "Looks up key represented by a signed (big-endian) `n`-bit _Integer_ `i` in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, returns the found value as a _Slice_ `x`. If `i` does not fit into `n` bits, returns `0`.",
         "tags": [],
         "operands": [],
         "exit_codes": [
@@ -31127,7 +31231,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Looks up key represented by an unsigned (big-endian) `n`-bit _Integer_ `i` in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, returns the value found as a _Slice_ `x`. If `i` does not fit into `n` bits, returns `0`.",
+        "long": "Looks up key represented by an unsigned (big-endian) `n`-bit _Integer_ `i` in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, returns the found value as a _Slice_ `x`. If `i` does not fit into `n` bits, returns `0`.",
         "tags": [],
         "operands": [],
         "exit_codes": [
@@ -31208,7 +31312,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Looks up key represented by an unsigned (big-endian) `n`-bit _Integer_ `i` in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, applies `LDREF` `ENDS` to the value found, returning a _Cell_ `c` instead of a _Slice_. If `i` does not fit into `n` bits, returns `0`.",
+        "long": "Looks up key represented by an unsigned (big-endian) `n`-bit _Integer_ `i` in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, applies `LDREF` `ENDS` to the found value, returning a _Cell_ `c` instead of a _Slice_. If `i` does not fit into `n` bits, returns `0`.",
         "tags": [],
         "operands": [],
         "exit_codes": [
@@ -38580,7 +38684,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Looks up key represented by a signed (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. Returns _Null_ if the key `i` is absent from dictionary `D` or if `i` is out of range. Otherwise, returns the value found as a _Cell_ `c`.",
+        "long": "Looks up key represented by a signed (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. Returns _Null_ if the key `i` is absent from dictionary `D` or if `i` is out of range. Otherwise, returns the found value as a _Cell_ `c`.",
         "tags": [],
         "operands": []
       },
@@ -38635,7 +38739,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Looks up key represented by an unsigned (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. Returns _Null_ if the key `i` is absent from dictionary `D` or if `i` is out of range. Otherwise, returns the value found as a _Cell_ `c`.",
+        "long": "Looks up key represented by an unsigned (big-endian) `n`-bit _Integer_ `i` in dictionary `D`. Returns _Null_ if the key `i` is absent from dictionary `D` or if `i` is out of range. Otherwise, returns the found value as a _Cell_ `c`.",
         "tags": [],
         "operands": []
       },
@@ -46025,7 +46129,7 @@
         "prefix_str": "F820"
       },
       "signature": {
-        "stack_string": "∅ -> x:Int",
+        "stack_string": "∅ -> x:Any",
         "inputs": {
           "stack": [],
           "registers": [
@@ -46040,7 +46144,7 @@
             {
               "type": "simple",
               "name": "x",
-              "value_types": ["Int"]
+              "value_types": ["Any"]
             }
           ]
         }
@@ -48010,8 +48114,8 @@
       "category": "continuation",
       "sub_category": "continuation_jump",
       "description": {
-        "short": "",
-        "long": "Runs child VM with `code` and stack `x_1...x_n`. Returns the resulting stack `x'_1...x'_m` and exitcode. Other arguments and return values are enabled by flags.",
+        "short": "Runs child VM with `code` and stack `x_1...x_n`. Returns the resulting stack `x'_1...x'_m` and exitcode. Other arguments and return values are enabled by flags.",
+        "long": "Flags:\n\n- **+1** — same_c3 (set c3 to code)\n- **+2** — push_0 (push an implicit 0 before running the code); only works with +1 enabled\n- **+4** — load c4 (persistent data) from stack and return its final value\n- **+8** — load gas limit from stack and return consumed gas\n- **+16** — load c7 (smart-contract context)\n- **+32** — return c5 (actions)\n- **+64** — pop hard gas limit (enabled by ACCEPT) from stack as well\n- **+128** — isolated gas consumption (separate set of visited cells, reset chksgn counter)\n- **+256** — pop number N, return exactly N values from stack (only if res=0 or 1; if not enough then res=stk_und)",
         "tags": [],
         "operands": ["flags"]
       },
@@ -53382,7 +53486,7 @@
       "sub_category": "continuation_change",
       "description": {
         "short": "",
-        "long": "Pushes the current value of control register `c(i)`. If the control register is not supported in the current codepage, or if it does not have a value, an exception is triggered.",
+        "long": "Pushes the current value of control register `c(i)`. If the control register is not supported in the current codepage, or if it does not have a value, throws an exception.",
         "tags": [],
         "operands": ["i"]
       },
