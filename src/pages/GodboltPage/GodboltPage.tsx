@@ -1,11 +1,9 @@
-import React, {Suspense, useCallback, useEffect, useMemo, useRef, useState} from "react"
+import React, {Suspense, useCallback, useEffect, useRef, useState} from "react"
 
 import {Allotment} from "allotment"
 import "allotment/dist/style.css"
 
 import type * as monaco from "monaco-editor"
-
-import {trace} from "ton-assembly"
 
 import InlineLoader from "@shared/ui/InlineLoader"
 import PageHeader from "@shared/ui/PageHeader"
@@ -152,7 +150,7 @@ function GodboltPage() {
   const [initiallyCompiled, setInitiallyCompiled] = useState<boolean>(false)
   const [language, setLanguage] = useState<CodeLanguage>(() => {
     const fromUrl = decodeLanguageFromUrl()
-    if (fromUrl) return fromUrl
+    if (fromUrl === "func" || fromUrl === "tolk") return fromUrl
     const saved = localStorage.getItem(STORAGE_LANG_KEY)
     return saved === "tolk" ? "tolk" : "func"
   })
@@ -207,17 +205,12 @@ function GodboltPage() {
   const error = language === "func" ? func.error : tolk.error
   const errorMarkers = language === "func" ? func.errorMarkers : tolk.errorMarkers
 
-  const sourceMap = useMemo(() => {
-    if (result?.lang === "func" && result?.funcSourceMap) {
-      try {
-        return trace.loadFuncMapping(result.funcSourceMap)
-      } catch (e) {
-        console.error("Failed to parse source map:", e)
-        return undefined
-      }
+  const sourceMap = (() => {
+    if (result?.lang === "func" && result?.sourceMap) {
+      return result.sourceMap
     }
     return undefined
-  }, [result])
+  })()
 
   const {
     funcHighlightGroups,
