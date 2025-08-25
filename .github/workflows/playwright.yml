@@ -16,6 +16,9 @@ jobs:
       - name: Fetch Sources
         uses: actions/checkout@v4
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Setup Node.js 22.x
         uses: actions/setup-node@v4
         with:
