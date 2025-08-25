@@ -1,25 +1,53 @@
 name: Playwright Tests
+
 on:
   push:
-    branches: [main, master]
+    branches:
+      - main
   pull_request:
-    branches: [main, master]
+    branches:
+      - main
+
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Fetch Sources
+        uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Setup Node.js 22.x
+        uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: 22.x
+          cache: "yarn"
+
       - name: Install dependencies
-        run: npm install -g yarn && yarn
-      - name: Install Playwright Browsers
+        env:
+          YARN_ENABLE_HARDENED_MODE: false
+        run: yarn install --immutable
+
+      - name: Get Playwright version
+        id: playwright-version
+        run: echo "version=$(yarn info playwright --json | jq -r ".children.Version")" >> $GITHUB_OUTPUT
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ runner.arch }}-${{ steps.playwright-version.outputs.version }}
+
+      - name: Install Playwright browsers
         run: yarn playwright install --with-deps
+
       - name: Run Playwright tests
-        run: yarn playwright test
-      - uses: actions/upload-artifact@v4
+        run: yarn test:e2e
+
+      - name: Upload Playwright tests results
+        uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
