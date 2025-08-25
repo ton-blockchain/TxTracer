@@ -30,13 +30,23 @@ jobs:
           YARN_ENABLE_HARDENED_MODE: false
         run: yarn install --immutable
 
-      - name: Install Playwright Browsers
+      - name: Get Playwright version
+        id: playwright-version
+        run: echo "version=$(yarn info playwright --json | jq -r ".children.Version")" >> $GITHUB_OUTPUT
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@4
+        with:
+          key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
+
+      - name: Install Playwright browsers
         run: yarn playwright install --with-deps
 
       - name: Run Playwright tests
-        run: yarn playwright test
+        run: yarn test:e2e
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload Playwright tests results
+        uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
