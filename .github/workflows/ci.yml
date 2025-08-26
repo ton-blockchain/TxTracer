@@ -30,8 +30,11 @@ jobs:
       - name: Check yarn dedupe
         run: yarn dedupe --check
 
-      - name: Check formatting
+      - name: Run prettier
         run: yarn run fmt:check
+
+      - name: Run eslint
+        run: yarn run lint
 
       - name: Build project
         run: yarn run build
