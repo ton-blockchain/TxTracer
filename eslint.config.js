@@ -5,10 +5,11 @@ import reactHooks from "eslint-plugin-react-hooks"
 import reactRefresh from "eslint-plugin-react-refresh"
 import tseslint from "typescript-eslint"
 import eslintPluginJsxA11y from "eslint-plugin-jsx-a11y"
-import eslintPluginImport from "eslint-plugin-import"
+import {importX} from "eslint-plugin-import-x"
 import eslintConfigPrettier from "eslint-config-prettier"
 import unusedImports from "eslint-plugin-unused-imports"
 import functional from "eslint-plugin-functional"
+import * as tsResolver from "eslint-import-resolver-typescript"
 
 export default tseslint.config(
   {
@@ -22,7 +23,12 @@ export default tseslint.config(
     ],
   },
   {
-    extends: [js.configs.recommended, ...tseslint.configs.recommendedTypeChecked],
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommendedTypeChecked,
+      importX.flatConfigs.recommended,
+      importX.flatConfigs.typescript,
+    ],
     files: ["**/*.{ts,tsx}"],
     languageOptions: {
       ecmaVersion: 2020,
@@ -40,7 +46,7 @@ export default tseslint.config(
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
       "jsx-a11y": eslintPluginJsxA11y,
-      import: eslintPluginImport,
+      "import-x": importX,
       "@unused-imports": unusedImports,
       functional: functional,
     },
@@ -58,18 +64,18 @@ export default tseslint.config(
         },
       ],
       ...eslintPluginJsxA11y.configs.recommended.rules,
-      "import/order": [
+      "import-x/order": [
         "warn",
         {
           groups: ["builtin", "external", "internal", "parent", "sibling", "index"],
           "newlines-between": "always-and-inside-groups",
         },
       ],
-      "import/no-unresolved": "off",
-      "import/named": "error",
-      "import/namespace": "error",
-      "import/default": "error",
-      "import/export": "error",
+      "import-x/no-unresolved": "off",
+      "import-x/named": "error",
+      "import-x/namespace": "error",
+      "import-x/default": "error",
+      "import-x/export": "error",
       "@unused-imports/no-unused-imports": "error",
       "jsx-a11y/no-autofocus": "off",
       "functional/type-declaration-immutability": [
@@ -89,11 +95,9 @@ export default tseslint.config(
       react: {
         version: "detect",
       },
-      "import/resolver": {
-        typescript: {
-          project: "./tsconfig.eslint.json",
-        },
-        node: true,
+      "import-x/resolver": {
+        name: "tsResolver",
+        resolver: tsResolver,
       },
     },
   },
