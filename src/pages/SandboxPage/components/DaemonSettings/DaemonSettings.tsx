@@ -14,7 +14,7 @@ const portIsValid = (port: string): boolean => {
     return false
   }
 
-  return portNumber >= 1 && portNumber <= 65535
+  return portNumber >= 0 && portNumber <= 65535
 }
 
 export function DaemonSettings({host, port, onChange}: DaemonSettingsProps) {
