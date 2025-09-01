@@ -137,7 +137,7 @@
 
 .inputPage {
   padding: var(--spacing-lg);
-  height: calc(100vh - (var(--spacing-lg) * 2));
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: var(--color-background-secondary);
@@ -148,8 +148,8 @@
   flex-direction: column;
   align-items: center;
   height: 100%;
-  padding: 0 var(--spacing-lg) var(--spacing-2xl);
-  margin-top: 265px;
+  padding: 0 var(--spacing-lg) 0;
+  margin-top: calc(16rem - (var(--spacing-2xl)));
 }
 
 .txtracerLogo {
@@ -400,7 +400,7 @@
   color: var(--tracepage-create-by-text-color);
   font-size: var(--font-size-sm);
   text-align: center;
-  padding-top: var(--spacing-lg);
+  padding-top: calc(16rem - var(--spacing-2xl) * 3 - var(--spacing-lg));
 }
 
 .createBy a {
@@ -453,6 +453,7 @@
   .historyItem > span[class*="status"] {
     display: none;
   }
+
   .historyItemBadges {
     display: none;
   }
