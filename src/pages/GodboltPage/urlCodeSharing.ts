@@ -60,3 +60,7 @@ export function decodeLanguageFromUrl(): "func" | "tolk" | null {
     return null
   }
 }
+
+export function clearShareHash(): void {
+  window.history.pushState({}, document.title, window.location.pathname)
+}

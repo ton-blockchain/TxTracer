@@ -14,7 +14,7 @@ import PageHeader from "@shared/ui/PageHeader"
 import Tutorial, {useTutorial} from "@shared/ui/Tutorial"
 
 import ShareButton from "@shared/ui/ShareButton/ShareButton.tsx"
-import {decodeCodeFromUrl} from "@app/pages/GodboltPage/urlCodeSharing.ts"
+import {clearShareHash, decodeCodeFromUrl} from "@app/pages/GodboltPage/urlCodeSharing.ts"
 
 import {ExecuteButton} from "@app/pages/PlaygroundPage/components/ExecuteButton.tsx"
 
@@ -41,7 +41,8 @@ const INITIAL_STACK_STORAGE_KEY = "txtracer-playground-initial-stack"
 function PlaygroundPage() {
   const [assemblyCode, setAssemblyCode] = useState(() => {
     const sharedCode = decodeCodeFromUrl()
-    if (sharedCode) {
+    if (sharedCode !== null) {
+      clearShareHash()
       return sharedCode
     }
     return localStorage.getItem(LOCAL_STORAGE_KEY) ?? DEFAULT_ASSEMBLY_CODE
