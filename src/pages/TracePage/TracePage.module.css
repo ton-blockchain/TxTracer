@@ -137,19 +137,20 @@
 
 .inputPage {
   padding: var(--spacing-lg);
-  height: 100%;
+  min-height: calc(100vh - (var(--spacing-lg) * 2));
   display: flex;
   flex-direction: column;
   background-color: var(--color-background-secondary);
 }
 
 .centeredInputContainer {
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   height: 100%;
-  padding: 0 var(--spacing-lg) 0;
-  margin-top: calc(16rem - (var(--spacing-2xl)));
+  padding: calc(var(--spacing-2xl) * 4) var(--spacing-lg) var(--spacing-2xl);
 }
 
 .txtracerLogo {
@@ -202,9 +203,8 @@
   background: linear-gradient(89deg, #2b82eb, #1cc8ff);
   background-clip: text;
   -webkit-background-clip: text;
-  font-feature-settings:
-    "clig" off,
-    "liga" off;
+  font-feature-settings: "clig" off,
+  "liga" off;
 }
 
 .inputCard {
@@ -397,10 +397,10 @@
 }
 
 .createBy {
+  flex: 0 0 auto;
   color: var(--tracepage-create-by-text-color);
   font-size: var(--font-size-sm);
   text-align: center;
-  padding-top: calc(16rem - var(--spacing-2xl) * 3 - var(--spacing-lg));
 }
 
 .createBy a {
@@ -453,7 +453,6 @@
   .historyItem > span[class*="status"] {
     display: none;
   }
-
   .historyItemBadges {
     display: none;
   }
