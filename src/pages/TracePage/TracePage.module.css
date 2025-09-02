@@ -203,8 +203,9 @@
   background: linear-gradient(89deg, #2b82eb, #1cc8ff);
   background-clip: text;
   -webkit-background-clip: text;
-  font-feature-settings: "clig" off,
-  "liga" off;
+  font-feature-settings:
+    "clig" off,
+    "liga" off;
 }
 
 .inputCard {
