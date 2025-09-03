@@ -12,7 +12,7 @@ import {useLineExecutionData, useTraceStepper, useFuncLineStepper} from "@featur
 import {normalizeGas} from "@features/txTrace/lib/traceTx"
 import type {InstructionDetail} from "@features/txTrace/ui/StepInstructionBlock"
 import {useFuncCompilation, useSourceMapHighlight} from "@app/pages/GodboltPage/hooks"
-import {CompilerErrors} from "@app/pages/GodboltPage/components"
+import {CompilerErrors, CustomSegmentedSelector} from "@app/pages/GodboltPage/components"
 
 import PageHeader from "@shared/ui/PageHeader"
 import Tutorial, {useTutorial} from "@shared/ui/Tutorial"
@@ -28,7 +28,6 @@ import {
 } from "@app/pages/GodboltPage/urlCodeSharing.ts"
 
 import {ExecuteButton} from "@app/pages/PlaygroundPage/components/ExecuteButton.tsx"
-import {CustomSegmentedSelector} from "@app/pages/GodboltPage/components"
 
 import {TUTORIAL_STEPS} from "@app/pages/PlaygroundPage/Tutorial.ts"
 
@@ -54,7 +53,7 @@ const DEFAULT_FUNC_CODE = `#include "stdlib.fc";
     if (a > b) {
         throw(10);
     }
-    
+
     ;; create some data
     var data = begin_cell()
         .store_int(1, 32)

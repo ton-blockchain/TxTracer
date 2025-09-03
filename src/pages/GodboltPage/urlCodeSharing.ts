@@ -72,6 +72,25 @@ export function decodeLanguageFromUrl(): "func" | "tolk" | "tasm" | null {
   }
 }
 
+export function decodeStackFromUrl(): string | null {
+  try {
+    const hash = window.location.hash.startsWith("#")
+      ? window.location.hash.substring(1)
+      : window.location.hash
+    const params = new URLSearchParams(hash)
+    const encoded = params.get("stack")
+    if (!encoded) return null
+    if (!/^[0-9a-fA-F]*$/.test(encoded)) {
+      console.error("Invalid hex stack in URL hash")
+      return null
+    }
+    return hexToString(encoded)
+  } catch (error) {
+    console.error("Failed to decode stack from URL hash:", error)
+    return null
+  }
+}
+
 export function clearShareHash(): void {
   window.history.pushState({}, document.title, window.location.pathname)
 }
