@@ -443,16 +443,6 @@ function TracePage() {
         </main>
       )}
 
-      {loading && !result && (
-        <main className={styles.inputPage}>
-          <InlineLoader
-            message="Tracing transaction"
-            subtext="This may take a few moments"
-            loading={true}
-          />
-        </main>
-      )}
-
       {result && (
         <div className={styles.traceViewWrapper}>
           <div id="trace-results-status" className="sr-only" aria-live="polite" aria-atomic="true">
