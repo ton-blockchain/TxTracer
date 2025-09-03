@@ -21,6 +21,7 @@ import ShareButton from "@shared/ui/ShareButton/ShareButton.tsx"
 import SettingsDropdown from "@shared/ui/SettingsDropdown/SettingsDropdown.tsx"
 import {usePlaygroundSettings} from "@app/pages/PlaygroundPage/hooks/usePlaygroundSettings.ts"
 import {
+  clearShareHash,
   decodeCodeFromUrl,
   decodeLanguageFromUrl,
   decodeStackFromUrl,
@@ -92,7 +93,10 @@ function PlaygroundPage() {
     const fromUrl = decodeLanguageFromUrl()
     if (fromUrl === "tasm") {
       const sharedCode = decodeCodeFromUrl()
-      if (sharedCode) return sharedCode
+      if (sharedCode) {
+        clearShareHash()
+        return sharedCode
+      }
     }
     return localStorage.getItem(LOCAL_STORAGE_KEY_ASM) ?? DEFAULT_ASSEMBLY_CODE
   })
@@ -101,7 +105,10 @@ function PlaygroundPage() {
     const fromUrl = decodeLanguageFromUrl()
     if (fromUrl === "func") {
       const sharedCode = decodeCodeFromUrl()
-      if (sharedCode) return sharedCode
+      if (sharedCode) {
+        clearShareHash()
+        return sharedCode
+      }
     }
     return localStorage.getItem(LOCAL_STORAGE_KEY_FUNC) ?? DEFAULT_FUNC_CODE
   })

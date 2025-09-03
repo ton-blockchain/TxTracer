@@ -32,3 +32,6 @@ dist-ssr
 # Yarn
 yarn-error.log
 .yarn/
+
+# Eslint
+.eslintcache

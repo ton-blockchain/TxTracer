@@ -1,6 +1,5 @@
 import type {Arg, ArgRange, Args, Child} from "@features/spec/tvm-specification.types"
-import {ArgsEnum} from "@features/spec/tvm-specification.types"
-import {Bits} from "@features/spec/tvm-specification.types"
+import {ArgsEnum, Bits} from "@features/spec/tvm-specification.types"
 
 import styles from "./OperandsView.module.css"
 

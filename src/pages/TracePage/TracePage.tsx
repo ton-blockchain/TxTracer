@@ -424,11 +424,21 @@ function TracePage() {
             )}
           </div>
 
-          <footer className={styles.createBy}>
-            Created by{" "}
-            <a href="https://tonstudio.io" target="_blank" rel="noreferrer">
-              TON Studio
-            </a>
+          <footer>
+            <span className={styles.createBy}>
+              Created by{" "}
+              <a href="https://tonstudio.io" target="_blank" rel="noreferrer">
+                TON Studio
+              </a>
+              {" and "}
+              <a href="https://t.me/toncore" target="_blank" rel="noreferrer">
+                TON Core
+              </a>
+              , powered by{" "}
+              <a href="https://toncenter.com/" target="_blank" rel="noreferrer">
+                TON Center
+              </a>
+            </span>
           </footer>
         </main>
       )}

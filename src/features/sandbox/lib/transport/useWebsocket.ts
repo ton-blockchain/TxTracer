@@ -1,5 +1,7 @@
 import {useEffect, useState, useCallback} from "react"
 
+import {useGlobalError} from "@shared/lib/useGlobalError.tsx"
+
 import type {Message, MessageTestData} from "./message"
 import type {RawTransactions} from "./transaction"
 import type {ContractRawData, ContractStateChange} from "./contract"
@@ -37,6 +39,7 @@ export function useWebsocket({
   const [error, setError] = useState<string>("")
   const [isConnected, setIsConnected] = useState<boolean>(false)
   const [fromFile, setFromFile] = useState<boolean>(false)
+  const {setError: setGlobalError} = useGlobalError()
 
   const loadFromFile = useCallback((data: MessageTestData[]) => {
     setRawData(data)
@@ -148,7 +151,22 @@ export function useWebsocket({
   }, [handleLocalData, fromFile, rawData])
 
   useEffect(() => {
-    const ws = new WebSocket(url)
+    let ws: WebSocket | null = null
+    try {
+      ws = new WebSocket(url)
+    } catch (err) {
+      let errorMessage = ""
+      if (err instanceof Error) {
+        errorMessage = err.message
+      } else {
+        throw err
+      }
+
+      setGlobalError(errorMessage)
+      setError(errorMessage)
+      setIsConnected(false)
+      return
+    }
 
     ws.onopen = () => {
       setError("")
@@ -171,7 +189,7 @@ export function useWebsocket({
     return () => {
       ws.close()
     }
-  }, [url, handleMessage, onError])
+  }, [url, handleMessage, onError, setGlobalError])
 
   return {
     tests,

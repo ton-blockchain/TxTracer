@@ -56,7 +56,6 @@ test.describe("TxTracer Viewers Links", () => {
         return
       }
 
-      await wait() // TODO: Remove that. Cause we have only 1 rps from toncenter without API key
       await page.goto("/")
       await startTracing(page, link)
       await checkPageLoaded(page)
@@ -67,8 +66,4 @@ test.describe("TxTracer Viewers Links", () => {
 async function checkPageLoaded(page: Page) {
   const stepCounter = page.getByTestId("step-counter-info")
   await expect(stepCounter).toBeVisible({timeout: 30000})
-}
-
-async function wait(): Promise<unknown> {
-  return new Promise(resolve => setTimeout(resolve, 5_000))
 }

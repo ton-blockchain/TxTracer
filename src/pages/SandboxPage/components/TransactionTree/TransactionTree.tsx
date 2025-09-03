@@ -9,10 +9,8 @@ import type {TestData} from "@features/sandbox/lib/test-data.ts"
 import {findOpcodeABI, type TransactionInfo} from "@features/sandbox/lib/transaction.ts"
 import type {ContractData} from "@features/sandbox/lib/contract"
 import {parseSliceWithAbiType, type ParsedObjectByABI} from "@features/sandbox/lib/abi/parser.ts"
-import {TransactionShortInfo} from "@app/pages/SandboxPage/components"
+import {TransactionShortInfo, ContractDetails} from "@app/pages/SandboxPage/components"
 import {ParsedDataView} from "@features/sandbox/ui/abi"
-
-import {ContractDetails} from "@app/pages/SandboxPage/components"
 
 import {useTooltip} from "./useTooltip"
 import {SmartTooltip} from "./SmartTooltip"

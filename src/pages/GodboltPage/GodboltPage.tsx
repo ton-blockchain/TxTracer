@@ -30,7 +30,7 @@ import type {TolkCompilationResult} from "@features/godbolt/lib/tolk/types.ts"
 import {useGodboltSettings} from "./hooks/useGodboltSettings"
 import {useFuncCompilation} from "./hooks/useFuncCompilation.ts"
 import {useTolkCompilation} from "./hooks/useTolkCompilation.ts"
-import {decodeCodeFromUrl, decodeLanguageFromUrl} from "./urlCodeSharing"
+import {clearShareHash, decodeCodeFromUrl, decodeLanguageFromUrl} from "./urlCodeSharing"
 
 import styles from "./GodboltPage.module.css"
 
@@ -56,7 +56,7 @@ const DEFAULT_FUNC_CODE = `#include "stdlib.fc";
     }
     slice s_addr = cs~load_msg_addr();
     (int wc, int addr_hash) = parse_std_addr(s_addr);
-  
+
     ;; ... other code
 
     throw(wc + addr_hash);
@@ -150,20 +150,25 @@ function GodboltPage() {
   const [initiallyCompiled, setInitiallyCompiled] = useState<boolean>(false)
   const [language, setLanguage] = useState<CodeLanguage>(() => {
     const fromUrl = decodeLanguageFromUrl()
-    if (fromUrl === "func" || fromUrl === "tolk") return fromUrl
+    if (fromUrl === "func" || fromUrl === "tolk") {
+      clearShareHash()
+      return fromUrl
+    }
     const saved = localStorage.getItem(STORAGE_LANG_KEY)
     return saved === "tolk" ? "tolk" : "func"
   })
   const [funcCode, setFuncCode] = useState(() => {
     const sharedCode = decodeCodeFromUrl()
-    if (sharedCode && (decodeLanguageFromUrl() ?? "func") === "func") {
+    if (sharedCode !== null && (decodeLanguageFromUrl() ?? "func") === "func") {
+      clearShareHash()
       return sharedCode
     }
     return localStorage.getItem(FUNC_EDITOR_KEY) ?? DEFAULT_FUNC_CODE
   })
   const [tolkCode, setTolkCode] = useState(() => {
     const sharedCode = decodeCodeFromUrl()
-    if (sharedCode && decodeLanguageFromUrl() === "tolk") {
+    if (sharedCode != null && decodeLanguageFromUrl() === "tolk") {
+      clearShareHash()
       return sharedCode
     }
     return localStorage.getItem("txtracer-godbolt-tolk-code") ?? DEFAULT_TOLK_CODE

@@ -27,11 +27,14 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable --check-cache --check-resolutions
 
-      - name: Run linters
-        run: yarn lint
+      - name: Check yarn dedupe
+        run: yarn dedupe --check
 
-      - name: Check formatting
-        run: yarn fmt:check
+      - name: Run prettier
+        run: yarn run fmt:check
+
+      - name: Run eslint
+        run: yarn run lint
 
       - name: Build project
-        run: yarn build
+        run: yarn run build
