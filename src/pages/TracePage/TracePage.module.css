@@ -397,11 +397,16 @@
   z-index: 1;
 }
 
+footer {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: center;
+}
+
 .createBy {
   flex: 0 0 auto;
   color: var(--tracepage-create-by-text-color);
   font-size: var(--font-size-sm);
-  text-align: center;
 }
 
 .createBy a {

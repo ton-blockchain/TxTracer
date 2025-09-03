@@ -7378,16 +7378,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"txtracer-core@npm:^0.1.1":
-  version: 0.1.1
-  resolution: "txtracer-core@npm:0.1.1"
+"txtracer-core@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "txtracer-core@npm:0.2.0"
   dependencies:
     "@ton-community/func-js": "npm:^0.10.0"
     "@ton/core": "npm:^0.61.0"
     "@ton/sandbox": "npm:^0.36.0"
     "@ton/ton": "npm:^15.3.1"
     axios: "npm:^1.6.7"
-  checksum: 10c0/4e2510dd3ffc411d908cef98e8fa62841ac0319fcc10a272e221458f4a86e17a62f9fe7aadef6fbc186393f56f354d10c896777f94ccab37ce40f7eb2d9ab458
+  checksum: 10c0/b8ac8b55135fb613ffa90f196736116b3359850ac4b0faea1d291dcb20d21fee2063933fb957fc346fa908bf5587cfdfb415a73aff24bf52f556a1e1cee3ae30
   languageName: node
   linkType: hard
 
@@ -7442,7 +7442,7 @@ __metadata:
     rollup-plugin-visualizer: "npm:^6.0.3"
     ton-assembly: "npm:0.2.4"
     ts-node: "npm:^10.9.1"
-    txtracer-core: "npm:^0.1.1"
+    txtracer-core: "npm:^0.2.0"
     typescript: "npm:~5.8.3"
     typescript-eslint: "npm:^8.30.1"
     vite: "npm:^6.3.5"

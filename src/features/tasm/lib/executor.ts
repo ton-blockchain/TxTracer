@@ -1,12 +1,10 @@
-import {runtime as i, text} from "ton-assembly"
+import {runtime as i, text, trace} from "ton-assembly"
 import type {Address, Contract, ContractProvider, Sender, StateInit, TupleReader} from "@ton/core"
 import {Cell, contractAddress, toNano, TupleBuilder} from "@ton/core"
 import {GetMethodError, type SandboxContract, type TreasuryContract} from "@ton/sandbox"
 import {Blockchain} from "@ton/sandbox"
 import {createMappingInfo, type MappingInfo} from "ton-assembly/dist/trace/mapping"
 import type {StackElement} from "ton-assembly/dist/trace"
-
-import {trace} from "ton-assembly"
 
 import {type ExitCode, findExitCode} from "@features/txTrace/lib/traceTx.ts"
 

@@ -1,18 +1,17 @@
-import React, {Suspense, useMemo} from "react"
+import {Suspense, useMemo, lazy} from "react"
 import {FiX} from "react-icons/fi"
 
 import type {TransactionInfo} from "@features/sandbox/lib/transaction"
 import type {ContractData} from "@features/sandbox/lib/contract"
-import {traceSandboxTransaction} from "@features/txTrace/lib/traceTx"
+import {traceSandboxTransaction, normalizeGas} from "@features/txTrace/lib/traceTx"
 import {useLineExecutionData, useTraceStepper} from "@features/txTrace/hooks"
 import TraceSidePanel from "@shared/ui/TraceSidePanel"
 import InlineLoader from "@shared/ui/InlineLoader"
 import {type InstructionDetail} from "@features/txTrace/ui/StepInstructionBlock"
-import {normalizeGas} from "@features/txTrace/lib/traceTx"
 
 import styles from "./TransactionTraceViewer.module.css"
 
-const CodeEditor = React.lazy(() => import("@shared/ui/CodeEditor"))
+const CodeEditor = lazy(() => import("@shared/ui/CodeEditor"))
 
 export interface TransactionTraceViewerProps {
   readonly tx: TransactionInfo

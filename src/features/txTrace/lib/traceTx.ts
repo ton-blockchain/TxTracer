@@ -60,13 +60,11 @@ async function maybeTestnet(link: string): Promise<{result: TraceResult; network
   }
 
   try {
-    await wait(500) // rate limit
     const result = await retraceAny(txLinkInfo ?? SingleHash(link, false))
     return {result, network: txLinkInfo?.testnet ? "testnet" : "mainnet"}
   } catch (error: unknown) {
     if (error instanceof Error && error.message.includes("Cannot find transaction info")) {
       console.log("Cannot find in mainnet, trying to find in testnet")
-      await wait(500) // rate limit
       const result = await retraceAny(txLinkInfo ?? SingleHash(link, true))
       return {result, network: "testnet"}
     }
@@ -237,8 +235,4 @@ export function normalizeGas(step: Step) {
     return 26
   }
   return step.gasCost
-}
-
-async function wait(delay: number): Promise<unknown> {
-  return new Promise(resolve => setTimeout(resolve, delay))
 }
