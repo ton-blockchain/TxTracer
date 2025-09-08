@@ -1,7 +1,7 @@
 import {useState} from "react"
 
 import type {TestData} from "@features/sandbox/lib/test-data"
-import {TransactionTree} from "@app/pages/SandboxPage/components"
+import {TransactionTree} from "@features/sandbox/ui/TransactionTree/TransactionTree"
 import {ChevronDownIcon, ChevronUpIcon} from "@shared/ui/Icon"
 
 import type {MessageTestData} from "@features/sandbox/lib/transport/message"

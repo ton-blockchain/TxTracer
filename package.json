@@ -1,6 +1,6 @@
 {
   "name": "txtracer-components-test-dev",
-  "version": "0.1.0",
+  "version": "0.0.7",
   "type": "module",
   "homepage": "https://txtracer.ton.org/",
   "main": "./src/lib/index.ts",
@@ -18,10 +18,6 @@
     "./features": {
       "import": "./src/lib/features.ts",
       "types": "./src/lib/features.ts"
-    },
-    "./pages": {
-      "import": "./src/lib/pages.ts",
-      "types": "./src/lib/pages.ts"
     },
     "./styles": "./src/index.css"
   },
@@ -70,7 +66,7 @@
     "test:e2e": "yarn playwright test",
     "coverage": "vitest run --coverage",
     "precommit": "yarn fmt && yarn lint --fix && yarn build",
-    "prepare:publish": "node scripts/prepare-publish.js",
+    "prepare:publish": "node scripts/prepare-publish.js && cd .publish-temp/ && npm pack",
     "prepublishOnly": "yarn lint && yarn fmt:check"
   },
   "peerDependencies": {

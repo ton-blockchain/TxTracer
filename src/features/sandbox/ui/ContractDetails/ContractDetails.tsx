@@ -5,7 +5,7 @@ import {useState} from "react"
 import type {Maybe} from "@ton/core/dist/utils/maybe"
 
 import {formatCurrency} from "@shared/lib/format"
-import {OpcodeChip} from "@app/pages/SandboxPage/components"
+import {OpcodeChip} from "@shared/ui/OpcodeChip/OpcodeChip"
 import {CodeBlock} from "@shared/ui/CodeBlock"
 import {ContractChip} from "@shared/ui/ContractChip/ContractChip"
 import type {TestData} from "@features/sandbox/lib/test-data"

@@ -20,7 +20,7 @@ export interface TransactionTraceViewerProps {
   readonly inline?: boolean
 }
 
-export function TransactionTraceViewer({
+export default function TransactionTraceViewer({
   tx,
   contracts,
   onClose,

@@ -1,10 +1,10 @@
 import {Address, type ExternalAddress} from "@ton/core"
 
-import React, {type JSX, useState} from "react"
+import React, {type JSX, lazy, useState} from "react"
 import type {Maybe} from "@ton/core/dist/utils/maybe"
 import {FiPlay, FiX, FiChevronDown, FiChevronUp} from "react-icons/fi"
 
-import {OpcodeChip} from "@app/pages/SandboxPage/components"
+import {OpcodeChip} from "@shared/ui/OpcodeChip/OpcodeChip"
 import {ContractChip} from "@shared/ui/ContractChip/ContractChip"
 import {formatCurrency, formatNumber} from "@shared/lib/format"
 import {
@@ -15,7 +15,6 @@ import {
 import type {ContractData} from "@features/sandbox/lib/contract"
 import {type ParsedObjectByABI, parseSliceWithAbiType} from "@features/sandbox/lib/abi/parser"
 import {ParsedDataView} from "@features/sandbox/ui/abi"
-import {TransactionTraceViewer} from "@features/sandbox/ui/TransactionTraceViewer"
 import Button from "@shared/ui/Button"
 
 import type {TestData} from "@features/sandbox/lib/test-data"
@@ -138,6 +137,10 @@ export function TransactionShortInfo({
   const money = tx.money
 
   const sendMode = computeSendMode(tx, testData)
+
+  const TransactionTraceViewer = lazy(
+    () => import("@app/pages/SandboxPage/components/TransactionTraceViewer/TransactionTraceViewer"),
+  )
 
   return (
     <>

@@ -27,8 +27,7 @@ const filesToCopy = [
   "src/features/common/",
   "src/features/txTrace/",
   "src/features/tasm/",
-  "src/features/godbolt/",
-  "src/pages/SandboxPage/",
+  // "src/features/godbolt/",
   "src/index.css",
 ]
 
@@ -43,6 +42,9 @@ function copyRecursively(src, dest) {
       copyRecursively(path.join(src, file), path.join(dest, file))
     }
   } else {
+    if (src.includes("CodeEditor")) {
+      return
+    }
     fs.copyFileSync(src, dest)
   }
 }
@@ -64,6 +66,11 @@ function replaceAliases(filePath, content) {
   const fileDir = path.dirname(filePath)
 
   let newContent = content
+
+  newContent = newContent.replace(
+    'import("@app/pages/SandboxPage/components/TransactionTraceViewer/TransactionTraceViewer"),',
+    "new Promise(() => <div></div>),",
+  )
 
   newContent = newContent.replace(/"@shared\/(.+?)"/g, (match, importPath) => {
     const sharedPath = path.join(publishDir, "src/shared", importPath)
