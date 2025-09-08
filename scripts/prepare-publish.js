@@ -27,7 +27,6 @@ const filesToCopy = [
   "src/features/common/",
   "src/features/txTrace/",
   "src/features/tasm/",
-  // "src/features/godbolt/",
   "src/index.css",
 ]
 

@@ -139,6 +139,7 @@ export function TransactionShortInfo({
   const sendMode = computeSendMode(tx, testData)
 
   const TransactionTraceViewer = lazy(
+    // will be replaced with an empty component in library mode
     () => import("@app/pages/SandboxPage/components/TransactionTraceViewer/TransactionTraceViewer"),
   )
 
