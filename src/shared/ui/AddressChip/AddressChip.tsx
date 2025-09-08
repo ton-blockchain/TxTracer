@@ -1,6 +1,6 @@
 import React from "react"
 
-import {CopyButton} from "@shared/CopyButton/CopyButton"
+import {CopyButton} from "@shared/ui/CopyButton/CopyButton"
 
 import styles from "./AddressChip.module.css"
 

@@ -63,7 +63,7 @@ export {default as FullScreenLoader} from "../shared/ui/FullScreenLoader/FullScr
 export {OpcodeChip} from "../shared/ui/OpcodeChip/OpcodeChip"
 
 // Copy Button
-export {CopyButton} from "../shared/CopyButton/CopyButton"
+export {CopyButton} from "../shared/ui/CopyButton/CopyButton"
 
 // Shared lib utilities
 export {useGlobalError} from "../shared/lib/useGlobalError"

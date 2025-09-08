@@ -3,7 +3,7 @@ import {type StackElement} from "ton-assembly/dist/trace"
 import {Cell} from "@ton/core"
 import {motion, AnimatePresence} from "framer-motion"
 
-import {CopyButton} from "@shared/CopyButton/CopyButton"
+import {CopyButton} from "@shared/ui/CopyButton/CopyButton"
 
 import styles from "./StackViewer.module.css"
 

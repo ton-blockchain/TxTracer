@@ -2,7 +2,7 @@ import {FiInfo} from "react-icons/fi"
 
 import type {MessageTestData} from "@features/sandbox/lib/transport/message"
 
-import {CopyButton} from "@shared/CopyButton/CopyButton"
+import {CopyButton} from "@shared/ui/CopyButton/CopyButton"
 
 import {ExampleDataButtons} from "../ExampleDataButtons"
 import {DaemonSettings} from "../DaemonSettings/DaemonSettings"

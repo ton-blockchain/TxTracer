@@ -3,7 +3,7 @@ import React, {useMemo, useState} from "react"
 import type {ParsedInternal} from "@truecarry/tlb-abi"
 import {Address, Cell} from "@ton/core"
 
-import {CopyButton} from "@shared/CopyButton/CopyButton"
+import {CopyButton} from "@shared/ui/CopyButton/CopyButton"
 
 import styles from "./ParsedBodyViewer.module.css"
 

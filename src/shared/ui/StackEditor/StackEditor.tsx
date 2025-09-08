@@ -8,7 +8,7 @@ import {motion, AnimatePresence} from "framer-motion"
 import {RiFileCloseLine} from "react-icons/ri"
 
 import Button from "@shared/ui/Button"
-import {CopyButton} from "@shared/CopyButton/CopyButton"
+import {CopyButton} from "@shared/ui/CopyButton/CopyButton"
 
 import styles from "./StackEditor.module.css"
 
