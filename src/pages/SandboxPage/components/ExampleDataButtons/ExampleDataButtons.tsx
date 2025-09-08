@@ -4,9 +4,9 @@ import Button from "@shared/ui/Button"
 
 import type {MessageTestData} from "@features/sandbox/lib/transport/message"
 
-import styles from "../SandboxPage.module.css"
+import styles from "../../SandboxPage.module.css"
 
-import {SANDBOX_EXAMPLES, fetchExampleData} from "./examples"
+import {SANDBOX_EXAMPLES, fetchExampleData} from "../examples"
 
 interface ExampleDataButtonsProps {
   readonly onDataLoaded: (data: MessageTestData[]) => void

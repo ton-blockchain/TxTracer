@@ -4,7 +4,7 @@ import type {MessageTestData} from "@features/sandbox/lib/transport/message"
 
 import {CopyButton} from "@shared/ui/CopyButton/CopyButton"
 
-import {ExampleDataButtons} from "../ExampleDataButtons"
+import {ExampleDataButtons} from "../ExampleDataButtons/ExampleDataButtons"
 import {DaemonSettings} from "../DaemonSettings/DaemonSettings"
 
 import styles from "./ConnectionGuide.module.css"

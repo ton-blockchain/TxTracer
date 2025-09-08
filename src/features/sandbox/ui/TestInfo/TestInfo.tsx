@@ -6,7 +6,7 @@ import {ChevronDownIcon, ChevronUpIcon} from "@shared/ui/Icon"
 
 import type {MessageTestData} from "@features/sandbox/lib/transport/message"
 
-import {DownloadTestDataButton} from "@app/pages/SandboxPage/components/DownloadTestDataButton"
+import {DownloadTestDataButton} from "@app/pages/SandboxPage/components/DownloadTestDataButton/DownloadTestDataButton"
 
 import styles from "./TestInfo.module.css"
 

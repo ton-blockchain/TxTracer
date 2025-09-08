@@ -5,7 +5,7 @@ import Button from "@shared/ui/Button"
 
 import type {MessageTestData} from "@features/sandbox/lib/transport/message"
 
-import styles from "../SandboxPage.module.css"
+import styles from "../../SandboxPage.module.css"
 
 interface DownloadTestDataButtonProps {
   readonly rawData: MessageTestData[]

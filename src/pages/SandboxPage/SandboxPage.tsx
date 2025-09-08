@@ -4,8 +4,12 @@ import {useEffect, useMemo, useState} from "react"
 
 import PageHeader from "@shared/ui/PageHeader"
 import {useSandboxData} from "@features/sandbox/lib/useSandboxData"
-import {TestInfo, ConnectionGuide, LoadingState} from "@app/pages/SandboxPage/components"
-import {UploadTestDataButton} from "@app/pages/SandboxPage/components/UploadTestDataButton"
+import {
+  TestInfo,
+  ConnectionGuide,
+  LoadingState,
+  UploadTestDataButton,
+} from "@app/pages/SandboxPage/components"
 import {loadExampleByKey} from "@app/pages/SandboxPage/components/examples"
 
 import styles from "./SandboxPage.module.css"

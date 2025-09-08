@@ -5,7 +5,7 @@ import Button from "@shared/ui/Button"
 
 import type {MessageTestData} from "@features/sandbox/lib/transport/message"
 
-import styles from "../SandboxPage.module.css"
+import styles from "../../SandboxPage.module.css"
 
 interface UploadTestDataButtonProps {
   readonly onDataLoaded: (data: MessageTestData[]) => void
@@ -103,5 +103,3 @@ export const UploadTestDataButton: React.FC<UploadTestDataButtonProps> = ({onDat
     </>
   )
 }
-
-export default UploadTestDataButton

@@ -15,7 +15,7 @@ import {
 import type {ContractData} from "@features/sandbox/lib/contract"
 import {type ParsedObjectByABI, parseSliceWithAbiType} from "@features/sandbox/lib/abi/parser"
 import {ParsedDataView} from "@features/sandbox/ui/abi"
-import {TransactionTraceViewer} from "@app/pages/SandboxPage/components/TransactionTraceViewer"
+import {TransactionTraceViewer} from "@features/sandbox/ui/TransactionTraceViewer"
 import Button from "@shared/ui/Button"
 
 import type {TestData} from "@features/sandbox/lib/test-data"
