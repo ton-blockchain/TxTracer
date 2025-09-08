@@ -140,6 +140,7 @@ export function TransactionShortInfo({
 
   const TransactionTraceViewer = lazy(
     // will be replaced with an empty component in library mode
+    // since CodeEditor is not available in library due to size and complexity (including dependency complexity)
     () => import("@app/pages/SandboxPage/components/TransactionTraceViewer/TransactionTraceViewer"),
   )
 
