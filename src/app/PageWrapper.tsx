@@ -5,7 +5,7 @@ import FullScreenLoader from "@shared/ui/FullScreenLoader/FullScreenLoader"
 
 import {ThemeToggleButton} from "@features/themeSwitcher/ui/ThemeToggleButton"
 
-import {useGlobalError} from "@shared/lib/useGlobalError.tsx"
+import {useGlobalError} from "@shared/lib/useGlobalError"
 
 import {ErrorBoundary} from "./ErrorBoundary"
 

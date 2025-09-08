@@ -19,6 +19,7 @@ export default tseslint.config(
       "src/features/godbolt/lib/func/func-wasm/func-compile.ts",
       "src/features/godbolt/lib/func/func-wasm/funcfiftlib.d.ts",
       ".test-project/",
+      ".publish-temp/",
       ".yarn",
     ],
   },

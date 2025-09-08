@@ -1,9 +1,62 @@
 {
-  "name": "txtracer",
-  "private": true,
-  "version": "0.0.1",
+  "name": "txtracer-components-test-dev",
+  "version": "0.1.0",
   "type": "module",
   "homepage": "https://txtracer.ton.org/",
+  "main": "./src/lib/index.ts",
+  "module": "./src/lib/index.ts",
+  "types": "./src/lib/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/lib/index.ts",
+      "types": "./src/lib/index.ts"
+    },
+    "./shared": {
+      "import": "./src/lib/shared.ts",
+      "types": "./src/lib/shared.ts"
+    },
+    "./features": {
+      "import": "./src/lib/features.ts",
+      "types": "./src/lib/features.ts"
+    },
+    "./pages": {
+      "import": "./src/lib/pages.ts",
+      "types": "./src/lib/pages.ts"
+    },
+    "./styles": "./src/index.css"
+  },
+  "files": [
+    "src/lib/",
+    "src/shared/",
+    "!src/shared/ui/CodeEditor",
+    "src/features/sandbox/",
+    "src/features/common/",
+    "src/features/txTrace/",
+    "src/features/tasm/",
+    "src/features/godbolt/",
+    "src/pages/SandboxPage/",
+    "src/index.css",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "react",
+    "ton",
+    "blockchain",
+    "components",
+    "ui",
+    "txtracer",
+    "typescript"
+  ],
+  "author": "TON Studio",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ton-blockchain/txtracer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ton-blockchain/txtracer/issues"
+  },
   "scripts": {
     "dev": "vite --port 5174",
     "build": "tsc -b && vite build",
@@ -16,7 +69,21 @@
     "test:ui": "vitest --ui",
     "test:e2e": "yarn playwright test",
     "coverage": "vitest run --coverage",
-    "precommit": "yarn fmt && yarn lint --fix && yarn build"
+    "precommit": "yarn fmt && yarn lint --fix && yarn build",
+    "prepare:publish": "node scripts/prepare-publish.js",
+    "prepublishOnly": "yarn lint && yarn fmt:check"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": false
+    },
+    "react-dom": {
+      "optional": false
+    }
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",

@@ -7,7 +7,7 @@ import {formatVariablesForHover, type FuncVar} from "@features/godbolt/lib/func/
 
 import type {LinesExecutionData} from "@features/txTrace/hooks"
 
-import {CONTROL_REGISTERS} from "@features/common/lib/control-registers/control-registers.ts"
+import {CONTROL_REGISTERS} from "@features/common/lib/control-registers/control-registers"
 
 import {TASM_LANGUAGE_ID} from "../languages"
 

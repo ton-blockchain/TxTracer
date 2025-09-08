@@ -1,8 +1,9 @@
 import {Address, Cell, Slice} from "@ton/core"
 
-import type {ParsedObjectByABI} from "@features/sandbox/lib/abi/parser.ts"
-import type {ContractData} from "@features/sandbox/lib/contract.ts"
-import {CodeBlock, ContractChip} from "@app/pages/SandboxPage/components"
+import type {ParsedObjectByABI} from "@features/sandbox/lib/abi/parser"
+import type {ContractData} from "@features/sandbox/lib/contract"
+import {CodeBlock} from "@shared/ui/CodeBlock"
+import {ContractChip} from "@shared/ui/ContractChip/ContractChip"
 
 import styles from "./ParsedDataView.module.css"
 

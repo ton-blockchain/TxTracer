@@ -1,1 +1,1 @@
-export {SendModeViewer} from "./SendModeViewer.tsx"
+export {SendModeViewer} from "./SendModeViewer"

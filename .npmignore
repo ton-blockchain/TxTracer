@@ -1,0 +1,47 @@
+# Source files
+src/
+public/
+docs/
+
+# Build configs
+vite.config.ts
+tsconfig.*.json
+eslint.config.js
+playwright.config.ts
+
+# Development files
+.env*
+.vscode/
+.idea/
+*.log
+*.lock
+yarn.lock
+
+# Test files
+e2e-tests/
+test-results/
+playwright-report/
+coverage/
+
+# Development directories
+node_modules/
+.cache/
+.temp/
+.tmp/
+
+# Git
+.git/
+.gitignore
+
+# Other
+*.tgz
+*.tar.gz
+.DS_Store
+Thumbs.db
+
+# Temporary publish directory
+.publish-temp/
+
+# Keep only dist/lib
+dist/
+!dist/lib/

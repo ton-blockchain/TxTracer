@@ -2,7 +2,7 @@ import React, {useCallback, useState} from "react"
 import {FiShare2, FiCheck} from "react-icons/fi"
 
 import Button from "@shared/ui/Button"
-import {encodeCodeToUrl} from "@app/pages/GodboltPage/urlCodeSharing.ts"
+import {encodeCodeToUrl} from "@app/pages/GodboltPage/urlCodeSharing"
 import styles from "@app/pages/GodboltPage/GodboltPage.module.css"
 
 interface ShareButtonProps {

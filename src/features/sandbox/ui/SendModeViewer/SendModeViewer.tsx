@@ -1,4 +1,4 @@
-import {parseSendMode} from "@features/sandbox/lib/transaction.ts"
+import {parseSendMode} from "@features/sandbox/lib/transaction"
 import {Tooltip} from "@shared/ui/Tooltip"
 
 import styles from "./SendModeViewer.module.css"

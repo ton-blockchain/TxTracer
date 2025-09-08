@@ -1,16 +1,16 @@
-import React, {useCallback, useEffect, useRef, useState} from "react"
-import Editor, {loader} from "@monaco-editor/react"
+import React, {memo, useCallback, useEffect, useRef, useState} from "react"
+import {Editor, loader} from "@monaco-editor/react"
 
 import * as monaco from "monaco-editor"
 
 import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker"
 
 import type {ExitCode} from "@features/txTrace/lib/traceTx"
-import type {FuncVar} from "@features/godbolt/lib/func/variables.ts"
+import type {FuncVar} from "@features/godbolt/lib/func/variables"
 
 import type {LinesExecutionData} from "@features/txTrace/hooks"
 
-import {useTolkLanguageProviders} from "@shared/ui/CodeEditor/hooks/useTolkLanguageProviders.ts"
+import {useTolkLanguageProviders} from "@shared/ui/CodeEditor/hooks/useTolkLanguageProviders"
 
 import {
   useMonacoSetup,
@@ -334,4 +334,4 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 
 CodeEditor.displayName = "CodeEditor"
 
-export default React.memo(CodeEditor)
+export default memo(CodeEditor)

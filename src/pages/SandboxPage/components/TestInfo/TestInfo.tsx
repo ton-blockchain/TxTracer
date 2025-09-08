@@ -1,12 +1,12 @@
 import {useState} from "react"
 
-import type {TestData} from "@features/sandbox/lib/test-data.ts"
+import type {TestData} from "@features/sandbox/lib/test-data"
 import {TransactionTree} from "@app/pages/SandboxPage/components"
 import {ChevronDownIcon, ChevronUpIcon} from "@shared/ui/Icon"
 
-import type {MessageTestData} from "@features/sandbox/lib/transport/message.ts"
+import type {MessageTestData} from "@features/sandbox/lib/transport/message"
 
-import DownloadTestDataButton from "@app/pages/SandboxPage/components/DownloadTestDataButton.tsx"
+import {DownloadTestDataButton} from "@app/pages/SandboxPage/components/DownloadTestDataButton"
 
 import styles from "./TestInfo.module.css"
 

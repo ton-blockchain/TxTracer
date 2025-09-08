@@ -1,9 +1,9 @@
 import {useMemo} from "react"
 import {Address, Cell, loadShardAccount, loadStateInit, loadTransaction} from "@ton/core"
 
-import type {ContractRawData} from "@features/sandbox/lib/transport/contract.ts"
+import type {ContractRawData} from "@features/sandbox/lib/transport/contract"
 
-import type {MessageTestData} from "@features/sandbox/lib/transport/message.ts"
+import type {MessageTestData} from "@features/sandbox/lib/transport/message"
 
 import {useWebsocket} from "./transport/useWebsocket"
 import {processRawTransactions, type RawTransactionInfo} from "./transport/transaction"

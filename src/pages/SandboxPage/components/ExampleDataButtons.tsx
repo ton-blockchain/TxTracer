@@ -2,7 +2,7 @@ import React, {useCallback, useState} from "react"
 
 import Button from "@shared/ui/Button"
 
-import type {MessageTestData} from "@features/sandbox/lib/transport/message.ts"
+import type {MessageTestData} from "@features/sandbox/lib/transport/message"
 
 import styles from "../SandboxPage.module.css"
 

@@ -2,7 +2,7 @@ import {useEffect, type RefObject} from "react"
 import type * as monacoTypes from "monaco-editor"
 
 import type {ExitCode} from "@features/txTrace/lib/traceTx"
-import {EXIT_CODE_DESCRIPTIONS} from "@features/common/lib/error-codes/error-codes.ts"
+import {EXIT_CODE_DESCRIPTIONS} from "@features/common/lib/error-codes/error-codes"
 
 import {TASM_LANGUAGE_ID} from "../languages"
 

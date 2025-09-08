@@ -1,7 +1,7 @@
 import React from "react"
 
 import {Tooltip} from "@shared/ui/Tooltip"
-import {EXIT_CODE_DESCRIPTIONS} from "@features/common/lib/error-codes/error-codes.ts"
+import {EXIT_CODE_DESCRIPTIONS} from "@features/common/lib/error-codes/error-codes"
 import exitStyles from "@features/common/ui/ExitCodeChip/ExitCodeViewer.module.css"
 
 import styles from "./StatusBadge.module.css"

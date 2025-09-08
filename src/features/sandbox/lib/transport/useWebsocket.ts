@@ -1,6 +1,6 @@
 import {useEffect, useState, useCallback} from "react"
 
-import {useGlobalError} from "@shared/lib/useGlobalError.tsx"
+import {useGlobalError} from "@shared/lib/useGlobalError"
 
 import type {Message, MessageTestData} from "./message"
 import type {RawTransactions} from "./transaction"

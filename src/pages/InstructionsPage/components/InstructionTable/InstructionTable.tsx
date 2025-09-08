@@ -23,7 +23,7 @@ import StackDisplay from "./StackDisplay"
 import InlineOperand from "./InlineOperand"
 
 import styles from "./InstructionTable.module.css"
-import {formatGasRanges} from "./utils.ts"
+import {formatGasRanges} from "./utils"
 
 interface DescriptionCellProps {
   readonly instruction: Instruction

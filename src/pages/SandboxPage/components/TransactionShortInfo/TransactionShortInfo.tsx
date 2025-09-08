@@ -4,20 +4,21 @@ import React, {type JSX, useState} from "react"
 import type {Maybe} from "@ton/core/dist/utils/maybe"
 import {FiPlay, FiX, FiChevronDown, FiChevronUp} from "react-icons/fi"
 
-import {ContractChip, OpcodeChip} from "@app/pages/SandboxPage/components"
+import {OpcodeChip} from "@app/pages/SandboxPage/components"
+import {ContractChip} from "@shared/ui/ContractChip/ContractChip"
 import {formatCurrency, formatNumber} from "@shared/lib/format"
 import {
   computeSendMode,
   findOpcodeABI,
   type TransactionInfo,
-} from "@features/sandbox/lib/transaction.ts"
-import type {ContractData} from "@features/sandbox/lib/contract.ts"
-import {type ParsedObjectByABI, parseSliceWithAbiType} from "@features/sandbox/lib/abi/parser.ts"
+} from "@features/sandbox/lib/transaction"
+import type {ContractData} from "@features/sandbox/lib/contract"
+import {type ParsedObjectByABI, parseSliceWithAbiType} from "@features/sandbox/lib/abi/parser"
 import {ParsedDataView} from "@features/sandbox/ui/abi"
 import {TransactionTraceViewer} from "@app/pages/SandboxPage/components/TransactionTraceViewer"
 import Button from "@shared/ui/Button"
 
-import type {TestData} from "@features/sandbox/lib/test-data.ts"
+import type {TestData} from "@features/sandbox/lib/test-data"
 
 import {SendModeViewer} from "@features/sandbox/ui"
 import {ExitCodeChip} from "@features/common/ui/ExitCodeChip/ExitCodeChip"

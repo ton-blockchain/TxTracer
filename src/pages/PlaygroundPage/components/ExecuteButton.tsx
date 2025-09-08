@@ -2,7 +2,7 @@ import {FiPlay} from "react-icons/fi"
 
 import Button from "@shared/ui/Button"
 import styles from "@app/pages/PlaygroundPage/PlaygroundPage.module.css"
-import ButtonLoader from "@shared/ui/ButtonLoader/ButtonLoader.tsx"
+import ButtonLoader from "@shared/ui/ButtonLoader/ButtonLoader"
 
 interface ExecuteButtonProps {
   readonly onClick: () => undefined

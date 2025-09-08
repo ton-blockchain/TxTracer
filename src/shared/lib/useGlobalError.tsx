@@ -1,6 +1,6 @@
 import {createContext, useContext} from "react"
 
-import type {GlobalErrorContextValue} from "@shared/lib/errorContext.tsx"
+import type {GlobalErrorContextValue} from "@shared/lib/errorContext"
 
 export const GlobalErrorContext = createContext<GlobalErrorContextValue | undefined>(undefined)
 

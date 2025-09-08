@@ -6,7 +6,7 @@ import {Blockchain} from "@ton/sandbox"
 import {createMappingInfo, type MappingInfo} from "ton-assembly/dist/trace/mapping"
 import type {StackElement} from "ton-assembly/dist/trace"
 
-import {type ExitCode, findExitCode} from "@features/txTrace/lib/traceTx.ts"
+import {type ExitCode, findExitCode} from "@features/txTrace/lib/traceTx"
 
 function stackElementsToTupleBuilder(stackElements: StackElement[]): TupleBuilder {
   const builder = new TupleBuilder()

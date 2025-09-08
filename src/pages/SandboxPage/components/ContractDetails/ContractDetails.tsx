@@ -5,11 +5,13 @@ import {useState} from "react"
 import type {Maybe} from "@ton/core/dist/utils/maybe"
 
 import {formatCurrency} from "@shared/lib/format"
-import {ContractChip, OpcodeChip, CodeBlock} from "@app/pages/SandboxPage/components"
-import type {TestData} from "@features/sandbox/lib/test-data.ts"
-import {findOpcodeABI, type TransactionInfo} from "@features/sandbox/lib/transaction.ts"
+import {OpcodeChip} from "@app/pages/SandboxPage/components"
+import {CodeBlock} from "@shared/ui/CodeBlock"
+import {ContractChip} from "@shared/ui/ContractChip/ContractChip"
+import type {TestData} from "@features/sandbox/lib/test-data"
+import {findOpcodeABI, type TransactionInfo} from "@features/sandbox/lib/transaction"
 import type {ContractData} from "@features/sandbox/lib/contract"
-import {parseSliceWithAbiType} from "@features/sandbox/lib/abi/parser.ts"
+import {parseSliceWithAbiType} from "@features/sandbox/lib/abi/parser"
 
 import {ParsedDataView} from "@features/sandbox/ui/abi"
 

@@ -1,1 +1,1 @@
-export {default} from "./PageHeader.tsx"
+export {default} from "./PageHeader"

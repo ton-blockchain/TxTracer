@@ -6,7 +6,7 @@ import {Tooltip} from "@shared/ui/Tooltip/Tooltip"
 
 import styles from "./InlineOperand.module.css"
 
-import {renderArgsTreeCompactForOperand} from "./operands.tsx"
+import {renderArgsTreeCompactForOperand} from "./operands"
 
 interface InlineOperandProps {
   readonly instruction: Instruction

@@ -1,2 +1,2 @@
 export * from "./types"
-export * from "./documentation.ts"
+export * from "./documentation"

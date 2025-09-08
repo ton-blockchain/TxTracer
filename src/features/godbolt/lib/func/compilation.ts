@@ -1,8 +1,8 @@
 import {Cell} from "@ton/core"
 import {runtime as i, text, trace} from "ton-assembly"
 
-import {FUNC_STDLIB} from "@features/godbolt/lib/func/stdlib.ts"
-import {funcCompile} from "@features/godbolt/lib/func/func-wasm/func-compile.ts"
+import {FUNC_STDLIB} from "@features/godbolt/lib/func/stdlib"
+import {funcCompile} from "@features/godbolt/lib/func/func-wasm/func-compile"
 
 export interface FuncCompilationResult {
   readonly lang: "func"

@@ -1,7 +1,4 @@
-import type {
-  ContractRawData,
-  ContractStateChange,
-} from "@features/sandbox/lib/transport/contract.ts"
+import type {ContractRawData, ContractStateChange} from "@features/sandbox/lib/transport/contract"
 
 export type MessageTestData = {
   readonly $: "test-data"

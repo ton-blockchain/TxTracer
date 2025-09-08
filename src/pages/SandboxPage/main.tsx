@@ -8,7 +8,7 @@ import {GlobalErrorProvider} from "@shared/lib/errorContext"
 import {ThemeProvider} from "@shared/lib/themeContext"
 import {PageWrapper} from "@app/app/PageWrapper"
 
-import SandboxPage from "./SandboxPage.tsx"
+import SandboxPage from "./SandboxPage"
 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 ReactDOM.createRoot(document.getElementById("root")!).render(

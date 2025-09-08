@@ -1,7 +1,7 @@
 import React from "react"
 
 import styles from "@app/pages/InstructionsPage/components/InstructionTable/RegisterSquare.module.css"
-import {CONTROL_REGISTERS} from "@features/common/lib/control-registers/control-registers.ts"
+import {CONTROL_REGISTERS} from "@features/common/lib/control-registers/control-registers"
 import {Tooltip} from "@shared/ui/Tooltip"
 
 export interface RegisterSquareProps {

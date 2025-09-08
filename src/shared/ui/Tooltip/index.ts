@@ -1,1 +1,1 @@
-export {Tooltip} from "./Tooltip.tsx"
+export {Tooltip} from "./Tooltip"

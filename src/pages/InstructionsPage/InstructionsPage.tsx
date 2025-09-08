@@ -1,7 +1,7 @@
 import {useEffect, useMemo, useState} from "react"
 
 import PageHeader from "@shared/ui/PageHeader"
-import InstructionTable from "@app/pages/InstructionsPage/components/InstructionTable/InstructionTable.tsx"
+import InstructionTable from "@app/pages/InstructionsPage/components/InstructionTable/InstructionTable"
 import SearchInput from "@shared/ui/SearchInput"
 import SearchColumnsSelector, {
   type InstructionColumnKey,
@@ -10,15 +10,15 @@ import SortSelector, {type SortMode} from "@app/pages/InstructionsPage/component
 import CategoryTabs from "@app/pages/InstructionsPage/components/CategoryTabs"
 import Button from "@shared/ui/Button"
 import tvmSpecData from "@features/spec/gen/tvm-specification.json"
-import {POPULARITY} from "@features/spec/popularity/popularity.ts"
+import {POPULARITY} from "@features/spec/popularity/popularity"
 
-import type {TvmSpec, FiftInstruction, Instruction} from "@features/spec/tvm-specification.types.ts"
+import type {TvmSpec, FiftInstruction, Instruction} from "@features/spec/tvm-specification.types"
 
 import {
   loadStoredSettings,
   SETTINGS_STORAGE_KEY,
   type StoredSettings,
-} from "@app/pages/InstructionsPage/settings.ts"
+} from "@app/pages/InstructionsPage/settings"
 
 import Footer from "./components/Footer"
 

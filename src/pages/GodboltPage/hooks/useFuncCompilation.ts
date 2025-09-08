@@ -5,8 +5,8 @@ import {
   compileFuncCode,
   FuncCompilationError,
   type FuncCompilationResult,
-} from "@features/godbolt/lib/func/compilation.ts"
-import {parseFuncErrors, convertErrorsToMarkers} from "@features/godbolt/lib/func/error-parser.ts"
+} from "@features/godbolt/lib/func/compilation"
+import {parseFuncErrors, convertErrorsToMarkers} from "@features/godbolt/lib/func/error-parser"
 
 export interface UseFuncCompilationReturn {
   readonly result: FuncCompilationResult | undefined

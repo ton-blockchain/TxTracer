@@ -3,7 +3,7 @@ import {runtime as i, text, trace} from "ton-assembly"
 
 import {runTolkCompiler} from "@ton/tolk-js"
 
-import {TolkCompilationError, type TolkCompilationResult} from "@features/godbolt/lib/tolk/types.ts"
+import {TolkCompilationError, type TolkCompilationResult} from "@features/godbolt/lib/tolk/types"
 
 export const compileTolkCode = async (code: string): Promise<TolkCompilationResult | undefined> => {
   const result = await runTolkCompiler({

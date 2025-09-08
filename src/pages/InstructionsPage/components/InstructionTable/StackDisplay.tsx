@@ -1,6 +1,6 @@
 import React from "react"
 
-import type {ConstantValue, StackEntry} from "@features/spec/signatures/stack-signatures-schema.ts"
+import type {ConstantValue, StackEntry} from "@features/spec/signatures/stack-signatures-schema"
 
 import styles from "./StackDisplay.module.css"
 

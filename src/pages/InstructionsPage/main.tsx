@@ -8,7 +8,7 @@ import {GlobalErrorProvider} from "@shared/lib/errorContext"
 import {ThemeProvider} from "@shared/lib/themeContext"
 import {PageWrapper} from "@app/app/PageWrapper"
 
-import InstructionsPage from "./InstructionsPage.tsx"
+import InstructionsPage from "./InstructionsPage"
 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 ReactDOM.createRoot(document.getElementById("root")!).render(

@@ -18,7 +18,8 @@
       "@app/*": ["src/*"]
     },
     "moduleResolution": "bundler",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": false
   },
   "references": [{"path": "./tsconfig.app.json"}, {"path": "./tsconfig.node.json"}]
 }

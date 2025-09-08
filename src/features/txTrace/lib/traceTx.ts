@@ -16,11 +16,7 @@ import type {NetworkType, RetraceResultAndCode} from "@features/txTrace/ui"
 import type {TransactionInfo} from "@features/sandbox/lib/transaction"
 import type {ContractData} from "@features/sandbox/lib/contract"
 
-import {
-  type ExtractionResult,
-  extractTxInfoFromLink,
-  SingleHash,
-} from "@features/txTrace/lib/links.ts"
+import {type ExtractionResult, extractTxInfoFromLink, SingleHash} from "@features/txTrace/lib/links"
 
 import {
   NetworkError,

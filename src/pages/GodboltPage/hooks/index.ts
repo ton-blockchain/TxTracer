@@ -1,6 +1,6 @@
-export {useFuncCompilation} from "./useFuncCompilation.ts"
+export {useFuncCompilation} from "./useFuncCompilation"
 export {useGodboltSettings} from "./useGodboltSettings"
 export {useSourceMapHighlight} from "./useSourceMapHighlight"
 
-export type {UseFuncCompilationReturn} from "./useFuncCompilation.ts"
+export type {UseFuncCompilationReturn} from "./useFuncCompilation"
 export type {GodboltSettingsHook} from "./useGodboltSettings"

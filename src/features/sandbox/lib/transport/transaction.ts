@@ -16,7 +16,7 @@ import {
   type TransactionMoney,
   type TransactionInfo,
   type TransactionInfoData,
-} from "@features/sandbox/lib/transaction.ts"
+} from "@features/sandbox/lib/transaction"
 
 /**
  * Bucket of transactions from sandbox

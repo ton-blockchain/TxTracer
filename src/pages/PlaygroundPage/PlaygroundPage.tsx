@@ -1,10 +1,10 @@
-import React, {Suspense, useCallback, useEffect, useMemo, useState} from "react"
+import {lazy, Suspense, useCallback, useEffect, useMemo, useState} from "react"
 import type {StackElement} from "ton-assembly/dist/trace"
 
 import InlineLoader from "@shared/ui/InlineLoader"
 import TraceSidePanel from "@shared/ui/TraceSidePanel"
 
-import {type AssemblyExecutionResult, executeAssemblyCode} from "@features/tasm/lib/executor.ts"
+import {type AssemblyExecutionResult, executeAssemblyCode} from "@features/tasm/lib/executor"
 import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
 import {useLineExecutionData, useTraceStepper} from "@features/txTrace/hooks"
 import {normalizeGas} from "@features/txTrace/lib/traceTx"
@@ -13,18 +13,18 @@ import type {InstructionDetail} from "@features/txTrace/ui/StepInstructionBlock"
 import PageHeader from "@shared/ui/PageHeader"
 import Tutorial, {useTutorial} from "@shared/ui/Tutorial"
 
-import ShareButton from "@shared/ui/ShareButton/ShareButton.tsx"
-import {clearShareHash, decodeCodeFromUrl} from "@app/pages/GodboltPage/urlCodeSharing.ts"
+import {ShareButton} from "@shared/ui/ShareButton/ShareButton"
+import {clearShareHash, decodeCodeFromUrl} from "@app/pages/GodboltPage/urlCodeSharing"
 
-import {ExecuteButton} from "@app/pages/PlaygroundPage/components/ExecuteButton.tsx"
+import {ExecuteButton} from "@app/pages/PlaygroundPage/components/ExecuteButton"
 
-import {TUTORIAL_STEPS} from "@app/pages/PlaygroundPage/Tutorial.ts"
+import {TUTORIAL_STEPS} from "@app/pages/PlaygroundPage/Tutorial"
 
-import {useGlobalError} from "@shared/lib/useGlobalError.tsx"
+import {useGlobalError} from "@shared/lib/useGlobalError"
 
 import styles from "./PlaygroundPage.module.css"
 
-const CodeEditor = React.lazy(() => import("@shared/ui/CodeEditor"))
+const CodeEditor = lazy(() => import("@shared/ui/CodeEditor"))
 
 const DEFAULT_ASSEMBLY_CODE = `PUSHINT_8 42
 PUSHINT_8 100

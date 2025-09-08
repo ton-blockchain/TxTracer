@@ -1,4 +1,5 @@
 import {trace} from "ton-assembly"
+// @ts-expect-error TS5097
 import {FuncFiftLibWasm} from "./funcfiftlib.wasm.ts"
 import CompilerModule from "./funcfiftlib"
 

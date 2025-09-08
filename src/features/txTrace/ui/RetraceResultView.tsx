@@ -1,10 +1,10 @@
-import React from "react"
+import React, {memo} from "react"
 
 import {type TraceInfo} from "ton-assembly/dist/trace"
 import type {TraceResult} from "txtracer-core/dist/types"
 
-import type {ExitCode} from "@features/txTrace/lib/traceTx.ts"
-import {VMLogsView} from "@features/txTrace/ui/index.ts"
+import type {ExitCode} from "@features/txTrace/lib/traceTx"
+import {VMLogsView} from "@features/txTrace/ui/index"
 
 import TransactionDetailsTable from "./TransactionDetailsTable"
 
@@ -48,5 +48,5 @@ const RetraceResultViewFc: React.FC<RetraceResultViewProps> = ({result}) => {
   )
 }
 
-export const RetraceResultView = React.memo(RetraceResultViewFc)
+export const RetraceResultView = memo(RetraceResultViewFc)
 RetraceResultView.displayName = "RetraceResultView"

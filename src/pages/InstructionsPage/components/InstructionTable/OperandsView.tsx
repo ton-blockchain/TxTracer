@@ -11,7 +11,7 @@ import {
   childType,
   getChildRange,
   renderChildRange,
-} from "@app/pages/InstructionsPage/components/InstructionTable/operands.tsx"
+} from "@app/pages/InstructionsPage/components/InstructionTable/operands"
 
 import styles from "./OperandsView.module.css"
 

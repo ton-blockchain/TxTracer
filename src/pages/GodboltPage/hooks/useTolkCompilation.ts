@@ -1,10 +1,7 @@
 import {useState, useCallback} from "react"
 import type * as monaco from "monaco-editor"
 
-import {
-  convertTolkErrorsToMarkers,
-  parseTolkErrors,
-} from "@features/godbolt/lib/tolk/error-parser.ts"
+import {convertTolkErrorsToMarkers, parseTolkErrors} from "@features/godbolt/lib/tolk/error-parser"
 import {TolkCompilationError, type TolkCompilationResult} from "@features/godbolt/lib/tolk/types"
 
 export interface UseTolkCompilationReturn {
@@ -29,7 +26,7 @@ export const useTolkCompilation = (): UseTolkCompilationReturn => {
     setErrorMarkers([])
 
     try {
-      const tolk = await import("@features/godbolt/lib/tolk/compilation.ts")
+      const tolk = await import("@features/godbolt/lib/tolk/compilation")
       const compilationResult = await tolk.compileTolkCode(code)
       setResult(compilationResult)
       setErrorMarkers([])

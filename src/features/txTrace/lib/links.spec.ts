@@ -1,4 +1,4 @@
-import {extractTxInfoFromLink, type ExtractionResult} from "@features/txTrace/lib/links.ts"
+import {extractTxInfoFromLink, type ExtractionResult} from "@features/txTrace/lib/links"
 
 describe("should parse links", () => {
   it("should parse ton.cx link", () => {

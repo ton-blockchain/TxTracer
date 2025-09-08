@@ -11,16 +11,16 @@ import {
 
 import {Category, type Instruction} from "@features/spec/tvm-specification.types"
 
-import {prettySubCategoryName} from "@app/pages/InstructionsPage/lib/formatCategory.ts"
+import {prettySubCategoryName} from "@app/pages/InstructionsPage/lib/formatCategory"
 
-import {RegisterSquare} from "@app/pages/InstructionsPage/components/InstructionTable/RegisterSquare.tsx"
+import {RegisterSquare} from "@app/pages/InstructionsPage/components/InstructionTable/RegisterSquare"
 
-import type {Register} from "@features/spec/signatures/stack-signatures-schema.ts"
+import type {Register} from "@features/spec/signatures/stack-signatures-schema"
 
 import {useProcessedMarkdown} from "../../hooks/useProcessedMarkdown"
 
 import styles from "./InstructionDetail.module.css"
-import {formatGasRanges} from "./utils.ts"
+import {formatGasRanges} from "./utils"
 import InlineOperand from "./InlineOperand"
 import OperandsView from "./OperandsView"
 import ArithmeticCalculator from "./ArithmeticCalculator"

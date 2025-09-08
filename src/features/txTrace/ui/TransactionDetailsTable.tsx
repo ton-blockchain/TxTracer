@@ -10,8 +10,8 @@ import AddressChip from "@shared/ui/AddressChip"
 import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
 import {formatAddress, formatCurrency, formatNumber} from "@shared/lib/format"
 
-import {ExitCodeChip} from "@features/common/ui/ExitCodeChip/ExitCodeChip.tsx"
-import {OpcodeChip} from "@shared/ui/OpcodeChip/OpcodeChip.tsx"
+import {ExitCodeChip} from "@features/common/ui/ExitCodeChip/ExitCodeChip"
+import {OpcodeChip} from "@shared/ui/OpcodeChip/OpcodeChip"
 
 import {ParsedBodyViewer} from "@features/txTrace/ui/ParsedBodyViewer"
 import {ActionsSummary} from "@app/pages/SandboxPage/components/TransactionShortInfo/ActionsSummary"

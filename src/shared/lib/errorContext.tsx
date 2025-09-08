@@ -1,6 +1,6 @@
 import React, {useState} from "react"
 
-import {GlobalErrorContext} from "@shared/lib/useGlobalError.tsx"
+import {GlobalErrorContext} from "@shared/lib/useGlobalError"
 
 export interface GlobalErrorContextValue {
   readonly error: string | null

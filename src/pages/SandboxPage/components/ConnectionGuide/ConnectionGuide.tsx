@@ -1,6 +1,6 @@
 import {FiInfo} from "react-icons/fi"
 
-import type {MessageTestData} from "@features/sandbox/lib/transport/message.ts"
+import type {MessageTestData} from "@features/sandbox/lib/transport/message"
 
 import {CopyButton} from "@shared/CopyButton/CopyButton"
 
