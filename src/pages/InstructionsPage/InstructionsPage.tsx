@@ -21,6 +21,7 @@ import {
 } from "@app/pages/InstructionsPage/settings.ts"
 
 import Footer from "./components/Footer"
+import ContinuationsDocsBanner from "./components/ContinuationsDocsBanner/ContinuationsDocsBanner.tsx"
 
 import styles from "./InstructionsPage.module.css"
 
@@ -259,7 +260,7 @@ function InstructionsPage() {
 
   return (
     <div className={styles.traceViewWrapper}>
-      <PageHeader pageTitle="spec" titleBadgeText="Beta" titleBadgeColor="green">
+      <PageHeader pageTitle="spec" documentationLink={"/spec/doc/"}>
         <div className={styles.mainActionContainer}></div>
       </PageHeader>
 
@@ -293,12 +294,15 @@ function InstructionsPage() {
               }}
             />
             {subCategories.length > 0 && (
-              <CategoryTabs
-                categories={subCategories}
-                selected={selectedSubCategory}
-                onSelect={setSelectedSubCategory}
-                label="Subcategory:"
-              />
+              <div className={styles.subCategoryAndDocsContainer}>
+                <CategoryTabs
+                  categories={subCategories}
+                  selected={selectedSubCategory}
+                  onSelect={setSelectedSubCategory}
+                  label="Subcategory:"
+                />
+                {selectedCategory === "continuation" && <ContinuationsDocsBanner />}
+              </div>
             )}
           </div>
           <InstructionTable

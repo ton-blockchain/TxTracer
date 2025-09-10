@@ -152,9 +152,14 @@ export default defineConfig({
         {
           label: "Book",
           items: [
-            {slug: "book/basics-register-c0-cc-savelist-if-instruction"},
-            {slug: "book/diving-deeper-exit-points-of-continuations"},
-            {slug: "book/manual-handling-and-jmp-vs-execute"},
+            {
+              label: "Continuations",
+              items: [
+                {slug: "book/continuations/basics-register-c0-cc-savelist-if-instruction"},
+                {slug: "book/continuations/diving-deeper-exit-points-of-continuations"},
+                {slug: "book/continuations/manual-handling-and-jmp-vs-execute"},
+              ],
+            },
           ],
         },
       ],
@@ -162,6 +167,8 @@ export default defineConfig({
     react(),
   ],
   redirects: {
-    "/": "/spec/doc/book/basics-register-c0-cc-savelist-if-instruction/",
+    "/": "/spec/doc/book/continuations/basics-register-c0-cc-savelist-if-instruction/",
+    "/book/continuations":
+      "/spec/doc/book/continuations/basics-register-c0-cc-savelist-if-instruction/",
   },
 })

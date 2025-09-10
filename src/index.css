@@ -291,7 +291,7 @@
   --color-neutral: #8e8e93;
   --color-neutral-rgb: 142, 142, 147;
   --color-neutral-bg: #3a3a3c;
-  --color-neutral-bg-hover: #48484a;
+  --color-neutral-bg-hover: #2f2f30;
   --color-neutral-bg-hover-alpha: rgba(var(--color-neutral-rgb), 0.2);
   --color-neutral-bg-alpha: rgba(var(--color-neutral-rgb), 0.3);
 

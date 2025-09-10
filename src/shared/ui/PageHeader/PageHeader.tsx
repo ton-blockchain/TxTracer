@@ -13,6 +13,7 @@ interface PageHeaderProps {
   readonly children?: React.ReactNode
   readonly titleBadgeText?: string
   readonly titleBadgeColor?: "green" | "red" | "blue" | "gray"
+  readonly documentationLink?: string
 }
 
 const PageHeaderFc: React.FC<PageHeaderProps> = ({
@@ -21,6 +22,7 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({
   children,
   titleBadgeText,
   titleBadgeColor = "gray",
+  documentationLink = "https://docs.ton.org/",
 }) => {
   const isPlayground = pageTitle === "playground"
   const isExplorer = pageTitle === "explorer"
@@ -65,7 +67,7 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({
 
       <nav className={styles.headerLinks} aria-label="External links">
         <a
-          href="https://docs.ton.org/"
+          href={documentationLink}
           target="_blank"
           rel="noopener noreferrer"
           title="TON Documentation"
