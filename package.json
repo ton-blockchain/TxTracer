@@ -18,9 +18,10 @@
     "test:e2e": "yarn playwright test",
     "coverage": "vitest run --coverage",
     "precommit": "yarn fmt && yarn lint --fix && yarn build",
+    "spell": "cspell --no-progress spec/src/content/docs",
     "astro:dev": "cd spec && astro dev",
     "astro:clean": "rm -rf dist/spec/doc out/ .astro/",
-    "astro:build": "yarn astro:clean && cd spec && astro check && astro build"
+    "astro:build": "yarn astro:clean && cd spec && yarn spell && astro check && astro build"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
@@ -34,6 +35,7 @@
     "@xyflow/react": "^12.3.2",
     "allotment": "^1.20.4",
     "buffer": "^6.0.3",
+    "cspell": "^9.2.1",
     "framer-motion": "^12.11.0",
     "monaco-editor": "^0.52.2",
     "react": "^19.1.0",
