@@ -152,23 +152,23 @@ declare module 'astro:content' {
 
 	type ContentEntryMap = {
 		"docs": {
-"book/basics-register-c0-cc-savelist-if-instruction.mdx": {
-	id: "book/basics-register-c0-cc-savelist-if-instruction.mdx";
-  slug: "book/basics-register-c0-cc-savelist-if-instruction";
+"book/continuations/basics-register-c0-cc-savelist-if-instruction.mdx": {
+	id: "book/continuations/basics-register-c0-cc-savelist-if-instruction.mdx";
+  slug: "book/continuations/basics-register-c0-cc-savelist-if-instruction";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".mdx"] };
-"book/diving-deeper-exit-points-of-continuations.mdx": {
-	id: "book/diving-deeper-exit-points-of-continuations.mdx";
-  slug: "book/diving-deeper-exit-points-of-continuations";
+"book/continuations/diving-deeper-exit-points-of-continuations.mdx": {
+	id: "book/continuations/diving-deeper-exit-points-of-continuations.mdx";
+  slug: "book/continuations/diving-deeper-exit-points-of-continuations";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".mdx"] };
-"book/manual-handling-and-jmp-vs-execute.mdx": {
-	id: "book/manual-handling-and-jmp-vs-execute.mdx";
-  slug: "book/manual-handling-and-jmp-vs-execute";
+"book/continuations/manual-handling-and-jmp-vs-execute.mdx": {
+	id: "book/continuations/manual-handling-and-jmp-vs-execute.mdx";
+  slug: "book/continuations/manual-handling-and-jmp-vs-execute";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
