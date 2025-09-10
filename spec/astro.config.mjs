@@ -17,7 +17,7 @@ import react from "@astrojs/react"
 // https://starlight.astro.build/reference/configuration/
 export default defineConfig({
   outDir: "../dist/spec/doc",
-  site: "https://i582.github.io",
+  site: "https://txtracer.ton.org",
   base: "/spec/doc/",
   trailingSlash: "always",
   vite: {
