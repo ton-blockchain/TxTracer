@@ -137,7 +137,7 @@ header.header .site-title span:before {
   font-size: var(--sl-text-lg) !important;
   color: var(--sl-color-real-white);
   font-weight: 700;
-  margin-right: 7px;
+  margin-right: 4px;
 }
 
 :root[data-theme="light"] .expressive-code .frame pre {
