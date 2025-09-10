@@ -161,5 +161,7 @@ export default defineConfig({
     }),
     react(),
   ],
-  redirects: {},
+  redirects: {
+    "/": "/spec/doc/book/basics-register-c0-cc-savelist-if-instruction/",
+  },
 })
