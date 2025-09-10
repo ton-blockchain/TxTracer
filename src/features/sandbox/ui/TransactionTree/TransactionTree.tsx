@@ -314,10 +314,10 @@ export function TransactionTree({testData}: TransactionTreeProps) {
       if (!node.children || node.children.length === 0) {
         return 1
       }
-      return node.children.reduce(
+      return Number(node.children.reduce(
         (sum: number, child) => sum + countNodes(child as {children?: unknown[]}),
         0,
-      )
+      ))
     }
 
     const totalNodes = countNodes(data)

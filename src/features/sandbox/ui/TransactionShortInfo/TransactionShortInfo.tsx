@@ -224,7 +224,7 @@ export function TransactionShortInfo({
                 <div className={styles.multiColumnItem}>
                   <div className={styles.multiColumnItemTitle}>Created Lt</div>
                   <div className={`${styles.multiColumnItemValue} ${styles.numberValue}`}>
-                    {inMessage.info.createdLt}
+                    {inMessage.info.createdLt.toString()}
                   </div>
                 </div>
               </div>
@@ -322,7 +322,7 @@ export function TransactionShortInfo({
                 <div className={styles.multiColumnItem}>
                   <div className={styles.multiColumnItemTitle}>Gas Used</div>
                   <div className={`${styles.multiColumnItemValue} ${styles.gasValue}`}>
-                    {computeInfo?.gasUsed}
+                    {computeInfo?.gasUsed?.toString()}
                   </div>
                 </div>
                 <div className={styles.multiColumnItem}>

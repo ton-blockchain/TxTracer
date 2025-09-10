@@ -1,6 +1,7 @@
 import React, {useState} from "react"
 
-import type {OutAction} from "@entities/transaction"
+import type {OutAction} from "@ton/core"
+
 import {getActionSummary} from "@features/txTrace/lib/actions"
 import {formatCurrency, formatAddress} from "@shared/lib/format"
 import type {ContractData} from "@features/sandbox/lib/contract"

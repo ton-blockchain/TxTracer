@@ -1,6 +1,6 @@
 {
   "name": "txtracer-components-test-dev",
-  "version": "0.0.7",
+  "version": "0.0.14",
   "type": "module",
   "homepage": "https://txtracer.ton.org/",
   "main": "./src/lib/index.ts",
@@ -8,32 +8,22 @@
   "types": "./src/lib/index.ts",
   "exports": {
     ".": {
-      "import": "./src/lib/index.ts",
-      "types": "./src/lib/index.ts"
+      "import": "./dist/lib/index.js",
+      "types": "./dist/lib/index.d.ts"
     },
     "./shared": {
-      "import": "./src/lib/shared.ts",
-      "types": "./src/lib/shared.ts"
+      "import": "./dist/lib/shared.js",
+      "types": "./dist/lib/shared.d.ts"
     },
     "./features": {
-      "import": "./src/lib/features.ts",
-      "types": "./src/lib/features.ts"
+      "import": "./dist/lib/features.js",
+      "types": "./dist/lib/features.d.ts"
     },
-    "./styles": "./src/index.css"
+    "./styles": "./dist/lib/txtracer.css"
   },
   "files": [
-    "src/lib/",
-    "src/shared/",
-    "!src/shared/ui/CodeEditor",
-    "src/features/sandbox/",
-    "src/features/common/",
-    "src/features/txTrace/",
-    "src/features/tasm/",
-    "src/features/godbolt/",
-    "src/pages/SandboxPage/",
-    "src/index.css",
-    "README.md",
-    "LICENSE"
+    "dist/lib/",
+    "!dist/lib/assets"
   ],
   "keywords": [
     "react",
@@ -56,6 +46,8 @@
   "scripts": {
     "dev": "vite --port 5174",
     "build": "tsc -b && vite build",
+    "build-lib": "tsc -b && vite build --config vite.lib.config.ts",
+    "build-lib-tgz": "yarn build-lib && npm pack --pack-destination=. && echo 'Library TGZ created successfully'",
     "lint": "eslint . --cache",
     "preview": "vite preview",
     "deploy": "gh-pages -d dist",
