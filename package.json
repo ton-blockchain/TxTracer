@@ -10,7 +10,7 @@
     "build:all": "yarn build && yarn astro:build",
     "lint": "eslint . --cache",
     "preview": "vite preview",
-    "deploy": "gh-pages -d dist",
+    "deploy": "gh-pages -d dist --nojekyll",
     "fmt": "prettier --write -l --cache .",
     "fmt:check": "prettier --check --cache .",
     "test": "vitest",
