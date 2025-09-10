@@ -9,7 +9,7 @@ const ContinuationsDocsBanner: React.FC = () => {
       <div className={styles.compactContent}>
         <FiBookOpen size={14} aria-hidden="true" />
         <a
-          href="/spec/doc/book/continuations/"
+          href="/spec/doc/book/continuations/basics-register-c0-cc-savelist-if-instruction/"
           target="_blank"
           rel="noopener noreferrer"
           className={styles.labelLink}
