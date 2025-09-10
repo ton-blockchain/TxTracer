@@ -101,7 +101,7 @@ export default defineConfig({
         telegram: "https://t.me/toncore",
       },
       editLink: {
-        baseUrl: "https://github.com/ton-blockchain/txtracer/edit/main/spec/src/content/dpcs/",
+        baseUrl: "https://github.com/ton-blockchain/txtracer/edit/main/spec/src/content/docs/",
       },
       tableOfContents: {minHeadingLevel: 2, maxHeadingLevel: 4},
       expressiveCode: {
