@@ -137,20 +137,19 @@
 
 .inputPage {
   padding: var(--spacing-lg);
-  min-height: calc(100vh - (var(--spacing-lg) * 2));
+  height: calc(100vh - (var(--spacing-lg) * 2));
   display: flex;
   flex-direction: column;
   background-color: var(--color-background-secondary);
 }
 
 .centeredInputContainer {
-  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   height: 100%;
-  padding: calc(var(--spacing-2xl) * 4) var(--spacing-lg) var(--spacing-2xl);
+  padding: 0 var(--spacing-lg) var(--spacing-2xl);
+  margin-top: 265px;
 }
 
 .txtracerLogo {
@@ -404,9 +403,10 @@ footer {
 }
 
 .createBy {
-  flex: 0 0 auto;
   color: var(--tracepage-create-by-text-color);
   font-size: var(--font-size-sm);
+  text-align: center;
+  padding-top: var(--spacing-lg);
 }
 
 .createBy a {
