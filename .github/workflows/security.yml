@@ -1,0 +1,31 @@
+name: Security checks
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Sources
+        uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Setup Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn install --immutable --check-cache --check-resolutions
+
+      - name: Check project packages for deprecated
+        run: yarn npm audit --all --severity moderate
+
+      - name: Check all packages for vulnerabilities
+        run: yarn npm audit --all --recursive --severity high
