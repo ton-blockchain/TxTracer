@@ -4150,9 +4150,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astro@npm:4.16.18":
-  version: 4.16.18
-  resolution: "astro@npm:4.16.18"
+"astro@npm:4.16.19":
+  version: 4.16.19
+  resolution: "astro@npm:4.16.19"
   dependencies:
     "@astrojs/compiler": "npm:^2.10.3"
     "@astrojs/internal-helpers": "npm:0.4.1"
@@ -4222,7 +4222,7 @@ __metadata:
       optional: true
   bin:
     astro: astro.js
-  checksum: 10c0/409e726134c4f81dde0a53b5fb6d6f7b195d91b1e7d726431fd380a497e827259fb054ce86d53fdad30f01d3901a00942ddf8069f184a48c2a3cbc1df1e91975
+  checksum: 10c0/3b49ecec9994f26fe3ab4f83972c8ca426be737a5d58afb695fa626d88ecf4585bc004fe548df0d364ad66aec75c7de9d2edfe9f5c923907db37d80a2a4fee3f
   languageName: node
   linkType: hard
 
@@ -12163,7 +12163,7 @@ __metadata:
     "@vitest/ui": "npm:^3.1.3"
     "@xyflow/react": "npm:^12.3.2"
     allotment: "npm:^1.20.4"
-    astro: "npm:4.16.18"
+    astro: "npm:4.16.19"
     buffer: "npm:^6.0.3"
     cspell: "npm:^9.2.1"
     eslint: "npm:^9.25.0"
