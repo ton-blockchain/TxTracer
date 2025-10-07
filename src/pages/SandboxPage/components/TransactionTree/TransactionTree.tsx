@@ -341,6 +341,9 @@ export function TransactionTree({testData}: TransactionTreeProps) {
     } else {
       setSelectedTransaction(transaction)
       setSelectedContract(null)
+      if (window.dispatchEvent) {
+        window.dispatchEvent(new CustomEvent("resetTraceViewer"))
+      }
     }
   }
 

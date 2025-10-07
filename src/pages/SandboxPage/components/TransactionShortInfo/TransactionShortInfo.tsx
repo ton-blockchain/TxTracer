@@ -1,6 +1,6 @@
 import {Address, type ExternalAddress} from "@ton/core"
 
-import React, {type JSX, useState} from "react"
+import React, {type JSX, useState, useEffect} from "react"
 import type {Maybe} from "@ton/core/dist/utils/maybe"
 import {FiPlay, FiX, FiChevronDown, FiChevronUp} from "react-icons/fi"
 
@@ -105,6 +105,17 @@ export function TransactionShortInfo({
 }: TransactionShortInfoProps) {
   const [showTraceViewer, setShowTraceViewer] = useState(false)
   const [showActions, setShowActions] = useState(false)
+
+  useEffect(() => {
+    const handleResetTraceViewer = () => {
+      setShowTraceViewer(false)
+    }
+
+    window.addEventListener("resetTraceViewer", handleResetTraceViewer)
+    return () => {
+      window.removeEventListener("resetTraceViewer", handleResetTraceViewer)
+    }
+  }, [])
 
   if (tx.transaction.description.type !== "generic") {
     throw new Error(
