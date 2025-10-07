@@ -8,7 +8,7 @@
     "dev": "vite --port 5174",
     "build": "tsc -b && vite build",
     "build:all": "yarn build && yarn astro:build",
-    "lint": "eslint . --cache",
+    "lint": "eslint --max-warnings 0 . --cache",
     "preview": "vite preview",
     "deploy": "gh-pages -d dist --nojekyll",
     "fmt": "prettier --write -l --cache .",

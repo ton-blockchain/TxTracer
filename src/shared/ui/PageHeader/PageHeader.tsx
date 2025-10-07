@@ -1,4 +1,4 @@
-import React from "react"
+import React, {memo} from "react"
 
 import {FiGithub, FiBookOpen} from "react-icons/fi"
 
@@ -91,7 +91,7 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({
   )
 }
 
-const MemoizedPageHeader = React.memo(PageHeaderFc)
+const MemoizedPageHeader = memo(PageHeaderFc)
 MemoizedPageHeader.displayName = "PageHeader"
 
 export default MemoizedPageHeader

@@ -1,17 +1,17 @@
 import "@xyflow/react/dist/style.css"
 
-import React, {useEffect} from "react"
+import {useEffect, useState, useMemo} from "react"
 
 import PageHeader from "@shared/ui/PageHeader"
 import {useSandboxData} from "@features/sandbox/lib/useSandboxData"
 import {TestInfo, ConnectionGuide, LoadingState} from "@app/pages/SandboxPage/components"
-import UploadTestDataButton from "@app/pages/SandboxPage/components/UploadTestDataButton"
+import {UploadTestDataButton} from "@app/pages/SandboxPage/components/UploadTestDataButton"
 import {loadExampleByKey} from "@app/pages/SandboxPage/components/examples"
 
 import styles from "./SandboxPage.module.css"
 
 function SandboxPage() {
-  const [host, setHost] = React.useState<string>(() => {
+  const [host, setHost] = useState<string>(() => {
     if (typeof window !== "undefined") {
       const v = localStorage.getItem("sandbox-daemon-host")
       const trimmed = (v ?? "").trim()
@@ -19,7 +19,7 @@ function SandboxPage() {
     }
     return "localhost"
   })
-  const [port, setPort] = React.useState<string>(() => {
+  const [port, setPort] = useState<string>(() => {
     if (typeof window !== "undefined") {
       const v = localStorage.getItem("sandbox-daemon-port")
       const digits = (v ?? "").replace(/[^0-9]/g, "")
@@ -28,7 +28,7 @@ function SandboxPage() {
     return "7743"
   })
 
-  const url = React.useMemo(() => `ws://${host}:${port}` as const, [host, port])
+  const url = useMemo(() => `ws://${host}:${port}` as const, [host, port])
 
   const {tests, error, isConnected, isSharedData, rawData, loadFromFile} = useSandboxData({url})
 

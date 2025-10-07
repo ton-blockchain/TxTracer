@@ -1,5 +1,5 @@
-import React, {useCallback, useEffect, useRef, useState} from "react"
-import Editor, {loader} from "@monaco-editor/react"
+import React, {memo, useCallback, useEffect, useRef, useState} from "react"
+import {Editor, loader} from "@monaco-editor/react"
 
 import * as monaco from "monaco-editor"
 
@@ -334,4 +334,4 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 
 CodeEditor.displayName = "CodeEditor"
 
-export default React.memo(CodeEditor)
+export default memo(CodeEditor)
