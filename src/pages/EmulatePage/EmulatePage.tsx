@@ -2,6 +2,8 @@ import {useState, useEffect} from "react"
 import {FiArrowLeft, FiGithub} from "react-icons/fi"
 import {Cell, loadMessage} from "@ton/core"
 
+import type {EmulationError} from "@ton/sandbox"
+
 import PageHeader from "@shared/ui/PageHeader"
 import Button from "@shared/ui/Button"
 import {TransactionTree} from "@app/pages/SandboxPage/components"
@@ -9,6 +11,8 @@ import {useSandboxData} from "@features/sandbox/lib/useSandboxData"
 import {useGlobalError} from "@shared/lib/useGlobalError.tsx"
 
 import {getRawQueryParam, setQueryParam} from "@features/common/lib/query-params.ts"
+
+import {ExitCodeChip} from "@features/common/ui/ExitCodeChip/ExitCodeChip"
 
 import {emulateMessage} from "./emulateMessage"
 import styles from "./EmulatePage.module.css"
@@ -22,6 +26,8 @@ function EmulatePage() {
   const [newMessage, setNewMessage] = useState("")
   const [allMessages, setAllMessages] = useState<string[]>([])
   const [isTestnet, setIsTestnet] = useState(false)
+  const [ignoreChksig, setIgnoreChksig] = useState(false)
+  const [emulationErrors, setEmulationErrors] = useState<readonly EmulationError[]>([])
 
   const {setError, clearError} = useGlobalError()
 
@@ -82,15 +88,19 @@ function EmulatePage() {
 
     try {
       const hexMessage = normalizeMessageToHex(newMessage)
-      const result = await emulateMessage([hexMessage], isTestnet)
+      const result = await emulateMessage([hexMessage], isTestnet, ignoreChksig)
 
       if (result.error) {
         setError(result.error)
       } else {
         loadFromFile([result.testData])
-        setAllMessages(prev => [...prev, hexMessage.trim()])
-        setNewMessage("")
-        setShowAddForm(false)
+        setEmulationErrors(result.errors ?? [])
+
+        if (result.errors.length === 0) {
+          setAllMessages(prev => [...prev, hexMessage.trim()])
+          setNewMessage("")
+          setShowAddForm(false)
+        }
       }
     } catch (error) {
       setError(error instanceof Error ? error.message : "Unknown error occurred")
@@ -111,11 +121,20 @@ function EmulatePage() {
     if (testnetParam !== null) {
       setIsTestnet(testnetParam === "true")
     }
+
+    const ignoreChksigParam = getRawQueryParam("ignoreChksig")
+    if (ignoreChksigParam !== null) {
+      setIgnoreChksig(ignoreChksigParam === "true")
+    }
   }, [])
 
   useEffect(() => {
     setQueryParam("testnet", isTestnet ? "true" : null)
   }, [isTestnet])
+
+  useEffect(() => {
+    setQueryParam("ignoreChksig", ignoreChksig ? "true" : null)
+  }, [ignoreChksig])
 
   const handleEmulate = async () => {
     const validationError = validateMessage(rawMessage)
@@ -127,17 +146,22 @@ function EmulatePage() {
     setIsEmulating(true)
     clearError()
     clearFileData()
+    setEmulationErrors([])
 
     try {
       const hexMessage = normalizeMessageToHex(rawMessage)
-      const result = await emulateMessage([hexMessage], isTestnet)
+      const result = await emulateMessage([hexMessage], isTestnet, ignoreChksig)
 
       if (result.error) {
         setError(result.error)
       } else {
         loadFromFile([result.testData])
-        setAllMessages([hexMessage.trim()])
-        setShowResults(true)
+        setEmulationErrors(result.errors)
+
+        if (result.errors.length === 0) {
+          setAllMessages([hexMessage.trim()])
+          setShowResults(true)
+        }
       }
     } catch (error) {
       setError(error instanceof Error ? error.message : "Unknown error occurred")
@@ -164,16 +188,18 @@ function EmulatePage() {
     setIsEmulating(true)
     clearError()
     clearFileData()
+    setEmulationErrors([] as readonly EmulationError[])
 
     const messagesToEmulate = [...allMessages, newMessage.trim()]
 
     try {
-      const result = await emulateMessage(messagesToEmulate, isTestnet)
+      const result = await emulateMessage(messagesToEmulate, isTestnet, ignoreChksig)
 
       if (result.error) {
         setError(result.error)
       } else {
         loadFromFile([result.testData])
+        setEmulationErrors(result.errors)
         setAllMessages(messagesToEmulate)
         setNewMessage("")
         setShowAddForm(false)
@@ -190,6 +216,7 @@ function EmulatePage() {
     clearError()
     clearFileData()
     setAllMessages([])
+    setEmulationErrors([] as readonly EmulationError[])
   }
 
   if (showResults) {
@@ -358,16 +385,78 @@ function EmulatePage() {
                       Try an example!
                     </button>
                   </span>
-                  <label className={styles.checkboxLabel}>
-                    <input
-                      type="checkbox"
-                      checked={isTestnet}
-                      onChange={e => setIsTestnet(e.target.checked)}
-                      disabled={isEmulating}
-                    />
-                    Use Testnet
-                  </label>
+                  <div className={styles.checkboxesContainer}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        checked={isTestnet}
+                        onChange={e => setIsTestnet(e.target.checked)}
+                        disabled={isEmulating}
+                      />
+                      Use Testnet
+                    </label>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        checked={ignoreChksig}
+                        onChange={e => setIgnoreChksig(e.target.checked)}
+                        disabled={isEmulating}
+                      />
+                      Ignore Chksig
+                    </label>
+                  </div>
                 </div>
+
+                {emulationErrors.length > 0 && (
+                  <div className={styles.emulationErrors}>
+                    <div className={styles.errorsLogsContainer}>
+                      <div className={styles.errorsList}>
+                        {emulationErrors.map((error, index) => (
+                          <div key={index} className={styles.errorItem}>
+                            <div className={styles.errorHeader}>
+                              <div className={styles.errorType}>Emulation Error</div>
+                              <div className={styles.errorIndex}>#{index + 1}</div>
+                              <div className={styles.errorExitCode}>
+                                <ExitCodeChip exitCode={error.exitCode} />
+                              </div>
+                            </div>
+
+                            <div className={styles.errorDescription}>{error.error}</div>
+
+                            <div className={styles.errorFields}>
+                              {Object.entries(error).map(([key, value]) => {
+                                if (key === "error" || key === "exitCode") return null
+                                if (typeof value === "object" && value !== null) return null
+                                if (value === null || value === undefined) return null
+
+                                const stringValue =
+                                  typeof value === "string" ? value : String(value)
+
+                                if (stringValue === "") return null
+                                const isLongContent = stringValue.length > 500
+
+                                return (
+                                  <div key={key} className={styles.errorField}>
+                                    <div className={styles.errorFieldLabel}>
+                                      {key
+                                        .replace(/([A-Z])/g, " $1")
+                                        .replace(/^./, str => str.toUpperCase())}
+                                    </div>
+                                    <div
+                                      className={`${styles.errorFieldValue} ${isLongContent ? styles["--long-content"] : ""}`}
+                                    >
+                                      {stringValue}
+                                    </div>
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </section>
             </div>
           </main>

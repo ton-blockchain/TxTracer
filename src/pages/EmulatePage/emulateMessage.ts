@@ -4,6 +4,7 @@ import {
   RemoteBlockchainStorage,
   wrapTonClient4ForRemote,
   SmartContract,
+  EmulationError,
 } from "@ton/sandbox"
 import {
   Address,
@@ -29,12 +30,14 @@ export interface EmulationResult {
     readonly contracts: readonly ContractRawData[]
     readonly changes: readonly ContractStateChange[]
   }
+  readonly errors: readonly EmulationError[]
   readonly error?: string
 }
 
 export async function emulateMessage(
   hexMessages: string[],
   testnet: boolean,
+  ignoreChksig: boolean = false,
 ): Promise<EmulationResult> {
   try {
     const blockchain = await Blockchain.create({
@@ -49,10 +52,23 @@ export async function emulateMessage(
     blockchain.verbosity.print = false
     blockchain.verbosity.vmLogs = "vm_logs_verbose"
 
+    const errors: EmulationError[] = []
+
     for (const hexMessage of hexMessages) {
       const message = Cell.fromHex(hexMessage.trim())
       loadMessage(message.asSlice())
-      await blockchain.sendMessage(message)
+      try {
+        await blockchain.sendMessage(message, {
+          ignoreChksig,
+        })
+      } catch (error) {
+        if (error instanceof EmulationError) {
+          errors.push(error)
+          continue
+        }
+
+        throw error
+      }
     }
 
     // @ts-expect-error blockchain.transactions is not typed in @ton/sandbox
@@ -102,6 +118,7 @@ export async function emulateMessage(
 
     return {
       testData,
+      errors,
     }
   } catch (error) {
     return {
@@ -113,6 +130,7 @@ export async function emulateMessage(
         changes: [],
       },
       error: error instanceof Error ? error.message : String(error),
+      errors: [],
     }
   }
 }

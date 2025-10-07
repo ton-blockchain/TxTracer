@@ -9,6 +9,7 @@
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - 43px - 2 * var(--spacing-sm));
+  height: 100%;
   padding: var(--spacing-sm) var(--spacing-lg);
 }
 
@@ -58,6 +59,106 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
+}
+
+.checkboxesContainer {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-lg);
+}
+
+.emulationErrors {
+  margin-top: var(--spacing-md);
+  width: 100%;
+  border-radius: var(--border-radius-md);
+}
+
+.errorsLogsContainer {
+  height: auto;
+}
+
+.errorsList {
+  padding: var(--spacing-md) 0;
+}
+
+.errorItem {
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md);
+}
+
+.errorItem:last-child {
+  margin-bottom: 0;
+}
+
+.errorHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.errorType {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-error, #d32f2f);
+  font-size: var(--font-size-base);
+  background-color: var(--color-background-error, #fee);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+}
+
+.errorIndex {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  background-color: var(--color-background-tertiary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+}
+
+.errorExitCode {
+  margin-left: auto;
+}
+
+.errorDescription {
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+}
+
+.errorFields {
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.errorField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.errorFieldLabel {
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xsm);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+}
+
+.errorFieldValue {
+  font-family: var(--font-family-mono), serif;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-primary);
+  background-color: var(--color-background-primary);
+  padding: var(--spacing-xs);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.errorFieldValue.--long-content {
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .exampleText {
@@ -347,7 +448,7 @@
 
 .inputPage {
   padding: var(--spacing-lg);
-  height: calc(100vh - (var(--spacing-lg) * 2));
+  min-height: calc(100vh - (var(--spacing-lg) * 2));
   display: flex;
   flex-direction: column;
   background-color: var(--color-background-secondary);
