@@ -235,7 +235,7 @@ function EmulatePage() {
 
                 <div className={styles.exampleSection}>
                   <span className={styles.exampleText}>
-                    Not sure what this does?{"  "}
+                    Not sure what this does?
                     <button
                       type="button"
                       onClick={handleLoadExample}
