@@ -14,7 +14,7 @@ import {emulateMessage} from "./emulateMessage"
 import styles from "./EmulatePage.module.css"
 
 function EmulatePage() {
-  const [hexMessage, setHexMessage] = useState("")
+  const [rawMessage, setRawMessage] = useState("")
   const [isEmulating, setIsEmulating] = useState(false)
   const [showResults, setShowResults] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
@@ -24,19 +24,33 @@ function EmulatePage() {
 
   const {setError, clearError} = useGlobalError()
 
-  const validateHexMessage = (hexMessage: string): string | undefined => {
-    const trimmed = hexMessage.trim()
+  const normalizeMessageToHex = (message: string): string => {
+    const trimmed = message.trim()
+
+    try {
+      Cell.fromHex(trimmed)
+      return trimmed
+    } catch {
+      try {
+        Cell.fromBase64(trimmed)
+        const buffer = Buffer.from(trimmed, "base64")
+        return buffer.toString("hex")
+      } catch {
+        throw new Error("Message is invalid Cell")
+      }
+    }
+  }
+
+  const validateMessage = (message: string): string | undefined => {
+    const trimmed = message.trim()
 
     if (!trimmed) {
       return "Message cannot be empty"
     }
 
-    if (!/^[0-9a-fA-F]*$/.test(trimmed)) {
-      return "Message must contain only hexadecimal characters (0-9, a-f, A-F)"
-    }
-
     try {
-      const cell = Cell.fromHex(trimmed)
+      const hexMessage = normalizeMessageToHex(trimmed)
+      const cell = Cell.fromHex(hexMessage)
       loadMessage(cell.asSlice())
       return undefined
     } catch (error) {
@@ -51,12 +65,12 @@ function EmulatePage() {
     "b5ee9c720102060100012b0001ad6800a82a7aa43e8441299d2a937e4499ea5424a64e57d050479cfefea07ebb0bcb870036b854e9d36252ef0c9d206633589b93d77d29a6b4be95b3a03f09912d5c23481406d5ba88a800000000000000000200000002c0010267ea06185d00000000000000005019d971e2a80059887087414684712ee07949af76475d6cbeb6a0a4c3388182937881124a56fa0c020501458006782fd72576f540683e048bc16f3715020eb4dba5fbe912e76da73ac8dc8453c0c0030145800361564f6ee70b7227610014e70f0f5b708175265958fbda002cf6dce0483afb60c0040045801c6119e5968d83b7a74656e33f13965ecedfa7df20bb4527934b02221a6821be0040004b00000000800a82a7aa43e8441299d2a937e4499ea5424a64e57d050479cfefea07ebb0bcb861"
 
   const handleLoadExample = () => {
-    setHexMessage(exampleMessage)
+    setRawMessage(exampleMessage)
     setIsFocused(true)
   }
 
   const handleAddMessage = async () => {
-    const validationError = validateHexMessage(newMessage)
+    const validationError = validateMessage(newMessage)
     if (validationError) {
       setError(validationError)
       return
@@ -66,13 +80,14 @@ function EmulatePage() {
     clearError()
 
     try {
-      const result = await emulateMessage([newMessage.trim()])
+      const hexMessage = normalizeMessageToHex(newMessage)
+      const result = await emulateMessage([hexMessage])
 
       if (result.error) {
         setError(result.error)
       } else {
         loadFromFile([result.testData])
-        setAllMessages(prev => [...prev, newMessage.trim()])
+        setAllMessages(prev => [...prev, hexMessage.trim()])
         setNewMessage("")
         setShowAddForm(false)
       }
@@ -88,12 +103,12 @@ function EmulatePage() {
   useEffect(() => {
     const message = getRawQueryParam("message") ?? ""
     if (message) {
-      setHexMessage(message)
+      setRawMessage(message)
     }
   }, [])
 
   const handleEmulate = async () => {
-    const validationError = validateHexMessage(hexMessage)
+    const validationError = validateMessage(rawMessage)
     if (validationError) {
       setError(validationError)
       return
@@ -104,7 +119,8 @@ function EmulatePage() {
     clearFileData()
 
     try {
-      const result = await emulateMessage([hexMessage.trim()])
+      const hexMessage = normalizeMessageToHex(rawMessage)
+      const result = await emulateMessage([hexMessage])
 
       if (result.error) {
         setError(result.error)
@@ -121,14 +137,14 @@ function EmulatePage() {
   }
 
   const handleEmulateAll = async () => {
-    const validationError = validateHexMessage(newMessage)
+    const validationError = validateMessage(newMessage)
     if (validationError) {
       setError(validationError)
       return
     }
 
     for (let i = 0; i < allMessages.length; i++) {
-      const error = validateHexMessage(allMessages[i])
+      const error = validateMessage(allMessages[i])
       if (error) {
         setError(`Message ${i + 1} is invalid: ${error}`)
         return
@@ -208,7 +224,7 @@ function EmulatePage() {
                   <textarea
                     id="newMessage"
                     className={styles.hexInput}
-                    placeholder="Enter another raw hex message..."
+                    placeholder="Enter another message in HEX or Base64..."
                     value={newMessage}
                     onChange={e => setNewMessage(e.target.value)}
                     rows={6}
@@ -290,13 +306,14 @@ function EmulatePage() {
                     <textarea
                       id="hexMessage"
                       className={styles.hexInput}
-                      placeholder="Enter encoded message in HEX..."
-                      value={hexMessage}
-                      onChange={e => setHexMessage(e.target.value)}
+                      placeholder="Enter encoded message in HEX or Base64..."
+                      value={rawMessage}
+                      onChange={e => setRawMessage(e.target.value)}
                       rows={6}
                       autoFocus={true}
                       onFocus={() => setIsFocused(true)}
                       onBlur={() => setIsFocused(false)}
+                      spellCheck={false}
                       onKeyDown={e => {
                         if (e.key === "Enter" && !isEmulating) {
                           if (!(e.ctrlKey || e.metaKey)) {
@@ -309,7 +326,7 @@ function EmulatePage() {
                     <Button
                       variant="primary"
                       onClick={() => void handleEmulate()}
-                      disabled={!hexMessage.trim() || isEmulating}
+                      disabled={!rawMessage.trim() || isEmulating}
                       className={styles.submitButton}
                     >
                       {isEmulating ? "Emulating..." : "Emulate"}
