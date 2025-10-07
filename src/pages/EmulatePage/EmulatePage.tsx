@@ -223,7 +223,7 @@ function EmulatePage() {
                 <div className={styles.inputWrapper}>
                   <textarea
                     id="newMessage"
-                    className={styles.hexInput}
+                    className={styles.messageInput}
                     placeholder="Enter another message in HEX or Base64..."
                     value={newMessage}
                     onChange={e => setNewMessage(e.target.value)}
@@ -305,7 +305,7 @@ function EmulatePage() {
                   <div className={`${styles.inputWrapper} ${isFocused ? styles.focused : ""}`}>
                     <textarea
                       id="hexMessage"
-                      className={styles.hexInput}
+                      className={styles.messageInput}
                       placeholder="Enter encoded message in HEX or Base64..."
                       value={rawMessage}
                       onChange={e => setRawMessage(e.target.value)}

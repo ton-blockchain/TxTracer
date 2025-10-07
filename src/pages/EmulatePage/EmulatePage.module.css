@@ -271,11 +271,11 @@
   box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.2);
 }
 
-.hexInput {
+.messageInput {
   flex-grow: 1;
   border: none;
   background-color: transparent;
-  font-family: var(--font-family-mono), monospace;
+  font-family: var(--font-family-sans), monospace;
   font-size: var(--font-size-sm);
   color: var(--color-text-primary);
   outline: none;
@@ -285,7 +285,7 @@
   min-height: 120px;
 }
 
-.hexInput::placeholder {
+.messageInput::placeholder {
   color: var(--color-text-placeholder);
 }
 
