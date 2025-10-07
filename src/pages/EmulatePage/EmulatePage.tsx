@@ -28,6 +28,8 @@ function EmulatePage() {
   const [isTestnet, setIsTestnet] = useState(false)
   const [ignoreChksig, setIgnoreChksig] = useState(false)
   const [emulationErrors, setEmulationErrors] = useState<readonly EmulationError[]>([])
+  const [animatedText, setAnimatedText] = useState("")
+  const [isAnimating, setIsAnimating] = useState(false)
 
   const {setError, clearError} = useGlobalError()
 
@@ -135,6 +137,39 @@ function EmulatePage() {
   useEffect(() => {
     setQueryParam("ignoreChksig", ignoreChksig ? "true" : null)
   }, [ignoreChksig])
+
+  useEffect(() => {
+    const targetText = isTestnet ? " in Testnet" : ""
+
+    if (animatedText === targetText) {
+      setIsAnimating(false)
+      return
+    }
+
+    setIsAnimating(true)
+    let currentIndex = animatedText.length
+    const direction = animatedText.length < targetText.length ? 1 : -1
+
+    const interval = setInterval(() => {
+      if (direction > 0) {
+        currentIndex++
+        setAnimatedText(targetText.slice(0, currentIndex))
+        if (currentIndex >= targetText.length) {
+          clearInterval(interval)
+          setIsAnimating(false)
+        }
+      } else {
+        currentIndex--
+        setAnimatedText(animatedText.slice(0, currentIndex))
+        if (currentIndex <= 0) {
+          clearInterval(interval)
+          setIsAnimating(false)
+        }
+      }
+    }, 100)
+
+    return () => clearInterval(interval)
+  }, [animatedText, isTestnet])
 
   const handleEmulate = async () => {
     const validationError = validateMessage(rawMessage)
@@ -332,7 +367,14 @@ function EmulatePage() {
                   <a href="/" className={styles.emulateLogoLink}>
                     <span>TxTracer</span>
                   </a>
-                  <span className={styles.titleEmulate}>Emulate</span>
+                  <span className={styles.titleEmulate}>
+                    Emulate
+                    <span
+                      className={`${styles.animatedTestnet} ${isAnimating ? styles.animating : ""}`}
+                    >
+                      {animatedText}
+                    </span>
+                  </span>
                 </h1>
               </header>
 
