@@ -1,5 +1,15 @@
 import React, {Suspense, useCallback, useEffect, useState} from "react"
-import {FiBook, FiClock, FiGithub, FiPlay, FiSearch, FiX, FiZap} from "react-icons/fi"
+import {
+  FiBook,
+  FiClock,
+  FiCpu,
+  FiGithub,
+  FiMoreHorizontal,
+  FiPlay,
+  FiSearch,
+  FiX,
+  FiZap,
+} from "react-icons/fi"
 
 import {type StackElement} from "ton-assembly/dist/trace"
 
@@ -402,6 +412,30 @@ function TracePage() {
                     Alpha
                   </Badge>
                 </a>
+
+                <a href="/emulate/" className={styles.featureCard}>
+                  <div className={`${styles.featureCardIcon} ${styles.emulateIcon}`}>
+                    <FiCpu aria-hidden="true" />
+                  </div>
+                  <h3 className={styles.featureCardTitle}>Emulate</h3>
+                  <p className={styles.featureCardDescription}>
+                    Emulate raw messages on TON blockchain. Send single messages or batch multiple
+                    messages together to see the full transaction tree and trace execution flow.
+                  </p>
+                  <span className={styles.featureCardBadge}>Emulator</span>
+                </a>
+
+                <div className={`${styles.featureCard} ${styles.placeholderCard}`}>
+                  <div className={`${styles.featureCardIcon} ${styles.placeholderIcon}`}>
+                    <FiMoreHorizontal aria-hidden="true" />
+                  </div>
+                  <h3 className={styles.featureCardTitle}>More Tools</h3>
+                  <p className={styles.featureCardDescription}>
+                    Additional developer tools and features are coming soon. Stay tuned for updates
+                    to enhance your TON blockchain development experience.
+                  </p>
+                  <span className={styles.featureCardBadge}>Coming Soon</span>
+                </div>
               </section>
             )}
           </div>

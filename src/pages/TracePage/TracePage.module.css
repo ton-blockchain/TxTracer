@@ -63,9 +63,6 @@
   padding: 0 var(--spacing-sm) var(--spacing-sm) var(--spacing-sm);
 }
 
-.mainContentMinimized {
-}
-
 .detailsSection {
   grid-area: details;
   overflow: hidden;
@@ -137,7 +134,7 @@
 
 .inputPage {
   padding: var(--spacing-lg);
-  height: calc(100vh - (var(--spacing-lg) * 2));
+  min-height: calc(100vh - (var(--spacing-lg) * 2));
   display: flex;
   flex-direction: column;
   background-color: var(--color-background-secondary);
@@ -298,10 +295,10 @@
 
 .featureCards {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: var(--spacing-md);
   margin-top: 5rem;
-  max-width: 1200px;
+  max-width: 900px;
   width: 100%;
 }
 
@@ -360,6 +357,43 @@
 .sandboxIcon {
   background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
   color: white;
+}
+
+.emulateIcon {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.placeholderIcon {
+  background: var(--color-background-secondary);
+  color: var(--color-text-tertiary);
+  border: 1px solid var(--color-divider);
+}
+
+.placeholderCard {
+  opacity: 0.5;
+  cursor: default;
+  border-color: var(--color-divider);
+  background: var(--color-background-secondary);
+}
+
+.placeholderCard .featureCardTitle {
+  color: var(--color-text-secondary);
+}
+
+.placeholderCard .featureCardDescription {
+  color: var(--color-text-tertiary);
+}
+
+.placeholderCard .featureCardBadge {
+  background: var(--color-background-tertiary);
+  color: var(--color-text-tertiary);
+  border: 1px solid var(--color-divider);
+}
+
+.placeholderCard:hover {
+  box-shadow: none;
+  border-color: var(--color-divider);
 }
 
 .featureCardTitle {
