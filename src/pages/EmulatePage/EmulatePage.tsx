@@ -1,5 +1,6 @@
 import {useState, useEffect} from "react"
 import {FiArrowLeft, FiGithub} from "react-icons/fi"
+import {Cell, loadMessage} from "@ton/core"
 
 import PageHeader from "@shared/ui/PageHeader"
 import Button from "@shared/ui/Button"
@@ -23,6 +24,29 @@ function EmulatePage() {
 
   const {setError, clearError} = useGlobalError()
 
+  const validateHexMessage = (hexMessage: string): string | undefined => {
+    const trimmed = hexMessage.trim()
+
+    if (!trimmed) {
+      return "Message cannot be empty"
+    }
+
+    if (!/^[0-9a-fA-F]*$/.test(trimmed)) {
+      return "Message must contain only hexadecimal characters (0-9, a-f, A-F)"
+    }
+
+    try {
+      const cell = Cell.fromHex(trimmed)
+      loadMessage(cell.asSlice())
+      return undefined
+    } catch (error) {
+      if (error instanceof Error) {
+        return "Failed to parse message: " + error.message
+      }
+      return "Invalid message format"
+    }
+  }
+
   const exampleMessage =
     "b5ee9c720102060100012b0001ad6800a82a7aa43e8441299d2a937e4499ea5424a64e57d050479cfefea07ebb0bcb870036b854e9d36252ef0c9d206633589b93d77d29a6b4be95b3a03f09912d5c23481406d5ba88a800000000000000000200000002c0010267ea06185d00000000000000005019d971e2a80059887087414684712ee07949af76475d6cbeb6a0a4c3388182937881124a56fa0c020501458006782fd72576f540683e048bc16f3715020eb4dba5fbe912e76da73ac8dc8453c0c0030145800361564f6ee70b7227610014e70f0f5b708175265958fbda002cf6dce0483afb60c0040045801c6119e5968d83b7a74656e33f13965ecedfa7df20bb4527934b02221a6821be0040004b00000000800a82a7aa43e8441299d2a937e4499ea5424a64e57d050479cfefea07ebb0bcb861"
 
@@ -32,7 +56,11 @@ function EmulatePage() {
   }
 
   const handleAddMessage = async () => {
-    if (newMessage.trim() === "") return // should not happen since the button is disabled if the input is empty
+    const validationError = validateHexMessage(newMessage)
+    if (validationError) {
+      setError(validationError)
+      return
+    }
 
     setIsEmulating(true)
     clearError()
@@ -65,7 +93,11 @@ function EmulatePage() {
   }, [])
 
   const handleEmulate = async () => {
-    if (!hexMessage.trim()) return
+    const validationError = validateHexMessage(hexMessage)
+    if (validationError) {
+      setError(validationError)
+      return
+    }
 
     setIsEmulating(true)
     clearError()
@@ -89,7 +121,19 @@ function EmulatePage() {
   }
 
   const handleEmulateAll = async () => {
-    if (newMessage.trim() === "") return
+    const validationError = validateHexMessage(newMessage)
+    if (validationError) {
+      setError(validationError)
+      return
+    }
+
+    for (let i = 0; i < allMessages.length; i++) {
+      const error = validateHexMessage(allMessages[i])
+      if (error) {
+        setError(`Message ${i + 1} is invalid: ${error}`)
+        return
+      }
+    }
 
     setIsEmulating(true)
     clearError()
