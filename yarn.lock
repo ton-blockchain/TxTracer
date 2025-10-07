@@ -11982,16 +11982,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"txtracer-core@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "txtracer-core@npm:0.2.0"
+"txtracer-core@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "txtracer-core@npm:0.3.0"
   dependencies:
     "@ton-community/func-js": "npm:^0.10.0"
     "@ton/core": "npm:^0.61.0"
     "@ton/sandbox": "npm:^0.36.0"
     "@ton/ton": "npm:^15.3.1"
     axios: "npm:^1.6.7"
-  checksum: 10c0/b8ac8b55135fb613ffa90f196736116b3359850ac4b0faea1d291dcb20d21fee2063933fb957fc346fa908bf5587cfdfb415a73aff24bf52f556a1e1cee3ae30
+  checksum: 10c0/1457050b9bdd4b28e52a3e4b2aec157b7eedf190c48df3921223c46c91f6a5e182b475f7669b332fd893e64520712b5c88479d0383f2a517a0cee58767dfaab8
   languageName: node
   linkType: hard
 
@@ -12059,7 +12059,7 @@ __metadata:
     starlight-theme-rapide: "npm:^0.2.1"
     ton-assembly: "npm:0.2.4"
     ts-node: "npm:^10.9.1"
-    txtracer-core: "npm:^0.2.0"
+    txtracer-core: "npm:^0.3.0"
     typescript: "npm:~5.8.3"
     typescript-eslint: "npm:^8.30.1"
     vite: "npm:^6.3.5"
