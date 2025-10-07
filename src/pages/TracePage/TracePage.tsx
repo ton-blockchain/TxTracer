@@ -22,6 +22,8 @@ import {StackItemViewer} from "@app/pages/TracePage/StackItemViewer.tsx"
 
 import {useGlobalError} from "@shared/lib/useGlobalError.tsx"
 
+import {getRawQueryParam} from "@features/common/lib/query-params.ts"
+
 import styles from "./TracePage.module.css"
 
 const CodeEditor = React.lazy(() => import("@shared/ui/CodeEditor"))
@@ -62,26 +64,6 @@ function TracePage() {
   } = useTraceStepper(result?.trace)
 
   useEffect(() => {
-    const getRawQueryParam = (name: string) => {
-      const search = window.location.search
-      if (!search || search.length <= 1) return null
-      const query = search.slice(1)
-      const pairs = query.split("&")
-      for (const pair of pairs) {
-        if (!pair) continue
-        const eq = pair.indexOf("=")
-        const key = eq >= 0 ? pair.slice(0, eq) : pair
-        if (key !== name) continue
-        const raw = eq >= 0 ? pair.slice(eq + 1) : ""
-        try {
-          return decodeURIComponent(raw)
-        } catch {
-          return raw
-        }
-      }
-      return null
-    }
-
     const tx = getRawQueryParam("tx") ?? ""
     setInputText(tx)
     setHeaderInputText(tx)

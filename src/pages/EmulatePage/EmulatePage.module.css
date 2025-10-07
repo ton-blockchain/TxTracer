@@ -24,7 +24,6 @@
   gap: var(--spacing-sm);
 }
 
-
 .resultsSection {
   flex: 1;
   display: flex;
@@ -46,6 +45,7 @@
 
 .errorSection {
   padding: var(--spacing-md);
+  margin-top: var(--spacing-md);
   background-color: var(--color-error-bg);
   border: 1px solid var(--color-error);
   border-radius: var(--border-radius-md);
@@ -54,7 +54,7 @@
 
 .errorSection h3 {
   margin: 0 0 var(--spacing-xs) 0;
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-base);
   color: var(--color-error-text);
 }
 
@@ -123,7 +123,8 @@
   position: relative;
 }
 
-.addButtonContainer:hover::after, .addButtonContainer:hover::before{
+.addButtonContainer:hover::after,
+.addButtonContainer:hover::before {
   opacity: 0.4;
 }
 
@@ -262,7 +263,6 @@
   color: #2b82eb;
   font-weight: var(--font-weight-normal);
 }
-
 
 .inputCard {
   width: 100%;

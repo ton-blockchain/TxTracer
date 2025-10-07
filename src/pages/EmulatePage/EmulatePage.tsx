@@ -6,6 +6,8 @@ import Button from "@shared/ui/Button"
 import {TransactionTree} from "@app/pages/SandboxPage/components"
 import {useSandboxData} from "@features/sandbox/lib/useSandboxData"
 
+import {getRawQueryParam} from "@features/common/lib/query-params.ts"
+
 import {emulateMessage} from "./emulateMessage"
 import styles from "./EmulatePage.module.css"
 
@@ -18,23 +20,16 @@ function EmulatePage() {
   const [showAddForm, setShowAddForm] = useState(false)
   const [newMessage, setNewMessage] = useState("")
 
-  const exampleMessage = "b5ee9c720102060100012b0001ad6800a82a7aa43e8441299d2a937e4499ea5424a64e57d050479cfefea07ebb0bcb870036b854e9d36252ef0c9d206633589b93d77d29a6b4be95b3a03f09912d5c23481406d5ba88a800000000000000000200000002c0010267ea06185d00000000000000005019d971e2a80059887087414684712ee07949af76475d6cbeb6a0a4c3388182937881124a56fa0c020501458006782fd72576f540683e048bc16f3715020eb4dba5fbe912e76da73ac8dc8453c0c0030145800361564f6ee70b7227610014e70f0f5b708175265958fbda002cf6dce0483afb60c0040045801c6119e5968d83b7a74656e33f13965ecedfa7df20bb4527934b02221a6821be0040004b00000000800a82a7aa43e8441299d2a937e4499ea5424a64e57d050479cfefea07ebb0bcb861"
+  const exampleMessage =
+    "b5ee9c720102060100012b0001ad6800a82a7aa43e8441299d2a937e4499ea5424a64e57d050479cfefea07ebb0bcb870036b854e9d36252ef0c9d206633589b93d77d29a6b4be95b3a03f09912d5c23481406d5ba88a800000000000000000200000002c0010267ea06185d00000000000000005019d971e2a80059887087414684712ee07949af76475d6cbeb6a0a4c3388182937881124a56fa0c020501458006782fd72576f540683e048bc16f3715020eb4dba5fbe912e76da73ac8dc8453c0c0030145800361564f6ee70b7227610014e70f0f5b708175265958fbda002cf6dce0483afb60c0040045801c6119e5968d83b7a74656e33f13965ecedfa7df20bb4527934b02221a6821be0040004b00000000800a82a7aa43e8441299d2a937e4499ea5424a64e57d050479cfefea07ebb0bcb861"
 
   const handleLoadExample = () => {
     setHexMessage(exampleMessage)
-    setTimeout(() => {
-      const inputElement: HTMLTextAreaElement | null = document.querySelector(
-        'textarea[name="hexMessage"], textarea[id="hexMessage"]',
-      )
-      if (inputElement) {
-        inputElement.focus()
-        inputElement.setSelectionRange(inputElement.value.length, inputElement.value.length)
-      }
-    }, 0)
+    setIsFocused(true)
   }
 
   const handleAddMessage = async () => {
-    if (!newMessage.trim()) return
+    if (newMessage.trim() === "") return // should not happen since the button is disabled if the input is empty
 
     setIsEmulating(true)
     setError("")
@@ -59,44 +54,11 @@ function EmulatePage() {
   const {tests, loadFromFile, clearFileData} = useSandboxData()
 
   useEffect(() => {
-    const getRawQueryParam = (name: string) => {
-      const search = window.location.search
-      if (!search || search.length <= 1) return null
-      const query = search.slice(1)
-      const pairs = query.split("&")
-      for (const pair of pairs) {
-        if (!pair) continue
-        const eq = pair.indexOf("=")
-        const key = eq >= 0 ? pair.slice(0, eq) : pair
-        if (key !== name) continue
-        const raw = eq >= 0 ? pair.slice(eq + 1) : ""
-        try {
-          return decodeURIComponent(raw)
-        } catch {
-          return raw
-        }
-      }
-      return null
-    }
-
     const message = getRawQueryParam("message") ?? ""
     if (message) {
       setHexMessage(message)
     }
   }, [])
-
-  useEffect(() => {
-    if (typeof window === "undefined") return
-
-    const url = new URL(window.location.href)
-    if (hexMessage.trim()) {
-      url.searchParams.set("message", hexMessage.trim())
-    } else {
-      url.searchParams.delete("message")
-    }
-
-    window.history.replaceState({}, "", url.toString())
-  }, [hexMessage])
 
   const handleEmulate = async () => {
     if (!hexMessage.trim()) return
@@ -242,13 +204,14 @@ function EmulatePage() {
                     <textarea
                       id="hexMessage"
                       className={styles.hexInput}
-                      placeholder='Enter encoded message in HEX...'
+                      placeholder="Enter encoded message in HEX..."
                       value={hexMessage}
-                      onChange={(e) => setHexMessage(e.target.value)}
+                      onChange={e => setHexMessage(e.target.value)}
                       rows={6}
+                      autoFocus={true}
                       onFocus={() => setIsFocused(true)}
                       onBlur={() => setIsFocused(false)}
-                      onKeyDown={(e) => {
+                      onKeyDown={e => {
                         if (e.key === "Enter" && !isEmulating) {
                           if (!(e.ctrlKey || e.metaKey)) {
                             e.preventDefault()
@@ -268,27 +231,27 @@ function EmulatePage() {
                   </div>
                 </div>
 
-            {error && (
-              <div className={styles.errorSection}>
-                <h3>Error</h3>
-                <p>{error}</p>
-              </div>
-            )}
+                {error && (
+                  <div className={styles.errorSection}>
+                    <h3>Error</h3>
+                    <p>{error}</p>
+                  </div>
+                )}
 
-            <div className={styles.exampleSection}>
-              <span className={styles.exampleText}>
-                Not sure what this does?{"  "}
-                <button
-                  type="button"
-                  onClick={handleLoadExample}
-                  className={styles.exampleButton}
-                  disabled={isEmulating}
-                >
-                  Try an example!
-                </button>
-              </span>
-            </div>
-          </section>
+                <div className={styles.exampleSection}>
+                  <span className={styles.exampleText}>
+                    Not sure what this does?{"  "}
+                    <button
+                      type="button"
+                      onClick={handleLoadExample}
+                      className={styles.exampleButton}
+                      disabled={isEmulating}
+                    >
+                      Try an example!
+                    </button>
+                  </span>
+                </div>
+              </section>
             </div>
           </main>
         </>
