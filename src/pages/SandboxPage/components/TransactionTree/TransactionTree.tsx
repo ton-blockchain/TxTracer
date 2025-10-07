@@ -481,6 +481,23 @@ export function TransactionTree({testData}: TransactionTreeProps) {
       const lt = tx.transaction.lt.toString()
       const isSelected = selectedTransaction?.transaction.lt.toString() === lt
 
+      const hasExternalOut = Array.from(tx.transaction.outMessages.values()).some(outMsg => {
+        return outMsg.info.type === "external-out"
+      })
+
+      const externalOutChildren = hasExternalOut
+        ? [
+            {
+              name: "",
+              attributes: {
+                isExternalOut: true,
+                parentLt: lt,
+              },
+              children: [],
+            },
+          ]
+        : []
+
       return {
         name: `${addressName}`,
         attributes: {
@@ -497,7 +514,7 @@ export function TransactionTree({testData}: TransactionTreeProps) {
           contractLetter,
           isSelected,
         },
-        children: tx.children.map(it => convertTransactionToNode(it)),
+        children: [...tx.children.map(it => convertTransactionToNode(it)), ...externalOutChildren],
       }
     }
 
@@ -545,6 +562,63 @@ export function TransactionTree({testData}: TransactionTreeProps) {
           >
             BL
           </text>
+        </g>
+      )
+    }
+
+    if (nodeDatum.attributes?.isExternalOut) {
+      const parentLt = nodeDatum.attributes.parentLt as string
+      const parentTx = transactionMap.get(parentLt)
+
+      const externalOutMsg = [...(parentTx?.transaction.outMessages.values() ?? [])].find(
+        msg => msg.info.type === "external-out",
+      )
+      const externalOutDest = externalOutMsg?.info.dest?.toString() ?? "External"
+      const createdLt =
+        externalOutMsg?.info.type === "external-out" ? externalOutMsg.info.createdLt.toString() : ""
+
+      return (
+        <g>
+          <foreignObject
+            width="4"
+            height="6"
+            x="-20"
+            y="-3"
+            className={styles.foreignObjectContainer}
+          >
+            <svg
+              width="4"
+              height="6"
+              viewBox="0 0 4 5"
+              xmlns="http://www.w3.org/2000/svg"
+              className={styles.iconSvg}
+            >
+              <path
+                d="M0.400044 0.549983C0.648572 0.218612 1.11867 0.151455 1.45004 0.399983L3.45004 1.89998C3.6389 2.04162 3.75004 2.26392 3.75004 2.49998C3.75004 2.73605 3.6389 2.95834 3.45004 3.09998L1.45004 4.59998C1.11867 4.84851 0.648572 4.78135 0.400044 4.44998C0.151516 4.11861 0.218673 3.64851 0.550044 3.39998L1.75004 2.49998L0.550044 1.59998C0.218673 1.35145 0.151516 0.881354 0.400044 0.549983Z"
+                fill="var(--color-text-tertiary)"
+              ></path>
+            </svg>
+          </foreignObject>
+
+          <circle
+            r={15}
+            fill="transparent"
+            stroke="var(--color-border)"
+            strokeWidth={1}
+            className={styles.nodeCircleDefault}
+          />
+
+          <foreignObject width="150" height="100" x="-180" y="-40">
+            <div className={styles.edgeText}>
+              <div className={styles.topText}>
+                <p className={styles.edgeTextTitle}>{externalOutDest}</p>
+                <p className={styles.edgeTextContent}>Lt: {createdLt}</p>
+              </div>
+              <div className={styles.bottonText}>
+                <p className={styles.edgeTextContent}>Type: external-out</p>
+              </div>
+            </div>
+          </foreignObject>
         </g>
       )
     }

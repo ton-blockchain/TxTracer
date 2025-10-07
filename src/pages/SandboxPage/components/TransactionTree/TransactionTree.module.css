@@ -266,3 +266,15 @@
   flex-direction: column;
   gap: 2px;
 }
+
+.nodeCircle {
+  cursor: pointer;
+}
+
+.nodeCircleDefault {
+  cursor: default;
+}
+
+.nodeText {
+  pointer-events: none;
+}

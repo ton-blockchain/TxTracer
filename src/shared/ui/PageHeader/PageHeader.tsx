@@ -28,6 +28,7 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({
   const isExplorer = pageTitle === "explorer"
   const isSandbox = pageTitle === "sandbox"
   const isSpec = pageTitle === "spec"
+  const isEmulate = pageTitle === "emulate"
 
   return (
     <header className={styles.header} role="banner">
@@ -57,6 +58,12 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({
         {isSpec && (
           <a className={styles.pageTitle} href="/spec/">
             TVM Instructions
+            {titleBadgeText && <Badge color={titleBadgeColor}>{titleBadgeText}</Badge>}
+          </a>
+        )}
+        {isEmulate && (
+          <a className={styles.pageTitle} href="/emulate/">
+            Emulate
             {titleBadgeText && <Badge color={titleBadgeColor}>{titleBadgeText}</Badge>}
           </a>
         )}
