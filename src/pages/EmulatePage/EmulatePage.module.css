@@ -43,26 +43,6 @@
   font-style: italic;
 }
 
-.errorSection {
-  padding: var(--spacing-md);
-  margin-top: var(--spacing-md);
-  background-color: var(--color-error-bg);
-  border: 1px solid var(--color-error);
-  border-radius: var(--border-radius-md);
-  color: var(--color-error-text);
-}
-
-.errorSection h3 {
-  margin: 0 0 var(--spacing-xs) 0;
-  font-size: var(--font-size-base);
-  color: var(--color-error-text);
-}
-
-.errorSection p {
-  margin: 0;
-  font-size: var(--font-size-sm);
-}
-
 .exampleSection {
   margin-top: var(--spacing-xs);
   padding-left: var(--spacing-xs);
@@ -188,10 +168,6 @@
 
 .addButton:hover {
   opacity: 0.9;
-}
-
-.addButton:hover::before,
-.addButton:hover::after {
 }
 
 .addForm {
