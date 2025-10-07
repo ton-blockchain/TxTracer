@@ -17,3 +17,13 @@ export function getRawQueryParam(name: string): string | null {
   }
   return null
 }
+
+export function setQueryParam(name: string, value: string | null): void {
+  const url = new URL(window.location.href)
+  if (value === null) {
+    url.searchParams.delete(name)
+  } else {
+    url.searchParams.set(name, value)
+  }
+  window.history.replaceState({}, "", url.toString())
+}

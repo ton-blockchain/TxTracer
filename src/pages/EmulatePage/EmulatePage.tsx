@@ -8,7 +8,7 @@ import {TransactionTree} from "@app/pages/SandboxPage/components"
 import {useSandboxData} from "@features/sandbox/lib/useSandboxData"
 import {useGlobalError} from "@shared/lib/useGlobalError.tsx"
 
-import {getRawQueryParam} from "@features/common/lib/query-params.ts"
+import {getRawQueryParam, setQueryParam} from "@features/common/lib/query-params.ts"
 
 import {emulateMessage} from "./emulateMessage"
 import styles from "./EmulatePage.module.css"
@@ -21,6 +21,7 @@ function EmulatePage() {
   const [showAddForm, setShowAddForm] = useState(false)
   const [newMessage, setNewMessage] = useState("")
   const [allMessages, setAllMessages] = useState<string[]>([])
+  const [isTestnet, setIsTestnet] = useState(false)
 
   const {setError, clearError} = useGlobalError()
 
@@ -81,7 +82,7 @@ function EmulatePage() {
 
     try {
       const hexMessage = normalizeMessageToHex(newMessage)
-      const result = await emulateMessage([hexMessage])
+      const result = await emulateMessage([hexMessage], isTestnet)
 
       if (result.error) {
         setError(result.error)
@@ -105,7 +106,16 @@ function EmulatePage() {
     if (message) {
       setRawMessage(message)
     }
+
+    const testnetParam = getRawQueryParam("testnet")
+    if (testnetParam !== null) {
+      setIsTestnet(testnetParam === "true")
+    }
   }, [])
+
+  useEffect(() => {
+    setQueryParam("testnet", isTestnet ? "true" : null)
+  }, [isTestnet])
 
   const handleEmulate = async () => {
     const validationError = validateMessage(rawMessage)
@@ -120,7 +130,7 @@ function EmulatePage() {
 
     try {
       const hexMessage = normalizeMessageToHex(rawMessage)
-      const result = await emulateMessage([hexMessage])
+      const result = await emulateMessage([hexMessage], isTestnet)
 
       if (result.error) {
         setError(result.error)
@@ -158,7 +168,7 @@ function EmulatePage() {
     const messagesToEmulate = [...allMessages, newMessage.trim()]
 
     try {
-      const result = await emulateMessage(messagesToEmulate)
+      const result = await emulateMessage(messagesToEmulate, isTestnet)
 
       if (result.error) {
         setError(result.error)
@@ -348,6 +358,15 @@ function EmulatePage() {
                       Try an example!
                     </button>
                   </span>
+                  <label className={styles.checkboxLabel}>
+                    <input
+                      type="checkbox"
+                      checked={isTestnet}
+                      onChange={e => setIsTestnet(e.target.checked)}
+                      disabled={isEmulating}
+                    />
+                    Use Testnet
+                  </label>
                 </div>
               </section>
             </div>

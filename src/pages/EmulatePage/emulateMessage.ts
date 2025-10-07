@@ -32,9 +32,11 @@ export interface EmulationResult {
   readonly error?: string
 }
 
-export async function emulateMessage(hexMessages: string[]): Promise<EmulationResult> {
+export async function emulateMessage(
+  hexMessages: string[],
+  testnet: boolean,
+): Promise<EmulationResult> {
   try {
-    const testnet = false
     const blockchain = await Blockchain.create({
       storage: new RemoteBlockchainStorage(
         wrapTonClient4ForRemote(

@@ -46,7 +46,18 @@
 .exampleSection {
   margin-top: var(--spacing-xs);
   padding-left: var(--spacing-xs);
-  text-align: left;
+  padding-right: var(--spacing-xs);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.checkboxLabel {
+  font-size: var(--font-size-xsm);
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
 }
 
 .exampleText {
