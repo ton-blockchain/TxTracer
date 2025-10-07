@@ -292,7 +292,9 @@ function EmulatePage() {
               <header className={styles.emulateLogo}>
                 <div className={styles.logoDiamond} aria-hidden="true"></div>
                 <h1 data-testid="app-title" className={styles.emulateLogoH1}>
-                  <span>TxTracer</span>
+                  <a href="/" className={styles.emulateLogoLink}>
+                    <span>TxTracer</span>
+                  </a>
                   <span className={styles.titleEmulate}>Emulate</span>
                 </h1>
               </header>
