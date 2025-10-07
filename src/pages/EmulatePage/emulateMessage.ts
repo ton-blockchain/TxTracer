@@ -32,11 +32,8 @@ export interface EmulationResult {
   readonly error?: string
 }
 
-export async function emulateMessage(hexMessage: string): Promise<EmulationResult> {
+export async function emulateMessage(hexMessages: string[]): Promise<EmulationResult> {
   try {
-    const message = Cell.fromHex(hexMessage.trim())
-    loadMessage(message.asSlice()) // Validate message format
-
     const testnet = false
     const blockchain = await Blockchain.create({
       storage: new RemoteBlockchainStorage(
@@ -50,7 +47,11 @@ export async function emulateMessage(hexMessage: string): Promise<EmulationResul
     blockchain.verbosity.print = false
     blockchain.verbosity.vmLogs = "vm_logs_verbose"
 
-    await blockchain.sendMessage(message)
+    for (const hexMessage of hexMessages) {
+      const message = Cell.fromHex(hexMessage.trim())
+      loadMessage(message.asSlice())
+      await blockchain.sendMessage(message)
+    }
 
     // @ts-expect-error blockchain.transactions is not typed in @ton/sandbox
     const txs = blockchain.transactions
@@ -68,7 +69,8 @@ export async function emulateMessage(hexMessage: string): Promise<EmulationResul
 
     const testData = {
       $: "test-data" as const,
-      testName: "Emulated Message",
+      testName:
+        hexMessages.length === 1 ? "Emulated Message" : `Emulated Messages (${hexMessages.length})`,
       transactions: data,
       contracts: contracts.map(contract => {
         const stateInit =

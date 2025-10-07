@@ -172,6 +172,7 @@
 
 .addForm {
   margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
   background-color: var(--color-background-secondary);
 }
 
@@ -280,7 +281,7 @@
   outline: none;
   resize: vertical;
   box-sizing: border-box;
-  padding-bottom: calc(var(--spacing-md) + 40px);
+  padding-bottom: calc(var(--spacing-md) + 45px);
   min-height: 120px;
 }
 
@@ -293,6 +294,25 @@
   right: var(--spacing-md);
   bottom: var(--spacing-md);
   flex-shrink: 0;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: var(--spacing-sm);
+  position: absolute;
+  right: var(--spacing-md);
+  bottom: var(--spacing-md);
+  flex-shrink: 0;
+}
+
+.addMessageButton {
+  flex: 1;
+  min-width: 120px;
+}
+
+.emulateAllButton {
+  flex: 1;
+  min-width: 120px;
 }
 
 .inputPage {

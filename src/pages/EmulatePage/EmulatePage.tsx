@@ -19,6 +19,7 @@ function EmulatePage() {
   const [isFocused, setIsFocused] = useState(false)
   const [showAddForm, setShowAddForm] = useState(false)
   const [newMessage, setNewMessage] = useState("")
+  const [allMessages, setAllMessages] = useState<string[]>([])
 
   const {setError, clearError} = useGlobalError()
 
@@ -37,12 +38,13 @@ function EmulatePage() {
     clearError()
 
     try {
-      const result = await emulateMessage(newMessage.trim())
+      const result = await emulateMessage([newMessage.trim()])
 
       if (result.error) {
         setError(result.error)
       } else {
         loadFromFile([result.testData])
+        setAllMessages(prev => [...prev, newMessage.trim()])
         setNewMessage("")
         setShowAddForm(false)
       }
@@ -70,14 +72,41 @@ function EmulatePage() {
     clearFileData()
 
     try {
-      const result = await emulateMessage(hexMessage.trim())
+      const result = await emulateMessage([hexMessage.trim()])
 
       if (result.error) {
         setError(result.error)
       } else {
-        // Load the emulation result into sandbox data
-        // loadFromFile([result.testData])
+        loadFromFile([result.testData])
+        setAllMessages([hexMessage.trim()])
         setShowResults(true)
+      }
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Unknown error occurred")
+    } finally {
+      setIsEmulating(false)
+    }
+  }
+
+  const handleEmulateAll = async () => {
+    if (newMessage.trim() === "") return
+
+    setIsEmulating(true)
+    clearError()
+    clearFileData()
+
+    const messagesToEmulate = [...allMessages, newMessage.trim()]
+
+    try {
+      const result = await emulateMessage(messagesToEmulate)
+
+      if (result.error) {
+        setError(result.error)
+      } else {
+        loadFromFile([result.testData])
+        setAllMessages(messagesToEmulate)
+        setNewMessage("")
+        setShowAddForm(false)
       }
     } catch (error) {
       setError(error instanceof Error ? error.message : "Unknown error occurred")
@@ -90,6 +119,7 @@ function EmulatePage() {
     setShowResults(false)
     clearError()
     clearFileData()
+    setAllMessages([])
   }
 
   if (showResults) {
@@ -147,14 +177,24 @@ function EmulatePage() {
                       }
                     }}
                   />
-                  <Button
-                    variant="primary"
-                    onClick={() => void handleAddMessage()}
-                    disabled={!newMessage.trim() || isEmulating}
-                    className={styles.submitButton}
-                  >
-                    {isEmulating ? "Adding..." : "Add Message"}
-                  </Button>
+                  <div className={styles.buttonGroup}>
+                    <Button
+                      variant="outline"
+                      onClick={() => void handleAddMessage()}
+                      disabled={!newMessage.trim() || isEmulating}
+                      className={styles.addMessageButton}
+                    >
+                      {isEmulating ? "Adding..." : "Add Message"}
+                    </Button>
+                    <Button
+                      variant="primary"
+                      onClick={() => void handleEmulateAll()}
+                      disabled={!newMessage.trim() || isEmulating}
+                      className={styles.emulateAllButton}
+                    >
+                      {isEmulating ? "Emulating..." : "Emulate All"}
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
