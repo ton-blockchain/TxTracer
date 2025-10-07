@@ -100,7 +100,6 @@ export function useWebsocket({
             : test,
         )
       } else {
-        console.log("Creating new test:", testName)
         return [
           ...prev,
           {
