@@ -1,0 +1,1 @@
+function u(c){const t=window.location.search;if(!t||t.length<=1)return null;const o=t.slice(1).split("&");for(const n of o){if(!n)continue;const e=n.indexOf("=");if((e>=0?n.slice(0,e):n)!==c)continue;const r=e>=0?n.slice(e+1):"";try{return decodeURIComponent(r)}catch{return r}}return null}export{u as g};
