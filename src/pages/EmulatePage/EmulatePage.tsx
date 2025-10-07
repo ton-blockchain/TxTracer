@@ -252,7 +252,7 @@ function EmulatePage() {
                       disabled={!newMessage.trim() || isEmulating}
                       className={styles.emulateAllButton}
                     >
-                      {isEmulating ? "Emulating..." : "Emulate All"}
+                      {isEmulating ? "Emulating..." : "Re-emulate with this message"}
                     </Button>
                   </div>
                 </div>
