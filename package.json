@@ -30,7 +30,7 @@
     "@ton/crypto": "^3.3.0",
     "@ton/sandbox": "^0.36.0",
     "@ton/test-utils": "^0.7.0",
-    "@ton/tolk-js": "^1.0.0",
+    "@ton/tolk-js": "^1.1.0",
     "@truecarry/tlb-abi": "^0.2.0",
     "@xyflow/react": "^12.3.2",
     "allotment": "^1.20.4",

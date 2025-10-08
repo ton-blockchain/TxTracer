@@ -2897,14 +2897,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ton/tolk-js@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@ton/tolk-js@npm:1.0.0"
+"@ton/tolk-js@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@ton/tolk-js@npm:1.1.0"
   dependencies:
     arg: "npm:^5.0.2"
   bin:
     tolk-js: dist/cli.js
-  checksum: 10c0/b4ef4569e405638a43d4bb2f0ea0d676ddd2e559a4638bba91725fb2513c196e649b8dd145daa069e25746fd52be83f542b5b8a7378dfb5593a320c7094276ef
+  checksum: 10c0/1516217b35bb4edcb79d5eb996c52dcd26dc1a3d49173713e044f6b9469737a073cefca0e3969c2bd8cd80fcd039afaec07875e7fe09e1475d365c8e3134f0f7
   languageName: node
   linkType: hard
 
@@ -12012,7 +12012,7 @@ __metadata:
     "@ton/crypto": "npm:^3.3.0"
     "@ton/sandbox": "npm:^0.36.0"
     "@ton/test-utils": "npm:^0.7.0"
-    "@ton/tolk-js": "npm:^1.0.0"
+    "@ton/tolk-js": "npm:^1.1.0"
     "@truecarry/tlb-abi": "npm:^0.2.0"
     "@types/d3": "npm:^7.4.3"
     "@types/node": "npm:^22.15.17"
