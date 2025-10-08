@@ -491,12 +491,15 @@ function PlaygroundPage() {
     setSteppingMode(newMode)
   }, [])
 
-  const implicitRet = (() => {
+  const implicitRet: {line: number | undefined; approx: boolean} = (() => {
     const steps = result?.traceInfo?.steps
-    if (!steps) return {line: undefined as number | undefined, approx: false}
+    if (!steps) {
+      return {line: undefined, approx: false}
+    }
     const current = steps[selectedStep]
-    if (!current || current.loc !== undefined)
-      return {line: undefined as number | undefined, approx: false}
+    if (!current || current.loc !== undefined) {
+      return {line: undefined, approx: false}
+    }
 
     let idx = selectedStep - 1
     let chainLen = 1
