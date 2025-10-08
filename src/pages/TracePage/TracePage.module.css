@@ -63,9 +63,6 @@
   padding: 0 var(--spacing-sm) var(--spacing-sm) var(--spacing-sm);
 }
 
-.mainContentMinimized {
-}
-
 .detailsSection {
   grid-area: details;
   overflow: hidden;
@@ -144,13 +141,12 @@
 }
 
 .centeredInputContainer {
-  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   height: 100%;
-  padding: calc(var(--spacing-2xl) * 4) var(--spacing-lg) var(--spacing-2xl);
+  padding: 0 var(--spacing-lg) var(--spacing-2xl);
+  margin-top: 265px;
 }
 
 .txtracerLogo {
@@ -299,10 +295,10 @@
 
 .featureCards {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: var(--spacing-md);
   margin-top: 5rem;
-  max-width: 1200px;
+  max-width: 900px;
   width: 100%;
 }
 
@@ -363,6 +359,43 @@
   color: white;
 }
 
+.emulateIcon {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.placeholderIcon {
+  background: var(--color-background-secondary);
+  color: var(--color-text-tertiary);
+  border: 1px solid var(--color-divider);
+}
+
+.placeholderCard {
+  opacity: 0.5;
+  cursor: default;
+  border-color: var(--color-divider);
+  background: var(--color-background-secondary);
+}
+
+.placeholderCard .featureCardTitle {
+  color: var(--color-text-secondary);
+}
+
+.placeholderCard .featureCardDescription {
+  color: var(--color-text-tertiary);
+}
+
+.placeholderCard .featureCardBadge {
+  background: var(--color-background-tertiary);
+  color: var(--color-text-tertiary);
+  border: 1px solid var(--color-divider);
+}
+
+.placeholderCard:hover {
+  box-shadow: none;
+  border-color: var(--color-divider);
+}
+
 .featureCardTitle {
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
@@ -404,9 +437,10 @@ footer {
 }
 
 .createBy {
-  flex: 0 0 auto;
   color: var(--tracepage-create-by-text-color);
   font-size: var(--font-size-sm);
+  text-align: center;
+  padding-top: var(--spacing-lg);
 }
 
 .createBy a {

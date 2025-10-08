@@ -1,4 +1,4 @@
-import React from "react"
+import React, {memo} from "react"
 
 import {FiGithub, FiBookOpen} from "react-icons/fi"
 
@@ -13,6 +13,7 @@ interface PageHeaderProps {
   readonly children?: React.ReactNode
   readonly titleBadgeText?: string
   readonly titleBadgeColor?: "green" | "red" | "blue" | "gray"
+  readonly documentationLink?: string
 }
 
 const PageHeaderFc: React.FC<PageHeaderProps> = ({
@@ -21,11 +22,13 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({
   children,
   titleBadgeText,
   titleBadgeColor = "gray",
+  documentationLink = "https://docs.ton.org/",
 }) => {
   const isPlayground = pageTitle === "playground"
   const isExplorer = pageTitle === "explorer"
   const isSandbox = pageTitle === "sandbox"
   const isSpec = pageTitle === "spec"
+  const isEmulate = pageTitle === "emulate"
 
   return (
     <header className={styles.header} role="banner">
@@ -58,6 +61,12 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({
             {titleBadgeText && <Badge color={titleBadgeColor}>{titleBadgeText}</Badge>}
           </a>
         )}
+        {isEmulate && (
+          <a className={styles.pageTitle} href="/emulate/">
+            Emulate
+            {titleBadgeText && <Badge color={titleBadgeColor}>{titleBadgeText}</Badge>}
+          </a>
+        )}
         {network === "testnet" && <Badge color="red">Testnet</Badge>}
       </div>
 
@@ -65,7 +74,7 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({
 
       <nav className={styles.headerLinks} aria-label="External links">
         <a
-          href="https://docs.ton.org/"
+          href={documentationLink}
           target="_blank"
           rel="noopener noreferrer"
           title="TON Documentation"
@@ -89,7 +98,7 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({
   )
 }
 
-const MemoizedPageHeader = React.memo(PageHeaderFc)
+const MemoizedPageHeader = memo(PageHeaderFc)
 MemoizedPageHeader.displayName = "PageHeader"
 
 export default MemoizedPageHeader

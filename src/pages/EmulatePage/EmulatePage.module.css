@@ -1,0 +1,539 @@
+.traceViewWrapper {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-background-secondary);
+}
+
+.appContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 43px - 2 * var(--spacing-sm));
+  height: 100%;
+  padding: var(--spacing-sm) var(--spacing-lg);
+}
+
+.headerContent {
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-end;
+}
+
+.headerControls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.resultsSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.resultsSection h3 {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  color: var(--color-text-primary);
+}
+
+.resultsSection p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.exampleSection {
+  margin-top: var(--spacing-xs);
+  padding-left: var(--spacing-xs);
+  padding-right: var(--spacing-xs);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.checkboxLabel {
+  font-size: var(--font-size-xsm);
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.checkboxesContainer {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-lg);
+}
+
+.animatedTestnet {
+  color: #ff6b35;
+  -webkit-text-fill-color: #ff6b35;
+  font-weight: var(--font-weight-semibold);
+  position: relative;
+  white-space: pre;
+  display: inline-block;
+  min-width: 2px;
+  margin-left: 8px;
+}
+
+.animatedTestnet.animating::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #ff6b35;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.emulationErrors {
+  margin-top: var(--spacing-md);
+  width: 100%;
+  border-radius: var(--border-radius-md);
+}
+
+.errorsLogsContainer {
+  height: auto;
+}
+
+.errorsList {
+  padding: var(--spacing-md) 0;
+}
+
+.errorItem {
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md);
+}
+
+.errorItem:last-child {
+  margin-bottom: 0;
+}
+
+.errorHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.errorType {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-error, #d32f2f);
+  font-size: var(--font-size-base);
+  background-color: var(--color-background-error, #fee);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+}
+
+.errorIndex {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  background-color: var(--color-background-tertiary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+}
+
+.errorExitCode {
+  margin-left: auto;
+}
+
+.errorDescription {
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+}
+
+.errorFields {
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.errorField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.errorFieldLabel {
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xsm);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+}
+
+.errorFieldValue {
+  font-family: var(--font-family-mono), serif;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-primary);
+  background-color: var(--color-background-primary);
+  padding: var(--spacing-xs);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.errorFieldValue.--long-content {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.exampleText {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xsm);
+}
+
+.exampleButton {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  margin-left: var(--spacing-sms);
+  text-decoration: none;
+  cursor: pointer;
+  font-size: inherit;
+  padding: 0;
+  border-radius: 0;
+  transition: color 0.2s ease;
+}
+
+.exampleButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  color: var(--color-text-disabled, var(--color-text-secondary));
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.backIcon {
+  font-size: var(--font-size-sm);
+}
+
+.noResults {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  color: var(--color-text-secondary);
+}
+
+.noResults p {
+  margin: 0;
+  font-size: var(--font-size-base);
+}
+
+.addButtonContainer {
+  display: flex;
+  align-items: center;
+  margin: var(--spacing-xl) 0 var(--spacing-lmd);
+  position: relative;
+}
+
+.addButtonContainer:hover::after,
+.addButtonContainer:hover::before {
+  opacity: 0.4;
+}
+
+.addButtonContainer::before,
+.addButtonContainer::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: var(--color-text-tertiary);
+  opacity: 0.3;
+  transition: all 0.2s ease;
+}
+
+.addButtonContainer::before {
+  margin-right: var(--spacing-sm);
+}
+
+.addButtonContainer::after {
+  margin-left: var(--spacing-sm);
+}
+
+.addButton {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  border: 1px solid var(--color-text-tertiary);
+  color: var(--color-text-tertiary);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  opacity: 0.6;
+}
+
+.addButton::before,
+.addButton::after {
+  content: "";
+  position: absolute;
+  transition: all 0.2s ease;
+  background: var(--color-text-tertiary);
+}
+
+.addButton::before {
+  width: 8px;
+  height: 1px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.addButton::after {
+  width: 1px;
+  height: 8px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.addButton:hover {
+  opacity: 0.9;
+}
+
+.addForm {
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+  background-color: var(--color-background-secondary);
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.addForm .inputSection {
+  width: 100%;
+  max-width: 720px;
+}
+
+.centeredInputContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  padding: 0 var(--spacing-lg) var(--spacing-2xl);
+  margin-top: 265px;
+}
+
+.emulateLogo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+  justify-content: center;
+}
+
+.emulateLogoLink {
+  text-decoration: none;
+  color: inherit;
+  transition: opacity var(--transition-duration-fast) ease;
+}
+
+.emulateLogoLink:hover {
+  opacity: 0.8;
+  text-decoration: none;
+}
+
+.logoDiamond {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(
+    135deg,
+    var(--tracepage-logo-gradient-start) 0%,
+    var(--tracepage-logo-gradient-end) 100%
+  );
+  transform: rotate(45deg);
+  position: relative;
+  border-radius: var(--border-radius-md);
+}
+
+.logoDiamond::before {
+  content: "";
+  position: absolute;
+  width: 75%;
+  height: 75%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(
+    135deg,
+    var(--tracepage-logo-inner-gradient-start) 0%,
+    var(--tracepage-logo-inner-gradient-end) 100%
+  );
+  border-radius: var(--border-radius-sm);
+}
+
+.emulateLogoH1 {
+  font-size: 40px;
+  font-weight: var(--font-weight-bold);
+  color: var(--tracepage-logo-main-color);
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-lmd);
+}
+
+.titleEmulate {
+  background: linear-gradient(135deg, #2b82eb, #1cc8ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #2b82eb;
+  font-weight: var(--font-weight-normal);
+}
+
+.inputCard {
+  width: 100%;
+  max-width: 720px;
+  position: relative;
+}
+
+.inputSection {
+  margin-bottom: var(--spacing-xs);
+}
+
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background-color: var(--color-background-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  transition:
+    border-color var(--transition-duration-fast) ease,
+    box-shadow var(--transition-duration-fast) ease;
+  position: relative;
+}
+
+.inputWrapper:focus-within,
+.inputWrapper.focused {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.2);
+}
+
+.messageInput {
+  flex-grow: 1;
+  border: none;
+  background-color: transparent;
+  font-family: var(--font-family-sans), monospace;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  outline: none;
+  resize: vertical;
+  box-sizing: border-box;
+  padding-bottom: calc(var(--spacing-md) + 45px);
+  min-height: 120px;
+}
+
+.messageInput::placeholder {
+  color: var(--color-text-placeholder);
+}
+
+.submitButton {
+  position: absolute;
+  right: var(--spacing-md);
+  bottom: var(--spacing-md);
+  flex-shrink: 0;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: var(--spacing-sm);
+  position: absolute;
+  right: var(--spacing-md);
+  bottom: var(--spacing-md);
+  flex-shrink: 0;
+}
+
+.addMessageButton {
+  flex: 1;
+  min-width: 120px;
+}
+
+.emulateAllButton {
+  flex: 1;
+  min-width: 240px;
+}
+
+.inputPage {
+  padding: var(--spacing-lg);
+  min-height: calc(100vh - (var(--spacing-lg) * 2));
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-background-secondary);
+}
+
+.externalLinksContainer {
+  position: absolute;
+  top: var(--spacing-xl);
+  right: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+}
+
+.iconLink {
+  display: flex;
+  align-items: center;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.iconLink:hover {
+  color: var(--color-text-primary);
+}
+
+@media (max-width: 768px) {
+  .centeredInputContainer {
+    padding: 0 var(--spacing-md) var(--spacing-lg);
+    margin-top: 160px;
+  }
+
+  .emulateLogo {
+    margin-bottom: var(--spacing-lg);
+    flex-direction: column;
+  }
+
+  .logoDiamond {
+    width: 60px;
+    height: 60px;
+  }
+
+  .emulateLogoH1 {
+    font-size: 32px;
+    gap: var(--spacing-sm);
+  }
+
+  .inputCard {
+    max-width: 100%;
+  }
+
+  .externalLinksContainer {
+    top: var(--spacing-lg);
+    right: var(--spacing-md);
+  }
+}

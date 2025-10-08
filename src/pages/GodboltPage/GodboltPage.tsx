@@ -1,4 +1,4 @@
-import React, {Suspense, useCallback, useEffect, useRef, useState} from "react"
+import {Suspense, useCallback, useEffect, useRef, useState, lazy} from "react"
 
 import {Allotment} from "allotment"
 import "allotment/dist/style.css"
@@ -19,7 +19,7 @@ import {
 
 import {useSourceMapHighlight} from "@app/pages/GodboltPage/hooks"
 
-import ShareButton from "@shared/ui/ShareButton/ShareButton.tsx"
+import {ShareButton} from "@shared/ui/ShareButton/ShareButton.tsx"
 
 import {TUTORIAL_STEPS} from "@app/pages/GodboltPage/Tutorial.ts"
 
@@ -34,7 +34,7 @@ import {clearShareHash, decodeCodeFromUrl, decodeLanguageFromUrl} from "./urlCod
 
 import styles from "./GodboltPage.module.css"
 
-const CodeEditor = React.lazy(() => import("@shared/ui/CodeEditor"))
+const CodeEditor = lazy(() => import("@shared/ui/CodeEditor"))
 
 const DEFAULT_FUNC_CODE = `#include "stdlib.fc";
 

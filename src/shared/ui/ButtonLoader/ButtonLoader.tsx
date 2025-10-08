@@ -1,9 +1,9 @@
-import React from "react"
+import React, {type ButtonHTMLAttributes} from "react"
 
 import styles from "./ButtonLoader.module.css"
 
 // eslint-disable-next-line functional/type-declaration-immutability
-export interface ButtonLoaderProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonLoaderProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   readonly children: React.ReactNode
 }
 

@@ -1,4 +1,4 @@
-import React, {Suspense, useCallback, useEffect, useMemo, useRef, useState} from "react"
+import {Suspense, useCallback, useEffect, useMemo, useRef, useState, lazy} from "react"
 import type {StackElement} from "ton-assembly/dist/trace"
 import type * as monaco from "monaco-editor"
 import {logs} from "ton-assembly"
@@ -17,7 +17,7 @@ import {CompilerErrors, CustomSegmentedSelector} from "@app/pages/GodboltPage/co
 import PageHeader from "@shared/ui/PageHeader"
 import Tutorial, {useTutorial} from "@shared/ui/Tutorial"
 
-import ShareButton from "@shared/ui/ShareButton/ShareButton.tsx"
+import {ShareButton} from "@shared/ui/ShareButton/ShareButton.tsx"
 import SettingsDropdown from "@shared/ui/SettingsDropdown/SettingsDropdown.tsx"
 import {usePlaygroundSettings} from "@app/pages/PlaygroundPage/hooks/usePlaygroundSettings.ts"
 import {
@@ -35,7 +35,7 @@ import {useGlobalError} from "@shared/lib/useGlobalError.tsx"
 
 import styles from "./PlaygroundPage.module.css"
 
-const CodeEditor = React.lazy(() => import("@shared/ui/CodeEditor"))
+const CodeEditor = lazy(() => import("@shared/ui/CodeEditor"))
 
 const DEFAULT_ASSEMBLY_CODE = `PUSHINT_8 42
 PUSHINT_8 100

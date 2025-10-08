@@ -1,4 +1,4 @@
-import React from "react"
+import React, {memo} from "react"
 
 import {type TraceInfo} from "ton-assembly/dist/trace"
 import type {TraceResult} from "txtracer-core/dist/types"
@@ -48,5 +48,5 @@ const RetraceResultViewFc: React.FC<RetraceResultViewProps> = ({result}) => {
   )
 }
 
-export const RetraceResultView = React.memo(RetraceResultViewFc)
+export const RetraceResultView = memo(RetraceResultViewFc)
 RetraceResultView.displayName = "RetraceResultView"

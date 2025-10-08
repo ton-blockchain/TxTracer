@@ -37,4 +37,4 @@ jobs:
         run: yarn run lint
 
       - name: Build project
-        run: yarn run build
+        run: yarn run build:all

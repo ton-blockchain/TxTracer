@@ -1,5 +1,5 @@
 import React from "react"
-import ReactDOM from "react-dom/client"
+import {createRoot} from "react-dom/client"
 import {HelmetProvider} from "react-helmet-async"
 
 import "../../index.css"
@@ -11,7 +11,7 @@ import {PageWrapper} from "@app/app/PageWrapper"
 import GodboltPage from "./GodboltPage"
 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-ReactDOM.createRoot(document.getElementById("root")!).render(
+createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <GlobalErrorProvider>
       <ThemeProvider>

@@ -1,0 +1,43 @@
+.compactBanner {
+  padding-top: var(--spacing-lg);
+}
+
+.compactContent {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-neutral-bg-hover);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+}
+
+.labelLink {
+  color: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.labelLink:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+@media (max-width: 1200px) {
+  .compactBanner {
+    padding-top: 0;
+    padding-bottom: var(--spacing-sm);
+  }
+
+  .compactContent {
+    gap: var(--spacing-xs);
+  }
+}

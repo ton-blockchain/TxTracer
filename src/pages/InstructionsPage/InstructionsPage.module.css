@@ -183,3 +183,19 @@
     margin-left: 0;
   }
 }
+
+.subCategoryAndDocsContainer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .subCategoryAndDocsContainer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+}

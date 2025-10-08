@@ -1,5 +1,15 @@
-import React, {Suspense, useCallback, useEffect, useState} from "react"
-import {FiBook, FiClock, FiGithub, FiPlay, FiSearch, FiX, FiZap} from "react-icons/fi"
+import React, {Suspense, useCallback, useEffect, useState, lazy} from "react"
+import {
+  FiBook,
+  FiClock,
+  FiCpu,
+  FiGithub,
+  FiMoreHorizontal,
+  FiPlay,
+  FiSearch,
+  FiX,
+  FiZap,
+} from "react-icons/fi"
 
 import {type StackElement} from "ton-assembly/dist/trace"
 
@@ -22,10 +32,12 @@ import {StackItemViewer} from "@app/pages/TracePage/StackItemViewer.tsx"
 
 import {useGlobalError} from "@shared/lib/useGlobalError.tsx"
 
+import {getRawQueryParam} from "@features/common/lib/query-params.ts"
+
 import styles from "./TracePage.module.css"
 
-const CodeEditor = React.lazy(() => import("@shared/ui/CodeEditor"))
-const PageHeader = React.lazy(() => import("@shared/ui/PageHeader"))
+const CodeEditor = lazy(() => import("@shared/ui/CodeEditor"))
+const PageHeader = lazy(() => import("@shared/ui/PageHeader"))
 
 function TracePage() {
   const [inputText, setInputText] = useState("")
@@ -62,26 +74,6 @@ function TracePage() {
   } = useTraceStepper(result?.trace)
 
   useEffect(() => {
-    const getRawQueryParam = (name: string) => {
-      const search = window.location.search
-      if (!search || search.length <= 1) return null
-      const query = search.slice(1)
-      const pairs = query.split("&")
-      for (const pair of pairs) {
-        if (!pair) continue
-        const eq = pair.indexOf("=")
-        const key = eq >= 0 ? pair.slice(0, eq) : pair
-        if (key !== name) continue
-        const raw = eq >= 0 ? pair.slice(eq + 1) : ""
-        try {
-          return decodeURIComponent(raw)
-        } catch {
-          return raw
-        }
-      }
-      return null
-    }
-
     const tx = getRawQueryParam("tx") ?? ""
     setInputText(tx)
     setHeaderInputText(tx)
@@ -420,6 +412,30 @@ function TracePage() {
                     Alpha
                   </Badge>
                 </a>
+
+                <a href="/emulate/" className={styles.featureCard}>
+                  <div className={`${styles.featureCardIcon} ${styles.emulateIcon}`}>
+                    <FiCpu aria-hidden="true" />
+                  </div>
+                  <h3 className={styles.featureCardTitle}>Emulate</h3>
+                  <p className={styles.featureCardDescription}>
+                    Emulate raw messages on TON blockchain. Send single messages or batch multiple
+                    messages together to see the full transaction tree and trace execution flow.
+                  </p>
+                  <span className={styles.featureCardBadge}>Emulator</span>
+                </a>
+
+                <div className={`${styles.featureCard} ${styles.placeholderCard}`}>
+                  <div className={`${styles.featureCardIcon} ${styles.placeholderIcon}`}>
+                    <FiMoreHorizontal aria-hidden="true" />
+                  </div>
+                  <h3 className={styles.featureCardTitle}>More Tools</h3>
+                  <p className={styles.featureCardDescription}>
+                    Additional developer tools and features are coming soon. Stay tuned for updates
+                    to enhance your TON blockchain development experience.
+                  </p>
+                  <span className={styles.featureCardBadge}>Coming Soon</span>
+                </div>
               </section>
             )}
           </div>
@@ -440,16 +456,6 @@ function TracePage() {
               </a>
             </span>
           </footer>
-        </main>
-      )}
-
-      {loading && !result && (
-        <main className={styles.inputPage}>
-          <InlineLoader
-            message="Tracing transaction"
-            subtext="This may take a few moments"
-            loading={true}
-          />
         </main>
       )}
 
