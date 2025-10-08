@@ -218,7 +218,7 @@ function TracePage() {
       : undefined
   const txStatus =
     result?.result?.emulatedTx?.computeInfo !== "skipped"
-      ? (result?.result?.emulatedTx?.computeInfo?.success && exitCode === 0) || exitCode === 1
+      ? result?.result?.emulatedTx?.computeInfo?.success && (exitCode === 0 || exitCode === 1)
         ? "success"
         : "failed"
       : "success"
