@@ -1,4 +1,4 @@
-import React, {Suspense, useCallback, useEffect, useState} from "react"
+import React, {Suspense, useCallback, useEffect, useState, lazy} from "react"
 import {
   FiBook,
   FiClock,
@@ -36,8 +36,8 @@ import {getRawQueryParam} from "@features/common/lib/query-params.ts"
 
 import styles from "./TracePage.module.css"
 
-const CodeEditor = React.lazy(() => import("@shared/ui/CodeEditor"))
-const PageHeader = React.lazy(() => import("@shared/ui/PageHeader"))
+const CodeEditor = lazy(() => import("@shared/ui/CodeEditor"))
+const PageHeader = lazy(() => import("@shared/ui/PageHeader"))
 
 function TracePage() {
   const [inputText, setInputText] = useState("")
