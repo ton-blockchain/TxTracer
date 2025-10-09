@@ -92,6 +92,13 @@
   overflow-y: auto;
 }
 
+.contentSmallHex {
+  color: var(--color-text-secondary);
+  word-break: break-all;
+  max-height: 50px;
+  overflow-y: auto;
+}
+
 .inlineContainer {
   display: inline-flex;
   align-items: center;

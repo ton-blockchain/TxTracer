@@ -221,7 +221,7 @@ function TracePage() {
       ? result?.result?.emulatedTx?.computeInfo?.success && (exitCode === 0 || exitCode === 1)
         ? "success"
         : "failed"
-      : "success"
+      : "failed"
 
   const stateUpdateHashOk = result?.result?.stateUpdateHashOk
   const shouldShowStatusContainer = txStatus !== undefined || stateUpdateHashOk === false

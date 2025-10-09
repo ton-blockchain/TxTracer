@@ -4,7 +4,7 @@ import type {TraceResult} from "txtracer-core/dist/types"
 
 import {type ParsedInternal, parseWithPayloads} from "@truecarry/tlb-abi"
 
-import {Cell, loadTransaction} from "@ton/core"
+import {beginCell, Cell, loadTransaction, storeMessage} from "@ton/core"
 
 import AddressChip from "@shared/ui/AddressChip"
 import StatusBadge, {type StatusType} from "@shared/ui/StatusBadge"
@@ -16,6 +16,8 @@ import {OpcodeChip} from "@shared/ui/OpcodeChip/OpcodeChip.tsx"
 import {ParsedBodyViewer} from "@features/txTrace/ui/ParsedBodyViewer"
 import {ActionsSummary} from "@app/pages/SandboxPage/components/TransactionShortInfo/ActionsSummary"
 import type {ContractData} from "@features/sandbox/lib/contract"
+
+import {CodeBlock} from "@app/pages/SandboxPage/components"
 
 import styles from "./TransactionDetailsTable.module.css"
 
@@ -77,23 +79,30 @@ const TransactionDetailsTable: React.FC<TransactionDetailsTableProps> = ({result
   const exitCode = tx.computeInfo !== "skipped" ? tx.computeInfo.exitCode : undefined
   const statusType: StatusType = isSuccess ? "success" : "failed"
 
+  const inMessage = useMemo(() => {
+    const loadedTx = loadTransaction(Cell.fromHex(result.emulatedTx.raw).asSlice())
+    if (loadedTx.inMessage) {
+      return loadedTx.inMessage
+    }
+    return undefined
+  }, [result.emulatedTx.raw])
+
+  const inMessageRaw = useMemo(() => {
+    if (!inMessage) return undefined
+    const b = beginCell().store(storeMessage(inMessage)).endCell()
+    return b.toBoc().toString("hex")
+  }, [inMessage])
+
   const {parsedBody, inCellHex} = useMemo(() => {
-    if (!result)
+    if (!result || !inMessage)
       return {
         parsedBody: undefined as ParsedInternal | undefined,
         inCellHex: undefined as string | undefined,
       }
-    const loadedTx = loadTransaction(Cell.fromHex(result.emulatedTx.raw).asSlice())
-    if (loadedTx.inMessage) {
-      const parsed = parseWithPayloads(loadedTx.inMessage.body.beginParse())
-      const hex = loadedTx.inMessage.body.toBoc().toString("hex")
-      return {parsedBody: parsed, inCellHex: hex}
-    }
-    return {
-      parsedBody: undefined as ParsedInternal | undefined,
-      inCellHex: undefined as string | undefined,
-    }
-  }, [result])
+    const parsed = parseWithPayloads(inMessage.body.beginParse())
+    const hex = inMessage.body.toBoc().toString("hex")
+    return {parsedBody: parsed, inCellHex: hex}
+  }, [inMessage, result])
 
   return (
     <div className={styles.transactionDetailsContainer}>
@@ -280,6 +289,16 @@ const TransactionDetailsTable: React.FC<TransactionDetailsTableProps> = ({result
                   <div className={styles.multiColumnItemTitle}>Parsed Data</div>
                   <div className={`${styles.multiColumnItemValue}`}>
                     <ParsedBodyViewer parsedBody={parsedBody} cellHex={inCellHex} />
+                  </div>
+                </div>
+              </div>
+            )}
+            {inMessageRaw && (
+              <div className={styles.multiColumnRow}>
+                <div className={styles.multiColumnItem}>
+                  <div className={styles.multiColumnItemTitle}>Raw data</div>
+                  <div className={`${styles.multiColumnItemValue}`}>
+                    <CodeBlock title={"HEX"} variant={"small-hex"} content={inMessageRaw} />
                   </div>
                 </div>
               </div>
