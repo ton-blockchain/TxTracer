@@ -1,37 +1,43 @@
 import {
   Blockchain,
   type BlockchainTransaction,
-  RemoteBlockchainStorage,
-  wrapTonClient4ForRemote,
-  SmartContract,
   EmulationError,
+  RemoteBlockchainStorage,
+  SmartContract,
+  wrapTonClient4ForRemote,
 } from "@ton/sandbox"
 import {
   Address,
-  Cell,
-  loadMessage,
   beginCell,
-  storeStateInit,
+  Cell,
   storeShardAccount,
+  storeStateInit,
   storeTransaction,
   type Transaction,
 } from "@ton/core"
 
 import {TonClient4} from "@ton/ton"
 
-import type {ContractRawData, ContractStateChange} from "@features/sandbox/lib/transport/contract"
+import type {ContractRawData} from "@features/sandbox/lib/transport/contract"
 import type {RawTransactionInfo} from "@features/sandbox/lib/transport/transaction.ts"
+import type {ValueFlow, MessageTestData} from "@features/sandbox/lib/transport/message.ts"
 
 export interface EmulationResult {
-  readonly testData: {
-    readonly $: "test-data"
-    readonly testName: string | undefined
-    readonly transactions: string
-    readonly contracts: readonly ContractRawData[]
-    readonly changes: readonly ContractStateChange[]
-  }
+  readonly testData: MessageTestData
   readonly errors: readonly EmulationError[]
   readonly error?: string
+}
+
+async function createBlockchain(testnet: boolean) {
+  return await Blockchain.create({
+    storage: new RemoteBlockchainStorage(
+      wrapTonClient4ForRemote(
+        new TonClient4({
+          endpoint: `https://${testnet ? "sandbox" : "mainnet"}-v4.tonhubapi.com`,
+        }),
+      ),
+    ),
+  })
 }
 
 export async function emulateMessage(
@@ -40,15 +46,7 @@ export async function emulateMessage(
   ignoreChksig: boolean = false,
 ): Promise<EmulationResult> {
   try {
-    const blockchain = await Blockchain.create({
-      storage: new RemoteBlockchainStorage(
-        wrapTonClient4ForRemote(
-          new TonClient4({
-            endpoint: `https://${testnet ? "sandbox" : "mainnet"}-v4.tonhubapi.com`,
-          }),
-        ),
-      ),
-    })
+    const blockchain = await createBlockchain(testnet)
     blockchain.verbosity.print = false
     blockchain.verbosity.vmLogs = "vm_logs_verbose"
 
@@ -56,7 +54,6 @@ export async function emulateMessage(
 
     for (const hexMessage of hexMessages) {
       const message = Cell.fromHex(hexMessage.trim())
-      loadMessage(message.asSlice())
       try {
         await blockchain.sendMessage(message, {
           ignoreChksig,
@@ -74,23 +71,41 @@ export async function emulateMessage(
     // @ts-expect-error blockchain.transactions is not typed in @ton/sandbox
     const txs = blockchain.transactions
 
-    const contracts: SmartContract[] = []
+    const contracts: Map<string, SmartContract> = new Map()
     for (const tx of txs) {
-      const addr = tx.inMessage?.info.dest
-      if (!addr || !(addr instanceof Address)) {
+      const destAddr = tx.inMessage?.info.dest
+      if (!destAddr || !(destAddr instanceof Address)) {
         continue
       }
-      contracts.push(await blockchain.getContract(addr))
+      contracts.set(destAddr.toString(), await blockchain.getContract(destAddr))
+      const srcAddr = tx.inMessage?.info.dest
+      if (!srcAddr || !(srcAddr instanceof Address)) {
+        continue
+      }
+      contracts.set(destAddr.toString(), await blockchain.getContract(srcAddr))
+    }
+
+    const currentBlockchain = await createBlockchain(testnet)
+
+    const valueFlow: Map<string, ValueFlow> = new Map()
+
+    for (const [, contractAfter] of contracts) {
+      const contractBefore = await currentBlockchain.getContract(contractAfter.address)
+
+      valueFlow.set(contractAfter.address.toString(), {
+        before: contractBefore.account.account?.storage.balance.coins ?? 0n,
+        after: contractAfter.account.account?.storage.balance.coins ?? 0n,
+      })
     }
 
     const data = serializeTransactions(txs)
 
-    const testData = {
+    const testData: MessageTestData = {
       $: "test-data" as const,
       testName:
         hexMessages.length === 1 ? "Emulated Message" : `Emulated Messages (${hexMessages.length})`,
       transactions: data,
-      contracts: contracts.map(contract => {
+      contracts: [...contracts.values()].map(contract => {
         const stateInit =
           contract.accountState?.type === "active"
             ? beginCell()
@@ -114,6 +129,7 @@ export async function emulateMessage(
         } satisfies ContractRawData
       }),
       changes: [],
+      valueFlow,
     }
 
     return {
@@ -128,6 +144,7 @@ export async function emulateMessage(
         transactions: "",
         contracts: [],
         changes: [],
+        valueFlow: new Map(),
       },
       error: error instanceof Error ? error.message : String(error),
       errors: [],

@@ -16,7 +16,7 @@ export function ContractChip({
   contracts,
   trimSoloAddress = true,
   onContractClick,
-}: ContractChipProps) {
+}: ContractChipProps): React.JSX.Element {
   const [isCopied, setIsCopied] = useState(false)
 
   const handleCopy = useCallback(
@@ -28,8 +28,8 @@ export function ContractChip({
           .then(() => {
             setIsCopied(true)
           })
-          .catch(err => {
-            console.error("Failed to copy: ", err)
+          .catch((error: unknown) => {
+            console.error("Failed to copy:", error)
           })
       }
     },
@@ -46,13 +46,16 @@ export function ContractChip({
     [address, onContractClick],
   )
 
-  useEffect(() => {
+  useEffect((): (() => void) | undefined => {
     if (isCopied) {
       const timer = setTimeout(() => {
         setIsCopied(false)
       }, 1500)
-      return () => clearTimeout(timer)
+      return () => {
+        clearTimeout(timer)
+      }
     }
+    return undefined
   }, [isCopied])
 
   const copyIconSvg = (

@@ -2,7 +2,7 @@ import {useEffect, useState, useCallback} from "react"
 
 import {useGlobalError} from "@shared/lib/useGlobalError.tsx"
 
-import type {Message, MessageTestData} from "./message"
+import type {Message, MessageTestData, ValueFlow} from "./message"
 import type {RawTransactions} from "./transaction"
 import type {ContractRawData, ContractStateChange} from "./contract"
 
@@ -11,6 +11,7 @@ interface TestData {
   readonly transactions: RawTransactions
   readonly timestamp?: number
   readonly changes: readonly ContractStateChange[]
+  readonly valueFlow?: Map<string, ValueFlow>
 }
 
 export interface RawWebsocketData {
@@ -96,6 +97,7 @@ export function useWebsocket({
                   ],
                 },
                 changes: [...test.changes, ...message.changes],
+                valueFlow: test.valueFlow,
               }
             : test,
         )
@@ -107,6 +109,7 @@ export function useWebsocket({
             transactions: rawTransactions,
             timestamp: Date.now(),
             changes: message.changes,
+            valueFlow: message.valueFlow,
           },
         ]
       }

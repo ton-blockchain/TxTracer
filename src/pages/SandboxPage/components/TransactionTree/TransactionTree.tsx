@@ -12,7 +12,10 @@ import {findOpcodeABI, type TransactionInfo} from "@features/sandbox/lib/transac
 import type {ContractData} from "@features/sandbox/lib/contract"
 import {parseSliceWithAbiType, type ParsedObjectByABI} from "@features/sandbox/lib/abi/parser.ts"
 import {TransactionShortInfo, ContractDetails} from "@app/pages/SandboxPage/components"
+
 import {ParsedDataView} from "@features/sandbox/ui/abi"
+
+import {ContractChip} from "../ContractChip/ContractChip"
 
 import {useTooltip} from "./useTooltip"
 import {SmartTooltip} from "./SmartTooltip"
@@ -824,6 +827,41 @@ export function TransactionTree({testData}: TransactionTreeProps) {
             contracts={contracts}
             onContractClick={handleContractClick}
           />
+        </div>
+      )}
+
+      {testData.valueFlow && testData.valueFlow.size > 0 && (
+        <div className={styles.valueFlowContainer}>
+          <h3 className={styles.detailsTitle}>Value Flow</h3>
+          <div className={styles.valueFlowTable}>
+            <div className={styles.tableHeader}>
+              <div className={styles.contractColumn}>Account</div>
+              <div className={styles.changeColumn}>Balance Change</div>
+            </div>
+            {[...testData.valueFlow.entries()].map(([address, flow]) => {
+              const change = flow.after - flow.before
+              const isPositive = change > 0n
+              const isNegative = change < 0n
+
+              return (
+                <div key={address} className={styles.tableRow}>
+                  <div className={styles.contractColumn}>
+                    <ContractChip
+                      address={address}
+                      contracts={contracts}
+                      onContractClick={handleContractClick}
+                    />
+                  </div>
+                  <div
+                    className={`${styles.changeColumn} ${isPositive ? styles.positiveChange : styles.negativeChange}`}
+                  >
+                    {isPositive ? "+" : isNegative ? "-" : ""}
+                    {formatCurrency(change)}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
         </div>
       )}
 
