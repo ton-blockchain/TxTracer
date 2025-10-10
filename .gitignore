@@ -36,5 +36,8 @@ yarn-error.log
 # Eslint
 .eslintcache
 
+# stylelint
+.stylelintcache
+
 # astro
 .astro/
