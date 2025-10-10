@@ -1,8 +1,10 @@
 import {Address, type ExternalAddress} from "@ton/core"
 
-import React, {type JSX, useState, useEffect} from "react"
+import React, {type JSX, useState, useEffect, useMemo} from "react"
 import type {Maybe} from "@ton/core/dist/utils/maybe"
 import {FiPlay, FiX, FiChevronDown, FiChevronUp} from "react-icons/fi"
+
+import * as tlb from "@truecarry/tlb-abi"
 
 import {ContractChip, OpcodeChip} from "@app/pages/SandboxPage/components"
 import {formatCurrency, formatNumber} from "@shared/lib/format"
@@ -21,6 +23,8 @@ import type {TestData} from "@features/sandbox/lib/test-data.ts"
 
 import {SendModeViewer} from "@features/sandbox/ui"
 import {ExitCodeChip} from "@features/common/ui/ExitCodeChip/ExitCodeChip"
+
+import {ParsedBodyViewer} from "@features/txTrace/ui/ParsedBodyViewer.tsx"
 
 import {ActionsSummary} from "./ActionsSummary"
 
@@ -127,14 +131,14 @@ export function TransactionShortInfo({
   const computeInfo = tx.computeInfo
   const abiType = findOpcodeABI(tx, contracts)
 
-  let inMsgBodyParsed: ParsedObjectByABI | undefined = undefined
+  let parsedBodyByABI: ParsedObjectByABI | undefined = undefined
   const contract = contracts.get(tx.address?.toString() ?? "")
   const slice = tx.transaction.inMessage?.body?.asSlice()
   if (slice && abiType) {
     if (slice.remainingBits >= 32) {
       slice.loadUint(32) // skip opcode
     }
-    inMsgBodyParsed = parseSliceWithAbiType(slice, abiType, contract?.meta?.abi?.types ?? [])
+    parsedBodyByABI = parseSliceWithAbiType(slice, abiType, contract?.meta?.abi?.types ?? [])
   }
 
   const formatBoolean = (v: boolean) => (
@@ -148,6 +152,18 @@ export function TransactionShortInfo({
   const money = tx.money
 
   const sendMode = computeSendMode(tx, testData)
+
+  const {parsedBodyBySchemas, inCellHex} = useMemo(() => {
+    if (!inMessage) {
+      return {
+        parsedBodyBySchemas: undefined as tlb.ParsedInternal | undefined,
+        inCellHex: undefined as string | undefined,
+      }
+    }
+    const parsed = tlb.parseWithPayloads(inMessage.body.beginParse())
+    const hex = inMessage.body.toBoc().toString("hex")
+    return {parsedBodyBySchemas: parsed, inCellHex: hex}
+  }, [inMessage])
 
   return (
     <>
@@ -244,17 +260,30 @@ export function TransactionShortInfo({
               <div className={styles.multiColumnItem}>
                 <div className={styles.multiColumnItemTitle}>Opcode</div>
                 <div className={styles.multiColumnItemValue}>
-                  <OpcodeChip opcode={tx.opcode} abiName={abiType?.name} />
+                  <OpcodeChip
+                    opcode={tx.opcode}
+                    abiName={abiType?.name ?? parsedBodyBySchemas?.data?.kind}
+                  />
                 </div>
               </div>
             </div>
-            {inMsgBodyParsed && (
+            {parsedBodyBySchemas && (
+              <div className={styles.multiColumnRow}>
+                <div className={styles.multiColumnItem}>
+                  <div className={styles.multiColumnItemTitle}>Parsed Data</div>
+                  <div className={`${styles.multiColumnItemValue}`}>
+                    <ParsedBodyViewer parsedBody={parsedBodyBySchemas} cellHex={inCellHex} />
+                  </div>
+                </div>
+              </div>
+            )}
+            {parsedBodyByABI && (
               <div
                 className={`${styles.multiColumnItemValue} ${styles.multiColumnItemValueWithRows}`}
               >
                 <div className={styles.multiColumnItemTitle}>Parsed Data:</div>
                 <div className={styles.parsedDataContent}>
-                  <ParsedDataView data={inMsgBodyParsed} contracts={contracts} />
+                  <ParsedDataView data={parsedBodyByABI} contracts={contracts} />
                 </div>
               </div>
             )}

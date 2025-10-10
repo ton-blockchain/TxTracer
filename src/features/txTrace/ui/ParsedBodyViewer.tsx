@@ -1,7 +1,7 @@
 import React, {useMemo, useState} from "react"
 
 import type {ParsedInternal} from "@truecarry/tlb-abi"
-import {Address, Cell} from "@ton/core"
+import {Address, Cell, ExternalAddress} from "@ton/core"
 
 import {CopyButton} from "@shared/CopyButton/CopyButton"
 
@@ -81,6 +81,12 @@ function sanitizeObject(obj: unknown): JsonLike {
   }
   if (obj instanceof Address) {
     return obj.toString()
+  }
+  if (obj instanceof ExternalAddress) {
+    return obj.toString()
+  }
+  if (obj instanceof Buffer) {
+    return obj.toString("hex")
   }
   if (typeof obj === "object" && obj !== null) {
     const record = obj as Record<string, unknown>

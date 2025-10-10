@@ -3,6 +3,8 @@ import type {Orientation, RawNodeDatum, TreeLinkDatum} from "react-d3-tree"
 import {Tree} from "react-d3-tree"
 import {Address, Cell, type ContractABI} from "@ton/core"
 
+import {parseWithPayloads} from "@truecarry/tlb-abi"
+
 import {formatCurrency} from "@shared/lib/format"
 
 import type {TestData} from "@features/sandbox/lib/test-data.ts"
@@ -465,10 +467,18 @@ export function TransactionTree({testData}: TransactionTreeProps) {
           ? tx.transaction.inMessage?.info.value?.coins
           : undefined
 
+      const opcodeNameFromInMessageSchemas = () => {
+        if (!tx.transaction.inMessage) {
+          return undefined
+        }
+        const parsed = parseWithPayloads(tx.transaction.inMessage.body.asSlice())
+        return parsed?.data.kind
+      }
+
       const opcode = tx.opcode
       const opcodeHex = opcode?.toString(16)
       const abiType = findOpcodeABI(tx, contracts)
-      const opcodeName = abiType?.name
+      const opcodeName = abiType?.name ?? opcodeNameFromInMessageSchemas()
 
       const contractLetter = thisAddress
         ? (contracts.get(thisAddress.toString())?.letter ?? "?")
