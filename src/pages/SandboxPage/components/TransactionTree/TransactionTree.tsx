@@ -467,7 +467,7 @@ export function TransactionTree({testData}: TransactionTreeProps) {
           ? tx.transaction.inMessage?.info.value?.coins
           : undefined
 
-      const opcodeNameFromInMessageSchemas = () => {
+      const opcodeNameFromInMessageBySchemas = () => {
         if (!tx.transaction.inMessage) {
           return undefined
         }
@@ -478,7 +478,7 @@ export function TransactionTree({testData}: TransactionTreeProps) {
       const opcode = tx.opcode
       const opcodeHex = opcode?.toString(16)
       const abiType = findOpcodeABI(tx, contracts)
-      const opcodeName = abiType?.name ?? opcodeNameFromInMessageSchemas()
+      const opcodeName = abiType?.name ?? opcodeNameFromInMessageBySchemas()
 
       const contractLetter = thisAddress
         ? (contracts.get(thisAddress.toString())?.letter ?? "?")
