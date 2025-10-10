@@ -160,7 +160,7 @@ export function TransactionShortInfo({
         inCellHex: undefined as string | undefined,
       }
     }
-    const parsed = tlb.parseWithPayloads(inMessage.body.beginParse())
+    const parsed = tlb.parseWithPayloads(inMessage.body.beginParse().clone())
     const hex = inMessage.body.toBoc().toString("hex")
     return {parsedBodyBySchemas: parsed, inCellHex: hex}
   }, [inMessage])
