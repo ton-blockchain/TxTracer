@@ -19,11 +19,17 @@ const InlineOperand: React.FC<InlineOperandProps> = ({instruction, operandIndex}
   if (!operands || operandIndex < 0 || operandIndex >= operands.length) return null
   const name = operands[operandIndex]
 
+  const layoutChildren = layout.args.children?.[operandIndex]
+  const isControl = layoutChildren?.$ === "control"
+  const isStack = layoutChildren?.$ === "stack" || layoutChildren?.$ === "s1"
+
+  const operandPresentation = isControl ? `c(${name})` : isStack ? `s(${name})` : `[${name}]`
+
   const tooltip = renderArgsTreeCompactForOperand(layout.args, name, operandIndex)
 
   return (
     <Tooltip content={tooltip} placement="bottom">
-      <span className={styles.inlineOperand}>[{name}]</span>
+      <span className={styles.inlineOperand}>{operandPresentation}</span>
     </Tooltip>
   )
 }

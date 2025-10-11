@@ -59,7 +59,6 @@
 
 .argNodeInline {
   font-size: var(--font-size-xsm);
-  margin-bottom: var(--spacing-sm);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
