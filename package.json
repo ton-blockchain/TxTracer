@@ -88,6 +88,7 @@
     "starlight-llms-txt": "^0.6.0",
     "starlight-theme-rapide": "^0.5.1",
     "stylelint": "^16.24.0",
+    "stylelint-config-css-modules": "^4.5.1",
     "stylelint-config-standard": "^39.0.0",
     "ts-node": "^10.9.1",
     "typescript": "~5.8.3",
