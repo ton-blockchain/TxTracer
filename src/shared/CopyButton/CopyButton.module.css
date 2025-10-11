@@ -24,7 +24,7 @@
   width: var(--font-size-sm);
   height: var(--font-size-sm);
   display: block;
-  stroke: currentColor;
+  stroke: currentcolor;
 }
 
 .copyIcon.copied {
@@ -33,7 +33,7 @@
 }
 
 .copyIcon.copied svg {
-  stroke: currentColor;
+  stroke: currentcolor;
   animation: popIn 0.2s ease-out;
 }
 
