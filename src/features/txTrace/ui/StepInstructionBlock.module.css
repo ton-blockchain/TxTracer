@@ -26,7 +26,7 @@
   box-sizing: border-box;
   gap: 8px;
   margin-left: var(--spacing-sm);
-  font-family: var(--font-family-mono), "monospace";
+  font-family: var(--font-family-mono), monospace;
 }
 
 .instructionName {
