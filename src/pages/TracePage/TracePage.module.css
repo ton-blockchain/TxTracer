@@ -8,10 +8,7 @@
 
 .loadingOverlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background-color: rgb(var(--color-background-primary-rgb), 0.7);
   display: flex;
   align-items: center;
@@ -53,9 +50,7 @@
 .mainContent {
   grid-area: main;
   display: grid;
-  grid-template-columns: 1fr 400px;
-  grid-template-rows: 1fr;
-  grid-template-areas: "editor sidebar";
+  grid-template: "editor sidebar" 1fr / 1fr 400px;
   width: calc(100% - var(--spacing-sm) * 2);
   min-height: 0;
   overflow: hidden;
@@ -197,7 +192,6 @@
 .titleTon {
   -webkit-text-fill-color: transparent;
   background: linear-gradient(89deg, #2b82eb, #1cc8ff);
-  background-clip: text;
   background-clip: text;
   font-feature-settings:
     "clig" off,
@@ -500,11 +494,7 @@ footer {
 
   .mainContent {
     display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1.5fr;
-    grid-template-areas:
-      "editor"
-      "sidebar";
+    grid-template: "editor" 1fr "sidebar" 1.5fr / 1fr;
     width: calc(100% - var(--spacing-xs) * 2);
     min-height: 0;
     padding: var(--spacing-xs);
@@ -705,10 +695,7 @@ footer {
 
 .stackItemOverlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: var(--color-background-primary);
   border-radius: var(--border-radius-lg);
   display: flex;

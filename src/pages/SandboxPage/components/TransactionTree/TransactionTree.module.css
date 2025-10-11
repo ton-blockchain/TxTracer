@@ -56,8 +56,7 @@
 .treeContainer {
   width: 100%;
   height: auto;
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: auto hidden;
 }
 
 .treeWrapper {
