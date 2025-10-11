@@ -42,7 +42,7 @@
 }
 
 .daemonMessageContent h3 {
-  margin: 0 0 8px 0;
+  margin: 0 0 8px;
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
 }
