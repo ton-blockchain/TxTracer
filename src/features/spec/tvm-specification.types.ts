@@ -25,6 +25,11 @@ export interface Instruction {
   readonly control_flow?: ControlFlowOfInstruction
 }
 
+export interface GasConsumptionEntry {
+  readonly value: number
+  readonly description: string
+}
+
 export enum Category {
   Arithmetic = "arithmetic",
   Cell = "cell",
@@ -61,31 +66,46 @@ export enum SubCategory {
   Tuple = "tuple",
 }
 
-export interface Description {
-  short: string
-  long: string
-  doc_links?: DocLinks
-  tags?: Tag[]
-  exit_codes?: Array<{errno: string; condition: string}>
-  examples?: Array<{
-    instructions: Array<{instruction: string; comment?: string; is_main?: boolean}>
-    stack: {input: string[]; output: string[]}
-    exit_code?: number
-    other_implementations?: {
-      exact: boolean
-      instructions: string[]
-    }[]
-  }>
-  other_implementations?: {
-    exact: boolean
-    instructions: string[]
-  }[]
-  operands: string[]
+export interface ExitCode {
+  readonly errno: string
+  readonly condition: string
 }
 
-export interface DocLinks {
-  "accept_message effects"?: string
-  "Low-level fees overview"?: string
+export interface ExampleInstruction {
+  readonly instruction: string
+  readonly comment?: string
+  readonly is_main?: boolean
+}
+
+export interface ExampleStack {
+  readonly input: readonly string[]
+  readonly output: readonly string[]
+}
+
+export interface Example {
+  readonly instructions: readonly ExampleInstruction[]
+  readonly stack: ExampleStack
+  readonly exit_code?: number
+}
+
+export interface Description {
+  readonly short: string
+  readonly long: string
+  readonly tags?: Tag[]
+  readonly exit_codes?: ExitCode[]
+  readonly examples?: Example[]
+  readonly other_implementations?: {
+    readonly exact: boolean
+    readonly instructions: string[]
+  }[]
+  readonly operands: readonly string[]
+  readonly gas?: readonly GasConsumptionEntry[]
+  readonly docs_links?: readonly DocsLink[]
+}
+
+export interface DocsLink {
+  readonly name: string
+  readonly url: string
 }
 
 export enum Tag {

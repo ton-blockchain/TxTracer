@@ -48,7 +48,7 @@ const renderChild = (child: Child, key: string | number, operandName?: string) =
   )
 }
 
-const renderArgsTree = (args: Args | undefined, operandNames?: string[]) => {
+const renderArgsTree = (args: Args | undefined, operandNames?: readonly string[]) => {
   if (!args) return null
   if (args.$ === ArgsEnum.Dictpush) {
     const pseudoChildDict: Child = {$: "dictpush"}

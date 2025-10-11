@@ -1,0 +1,95 @@
+.exampleItem {
+  margin-bottom: 0;
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background-color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.exampleItemError {
+  background-color: var(--color-error-bg-light);
+}
+
+.exampleErrorHeader {
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  background-color: var(--color-error-bg);
+  border-radius: calc(var(--border-radius-md) / 2);
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.errorIcon {
+  font-size: var(--font-size-lg);
+  color: #c62828;
+  display: flex;
+  align-items: center;
+}
+
+.errorConditionText {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  width: 100%;
+  padding-top: var(--spacing-xs);
+}
+
+.errorConditionText p {
+  display: inline;
+  margin: 0;
+}
+
+.exampleInstructions {
+  margin-bottom: var(--spacing-md);
+}
+
+.exampleStructTitle {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-top: 0;
+  margin-bottom: var(--spacing-xs);
+}
+
+.codeBlock {
+  background-color: var(--color-background-secondary);
+  padding: var(--spacing-sm);
+  margin: 0 0 var(--spacing-sm) 0;
+  border-radius: calc(var(--border-radius-md) / 2);
+  font-family: var(--font-family-mono), monospace;
+  font-size: var(--font-size-sm);
+  overflow-x: scroll;
+  overflow-y: visible;
+  white-space: pre;
+}
+
+.codeBlock code {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.codeBlock .comment {
+  color: var(--color-text-tertiary);
+  font-style: italic;
+}
+
+.codeBlock .preparatoryComment {
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.exampleStack {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+.preparatoryInstruction code {
+  color: var(--color-text-secondary);
+}
