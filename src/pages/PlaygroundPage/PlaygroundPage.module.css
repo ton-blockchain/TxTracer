@@ -275,9 +275,6 @@
     align-items: stretch;
   }
 
-  .executeButton {
-  }
-
   .iconLink {
     padding: var(--spacing-xs);
   }

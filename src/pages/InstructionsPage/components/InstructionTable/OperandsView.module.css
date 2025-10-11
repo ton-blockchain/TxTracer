@@ -35,9 +35,6 @@
   margin-bottom: var(--spacing-sm);
 }
 
-.argTree {
-}
-
 .argsHeader {
   color: var(--color-text-secondary);
   margin-bottom: var(--spacing-xs);
@@ -73,9 +70,6 @@
 .argNameAndType {
   font-family: var(--font-family-mono), monospace;
   display: flex;
-}
-
-.argName {
 }
 
 .argValidRange {

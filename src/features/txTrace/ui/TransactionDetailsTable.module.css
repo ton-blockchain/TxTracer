@@ -41,9 +41,6 @@
   color: var(--table-th-text-color);
 }
 
-.sectionTitle {
-}
-
 .detailLabel {
   display: flex;
   align-items: center;
@@ -101,9 +98,6 @@
 
 .timestampDetailSecondary {
   color: var(--color-text-secondary);
-}
-
-.numberValue {
 }
 
 .booleanTrue {
@@ -186,9 +180,6 @@
 .labeledSectionRow {
   display: flex;
   border-bottom: 1px solid var(--table-border-color);
-}
-
-.labeledSectionRow:last-of-type {
 }
 
 .labeledSectionTitle {
