@@ -10176,7 +10176,7 @@
           {
             "instructions": [
               {
-                "instruction": "PUSHINT -1"
+                "instruction": "PUSHINT_4 -1"
               },
               {
                 "instruction": "PUSHCONT {\n  PUSHINT_4 1\n  PUSHINT_4 2\n  ADD\n  // implicit exit from the continuation\n  // and since grand continuation is default `quit`\n  // the program will exit with code 0\n}",
@@ -10269,7 +10269,7 @@
           {
             "instructions": [
               {
-                "instruction": "PUSHINT 0"
+                "instruction": "PUSHINT_4 0"
               },
               {
                 "instruction": "PUSHCONT {\n  PUSHINT_4 1\n  PUSHINT_4 2\n  ADD\n  // implicit exit from the continuation\n  // and since grand continuation is default `quit`\n  // the program will exit with code 0\n}",
@@ -51103,7 +51103,7 @@
           {
             "instructions": [
               {
-                "instruction": "PUSHINT 0b001000"
+                "instruction": "PUSHINT_4 0b001000"
               },
               {
                 "instruction": "PUSHCONT {\n  PUSHINT_4 1\n  ADD // sum up 4 and 1\n  // implicit exit from the continuation\n  // and since grand continuation is default `quit`\n  // the program will exit with code 0\n}",
@@ -51214,7 +51214,7 @@
           {
             "instructions": [
               {
-                "instruction": "PUSHINT 0b001000"
+                "instruction": "PUSHINT_4 0b001000"
               },
               {
                 "instruction": "PUSHCONT {\n  PUSHINT_4 1\n  ADD // sum up 4 and 1\n  // implicit exit from the continuation\n  // and since grand continuation is default `quit`\n  // the program will exit with code 0\n}",
