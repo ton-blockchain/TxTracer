@@ -507,7 +507,7 @@
   color: var(--color-text-primary);
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .centeredInputContainer {
     padding: 0 var(--spacing-md) var(--spacing-lg);
     margin-top: 160px;

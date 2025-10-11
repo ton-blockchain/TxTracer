@@ -91,7 +91,7 @@
   font-size: var(--font-size-sm);
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .calculator {
     min-width: 200px;
     margin-top: var(--spacing-xs);

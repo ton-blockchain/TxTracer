@@ -158,7 +158,7 @@ kbd {
   color: var(--color-hint-divider-text);
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .editorHint {
     display: none;
   }

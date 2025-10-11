@@ -71,7 +71,7 @@
   background-color: var(--color-secondary);
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .container {
     width: 100%;
   }

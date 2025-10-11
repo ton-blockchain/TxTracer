@@ -147,7 +147,7 @@
   font-size: var(--font-size-sm);
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .detailRow,
   .labeledSectionRow {
     flex-direction: column;
@@ -253,7 +253,7 @@
   font-weight: 500;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .transactionDetailsContainer {
     padding: var(--spacing-mds);
   }

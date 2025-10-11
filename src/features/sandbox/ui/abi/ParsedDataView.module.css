@@ -149,7 +149,7 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .fieldValue {
     margin-left: var(--spacing-sm);
     width: calc(100% - var(--spacing-sm));

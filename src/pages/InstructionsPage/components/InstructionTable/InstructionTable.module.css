@@ -254,7 +254,7 @@
 .tableRoot {
 }
 
-@media (max-width: 1024px) {
+@media (width <= 1024px) {
   .divTable {
     grid-template-columns:
       72px
@@ -271,7 +271,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .divTable {
     grid-template-columns: 64px 1fr;
   }

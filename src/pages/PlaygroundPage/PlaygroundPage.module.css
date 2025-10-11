@@ -208,7 +208,7 @@
   border: 0;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .appContainer {
     position: relative;
   }

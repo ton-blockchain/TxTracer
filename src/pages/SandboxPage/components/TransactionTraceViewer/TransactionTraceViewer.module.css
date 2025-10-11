@@ -100,7 +100,7 @@
   font-weight: var(--font-weight-semibold);
 }
 
-@media (max-width: 1024px) {
+@media (width <= 1024px) {
   .inlineMainContent {
     flex-direction: column;
     max-height: none;

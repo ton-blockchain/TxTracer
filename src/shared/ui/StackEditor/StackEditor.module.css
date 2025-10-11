@@ -366,7 +366,7 @@
   background-color: rgb(255 0 0 / 10%) !important;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .stackElement {
     padding: 2px;
     flex-direction: column;

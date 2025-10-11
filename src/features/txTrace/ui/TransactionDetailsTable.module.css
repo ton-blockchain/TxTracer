@@ -212,7 +212,7 @@
   box-sizing: border-box;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .detailRow,
   .labeledSectionRow {
     flex-direction: column;
