@@ -189,6 +189,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -200,6 +201,7 @@
     transform: translateY(-8px) scale(0.96);
     filter: blur(4px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -214,6 +216,7 @@
       0 0 0 rgba(var(--color-primary-rgb), 0),
       inset 0 0 0 0 var(--color-primary);
   }
+
   to {
     box-shadow:
       0 0 0 9999px rgba(var(--color-black-rgb), 0.6),

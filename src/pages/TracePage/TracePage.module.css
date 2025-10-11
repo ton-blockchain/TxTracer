@@ -493,6 +493,7 @@ footer {
   .historyItem > span[class*="status"] {
     display: none;
   }
+
   .historyItemBadges {
     display: none;
   }
