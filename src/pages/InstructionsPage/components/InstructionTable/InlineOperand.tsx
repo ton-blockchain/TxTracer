@@ -1,6 +1,6 @@
 import React from "react"
 
-import type {Instruction} from "@features/spec/tvm-specification.types"
+import {Bits, type Child, type Instruction} from "@features/spec/tvm-specification.types"
 
 import {Tooltip} from "@shared/ui/Tooltip/Tooltip"
 
@@ -19,9 +19,18 @@ const InlineOperand: React.FC<InlineOperandProps> = ({instruction, operandIndex}
   if (!operands || operandIndex < 0 || operandIndex >= operands.length) return null
   const name = operands[operandIndex]
 
+  const isType = (op: Child | undefined, type: string) => {
+    if (!op) return false
+    if (op.$ === type) return true
+    if (op.$ === "delta") {
+      return type === "stack" && op.arg?.$ === Bits.Stack
+    }
+    return false
+  }
+
   const layoutChildren = layout.args.children?.[operandIndex]
-  const isControl = layoutChildren?.$ === "control"
-  const isStack = layoutChildren?.$ === "stack" || layoutChildren?.$ === "s1"
+  const isControl = isType(layoutChildren, "control")
+  const isStack = isType(layoutChildren, "stack") || layoutChildren?.$ === "s1"
 
   const operandPresentation = isControl ? `c(${name})` : isStack ? `s(${name})` : `[${name}]`
 
