@@ -37,7 +37,7 @@
   --color-info-bg: #e0f2ff;
   --color-info-text: #0059b3;
 
-  --color-semi-black: rgba(0, 0, 0, 0.05);
+  --color-semi-black: rgba(0, 0, 0, 5%);
 
   --color-neutral: #8e8e93;
   --color-neutral-rgb: 142, 142, 147;
@@ -74,10 +74,10 @@
   --color-highlight-bg: #fff3cd;
   --color-highlight-gradient: linear-gradient(
     to right,
-    rgba(255, 243, 205, 0.56) 0%,
-    rgba(255, 243, 205, 0.6) 35%,
-    rgba(255, 243, 205, 0.55) 65%,
-    rgba(255, 243, 205, 0) 100%
+    rgba(255, 243, 205, 56%) 0%,
+    rgba(255, 243, 205, 60%) 35%,
+    rgba(255, 243, 205, 55%) 65%,
+    rgba(255, 243, 205, 0%) 100%
   );
 
   --color-details-header: var(--color-background-primary);
@@ -98,8 +98,8 @@
   --color-hint-kbd-background: rgba(var(--color-white-rgb), 0.2);
   --color-hint-divider-text: rgba(var(--color-white-rgb), 0.5);
 
-  --editor-clickable-line-bg: rgba(144, 202, 249, 0.2);
-  --editor-hovered-line-bg: rgba(66, 165, 245, 0.4);
+  --editor-clickable-line-bg: rgba(144, 202, 249, 20%);
+  --editor-hovered-line-bg: rgba(66, 165, 245, 40%);
   --editor-hovered-line-border: #1976d2;
 
   --stack-item-null-bg: #f2f2f2;
@@ -124,7 +124,7 @@
   --stack-item-any-text: #666666;
   --stack-item-unknown-bg: #fafafa;
   --stack-item-unknown-text: #616161;
-  --stack-item-hover-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --stack-item-hover-shadow: 0 1px 3px rgba(0, 0, 0, 10%);
   --stack-item-expanded-bg: rgba(var(--color-white-rgb), 0.5);
   --stack-item-border: var(--color-divider);
   --stack-item-index-bg: #eee;
@@ -133,21 +133,21 @@
   --stack-item-details-text: var(--color-text-secondary);
   --stack-item-ellipsis-text: #999999;
 
-  --action-send-msg-bg-alpha: rgba(74, 105, 224, 0.1);
+  --action-send-msg-bg-alpha: rgba(74, 105, 224, 10%);
   --action-send-msg-border: #4a69e0;
-  --action-set-code-bg-alpha: rgba(52, 199, 89, 0.1);
+  --action-set-code-bg-alpha: rgba(52, 199, 89, 10%);
   --action-set-code-border: #34c759;
-  --action-reserve-bg-alpha: rgba(255, 149, 0, 0.1);
+  --action-reserve-bg-alpha: rgba(255, 149, 0, 10%);
   --action-reserve-border: #ff9500;
-  --action-unknown-bg-alpha: rgba(255, 59, 48, 0.1);
+  --action-unknown-bg-alpha: rgba(255, 59, 48, 10%);
   --action-unknown-border: var(--color-error);
 
   --scrollbar-thumb-color: #d1d1d6;
   --scrollbar-track-color: #f5f5f7;
 
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 5%);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 10%), 0 2px 4px -1px rgba(0, 0, 0, 6%);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 10%), 0 4px 6px -2px rgba(0, 0, 0, 5%);
 
   --font-family-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
@@ -291,7 +291,7 @@
   --color-info-bg: #003366;
   --color-info-text: #66b3ff;
 
-  --color-semi-black: rgb(0, 0, 0, 0.25);
+  --color-semi-black: rgb(0, 0, 0, 25%);
 
   --color-neutral: #8e8e93;
   --color-neutral-rgb: 142, 142, 147;
@@ -379,7 +379,7 @@
   --stack-item-any-text: #c7c7c7;
   --stack-item-unknown-bg: #2c2c2e;
   --stack-item-unknown-text: #c7c7c7;
-  --stack-item-hover-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --stack-item-hover-shadow: 0 1px 3px rgba(0, 0, 0, 30%);
   --stack-item-expanded-bg: rgba(var(--color-black-rgb), 0.3);
   --stack-item-border: var(--color-divider);
   --stack-item-index-bg: #303034;
@@ -400,9 +400,9 @@
   --scrollbar-thumb-color: #555558;
   --scrollbar-track-color: #2c2c2e;
 
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 15%);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 20%), 0 2px 4px -1px rgba(0, 0, 0, 15%);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 20%), 0 4px 6px -2px rgba(0, 0, 0, 15%);
 
   --table-border-color: var(--color-divider);
   --table-section-divider-bg: var(--color-background-secondary);
