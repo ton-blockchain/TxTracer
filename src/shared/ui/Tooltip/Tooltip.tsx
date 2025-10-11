@@ -10,6 +10,7 @@ interface TooltipProps {
   readonly position?: {x: number; y: number}
   readonly enableMarkdown?: boolean
   readonly placement?: "top" | "bottom"
+  readonly className?: string
 }
 
 function renderContent(content: ReactNode | string, enableMarkdown: boolean) {
@@ -40,6 +41,7 @@ export function Tooltip({
   position,
   enableMarkdown = false,
   placement = "top",
+  className,
 }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false)
 
@@ -64,7 +66,7 @@ export function Tooltip({
 
   return (
     <div
-      className={styles.triggerContainer}
+      className={`${styles.triggerContainer} ${className ?? ""}`.trim()}
       onMouseEnter={() => setIsVisible(true)}
       onMouseLeave={() => setIsVisible(false)}
     >

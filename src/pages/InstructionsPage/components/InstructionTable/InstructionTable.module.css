@@ -33,7 +33,6 @@
   padding: var(--spacing-sm) var(--spacing-md);
   border-bottom: 1px solid var(--color-border);
   text-align: left;
-  border-top-right-radius: var(--border-radius-md);
   overflow-wrap: break-word;
   word-break: break-word;
 
@@ -56,15 +55,12 @@
   background-color: var(--color-background-secondary);
 }
 
-.divTr.tableRow:hover .divTd:first-child {
+.divTr.tableRow:last-child:hover .divTd:first-child {
   border-radius: 0 0 0 var(--border-radius-md);
 }
 
-.divTr.tableRow:hover .divTd:last-child {
+.divTr.tableRow:last-child:hover .divTd:last-child {
   border-radius: 0 0 var(--border-radius-md) 0;
-}
-
-.divTr.expandedRowHeader .divTd {
 }
 
 .divTh {
@@ -166,7 +162,6 @@
   background-color: var(--color-background-secondary);
   padding: var(--spacing-xss) var(--spacing-xs);
   font-weight: var(--font-weight-semibold);
-  border-radius: var(--border-radius-sm);
 }
 
 .stackColumn {
@@ -174,7 +169,7 @@
 
 .shownCountBadge {
   position: absolute;
-  right: var(--spacing-sm);
+  right: var(--spacing-mds);
   top: 50%;
   transform: translateY(-50%);
   text-transform: none;

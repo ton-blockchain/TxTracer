@@ -1,6 +1,12 @@
 import React from "react"
 
-import type {ConstantValue, StackEntry} from "@features/spec/signatures/stack-signatures-schema.ts"
+import type {
+  ConstantValue,
+  PossibleValueRange,
+  StackEntry,
+} from "@features/spec/signatures/stack-signatures-schema.ts"
+
+import {Tooltip} from "@shared/ui/Tooltip"
 
 import styles from "./StackDisplay.module.css"
 
@@ -50,18 +56,21 @@ const renderArrayPreview = (entry: StackEntry & {readonly type: "array"}, baseKe
   )
 }
 
-const getPillDisplayProps = (entry: StackEntry): PillProps => {
+const getPillDisplayProps = (entry: StackEntry): {props: PillProps; range?: PossibleValueRange} => {
   switch (entry.type) {
     case "simple":
-      return {name: entry.name, type: entry.value_types?.[0] ?? "Any"}
+      return {
+        props: {name: entry.name, type: entry.value_types?.[0] ?? "Any"},
+        range: entry.range,
+      }
     case "const":
-      return {value: entry.value, type: entry.value_type}
+      return {props: {value: entry.value, type: entry.value_type}}
     case "array":
-      return {name: `${entry.name}[]`, type: "Any"}
+      return {props: {name: `${entry.name}[]`, type: "Any"}}
     case "conditional":
-      return {name: `Conditional: ${entry.name}`, type: "ConditionalBlock"}
+      return {props: {name: `Conditional: ${entry.name}`, type: "ConditionalBlock"}}
     default:
-      return {name: "Unknown", type: "Unknown"}
+      return {props: {name: "Unknown", type: "Unknown"}}
   }
 }
 
@@ -72,16 +81,28 @@ function getType(item: PillProps) {
   return item.type
 }
 
-const renderStackItemPill = (item: PillProps, key: string | number) => {
+const renderStackItemPill = (item: PillProps, key: string | number, range?: PossibleValueRange) => {
   const itemType = item.type.charAt(0).toUpperCase() + item.type.slice(1).toLowerCase()
   const displayName = item.name ?? (item.value !== undefined ? String(item.value) : "unnamed")
   const typeClass = `stackItem${itemType}`
   const pillStyle = styles[typeClass] ?? styles.stackItemAny
-  return (
-    <span key={key} className={`${styles.stackItem} ${styles.stackPillVertical} ${pillStyle}`}>
+
+  const pillElement = (
+    <span className={`${styles.stackItem} ${styles.stackPillVertical} ${pillStyle}`}>
       {displayName}: {getType(item)}
     </span>
   )
+
+  if (range) {
+    const tooltipContent = `${displayName}: ${range.min}..=${range.max}`
+    return (
+      <Tooltip key={key} className={styles.stackPillTooltip} content={tooltipContent}>
+        {pillElement}
+      </Tooltip>
+    )
+  }
+
+  return pillElement
 }
 
 interface StackDisplayProps {
@@ -122,7 +143,8 @@ const StackDisplay: React.FC<StackDisplayProps> = ({items}: StackDisplayProps) =
                         </React.Fragment>
                       )
                     }
-                    return renderStackItemPill(getPillDisplayProps(stackEl), key)
+                    const {props, range} = getPillDisplayProps(stackEl)
+                    return renderStackItemPill(props, key, range)
                   })}
                 </div>
               ))}
@@ -138,7 +160,8 @@ const StackDisplay: React.FC<StackDisplayProps> = ({items}: StackDisplayProps) =
                         </React.Fragment>
                       )
                     }
-                    return renderStackItemPill(getPillDisplayProps(stackEl), key)
+                    const {props, range} = getPillDisplayProps(stackEl)
+                    return renderStackItemPill(props, key, range)
                   })}
                 </div>
               )}
@@ -148,7 +171,8 @@ const StackDisplay: React.FC<StackDisplayProps> = ({items}: StackDisplayProps) =
         if (entry.type === "array") {
           return <React.Fragment key={baseKey}>{renderArrayPreview(entry, baseKey)}</React.Fragment>
         }
-        return renderStackItemPill(getPillDisplayProps(entry), baseKey)
+        const {props, range} = getPillDisplayProps(entry)
+        return renderStackItemPill(props, baseKey, range)
       })}
     </div>
   )

@@ -3,6 +3,12 @@
  * Allowed chars are `a-zA-Z0-9_`, must not begin with digit or underscore and must not end with underscore.
  */
 export type VariableName = string
+
+export type PossibleValueRange = {
+  readonly min: number
+  readonly max: number
+}
+
 /**
  * Representation of stack entry or group of stack entries
  */
@@ -13,6 +19,7 @@ export type StackEntry =
       presentation?: string
       value_types?: PossibleValueTypes
       mutations?: Mutation[]
+      range?: PossibleValueRange
     }
   | {
       type: "const"

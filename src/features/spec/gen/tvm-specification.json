@@ -775,7 +775,7 @@
       "sub_category": "shift_logic",
       "description": {
         "short": "",
-        "long": "Checks whether `x` is a `width`-bit signed integer for `0 <= width <= 1023`.",
+        "long": "Checks whether `x` is a `width`-bit signed integer.",
         "tags": [],
         "operands": []
       },
@@ -806,7 +806,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             }
           ]
         },
@@ -826,7 +830,7 @@
       "sub_category": "shift_logic",
       "description": {
         "short": "",
-        "long": "Checks whether `x` is a `width`-bit unsigned integer for `0 <= width <= 1023`.",
+        "long": "Checks whether `x` is a `width`-bit unsigned integer.",
         "tags": [],
         "operands": []
       },
@@ -857,7 +861,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             }
           ]
         },
@@ -5523,7 +5531,7 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Checks whether `y` references can be stored into `b`, `0 <= y <= 7`.",
+        "long": "Checks whether `y` references can be stored into `b`.",
         "tags": [],
         "operands": []
       },
@@ -5554,7 +5562,11 @@
             {
               "type": "simple",
               "name": "y",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 7
+              }
             }
           ]
         }
@@ -5565,7 +5577,7 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Checks whether `x` bits and `y` references can be stored into `b`, `0 <= x <= 1023`, `0 <= y <= 7`.",
+        "long": "Checks whether `x` bits and `y` references can be stored into `b`.",
         "tags": [],
         "operands": []
       },
@@ -5596,12 +5608,20 @@
             {
               "type": "simple",
               "name": "x",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             },
             {
               "type": "simple",
               "name": "y",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 7
+              }
             }
           ]
         }
@@ -5612,7 +5632,7 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Checks whether `y` references can be stored into `b`, `0 <= y <= 7`.",
+        "long": "Checks whether `y` references can be stored into `b`.",
         "tags": [],
         "operands": []
       },
@@ -5642,7 +5662,11 @@
             {
               "type": "simple",
               "name": "y",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 7
+              }
             }
           ]
         },
@@ -5662,7 +5686,7 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Checks whether `x` bits and `y` references can be stored into `b`, `0 <= x <= 1023`, `0 <= y <= 7`.",
+        "long": "Checks whether `x` bits and `y` references can be stored into `b`.",
         "tags": [],
         "operands": []
       },
@@ -5692,12 +5716,20 @@
             {
               "type": "simple",
               "name": "x",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             },
             {
               "type": "simple",
               "name": "y",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 7
+              }
             }
           ]
         },
@@ -5817,7 +5849,7 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Stores `n` binary `x`es (`0 <= x <= 1`) into _Builder_ `b`.",
+        "long": "Stores `n` binary `x`-es into _Builder_ `b`.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -5852,7 +5884,11 @@
             {
               "type": "simple",
               "name": "x",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1
+              }
             }
           ]
         },
@@ -6017,7 +6053,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads a cell reference `c` from `s`.",
+        "long": "Loads a cell reference `c` from `s` and returns the remainder of `s` as `s''`.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -6067,7 +6103,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads a cell reference `c` from `s`, converts it to _Slice_ and returns the _Slice_ and remainder.",
+        "long": "Loads a cell reference `c` from `s`, converts it to _Slice_ and returns that _Slice_ and remainder of `s` as `s''`.",
         "tags": ["slice parsing"],
         "operands": [],
         "other_implementations": [
@@ -6124,7 +6160,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns the first `0 <= length <= 1023` bits of `s`.",
+        "long": "Returns the first `length` bits of `s`.",
         "tags": ["slice parsing"],
         "operands": [],
         "other_implementations": [
@@ -6160,7 +6196,11 @@
             {
               "type": "simple",
               "name": "length",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             }
           ]
         },
@@ -6180,7 +6220,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns all but the first `0 <= length <= 1023` bits of `s`.",
+        "long": "Returns all but the first `length` bits of `s`.",
         "tags": ["slice parsing"],
         "operands": [],
         "other_implementations": [
@@ -6216,7 +6256,11 @@
             {
               "type": "simple",
               "name": "length",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             }
           ]
         },
@@ -6236,7 +6280,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns the last `0 <= length <= 1023` bits of `s`.",
+        "long": "Returns the last `length` bits of `s`.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -6266,7 +6310,11 @@
             {
               "type": "simple",
               "name": "length",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             }
           ]
         },
@@ -6286,7 +6334,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns all but the last `0 <= length <= 1023` bits of `s`.",
+        "long": "Returns all but the last `length` bits of `s`.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -6316,7 +6364,11 @@
             {
               "type": "simple",
               "name": "length",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             }
           ]
         },
@@ -6336,7 +6388,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns `0 <= length <= 1023` bits of `s` starting from offset `0 <= offset <= 1023`, thus extracting a bit substring out of the data of `s`.",
+        "long": "Returns `length` bits of `s` starting from `offset`, thus extracting a bit substring out of the data of `s`.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -6366,12 +6418,20 @@
             {
               "type": "simple",
               "name": "offset",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             },
             {
               "type": "simple",
               "name": "length",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             }
           ]
         },
@@ -6391,7 +6451,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns the first `0 <= length <= 1023` bits and first `0 <= refs <= 4` references of `s`.",
+        "long": "Returns the first `length` bits and first `refs` references of `s`.",
         "tags": [],
         "operands": []
       },
@@ -6421,12 +6481,20 @@
             {
               "type": "simple",
               "name": "length",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             },
             {
               "type": "simple",
               "name": "refs",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 4
+              }
             }
           ]
         },
@@ -6476,12 +6544,20 @@
             {
               "type": "simple",
               "name": "length",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             },
             {
               "type": "simple",
               "name": "refs",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 4
+              }
             }
           ]
         },
@@ -6501,7 +6577,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns the last `0 <= length <= 1023` data bits and last `0 <= refs <= 4` references of `s`.",
+        "long": "Returns the last `length` data bits and last `refs` references of `s`.",
         "tags": [],
         "operands": []
       },
@@ -6531,12 +6607,20 @@
             {
               "type": "simple",
               "name": "length",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             },
             {
               "type": "simple",
               "name": "refs",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 4
+              }
             }
           ]
         },
@@ -6586,12 +6670,20 @@
             {
               "type": "simple",
               "name": "length",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             },
             {
               "type": "simple",
               "name": "refs",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 4
+              }
             }
           ]
         },
@@ -6611,7 +6703,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns `0 <= l' <= 1023` bits and `0 <= r' <= 4` references from _Slice_ `s`, after skipping the first `0 <= length <= 1023` bits and first `0 <= r <= 4` references.",
+        "long": "Returns `length` bits and `refs` references from _Slice_ `s`, after skipping the first `skip_len` bits and first `skip_refs` references.",
         "tags": [],
         "operands": []
       },
@@ -6630,7 +6722,7 @@
         "prefix_str": "D734"
       },
       "signature": {
-        "stack_string": "s:Slice length:Int r:Int l2:Int r2:Int -> s2:Slice",
+        "stack_string": "s:Slice skip_len:Int skip_refs:Int length:Int refs:Int -> s2:Slice",
         "inputs": {
           "stack": [
             {
@@ -6640,22 +6732,30 @@
             },
             {
               "type": "simple",
+              "name": "skip_len",
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
+            },
+            {
+              "type": "simple",
+              "name": "skip_refs",
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 4
+              }
+            },
+            {
+              "type": "simple",
               "name": "length",
               "value_types": ["Int"]
             },
             {
               "type": "simple",
-              "name": "r",
-              "value_types": ["Int"]
-            },
-            {
-              "type": "simple",
-              "name": "l2",
-              "value_types": ["Int"]
-            },
-            {
-              "type": "simple",
-              "name": "r2",
+              "name": "refs",
               "value_types": ["Int"]
             }
           ]
@@ -6676,7 +6776,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Splits the first `0 <= length <= 1023` data bits and first `0 <= r <= 4` references from `s` into `s'`, returning the remainder of `s` as `s''`.",
+        "long": "Splits the first `length` data bits and first `refs` references from `s` into `s'`, returning the remainder of `s` as `s''`.",
         "tags": [],
         "operands": []
       },
@@ -6695,7 +6795,7 @@
         "prefix_str": "D736"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int r:Int -> s2:Slice s3:Slice",
+        "stack_string": "s:Slice length:Int refs:Int -> s':Slice s'':Slice",
         "inputs": {
           "stack": [
             {
@@ -6705,13 +6805,21 @@
             },
             {
               "type": "simple",
-              "name": "l",
-              "value_types": ["Int"]
+              "name": "length",
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             },
             {
               "type": "simple",
-              "name": "r",
-              "value_types": ["Int"]
+              "name": "refs",
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 4
+              }
             }
           ]
         },
@@ -6719,12 +6827,12 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             },
             {
               "type": "simple",
-              "name": "s3",
+              "name": "s''",
               "value_types": ["Slice"]
             }
           ]
@@ -6736,7 +6844,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Splits the first `0 <= length <= 1023` data bits and first `0 <= r <= 4` references from `s` into `s'`, returning the remainder of `s` as `s''`. This is a quiet version of `SPLIT` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
+        "long": "Splits the first `length` data bits and first `refs` references from `s` into `s'`, returning the remainder of `s` as `s''`. This is a quiet version of `SPLIT` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": [],
         "operands": []
       },
@@ -6755,7 +6863,7 @@
         "prefix_str": "D737"
       },
       "signature": {
-        "stack_string": "s:Slice l:Int r:Int -> (s:Slice 0)|(s2:Slice s3:Slice -1) status:Int",
+        "stack_string": "s:Slice length:Int refs:Int -> (s:Slice 0)|(s':Slice s'':Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -6765,13 +6873,21 @@
             },
             {
               "type": "simple",
-              "name": "l",
-              "value_types": ["Int"]
+              "name": "length",
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             },
             {
               "type": "simple",
-              "name": "r",
-              "value_types": ["Int"]
+              "name": "refs",
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 4
+              }
             }
           ]
         },
@@ -6796,12 +6912,12 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "s2",
+                      "name": "s'",
                       "value_types": ["Slice"]
                     },
                     {
                       "type": "simple",
-                      "name": "s3",
+                      "name": "s''",
                       "value_types": ["Slice"]
                     }
                   ]
@@ -7274,7 +7390,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns the `n`-th cell reference of _Slice_ `s`.",
+        "long": "Preloads the `n`-th cell reference of _Slice_ `s`.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -7564,7 +7680,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns the count `n` of leading bits equal to `0 <= x <= 1` in `s`, and removes these bits from `s`.",
+        "long": "Returns the count `n` of leading bits equal to `x` (0 or 1) in `s`, and removes these bits from `s`.",
         "tags": [],
         "operands": []
       },
@@ -7594,7 +7710,11 @@
             {
               "type": "simple",
               "name": "x",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1
+              }
             }
           ]
         },
@@ -8248,7 +8368,7 @@
       "sub_category": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Calls_ continuation `c` with parameters and expected return values, but unlike `CALLXARGS` which takes these values from the instruction itself, this instruction takes `-1 <= p,r <= 254` from the stack. Here `p` represents the number of parameters to pass to the continuation, and `r` represents the number of expected return values. The next three operations (`RETVARARGS`, `JMPXVARARGS`, `CALLCCVARARGS`) also take `p` and `r` from the stack, both in the range `-1...254`.",
+        "long": "_Calls_ continuation `c` with parameters and expected return values, but unlike `CALLXARGS` which takes these values from the instruction itself, this instruction takes `p` and `r` from the stack. Here `p` represents the number of parameters to pass to the continuation, and `r` represents the number of expected return values.",
         "tags": [],
         "operands": []
       },
@@ -8289,12 +8409,20 @@
             {
               "type": "simple",
               "name": "p",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": -1,
+                "max": 254
+              }
             },
             {
               "type": "simple",
               "name": "r",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": -1,
+                "max": 254
+              }
             }
           ]
         }
@@ -8324,7 +8452,7 @@
       "sub_category": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Returns_ to the continuation at `c0`, but unlike `RETARGS` which takes the number of return values from the instruction itself, this instruction takes the number of return values `0 <= r <= 255` from the stack. The top `r` values from the current stack are passed as return values to `c0`.",
+        "long": "_Returns_ to the continuation at `c0`, but unlike `RETARGS` which takes the number of return values from the instruction itself, this instruction takes the number of return values `r` from the stack. The top `r` values from the current stack are passed as return values to `c0`.",
         "tags": [],
         "operands": []
       },
@@ -8365,7 +8493,11 @@
             {
               "type": "simple",
               "name": "r",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 255
+              }
             }
           ]
         }
@@ -8395,7 +8527,7 @@
       "sub_category": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Jumps_ to continuation `c`, but unlike `JMPXARGS` which takes the number of parameters from the instruction itself, this instruction takes the number of parameters `0 <= p <= 254` from the stack. Only the top `p` values from the current stack are passed to the continuation, and the remainder of the current stack is discarded. The remainder of the current continuation is also discarded.",
+        "long": "_Jumps_ to continuation `c`, but unlike `JMPXARGS` which takes the number of parameters from the instruction itself, this instruction takes the number of parameters `p` from the stack. Only the top `p` values from the current stack are passed to the continuation, and the remainder of the current stack is discarded. The remainder of the current continuation is also discarded.",
         "tags": [],
         "operands": []
       },
@@ -8436,7 +8568,11 @@
             {
               "type": "simple",
               "name": "p",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 254
+              }
             },
             {
               "type": "simple",
@@ -8460,7 +8596,7 @@
       "sub_category": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Calls_ continuation `c` with parameters and pushes the old value of the current continuation, but unlike `CALLCCARGS` which takes the number of parameters and return values from the instruction itself, this instruction takes `-1 <= p,r <= 254` from the stack. The old value of the current continuation `cс` (along with the top `p` values from the original stack) is pushed onto the stack of the newly-invoked continuation `c`, setting `cc.nargs` to `r`. This allows the called continuation to later return to the caller with the specified number of return values.",
+        "long": "_Calls_ continuation `c` with parameters and pushes the old value of the current continuation, but unlike `CALLCCARGS` which takes the number of parameters and return values from the instruction itself, this instruction takes `p` and `r` from the stack. The old value of the current continuation `cc` (along with the top `p` values from the original stack) is pushed onto the stack of the newly-invoked continuation `c`, setting `cc.nargs` to `r`. This allows the called continuation to later return to the caller with the specified number of return values.",
         "tags": [],
         "operands": []
       },
@@ -8501,12 +8637,20 @@
             {
               "type": "simple",
               "name": "p",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": -1,
+                "max": 254
+              }
             },
             {
               "type": "simple",
               "name": "r",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": -1,
+                "max": 254
+              }
             }
           ]
         }
@@ -10379,7 +10523,7 @@
       "sub_category": "continuation_change",
       "description": {
         "short": "",
-        "long": "Leaves only the top `p` values in the current stack, where `0 <= p <= 255` is taken from the stack. Unlike `RETURNARGS` which takes the number of values to keep from the instruction itself, this instruction takes this number from the stack. All the unused bottom values are not discarded, but saved into continuation `c0` in the same way as `SETCONTARGS` does.",
+        "long": "Leaves only the top `p` values in the current stack, where `p` is taken from the stack. Unlike `RETURNARGS` which takes the number of values to keep from the instruction itself, this instruction takes this number from the stack. All the unused bottom values are not discarded, but saved into continuation `c0` in the same way as `SETCONTARGS` does.",
         "tags": [],
         "operands": []
       },
@@ -10398,9 +10542,19 @@
         "prefix_str": "ED10"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "p:Int -> ∅",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "p",
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 255
+              }
+            }
+          ],
           "registers": []
         },
         "outputs": {
@@ -10414,7 +10568,7 @@
       "sub_category": "continuation_change",
       "description": {
         "short": "",
-        "long": "Pushes values onto the stack of a continuation and optionally sets the number of missing arguments. Unlike `SETCONTARGS` which takes the number of values to push and the number of missing arguments from the instruction itself, this instruction takes `0 <= r <= 255` and `-1 <= n <= 255` from the stack. It pushes `r` values from the current stack onto the stack of continuation `c`, and for `n` not equal to -1, sets `c.nargs` to the final size of the stack of `c` plus `n`, effectively creating a closure with `n` missing arguments.",
+        "long": "Pushes values onto the stack of a continuation and optionally sets the number of missing arguments. Unlike `SETCONTARGS` which takes the number of values to push and the number of missing arguments from the instruction itself, this instruction takes `r` and `n` from the stack. It pushes `r` values from the current stack onto the stack of continuation `c`, and for `n` not equal to -1, sets `c.nargs` to the final size of the stack of `c` plus `n`, effectively creating a closure with `n` missing arguments.",
         "tags": [],
         "operands": []
       },
@@ -10455,12 +10609,20 @@
             {
               "type": "simple",
               "name": "r",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 255
+              }
             },
             {
               "type": "simple",
               "name": "n",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": -1,
+                "max": 255
+              }
             }
           ]
         },
@@ -10651,7 +10813,7 @@
       "sub_category": "continuation_change",
       "description": {
         "short": "",
-        "long": "Pushes the current value of control register `c(i)` onto the stack, where `i`, `0 <= i <= 255`, is taken from the stack. Unlike `c(i) PUSHCTR` which takes the register index from the instruction itself, this instruction takes this index from the stack. If the control register is not supported in the current codepage, or if it does not have a value, an exception is triggered.\nNotice that this primitive is one of the few \"exotic\" primitives, which are not polymorphic like stack manipulation primitives, and at the same time do not have well-defined types of parameters and return values, because the type of `x` depends on `i`.",
+        "long": "Pushes the current value of control register `c(i)` onto the stack, where `i` is taken from the stack. Unlike `c(i) PUSHCTR` which takes the register index from the instruction itself, this instruction takes this index from the stack. If the control register is not supported in the current codepage, or if it does not have a value, an exception is triggered.\nNotice that this primitive is one of the few \"exotic\" primitives, which are not polymorphic like stack manipulation primitives, and at the same time do not have well-defined types of parameters and return values, because the type of `x` depends on `i`.",
         "tags": [],
         "operands": []
       },
@@ -10676,7 +10838,11 @@
             {
               "type": "simple",
               "name": "i",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 255
+              }
             }
           ],
           "registers": [
@@ -10701,7 +10867,7 @@
       "sub_category": "continuation_change",
       "description": {
         "short": "",
-        "long": "Pops a value `x` from the stack and stores it into control register `c(i)`, where `i`, `0 <= i <= 255`, is taken from the stack. Unlike `c(i) POPCTR` which takes the register index from the instruction itself, this instruction takes this index from the stack. If the control register is not supported in the current codepage, or if it only accepts values of a specific type and `x` is not of that type, an exception is triggered.",
+        "long": "Pops a value `x` from the stack and stores it into control register `c(i)`, where `i` is taken from the stack. Unlike `c(i) POPCTR` which takes the register index from the instruction itself, this instruction takes this index from the stack. If the control register is not supported in the current codepage, or if it only accepts values of a specific type and `x` is not of that type, an exception is triggered.",
         "tags": [],
         "operands": []
       },
@@ -10730,7 +10896,11 @@
             {
               "type": "simple",
               "name": "i",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 255
+              }
             }
           ]
         },
@@ -10750,7 +10920,7 @@
       "sub_category": "continuation_change",
       "description": {
         "short": "",
-        "long": "Stores value `x` into the savelist of continuation `c` as `c(i)`, and returns the resulting continuation `c'`, where `i`, `0 <= i <= 255`, is taken from the stack. Unlike `c(i) SETCONTCTR` which takes the register index from the instruction itself, this instruction takes this index from the stack. Almost all operations with continuations may be expressed in terms of this primitive, along with `POPCTRX` and `PUSHCTRX`.",
+        "long": "Stores value `x` into the savelist of continuation `c` as `c(i)`, and returns the resulting continuation `c'`, where `i` is taken from the stack. Unlike `c(i) SETCONTCTR` which takes the register index from the instruction itself, this instruction takes this index from the stack. Almost all operations with continuations may be expressed in terms of this primitive, along with `POPCTRX` and `PUSHCTRX`.",
         "tags": [],
         "operands": []
       },
@@ -10784,7 +10954,11 @@
             {
               "type": "simple",
               "name": "i",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 255
+              }
             }
           ]
         },
@@ -12418,7 +12592,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Looks up the unique prefix of _Slice_ `s` present in the prefix code dictionary represented by `Cell^?` `D` and `0 <= n <= 1023`. If found, the prefix of `s` is returned as `s'`, and the corresponding value (also a _Slice_) as `x`. The remainder of `s` is returned as a _Slice_ `s''`. If no prefix of `s` is a key in prefix code dictionary `D`, returns the unchanged `s` and a zero flag to indicate failure.",
+        "long": "Looks up the unique prefix of _Slice_ `s` present in the prefix code dictionary represented by `Cell^?` `D` and `n`. If found, the prefix of `s` is returned as `s'`, and the corresponding value (also a _Slice_) as `x`. The remainder of `s` is returned as a _Slice_ `s''`. If no prefix of `s` is a key in prefix code dictionary `D`, returns the unchanged `s` and a zero flag to indicate failure.",
         "tags": [],
         "operands": []
       },
@@ -12453,7 +12627,11 @@
             {
               "type": "simple",
               "name": "n",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             }
           ]
         },
@@ -12509,7 +12687,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Looks up the unique prefix of _Slice_ `s` present in the prefix code dictionary represented by `Cell^?` `D` and `0 <= n <= 1023`. If found, the prefix of `s` is returned as `s'`, and the corresponding value (also a _Slice_) as `x`. The remainder of `s` is returned as a _Slice_ `s''`. If no prefix of `s` is a key in prefix code dictionary `D`, throws a `Cell` deserialization failure exception.",
+        "long": "Looks up the unique prefix of _Slice_ `s` present in the prefix code dictionary represented by `Cell^?` `D` and `n`. If found, the prefix of `s` is returned as `s'`, and the corresponding value (also a _Slice_) as `x`. The remainder of `s` is returned as a _Slice_ `s''`. If no prefix of `s` is a key in prefix code dictionary `D`, throws a `Cell` deserialization failure exception.",
         "tags": [],
         "operands": [],
         "exit_codes": [
@@ -12550,7 +12728,11 @@
             {
               "type": "simple",
               "name": "n",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             }
           ]
         },
@@ -12580,7 +12762,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Looks up the unique prefix of _Slice_ `s` present in the prefix code dictionary represented by `Cell^?` `D` and `0 <= n <= 1023`. If found, `BLESS`es the corresponding value into a _Continuation_ and transfers control to it as if by a `JMPX`. If no prefix of `s` is a key in prefix code dictionary `D`, returns the unchanged `s` and continues execution.",
+        "long": "Looks up the unique prefix of _Slice_ `s` present in the prefix code dictionary represented by `Cell^?` `D` and `n`. If found, `BLESS`es the corresponding value into a _Continuation_ and transfers control to it as if by a `JMPX`. If no prefix of `s` is a key in prefix code dictionary `D`, returns the unchanged `s` and continues execution.",
         "tags": [],
         "operands": []
       },
@@ -12615,7 +12797,11 @@
             {
               "type": "simple",
               "name": "n",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             }
           ],
           "registers": []
@@ -12639,7 +12825,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Looks up the unique prefix of _Slice_ `s` present in the prefix code dictionary represented by `Cell^?` `D` and `0 <= n <= 1023`. If found, `BLESS`es the corresponding value into a _Continuation_ and executes it as if by `EXECUTE`. If no prefix of `s` is a key in prefix code dictionary `D`, throws a `Cell` deserialization exception.",
+        "long": "Looks up the unique prefix of _Slice_ `s` present in the prefix code dictionary represented by `Cell^?` `D` and `n`. If found, `BLESS`es the corresponding value into a _Continuation_ and executes it as if by `EXECUTE`. If no prefix of `s` is a key in prefix code dictionary `D`, throws a `Cell` deserialization exception.",
         "tags": [],
         "operands": [],
         "exit_codes": [
@@ -12680,7 +12866,11 @@
             {
               "type": "simple",
               "name": "n",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             }
           ]
         },
@@ -19998,7 +20188,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Unpacks a _Tuple_ `t=(x_1,...,x_n)` of length equal to `0 <= n <= 15`, where `n` is taken from the stack rather than specified in the instruction.",
+        "long": "Unpacks a _Tuple_ `t=(x_1,...,x_n)` of length equal to `n`, where `n` is taken from the stack rather than specified in the instruction.",
         "tags": [],
         "operands": [],
         "exit_codes": [
@@ -20134,7 +20324,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Unpacks a _Tuple_ `t=(x_1,...,x_m)` and returns its length `m`, but only if `m <= n <= 15`, where `n` is taken from the stack rather than specified in the instruction.",
+        "long": "Unpacks a _Tuple_ `t=(x_1,...,x_m)` and returns its length `m`, but only if `m <= n <= 255`, where `n` is taken from the stack rather than specified in the instruction.",
         "tags": [],
         "operands": [],
         "exit_codes": [
@@ -28013,7 +28203,7 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Stores a signed `width`-bit integer `x` into `b` for `0 <= width <= 257`.",
+        "long": "Stores a signed `width`-bit integer `x` into `b`.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -28048,7 +28238,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 257
+              }
             }
           ]
         },
@@ -28075,7 +28269,7 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Stores an unsigned `width`-bit integer `x` into `b` for `0 <= width <= 256`.",
+        "long": "Stores an unsigned `width`-bit integer `x` into `b`.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -28110,7 +28304,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 256
+              }
             }
           ]
         },
@@ -28137,7 +28335,7 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Stores a signed `width`-bit integer `x` into `b` for `0 <= width <= 257`, but with arguments in a different order.",
+        "long": "Stores a signed `width`-bit integer `x` into `b`, but with arguments in a different order.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -28172,7 +28370,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 257
+              }
             }
           ]
         },
@@ -28199,7 +28401,7 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Stores an unsigned `width`-bit integer `x` into `b` for `0 <= width <= 256`, but with arguments in a different order.",
+        "long": "Stores an unsigned `width`-bit integer `x` into `b`, but with arguments in a different order.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -28234,7 +28436,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 256
+              }
             }
           ]
         },
@@ -28261,7 +28467,7 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Stores a signed `width`-bit integer `x` into `b` for `0 <= width <= 257`. If there is no space in `b`, sets `b' = b` and `f = -1`.\nIf `x` does not fit into `width` bits, sets `b' = b` and `f = 1`.\nIf the operation succeeds, `b'` is the new _Builder_ and `f=0`.\nHowever, `0 <= width <= 257`, with a range check exception if this is not so.",
+        "long": "Stores a signed `width`-bit integer `x` into `b`. If there is no space in `b`, sets `b' = b` and `f = -1`.\nIf `x` does not fit into `width` bits, sets `b' = b` and `f = 1`.\nIf the operation succeeds, `b'` is the new _Builder_ and `f=0`.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -28296,7 +28502,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 257
+              }
             }
           ]
         },
@@ -28362,7 +28572,7 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Stores an unsigned `width`-bit integer `x` into `b` for `0 <= width <= 256`. This is a quiet version of `STUX` which means that instead of throwing an exception, it pushes a status flag to the stack: -1 if there is no space in `b`, 0 if the operation succeeds.",
+        "long": "Stores an unsigned `width`-bit integer `x` into `b`. This is a quiet version of `STUX` which means that instead of throwing an exception, it pushes a status flag to the stack: -1 if there is no space in `b`, 0 if the operation succeeds.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -28397,7 +28607,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 256
+              }
             }
           ]
         },
@@ -28463,7 +28677,7 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Stores a signed `width`-bit integer `x` into `b` for `0 <= width <= 257`, but with arguments in a different order. This is a quiet version of `STIXR` which means that instead of throwing an exception, it pushes a status flag to the stack: -1 if there is no space in `b`, 0 if the operation succeeds.",
+        "long": "Stores a signed `width`-bit integer `x` into `b`, but with arguments in a different order. This is a quiet version of `STIXR` which means that instead of throwing an exception, it pushes a status flag to the stack: -1 if there is no space in `b`, 0 if the operation succeeds.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -28498,7 +28712,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 257
+              }
             }
           ]
         },
@@ -28564,7 +28782,7 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Stores an unsigned `width`-bit integer `x` into `b` for `0 <= width <= 256`, but with arguments in a different order. This is a quiet version of `STUXR` which means that instead of throwing an exception, it pushes a status flag to the stack: -1 if there is no space in `b`, 0 if the operation succeeds.",
+        "long": "Stores an unsigned `width`-bit integer `x` into `b`, but with arguments in a different order. This is a quiet version of `STUXR` which means that instead of throwing an exception, it pushes a status flag to the stack: -1 if there is no space in `b`, 0 if the operation succeeds.",
         "tags": ["builder building"],
         "operands": []
       },
@@ -28599,7 +28817,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 256
+              }
             }
           ]
         },
@@ -28865,7 +29087,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads a signed `width`-bit (`0 <= width <= 257`) integer `x` from _Slice_ `s`, and returns the remainder of `s` as `s'`.",
+        "long": "Loads a signed `width`-bit integer `x` from _Slice_ `s`, and returns the remainder of `s` as `s'`.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -28895,7 +29117,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 257
+              }
             }
           ]
         },
@@ -28920,7 +29146,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads an unsigned `width`-bit integer `x` from (the first `width` bits of) `s`, with `0 <= width <= 256`.",
+        "long": "Loads an unsigned `width`-bit integer `x` from (the first `width` bits of) `s`.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -28950,7 +29176,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 256
+              }
             }
           ]
         },
@@ -28975,7 +29205,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Preloads a signed `width`-bit integer from _Slice_ `s`, for `0 <= width <= 257`.",
+        "long": "Preloads a signed `width`-bit integer from _Slice_ `s`.",
         "tags": ["slice parsing", "preload"],
         "operands": []
       },
@@ -29005,7 +29235,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 257
+              }
             }
           ]
         },
@@ -29025,7 +29259,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Preloads an unsigned `width`-bit integer from `s`, for `0 <= width <= 256`.",
+        "long": "Preloads an unsigned `width`-bit integer from `s`.",
         "tags": ["slice parsing", "preload"],
         "operands": []
       },
@@ -29055,7 +29289,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 256
+              }
             }
           ]
         },
@@ -29075,7 +29313,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads a signed `width`-bit (`0 <= width <= 257`) integer `x` from _Slice_ `s`, and returns the remainder of `s` as `s'`. This is a quiet version of `LDIX` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
+        "long": "Loads a signed `width`-bit integer `x` from _Slice_ `s`, and returns the remainder of `s` as `s'`. This is a quiet version of `LDIX` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -29105,7 +29343,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 257
+              }
             }
           ]
         },
@@ -29156,7 +29398,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads an unsigned `width`-bit integer `x` from (the first `width` bits of) `s`, with `0 <= width <= 256`. This is a quiet version of `LDUX` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
+        "long": "Loads an unsigned `width`-bit integer `x` from (the first `width` bits of) `s`. This is a quiet version of `LDUX` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -29186,7 +29428,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 256
+              }
             }
           ]
         },
@@ -29237,7 +29483,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Preloads a signed `width`-bit integer from _Slice_ `s`, for `0 <= width <= 257`. This is a quiet version of `PLDIX` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
+        "long": "Preloads a signed `width`-bit integer from _Slice_ `s`. This is a quiet version of `PLDIX` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["slice parsing", "preload"],
         "operands": []
       },
@@ -29267,7 +29513,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 257
+              }
             }
           ]
         },
@@ -29307,7 +29557,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Preloads an unsigned `width`-bit integer from `s`, for `0 <= width <= 256`. This is a quiet version of `PLDUX` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
+        "long": "Preloads an unsigned `width`-bit integer from `s`. This is a quiet version of `PLDUX` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["slice parsing", "preload"],
         "operands": []
       },
@@ -29337,7 +29587,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 256
+              }
             }
           ]
         },
@@ -29377,7 +29631,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads the first `0 <= width <= 1023` bits from _Slice_ `s` into a separate _Slice_ `loaded`, returning the remainder of `s` as `s'`.",
+        "long": "Loads the first `width` bits from _Slice_ `s` into a separate _Slice_ `loaded`, returning the remainder of `s` as `s'`.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -29407,7 +29661,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             }
           ]
         },
@@ -29432,7 +29690,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns the first `0 <= width <= 1023` bits of `s` as `loaded`.",
+        "long": "Preloads the first `width` bits of `s` as `loaded`.",
         "tags": ["slice parsing", "preload"],
         "operands": []
       },
@@ -29462,7 +29720,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             }
           ]
         },
@@ -29482,7 +29744,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Loads the first `0 <= width <= 1023` bits from _Slice_ `s` into a separate _Slice_ `loaded`, returning the remainder of `s` as `s'`. This is a quiet version of `LDSLICEX` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
+        "long": "Loads the first `width` bits from _Slice_ `s` into a separate _Slice_ `loaded`, returning the remainder of `s` as `s'`. This is a quiet version of `LDSLICEX` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["slice parsing"],
         "operands": []
       },
@@ -29512,7 +29774,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             }
           ]
         },
@@ -29563,7 +29829,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns the first `0 <= width <= 1023` bits of `s` as `loaded`. This is a quiet version of `PLDSLICEX` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
+        "long": "Preloads the first `width` bits of `s` as `loaded`. This is a quiet version of `PLDSLICEX` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["slice parsing", "preload"],
         "operands": []
       },
@@ -29593,7 +29859,11 @@
             {
               "type": "simple",
               "name": "width",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             }
           ]
         },
@@ -31074,7 +31344,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Looks up key `k` (represented by a _Slice_, the first `0 <= n <= 1023` data bits of which are used as a key) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys.\nOn success, returns the found value as a _Slice_ `x`.",
+        "long": "Looks up key `k` (represented by a _Slice_, the first `n` data bits of which are used as a key) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys.\nOn success, returns the found value as a _Slice_ `x`.",
         "tags": [],
         "operands": []
       },
@@ -31109,7 +31379,11 @@
             {
               "type": "simple",
               "name": "n",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             }
           ]
         },
@@ -31149,7 +31423,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Looks up key `k` (represented by a _Slice_, the first `0 <= n <= 1023` data bits of which are used as a key) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, applies `LDREF` `ENDS` to the found value, returning a _Cell_ `c` instead of a _Slice_.\nThis operation is useful for dictionaries of type `HashmapE(n,^Y)`.",
+        "long": "Looks up key `k` (represented by a _Slice_, the first `n` data bits of which are used as a key) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, applies `LDREF` `ENDS` to the found value, returning a _Cell_ `c` instead of a _Slice_.\nThis operation is useful for dictionaries of type `HashmapE(n,^Y)`.",
         "tags": [],
         "operands": []
       },
@@ -31184,7 +31458,11 @@
             {
               "type": "simple",
               "name": "n",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             }
           ]
         },
@@ -39150,7 +39428,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Constructs a subdictionary consisting of all keys beginning with prefix `k` (represented by a _Slice_, the first `0 <= l <= n <= 1023` data bits of which are used as a key) of length `l` in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, returns the new subdictionary of the same type `HashmapE(n,X)` as a _Slice_ `D'`.",
+        "long": "Constructs a subdictionary consisting of all keys beginning with prefix `k` (represented by a _Slice_, the first data bits of which are used as a key) of length `l` in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, returns the new subdictionary of the same type `HashmapE(n,X)` as a _Slice_ `D'`.",
         "tags": [],
         "operands": []
       },
@@ -39210,7 +39488,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Constructs a subdictionary consisting of all keys beginning with prefix represented by a signed big-endian `l`-bit _Integer_ `x` (where necessarily `l <= 257`) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, returns the new subdictionary of the same type `HashmapE(n,X)` as a _Slice_ `D'`.",
+        "long": "Constructs a subdictionary consisting of all keys beginning with prefix represented by a signed big-endian `l`-bit _Integer_ `x` in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, returns the new subdictionary of the same type `HashmapE(n,X)` as a _Slice_ `D'`.",
         "tags": [],
         "operands": []
       },
@@ -39240,7 +39518,11 @@
             {
               "type": "simple",
               "name": "l",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 257
+              }
             },
             {
               "type": "simple",
@@ -39270,7 +39552,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Constructs a subdictionary consisting of all keys beginning with prefix represented by an unsigned big-endian `l`-bit _Integer_ `x` (where necessarily `l <= 256`) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, returns the new subdictionary of the same type `HashmapE(n,X)` as a _Slice_ `D'`.",
+        "long": "Constructs a subdictionary consisting of all keys beginning with prefix represented by an unsigned big-endian `l`-bit _Integer_ `x` in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. On success, returns the new subdictionary of the same type `HashmapE(n,X)` as a _Slice_ `D'`.",
         "tags": [],
         "operands": []
       },
@@ -39300,7 +39582,11 @@
             {
               "type": "simple",
               "name": "l",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 256
+              }
             },
             {
               "type": "simple",
@@ -39330,7 +39616,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Constructs a subdictionary consisting of all keys beginning with prefix `k` (represented by a _Slice_, the first `0 <= l <= n <= 1023` data bits of which are used as a key) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. Removes the common prefix from all keys of the new dictionary `D'`, which becomes of type `HashmapE(n-l,X)`.",
+        "long": "Constructs a subdictionary consisting of all keys beginning with prefix `k` (represented by a _Slice_, the first data bits of which are used as a key) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. Removes the common prefix from all keys of the new dictionary `D'`, which becomes of type `HashmapE(n-l,X)`.",
         "tags": [],
         "operands": []
       },
@@ -39360,7 +39646,11 @@
             {
               "type": "simple",
               "name": "l",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             },
             {
               "type": "simple",
@@ -39370,7 +39660,11 @@
             {
               "type": "simple",
               "name": "n",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             }
           ]
         },
@@ -39390,7 +39684,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Constructs a subdictionary consisting of all keys beginning with prefix represented by a signed big-endian `l`-bit _Integer_ `x` (where necessarily `l <= 257`) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. Removes the common prefix from all keys of the new dictionary `D'`, which becomes of type `HashmapE(n-l,X)`.",
+        "long": "Constructs a subdictionary consisting of all keys beginning with prefix represented by a signed big-endian `l`-bit _Integer_ `x` in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. Removes the common prefix from all keys of the new dictionary `D'`, which becomes of type `HashmapE(n-l,X)`.",
         "tags": [],
         "operands": []
       },
@@ -39420,7 +39714,11 @@
             {
               "type": "simple",
               "name": "l",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 257
+              }
             },
             {
               "type": "simple",
@@ -39450,7 +39748,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Constructs a subdictionary consisting of all keys beginning with prefix represented by an unsigned big-endian `l`-bit _Integer_ `x` (where necessarily `l <= 256`) in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. Removes the common prefix from all keys of the new dictionary `D'`, which becomes of type `HashmapE(n-l,X)`.",
+        "long": "Constructs a subdictionary consisting of all keys beginning with prefix represented by an unsigned big-endian `l`-bit _Integer_ `x` in dictionary `D` of type `HashmapE(n,X)` with `n`-bit keys. Removes the common prefix from all keys of the new dictionary `D'`, which becomes of type `HashmapE(n-l,X)`.",
         "tags": [],
         "operands": []
       },
@@ -39480,7 +39778,11 @@
             {
               "type": "simple",
               "name": "l",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 256
+              }
             },
             {
               "type": "simple",
@@ -41468,7 +41770,7 @@
       "sub_category": "shift_logic",
       "description": {
         "short": "",
-        "long": "Checks whether `x` is a `width`-bit signed integer for `0 <= width <= 255` (i.e., whether `-2 ^ width <= x < 2 ^ width`).",
+        "long": "Checks whether `x` is a `width`-bit signed integer (i.e., whether `-2 ^ width <= x < 2 ^ width`).",
         "tags": [],
         "operands": ["width"],
         "exit_codes": [
@@ -41533,7 +41835,7 @@
       "sub_category": "shift_logic",
       "description": {
         "short": "",
-        "long": "Checks whether `x` is a `width`-bit unsigned integer for `0 <= width <= 255` (i.e., whether `0 <= x < 2 ^ width`).",
+        "long": "Checks whether `x` is a `width`-bit unsigned integer (i.e., whether `0 <= x < 2 ^ width`).",
         "tags": [],
         "operands": ["width"],
         "exit_codes": [
@@ -41775,7 +42077,7 @@
       "sub_category": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Calls_ continuation `c` with `p` parameters, but unlike `CALLXARGS` which only passes parameters, this instruction also pushes the old value of the current continuation `cс` (along with the top `0 <= p <= 15` values from the original stack) onto the stack of newly-invoked continuation `c`, setting `cc.nargs` to `-1 <= r <= 14`. This allows the called continuation to later return to the caller with the specified number of return values.",
+        "long": "_Calls_ continuation `c` with `p` parameters, but unlike `CALLXARGS` which only passes parameters, this instruction also pushes the old value of the current continuation `cc` (along with the top `p` values from the original stack) onto the stack of newly-invoked continuation `c`, setting `cc.nargs` to `r`. This allows the called continuation to later return to the caller with the specified number of return values.",
         "tags": [],
         "operands": ["p", "r"]
       },
@@ -41847,7 +42149,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Similar to `TRY`, but with `[p] [r] CALLXARGS` internally used instead of `EXECUTE`.\nIn this way, all but the top `0 <= p <= 15` stack elements will be saved into current continuation's stack, and then restored upon return from either `body` or `handler`, with the top `0 <= r <= 15` values of the resulting stack of `body` or `handler` copied as return values.",
+        "long": "Similar to `TRY`, but with `[p] [r] CALLXARGS` internally used instead of `EXECUTE`.\nIn this way, all but the top `p` stack elements will be saved into current continuation's stack, and then restored upon return from either `body` or `handler`, with the top `0 <= r <= 15` values of the resulting stack of `body` or `handler` copied as return values.",
         "tags": ["exception_handling", "control_flow"],
         "operands": ["p", "r"]
       },
@@ -41970,7 +42272,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns the `n`-th cell reference of _Slice_ `s`.",
+        "long": "Preloads the `n`-th cell reference of _Slice_ `s`.",
         "tags": ["slice parsing"],
         "operands": ["n"]
       },
@@ -42417,7 +42719,7 @@
       "sub_category": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Jumps_ to continuation `c`, passing only the top `0 <= p <= 15` values from the current stack to it, the remainder of the current stack is discarded.",
+        "long": "_Jumps_ to continuation `c`, passing only the top `p` values from the current stack to it, the remainder of the current stack is discarded.",
         "tags": [],
         "operands": ["p"]
       },
@@ -42481,7 +42783,7 @@
       "sub_category": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Returns_ to `c0`, with `0 <= r <= 15` return values taken from the current stack.",
+        "long": "_Returns_ to `c0`, with `r` return values taken from the current stack.",
         "tags": [],
         "operands": ["r"]
       },
@@ -42546,7 +42848,7 @@
       "sub_category": "continuation_change",
       "description": {
         "short": "",
-        "long": "Leaves only the top `0 <= p <= 15` values in the current stack (somewhat similarly to `ONLYTOPX`), with all the unused bottom values not discarded, but saved into continuation `c0` in the same way as `SETCONTARGS` does.",
+        "long": "Leaves only the top `p` values in the current stack (somewhat similarly to `ONLYTOPX`), with all the unused bottom values not discarded, but saved into continuation `c0` in the same way as `SETCONTARGS` does.",
         "tags": [],
         "operands": ["p"]
       },
@@ -42821,7 +43123,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Unpacks a _Tuple_ `t=(x_1,...,x_n)` of length equal to `0 <= n <= 15`.",
+        "long": "Unpacks a _Tuple_ `t=(x_1,...,x_n)` of length equal to `n`.",
         "tags": [],
         "operands": ["n"],
         "exit_codes": [
@@ -44129,7 +44431,7 @@
       "sub_category": "continuation_change",
       "description": {
         "short": "",
-        "long": "Pushes `0 <= r <= 15` values `x_1...x_r` into the stack of (a copy of) the continuation `c`, starting with `x_1`. When `n` is 15 (-1 in Fift notation), does nothing with `c.nargs`. For `0 <= n <= 14`, sets `c.nargs` to the final size of the stack of `c'` plus `n`. In other words, transforms `c` into a _closure_ or a _partially applied function_, with `0 <= n <= 14` arguments missing.",
+        "long": "Pushes `r` values `x_1...x_r` into the stack of (a copy of) the continuation `c`, starting with `x_1`. When `n` is 15 (-1 in Fift notation), does nothing with `c.nargs`. For other values of `n`, sets `c.nargs` to the final size of the stack of `c'` plus `n`. In other words, transforms `c` into a _closure_ or a _partially applied function_, with `n` arguments missing.",
         "tags": [],
         "operands": ["r", "n"]
       },
@@ -45365,7 +45667,7 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Preloads the first `32 * (c + 1)` bits of _Slice_ `s` into an unsigned integer `x`, for `0 <= c <= 7`. If `s` is shorter than necessary, missing bits are assumed to be zero. This operation is intended to be used along with `IFBITJMP` and similar instructions.",
+        "long": "Preloads the first `32 * (c + 1)` bits of _Slice_ `s` into an unsigned integer `x`. If `s` is shorter than necessary, missing bits are assumed to be zero. This operation is intended to be used along with `IFBITJMP` and similar instructions.",
         "tags": ["slice parsing", "preload"],
         "operands": ["c"]
       },
@@ -45423,9 +45725,9 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns the first `0 < c+1 <= 256` bits of `s` as `loaded`.",
+        "long": "Preloads the first `width` bits of `s` as `loaded`.",
         "tags": ["slice parsing", "preload"],
-        "operands": ["c"]
+        "operands": ["width"]
       },
       "layout": {
         "min": 14097664,
@@ -45481,9 +45783,9 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Cuts the next `c + 1` bits of `s` into a separate _Slice_ `loaded`. This is a quiet version of `LDSLICE` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
+        "long": "Cuts the next `width` bits of `s` into a separate _Slice_ `loaded`. This is a quiet version of `LDSLICE` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["slice parsing"],
-        "operands": ["c"]
+        "operands": ["width"]
       },
       "layout": {
         "min": 14097920,
@@ -45570,9 +45872,9 @@
       "sub_category": "cell_deserialize",
       "description": {
         "short": "",
-        "long": "Returns the first `0 < c+1 <= 256` bits of `s` as `loaded`. This is a quiet version of `PLDSLICE` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
+        "long": "Preloads the first `width` bits of `s` as `loaded`. This is a quiet version of `PLDSLICE` which means that instead of throwing an exception, it pushes a status flag to the stack: 0 if the operation fails, -1 if the operation succeeds.",
         "tags": ["slice parsing", "preload"],
-        "operands": ["c"]
+        "operands": ["width"]
       },
       "layout": {
         "min": 14098176,
@@ -45648,9 +45950,9 @@
       "sub_category": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Checks whether bit `0 <= num <= 31` is set in integer `x`, and if so, performs `JMPX` to continuation `body`. Value `x` is left in the stack.",
+        "long": "Checks whether `i`-th bit is set in integer `x`, and if so, performs `JMPX` to continuation `body`. Value `x` is left in the stack.",
         "tags": [],
-        "operands": ["num"]
+        "operands": ["i"]
       },
       "layout": {
         "min": 14909440,
@@ -45715,9 +46017,9 @@
       "sub_category": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Checks whether bit `0 <= num <= 31` is NOT set in integer `x`, and if so, performs `JMPX` to continuation `body`. Value `x` is left in the stack.",
+        "long": "Checks whether `i`-th bit is NOT set in integer `x`, and if so, performs `JMPX` to continuation `body`. Value `x` is left in the stack.",
         "tags": [],
-        "operands": ["num"]
+        "operands": ["i"]
       },
       "layout": {
         "min": 14917632,
@@ -47086,9 +47388,9 @@
       "sub_category": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Performs a `JMPREF` if bit `0 <= num <= 31` is set in integer `x`. Value `x` is left in the stack.",
+        "long": "Performs a `JMPREF` if `i`-th bit is set in integer `x`. Value `x` is left in the stack.",
         "tags": [],
-        "operands": ["num", "body"]
+        "operands": ["i", "body"]
       },
       "layout": {
         "min": 14925824,
@@ -47152,9 +47454,9 @@
       "sub_category": "continuation_cond",
       "description": {
         "short": "",
-        "long": "Performs a `JMPREF` if bit `0 <= num <= 31` is NOT set in integer `x`. Value `x` is left in the stack.",
+        "long": "Performs a `JMPREF` if `i`-th bit is NOT set in integer `x`. Value `x` is left in the stack.",
         "tags": [],
-        "operands": ["num", "body"]
+        "operands": ["i", "body"]
       },
       "layout": {
         "min": 14934016,
@@ -47217,7 +47519,7 @@
       "category": "dictionary",
       "sub_category": "",
       "description": {
-        "short": "Pushes a non-empty constant dictionary `D` (as a `Cell^?`) along with its key length `0 <= n <= 1023`, stored as a part of the instruction. An empty dictionary can be pushed by a `PUSHNULL` instruction instead.",
+        "short": "Pushes a non-empty constant dictionary `D` (as a `Cell^?`) along with its key length `n`, stored as a part of the instruction. An empty dictionary can be pushed by a `PUSHNULL` instruction instead.",
         "long": "The dictionary itself is created from the first of remaining references of the current continuation. In this way, the complete `DICTPUSHCONST` instruction can be obtained by first serializing `xF4A4_`, then the non-empty dictionary itself (one `1` bit and a `Cell` reference), and then the unsigned 10-bit integer `n` (as if by a `STU 10` instruction).",
         "tags": [],
         "operands": ["d", "n"]
@@ -47247,7 +47549,11 @@
             {
               "type": "simple",
               "name": "n",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             }
           ]
         }
@@ -52017,7 +52323,7 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Checks whether `x` bits can be stored into `b`, `0 <= x <= 1023`. If there is no space for `x` more bits in `b`, or if `x` is not within the range `0...1023`, throws an exception.",
+        "long": "Checks whether `x` bits can be stored into `b`. If there is no space for `x` more bits in `b`, throws an exception.",
         "tags": [],
         "operands": []
       },
@@ -52048,7 +52354,11 @@
             {
               "type": "simple",
               "name": "x",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             }
           ]
         }
@@ -52059,7 +52369,7 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Checks whether `count` bits can be stored into `b`, where `0 <= count <= 255`.",
+        "long": "Checks whether `count` bits can be stored into `b`.",
         "tags": [],
         "operands": ["count"]
       },
@@ -52109,7 +52419,7 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Checks whether `x` bits can be stored into `b`, `0 <= x <= 1023`.",
+        "long": "Checks whether `x` bits can be stored into `b`.",
         "tags": [],
         "operands": []
       },
@@ -52139,7 +52449,11 @@
             {
               "type": "simple",
               "name": "x",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1023
+              }
             }
           ]
         },
@@ -52159,7 +52473,7 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Checks whether `count` bits can be stored into `b`, where `0 <= count <= 255`.",
+        "long": "Checks whether `count` bits can be stored into `b`.",
         "tags": [],
         "operands": ["count"]
       },
@@ -52587,7 +52901,7 @@
       "sub_category": "continuation_dict_jump",
       "description": {
         "short": "",
-        "long": "Calls the continuation in `c3`, pushing integer `num` into its stack as an argument. Long version of `CALLDICT` where `0 <= num < 2^14`. Essentially it's a call to method with `num` ID in the dictionary.",
+        "long": "Calls the continuation in `c3`, pushing integer `num` into its stack as an argument. Essentially it's a call to method with `num` ID in the dictionary.",
         "tags": [],
         "related_instructions": ["CALLDICT"],
         "operands": ["num"]
@@ -54012,7 +54326,7 @@
       "sub_category": "continuation_jump",
       "description": {
         "short": "",
-        "long": "_Calls_ continuation `c` with `0 <= p <= 15` parameters, expecting an arbitrary number of return values.",
+        "long": "_Calls_ continuation `c` with `p` parameters, expecting an arbitrary number of return values.",
         "tags": [],
         "operands": ["p"]
       },
@@ -54544,7 +54858,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Selects codepage `num` with `-2^15 <= num < 2^15` passed in the top of the stack.",
+        "long": "Selects codepage `num` with `num` from the top of the stack. If the codepage is not supported, throws an invalid opcode exception.",
         "tags": [],
         "operands": []
       },
@@ -54569,7 +54883,11 @@
             {
               "type": "simple",
               "name": "num",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": -32768,
+                "max": 32768
+              }
             }
           ]
         }
@@ -55319,7 +55637,7 @@
     },
     "PLDOPTREF": {
       "actual_name": "PLDDICT",
-      "description": "Preloads a dictionary or any cell or null from the slice as an optional reference, leaving the slice unchanged"
+      "description": "Preloads a dictionary or any cell or null from the slice as an optional reference"
     },
     "STOPTREF": {
       "actual_name": "STDICT",
@@ -55328,7 +55646,7 @@
     "PLDREF": {
       "actual_name": "PLDREFIDX",
       "arguments": [0],
-      "description": "Preloads the first optional reference from the slice, leaving the slice unchanged"
+      "description": "Preloads the first optional reference from the slice"
     },
     "SETCONTMANY": {
       "actual_name": "SETCONTCTRMANY"

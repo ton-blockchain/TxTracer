@@ -121,6 +121,18 @@
   width: 100%;
 }
 
+.stackPillTooltip {
+  display: block;
+  width: 100%;
+  padding-bottom: var(--spacing-xs);
+  box-sizing: content-box;
+  font-family: var(--font-family-mono), monospace;
+}
+
+.stackPillTooltip:hover {
+  padding-bottom: 0;
+}
+
 .stackItem {
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--border-radius-md);

@@ -48,7 +48,7 @@ function appendFiftInstructions(
         fiftInstruction: fiftInstr,
         description: {
           ...actualInstr.description,
-          short: "",
+          short: fiftInstr.description ? "" : actualInstr.description.short,
           long: fiftInstr.description ? fiftInstr.description + "." : actualInstr.description.long,
         },
       }
