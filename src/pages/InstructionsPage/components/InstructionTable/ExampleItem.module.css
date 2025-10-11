@@ -14,9 +14,7 @@
 }
 
 .exampleErrorHeader {
-  padding: var(--spacing-sm);
   margin-bottom: var(--spacing-sm);
-  background-color: var(--color-error-bg);
   border-radius: calc(var(--border-radius-md) / 2);
   color: var(--color-text-primary);
   display: flex;
@@ -46,15 +44,11 @@
 }
 
 .exampleInstructions {
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
 }
 
-.exampleStructTitle {
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  color: var(--color-text-secondary);
-  margin-top: 0;
-  margin-bottom: var(--spacing-xs);
+.codeBlockContainer {
+  position: relative;
 }
 
 .codeBlock {
@@ -90,6 +84,62 @@
   gap: var(--spacing-md);
 }
 
+.exampleStructTitle {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
 .preparatoryInstruction code {
   color: var(--color-text-secondary);
+}
+
+.tokenInstruction {
+  color: var(--syntax-keyword);
+}
+
+.tokenRegister {
+  color: var(--color-text-secondary);
+}
+
+.tokenControlRegister {
+  color: var(--color-text-secondary);
+}
+
+.tokenNumber {
+  color: var(--syntax-number);
+}
+
+.tokenComment {
+  color: var(--syntax-comment);
+  font-style: italic;
+}
+
+.stackDisplayContainer {
+  margin-top: var(--spacing-xs);
+}
+
+.playgroundLink {
+  display: inline-flex;
+  /*position: absolute;*/
+  align-items: center;
+  gap: var(--spacing-sms);
+  color: var(--color-text-secondary) !important;
+  text-decoration: none;
+  font-size: var(--font-size-xs);
+  border-radius: var(--border-radius-sm);
+  transition: color var(--transition-duration-fast);
+  margin-top: var(--spacing-mds);
+  margin-bottom: -4px;
+  margin-left: 2px;
+  right: 0;
+  opacity: 0.7;
+}
+
+.playgroundLink:hover {
+  color: var(--color-text-primary) !important;
+  opacity: 0.8;
+}
+
+.playIcon {
+  font-size: var(--font-size-xss);
 }

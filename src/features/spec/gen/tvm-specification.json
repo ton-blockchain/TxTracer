@@ -9924,8 +9924,12 @@
                 "comment": "Condition value (non-zero means true)"
               },
               {
-                "instruction": "PUSHCONT {\n  PUSHINT_4 10\n  PUSHINT_4 20\n  ADD\n}",
-                "comment": "Continuation body that adds 10 and 20"
+                "instruction": "PUSHCONT {",
+                "comment": "Continuation body that adds 5 and 10"
+              },
+              {
+                "instruction": "  PUSHINT_4 5\n  PUSHINT_4 10\n  ADD\n}",
+                "comment": ""
               },
               {
                 "instruction": "IF",
@@ -9934,7 +9938,7 @@
             ],
             "stack": {
               "input": ["-1", "Continuation"],
-              "output": ["30"]
+              "output": ["15"]
             }
           },
           {
@@ -9944,8 +9948,12 @@
                 "comment": "Condition value (zero means false)"
               },
               {
-                "instruction": "PUSHCONT {\n  PUSHINT_4 10\n  PUSHINT_4 20\n  ADD\n}",
-                "comment": "Continuation body that adds 10 and 20"
+                "instruction": "PUSHCONT {",
+                "comment": "Continuation body that adds 5 and 10"
+              },
+              {
+                "instruction": "  PUSHINT_4 5\n  PUSHINT_4 10\n  ADD\n}",
+                "comment": ""
               },
               {
                 "instruction": "IF",
@@ -10044,8 +10052,12 @@
                 "comment": "Condition value (zero means false)"
               },
               {
-                "instruction": "PUSHCONT {\n  PUSHINT_4 10\n  PUSHINT_4 20\n  ADD\n}",
-                "comment": "Continuation body that adds 10 and 20"
+                "instruction": "PUSHCONT {",
+                "comment": "Continuation body that adds 5 and 10"
+              },
+              {
+                "instruction": "  PUSHINT_4 5\n  PUSHINT_4 10\n  ADD\n}",
+                "comment": ""
               },
               {
                 "instruction": "IFNOT",
@@ -10054,7 +10066,7 @@
             ],
             "stack": {
               "input": ["0", "Continuation"],
-              "output": ["30"]
+              "output": ["15"]
             }
           },
           {
@@ -10064,8 +10076,12 @@
                 "comment": "Condition value (non-zero means true)"
               },
               {
-                "instruction": "PUSHCONT {\n  PUSHINT_4 10\n  PUSHINT_4 20\n  ADD\n}",
-                "comment": "Continuation body that adds 10 and 20"
+                "instruction": "PUSHCONT {",
+                "comment": "Continuation body that adds 5 and 10"
+              },
+              {
+                "instruction": "  PUSHINT_4 5\n  PUSHINT_4 10\n  ADD\n}",
+                "comment": ""
               },
               {
                 "instruction": "IFNOT",
@@ -60299,7 +60315,11 @@
               },
               {
                 "instruction": "PUSH s10",
-                "comment": "Trying to push a value from an index that is out of bounds."
+                "comment": "Trying to push a value from"
+              },
+              {
+                "instruction": "        ",
+                "comment": "an index that is out of bounds."
               }
             ],
             "exit_code": 2,

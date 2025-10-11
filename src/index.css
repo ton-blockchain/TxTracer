@@ -207,6 +207,11 @@
   --table-code-bg-color: var(--color-background-input);
   --table-code-text-color: var(--color-text-primary);
 
+  /* Code syntax highlighting */
+  --syntax-keyword: #0033b3;
+  --syntax-number: #1750eb;
+  --syntax-comment: #8c8c8c;
+
   --tracepage-logo-main-color: #000000;
   --tracepage-logo-gradient-start: #4a69e0;
   --tracepage-logo-gradient-end: #3690fd;
@@ -411,6 +416,11 @@
   --table-hash-bg-color: var(--color-background-input);
   --table-code-bg-color: var(--color-background-input);
   --table-code-text-color: var(--color-text-primary);
+
+  /* Code syntax highlighting */
+  --syntax-keyword: #749ded;
+  --syntax-number: #b5cea8;
+  --syntax-comment: #6a9955;
 
   --tracepage-logo-main-color: var(--color-text-primary);
   --tracepage-logo-gradient-start: #4a69e0;
