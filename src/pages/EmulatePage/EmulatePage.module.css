@@ -400,7 +400,7 @@
 .titleEmulate {
   background: linear-gradient(135deg, #2b82eb, #1cc8ff);
   background-clip: text;
-  -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #2b82eb;
   font-weight: var(--font-weight-normal);
