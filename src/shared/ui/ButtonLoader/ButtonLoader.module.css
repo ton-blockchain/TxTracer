@@ -4,7 +4,7 @@
 }
 
 .loader {
-  border: 2px solid rgba(255, 255, 255, 40%);
+  border: 2px solid rgb(255 255 255 / 40%);
   border-top: 2px solid #ffffff;
   border-radius: 50%;
   width: 12px;
