@@ -13,7 +13,7 @@
 
 .inputWrapper.focused {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.2);
+  box-shadow: 0 0 0 3px rgb(var(--color-primary-rgb), 0.2);
 }
 
 .searchIcon {

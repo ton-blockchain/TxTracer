@@ -17,7 +17,7 @@
 
 .copyIcon:hover {
   opacity: 1;
-  background-color: rgba(var(--color-primary-rgb), 0.1);
+  background-color: rgb(var(--color-primary-rgb), 0.1);
 }
 
 .copyIcon svg {

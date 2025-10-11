@@ -1,7 +1,7 @@
 .addressValue {
   color: var(--color-primary);
   text-decoration: none;
-  background-color: rgba(var(--color-primary-rgb), 0.08);
+  background-color: rgb(var(--color-primary-rgb), 0.08);
   border-radius: var(--border-radius-md);
   padding: var(--spacing-xs) var(--spacing-sm);
   display: inline-flex;
@@ -29,7 +29,7 @@
 
 .copyIcon:hover {
   opacity: 1;
-  background-color: rgba(var(--color-primary-rgb), 0.1);
+  background-color: rgb(var(--color-primary-rgb), 0.1);
 }
 
 .copyIcon.copied {

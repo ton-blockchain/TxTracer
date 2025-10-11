@@ -75,8 +75,8 @@
   border-radius: var(--border-radius-full);
   background: radial-gradient(
     circle,
-    rgba(var(--color-primary-rgb), 0.2) 0%,
-    rgba(var(--color-primary-rgb), 0) 70%
+    rgb(var(--color-primary-rgb), 0.2) 0%,
+    rgb(var(--color-primary-rgb), 0) 70%
   );
   animation: pulse 1.5s ease-in-out infinite;
   opacity: 0.6;

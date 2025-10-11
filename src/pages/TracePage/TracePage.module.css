@@ -12,7 +12,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(var(--color-background-primary-rgb), 0.7);
+  background-color: rgb(var(--color-background-primary-rgb), 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -318,7 +318,7 @@
 .featureCard:hover {
   text-decoration: none;
 
-  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.2);
+  box-shadow: 0 0 0 3px rgb(var(--color-primary-rgb), 0.2);
   border-color: var(--color-primary);
 }
 
