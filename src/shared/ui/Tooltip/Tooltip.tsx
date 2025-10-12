@@ -9,7 +9,7 @@ interface TooltipProps {
   readonly variant?: "hover" | "positioned"
   readonly position?: {x: number; y: number}
   readonly enableMarkdown?: boolean
-  readonly placement?: "top" | "bottom"
+  readonly placement?: "top" | "bottom" | "right"
   readonly className?: string
 }
 
@@ -47,6 +47,7 @@ export function Tooltip({
 
   const tooltipClassName = useMemo(() => {
     if (placement === "bottom") return `${styles.tooltip} ${styles.bottom}`
+    if (placement === "right") return `${styles.tooltip} ${styles.right}`
     return styles.tooltip
   }, [placement])
 

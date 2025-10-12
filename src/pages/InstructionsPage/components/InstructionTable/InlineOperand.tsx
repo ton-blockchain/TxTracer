@@ -9,11 +9,18 @@ import styles from "./InlineOperand.module.css"
 import {renderArgsTreeCompactForOperand} from "./operands.tsx"
 
 interface InlineOperandProps {
+  readonly instructionName: string
   readonly instruction: Instruction
   readonly operandIndex: number
+  readonly inDetails: boolean
 }
 
-const InlineOperand: React.FC<InlineOperandProps> = ({instruction, operandIndex}) => {
+const InlineOperand: React.FC<InlineOperandProps> = ({
+  instructionName,
+  instruction,
+  operandIndex,
+  inDetails,
+}) => {
   const {description, layout} = instruction
   const operands = instruction.operands ?? description.operands
   if (!operands || operandIndex < 0 || operandIndex >= operands.length) return null
@@ -35,9 +42,10 @@ const InlineOperand: React.FC<InlineOperandProps> = ({instruction, operandIndex}
   const operandPresentation = isControl ? `c(${name})` : isStack ? `s(${name})` : `[${name}]`
 
   const tooltip = renderArgsTreeCompactForOperand(layout.args, name, operandIndex)
+  const tooltipPlacement = inDetails && instructionName.length < 8 ? "right" : "bottom"
 
   return (
-    <Tooltip content={tooltip} placement="bottom">
+    <Tooltip content={tooltip} placement={tooltipPlacement}>
       <span className={styles.inlineOperand}>{operandPresentation}</span>
     </Tooltip>
   )

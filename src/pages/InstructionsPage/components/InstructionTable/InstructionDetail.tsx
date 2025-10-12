@@ -74,7 +74,13 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
             {displayedOperands && displayedOperands.length > 0 && (
               <span className={styles.operandsDisplay}>
                 {displayedOperands.map((_, idx) => (
-                  <InlineOperand key={idx} instruction={instruction} operandIndex={idx} />
+                  <InlineOperand
+                    key={idx}
+                    instructionName={instructionName}
+                    instruction={instruction}
+                    operandIndex={idx}
+                    inDetails={true}
+                  />
                 ))}
               </span>
             )}

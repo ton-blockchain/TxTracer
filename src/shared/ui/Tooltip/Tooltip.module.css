@@ -68,6 +68,17 @@
   border-left: none;
 }
 
+.tooltip.right::before {
+  top: 50%;
+  left: -9px;
+  margin-left: 0;
+  margin-top: -9px;
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-left: none;
+}
+
 .tooltipPositioned {
   position: fixed;
   padding: var(--spacing-md);

@@ -154,7 +154,13 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
                   {displayedOperands && displayedOperands.length > 0 && (
                     <span className={styles.operandsDisplay}>
                       {displayedOperands.map((_, opIdx) => (
-                        <InlineOperand key={opIdx} instruction={instruction} operandIndex={opIdx} />
+                        <InlineOperand
+                          instructionName={instructionName}
+                          key={opIdx}
+                          instruction={instruction}
+                          operandIndex={opIdx}
+                          inDetails={false}
+                        />
                       ))}
                     </span>
                   )}

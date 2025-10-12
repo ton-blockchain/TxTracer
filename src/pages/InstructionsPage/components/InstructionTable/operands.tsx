@@ -38,6 +38,8 @@ export function childType(child: Child) {
       return `${argType(child.arg)} + ${child.delta}`
     case "debugstr":
       return "String slice"
+    case "dictpush":
+      return "Dictionary"
     default:
       return undefined
   }
