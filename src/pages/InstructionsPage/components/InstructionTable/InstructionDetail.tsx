@@ -106,7 +106,8 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
                     rel="noopener noreferrer"
                     className={styles.implementationLink}
                   >
-                    {instruction.implementation.filePath.split('/').pop()}:{instruction.implementation.lineNumber}
+                    {instruction.implementation.filePath.split("/").pop()}:
+                    {instruction.implementation.lineNumber}
                   </a>
                 </span>
               </div>
