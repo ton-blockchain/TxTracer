@@ -82,7 +82,7 @@ function stringToHex(str: string): string {
 const generatePlaygroundUrl = (example: Example): string => {
   const code = example.instructions.map(instr => instr.instruction).join("\n")
   const encodedCode = stringToHex(code)
-  return `https://txtracer.ton.org/play/#lang=tasm&code=${encodedCode}`
+  return `${window.location.origin}/play/#lang=tasm&code=${encodedCode}`
 }
 
 interface ExampleItemProps {
