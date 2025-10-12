@@ -92,14 +92,13 @@
   color: var(--color-text-primary);
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-xs);
+  column-gap: var(--spacing-sm);
 }
 
 .metadataValue span.tagPill {
   background-color: transparent;
-  color: var(--color-accent);
+  color: var(--color-secondary);
   font-family: var(--font-family-mono), monospace;
-  padding: 2px var(--spacing-xs);
   white-space: nowrap;
 }
 
