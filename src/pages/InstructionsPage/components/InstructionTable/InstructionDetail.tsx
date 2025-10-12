@@ -10,6 +10,8 @@ import {RegisterSquare} from "@app/pages/InstructionsPage/components/Instruction
 
 import type {Register} from "@features/spec/signatures/stack-signatures-schema.ts"
 
+import {HighlightedAssembly} from "@app/pages/InstructionsPage/components/InstructionTable/HighlightedAssembly.tsx"
+
 import {useProcessedMarkdown} from "../../hooks/useProcessedMarkdown"
 
 import styles from "./InstructionDetail.module.css"
@@ -164,7 +166,9 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
                   <span className={styles.implementationsHeader}>
                     {impl.exact ? "Exact Equivalent:" : "Approximately Equivalent:"}
                   </span>
-                  <pre className={styles.codeBlock}>{impl.instructions.join("\n")}</pre>
+                  <div className={styles.implementationCode}>
+                    <HighlightedAssembly code={impl.instructions.join("\n")} />
+                  </div>
                 </li>
               ))}
             </ul>

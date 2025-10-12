@@ -1,0 +1,25 @@
+.assemblyContainer {
+  padding: 0;
+  margin: 0 0 -2px 0;
+}
+
+.tokenInstruction {
+  color: var(--syntax-keyword);
+}
+
+.tokenRegister {
+  color: var(--color-text-secondary);
+}
+
+.tokenControlRegister {
+  color: var(--color-text-secondary);
+}
+
+.tokenNumber {
+  color: var(--syntax-number);
+}
+
+.tokenComment {
+  color: var(--syntax-comment);
+  font-style: italic;
+}

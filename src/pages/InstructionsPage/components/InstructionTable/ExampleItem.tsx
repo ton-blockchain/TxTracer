@@ -6,6 +6,8 @@ import ReactMarkdown, {type Components} from "react-markdown"
 import type {Example, ExitCode} from "@features/spec/tvm-specification.types.ts"
 import type {StackEntry} from "@features/spec/signatures/stack-signatures-schema.ts"
 
+import {HighlightedAssembly} from "./HighlightedAssembly"
+
 import StackDisplay from "./StackDisplay"
 
 import styles from "./ExampleItem.module.css"
@@ -71,157 +73,6 @@ const convertStringsToStackEntries = (strings: readonly string[]): StackEntry[] 
   })
 }
 
-interface Token {
-  readonly type:
-    | "instruction"
-    | "register"
-    | "control_register"
-    | "number"
-    | "comment"
-    | "whitespace"
-    | "other"
-  readonly value: string
-}
-
-const tokenizeCode = (code: string): Token[] => {
-  const tokens: Token[] = []
-  let i = 0
-
-  while (i < code.length) {
-    const char = code[i]
-
-    if (/\s/.test(char)) {
-      let whitespace = char
-      i++
-      while (i < code.length && /\s/.test(code[i])) {
-        whitespace += code[i]
-        i++
-      }
-      tokens.push({type: "whitespace", value: whitespace})
-      continue
-    }
-
-    if (char === "/" && code[i + 1] === "/") {
-      const start = i
-      i += 2
-      while (i < code.length && code[i] !== "\n") {
-        i++
-      }
-      tokens.push({type: "comment", value: code.slice(start, i)})
-      continue
-    }
-
-    // Stack registers (s followed by digits)
-    if (char === "s" && /^\d/.test(code[i + 1] || "")) {
-      let register = char
-      i++
-      while (i < code.length && /\d/.test(code[i])) {
-        register += code[i]
-        i++
-      }
-      tokens.push({type: "register", value: register})
-      continue
-    }
-
-    // Control registers (c followed by digits)
-    if (char === "c" && /^\d/.test(code[i + 1] || "")) {
-      let register = char
-      i++
-      while (i < code.length && /\d/.test(code[i])) {
-        register += code[i]
-        i++
-      }
-      tokens.push({type: "control_register", value: register})
-      continue
-    }
-
-    if (char === "0" && code[i + 1] === "x") {
-      // Hex number
-      let number = char + code[i + 1]
-      i += 2
-      while (i < code.length && /[0-9a-fA-F]/.test(code[i])) {
-        number += code[i]
-        i++
-      }
-      tokens.push({type: "number", value: number})
-      continue
-    } else if (/\d/.test(char)) {
-      // Decimal number
-      let number = char
-      i++
-      while (i < code.length && /\d/.test(code[i])) {
-        number += code[i]
-        i++
-      }
-      tokens.push({type: "number", value: number})
-      continue
-    }
-
-    if (/[A-Z]/.test(char)) {
-      let instruction = char
-      i++
-      while (i < code.length && /[A-Z0-9_]/.test(code[i])) {
-        instruction += code[i]
-        i++
-      }
-      tokens.push({type: "instruction", value: instruction})
-      continue
-    }
-
-    tokens.push({type: "other", value: char})
-    i++
-  }
-
-  return tokens
-}
-
-const HighlightedAssembly: React.FC<{code: string}> = ({code}) => {
-  const tokens = tokenizeCode(code)
-
-  return (
-    <code>
-      {tokens.map((token, index) => {
-        switch (token.type) {
-          case "instruction":
-            return (
-              <span key={index} className={styles.tokenInstruction}>
-                {token.value}
-              </span>
-            )
-          case "register":
-            return (
-              <span key={index} className={styles.tokenRegister}>
-                {token.value}
-              </span>
-            )
-          case "control_register":
-            return (
-              <span key={index} className={styles.tokenControlRegister}>
-                {token.value}
-              </span>
-            )
-          case "number":
-            return (
-              <span key={index} className={styles.tokenNumber}>
-                {token.value}
-              </span>
-            )
-          case "comment":
-            return (
-              <span key={index} className={styles.tokenComment}>
-                {token.value}
-              </span>
-            )
-          case "whitespace":
-            return <span key={index}>{token.value}</span>
-          default:
-            return <span key={index}>{token.value}</span>
-        }
-      })}
-    </code>
-  )
-}
-
 function stringToHex(str: string): string {
   return Array.from(str)
     .map(char => char.charCodeAt(0).toString(16).padStart(2, "0"))
@@ -256,6 +107,10 @@ const ExampleItem: React.FC<ExampleItemProps> = ({
 
   const playgroundUrl = generatePlaygroundUrl(example)
 
+  const code = example.instructions
+    .map(instr => (instr.comment ? `${instr.instruction} // ${instr.comment}` : instr.instruction))
+    .join("\n")
+
   return (
     <div className={`${styles.exampleItem} ${isExceptional ? styles.exampleItemError : ""}`}>
       {isExceptional && (
@@ -276,21 +131,7 @@ const ExampleItem: React.FC<ExampleItemProps> = ({
       <div className={styles.exampleInstructions}>
         <div className={styles.codeBlockContainer}>
           <pre className={styles.codeBlock}>
-            {(() => {
-              const instructions = example.instructions
-
-              return instructions.map((instr, i) => {
-                const fullCode = instr.comment
-                  ? `${instr.instruction} // ${instr.comment}`
-                  : instr.instruction
-
-                return (
-                  <div key={i}>
-                    <HighlightedAssembly code={fullCode} />
-                  </div>
-                )
-              })
-            })()}
+            <HighlightedAssembly code={code} />
           </pre>
         </div>
       </div>
