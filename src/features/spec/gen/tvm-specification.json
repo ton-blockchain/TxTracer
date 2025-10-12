@@ -18512,10 +18512,16 @@
       "category": "crypto",
       "sub_category": "crypto_common",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Performs `secp256k1_xonly_pubkey_tweak_add()`.",
+        "long": "`key` and `tweak` are 256-bit unsigned integers. 65-byte public key is returned as `uint8 f`, `uint256 x, y` as in `ECRECOVER`.",
         "tags": [],
         "operands": [],
+        "docs_links": [
+          {
+            "name": "Implementation of the `secp256k1_xonly_pubkey_tweak_add`",
+            "url": "https://github.com/bitcoin-core/secp256k1/blob/master/include/secp256k1_extrakeys.h#L120"
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -18539,13 +18545,60 @@
         "prefix_str": "F913"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "key:Int tweak:Int -> (∅ 0)|(f:Int x:Int y:Int -1) status:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "key",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "tweak",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "conditional",
+              "name": "status",
+              "match": [
+                {
+                  "value": 0,
+                  "stack": []
+                },
+                {
+                  "value": -1,
+                  "stack": [
+                    {
+                      "type": "simple",
+                      "name": "f",
+                      "value_types": ["Int"]
+                    },
+                    {
+                      "type": "simple",
+                      "name": "x",
+                      "value_types": ["Int"]
+                    },
+                    {
+                      "type": "simple",
+                      "name": "y",
+                      "value_types": ["Int"]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "simple",
+              "name": "status",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       }
@@ -53916,9 +53969,27 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Outputs passed string to VM logs.",
+        "long": "Outputs passed string to debug logs.",
         "tags": [],
         "operands": ["s"],
+        "examples": [
+          {
+            "instructions": [
+              {
+                "instruction": "",
+                "comment": "Outputs \"hello world\" to logs"
+              },
+              {
+                "instruction": "DEBUGSTR \"hello world\"",
+                "comment": ""
+              }
+            ],
+            "stack": {
+              "input": [],
+              "output": []
+            }
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -60133,8 +60204,8 @@
       "category": "debug",
       "sub_category": "",
       "description": {
-        "short": "Dumps the entire contents of the stack for debugging.",
-        "long": "Outputs the entire contents of the stack to debug output without modifying the stack. Useful for debugging and stack inspection.",
+        "short": "Dumps the entire contents of the stack to debug logs.",
+        "long": "Outputs the entire contents of the stack to debug logs without modifying the stack. Useful for debugging and stack inspection.",
         "tags": ["debug", "stack"],
         "operands": [],
         "gas": [
@@ -60174,8 +60245,8 @@
       "category": "debug",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "",
+        "short": "Base instruction for debugging purposes.",
+        "long": "- With `i=0` and `j=0` this instruction outputs the entire stack as `DUMPSTK`.\n\n- With `i=1` and `j=4` this instruction outputs the string taken from the top of the stack as `STRDUMP`.\n\n- With `i=2` and any `j` this instruction dumps a slice with length divisible by 8 from `j`-th element of the stack as a string as `DUMP`.",
         "tags": [],
         "operands": ["i", "j"],
         "gas": [
@@ -60224,8 +60295,8 @@
       "category": "debug",
       "sub_category": "",
       "description": {
-        "short": "Dumps slice value as a UTF-8 encoded string to debug output.",
-        "long": "Takes a string value as a slice from the stack and outputs it to debug output. The string is interpreted as a UTF-8 encoded text.",
+        "short": "Dumps slice value as a UTF-8 encoded string to debug logs.",
+        "long": "Takes a string value as a slice from the stack and outputs it to debug logs. The string is interpreted as a UTF-8 encoded text.",
         "tags": ["debug", "string"],
         "operands": [],
         "gas": [
@@ -60278,7 +60349,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Padding instruction that does nothing.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -60327,8 +60398,8 @@
       "category": "debug",
       "sub_category": "",
       "description": {
-        "short": "Dumps a `i`-th value from stack to debug output.",
-        "long": "Takes a value from the stack at position `i` and outputs it to debug output. The value is formatted according to its type.",
+        "short": "Dumps a `i`-th value from stack to debug logs.",
+        "long": "Takes a value from the stack at position `i` and outputs it to debug logs. The value is formatted according to its type.",
         "tags": ["debug", "stack"],
         "operands": ["i"],
         "gas": [
@@ -60378,7 +60449,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Padding instruction that does nothing.",
         "tags": [],
         "operands": [],
         "gas": [
