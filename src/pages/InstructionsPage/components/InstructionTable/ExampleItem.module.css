@@ -38,7 +38,7 @@
   padding-top: var(--spacing-xs);
 }
 
-.errorConditionText p {
+.errorConditionText div {
   display: inline;
   margin: 0;
 }

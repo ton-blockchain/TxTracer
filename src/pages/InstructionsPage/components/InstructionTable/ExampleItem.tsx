@@ -120,10 +120,10 @@ const ExampleItem: React.FC<ExampleItemProps> = ({
           </span>
           <span>Leads to Exit Code: {example.exit_code}</span>
           {exitCondition && (
-            <p className={styles.errorConditionText}>
+            <div className={styles.errorConditionText}>
               Condition:{" "}
               <ReactMarkdown components={markdownComponents}>{exitCondition}</ReactMarkdown>
-            </p>
+            </div>
           )}
         </div>
       )}
