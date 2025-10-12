@@ -12,6 +12,7 @@ export default {
     "custom-property-empty-line-before": null,
     "declaration-empty-line-before": null,
     "comment-empty-line-before": null,
+    "no-duplicate-selectors": null,
 
     "value-keyword-case": [
       "lower",
