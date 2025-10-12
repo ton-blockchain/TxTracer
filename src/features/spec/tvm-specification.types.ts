@@ -27,10 +27,10 @@ export interface Instruction {
 }
 
 export interface ImplementationInfo {
-  readonly commitHash: string
-  readonly filePath: string
-  readonly lineNumber: number
-  readonly functionName: string
+  readonly commit_hash: string
+  readonly file_path: string
+  readonly line_number: number
+  readonly function_name: string
 }
 
 export interface GasConsumptionEntry {

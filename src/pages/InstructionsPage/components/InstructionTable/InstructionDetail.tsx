@@ -101,13 +101,13 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
                 <span className={styles.metadataLabel}>Implementation:</span>
                 <span className={styles.metadataValue}>
                   <a
-                    href={`https://github.com/ton-blockchain/ton/blob/${instruction.implementation.commitHash}/${instruction.implementation.filePath}#L${instruction.implementation.lineNumber}`}
+                    href={`https://github.com/ton-blockchain/ton/blob/${instruction.implementation.commit_hash}/${instruction.implementation.file_path}#L${instruction.implementation.line_number}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={styles.implementationLink}
                   >
-                    {instruction.implementation.filePath.split("/").pop()}:
-                    {instruction.implementation.lineNumber}
+                    {instruction.implementation.file_path.split("/").pop()}:
+                    {instruction.implementation.line_number}
                   </a>
                 </span>
               </div>
