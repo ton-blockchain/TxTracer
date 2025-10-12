@@ -4973,7 +4973,7 @@
       "sub_category": "cell_serialize",
       "description": {
         "short": "",
-        "long": "Appends all data from _Builder_ `b'` to _Builder_ `b` with swapped arguments.",
+        "long": "Appends all data from _Builder_ `from` to _Builder_ `to` with swapped arguments.",
         "tags": ["builder building"],
         "operands": [],
         "other_implementations": [
@@ -5004,7 +5004,7 @@
         "prefix_str": "CF17"
       },
       "signature": {
-        "stack_string": "to:Builder from:Builder -> b3:Builder",
+        "stack_string": "to:Builder from:Builder -> res:Builder",
         "inputs": {
           "stack": [
             {
@@ -5023,7 +5023,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b3",
+              "name": "res",
               "value_types": ["Builder"]
             }
           ]
@@ -10716,10 +10716,16 @@
       "category": "continuation",
       "sub_category": "continuation_cond_loop",
       "description": {
-        "short": "",
-        "long": "Executes continuation `body` `n` times, if integer `n` is non-negative. If `n >= 2^31` or `n < -2^31`, generates a range check exception.\nNotice that a `RET` inside the code of `body` works as a `continue`, not as a `break`. One should use either alternative (experimental) loops or alternative `RETALT` (along with a `SETEXITALT` before the loop) to `break` out of a loop.",
+        "short": "Executes continuation `body` `n`-times, if integer `n` is non-negative.",
+        "long": "`RET` inside the code of `body` works as a `continue`, not as a `break`. To `break` from the loop, use either alternative loop `REPEATBRK` + `RETALT` or `RETALT`, along with a `SETEXITALT` before the loop.",
         "tags": [],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "5",
+            "condition": "If `n >= 2^31` or `n < -2^31`."
+          }
+        ],
         "examples": [
           {
             "instructions": [
@@ -10744,31 +10750,12 @@
               "input": ["0", "5", "Body"],
               "output": ["50"]
             }
-          },
+          }
+        ],
+        "docs_links": [
           {
-            "instructions": [
-              {
-                "instruction": "PUSHINT_4 0",
-                "comment": "Initialize sum"
-              },
-              {
-                "instruction": "PUSHINT_4 -5",
-                "comment": "Negative number of iterations"
-              },
-              {
-                "instruction": "PUSHCONT {\n  PUSHINT_4 10\n  ADD\n}",
-                "comment": "Body: add 10 to the sum in each iteration"
-              },
-              {
-                "instruction": "REPEAT",
-                "comment": "Try to execute with negative iterations"
-              }
-            ],
-            "exit_code": 4,
-            "stack": {
-              "input": ["0", "-5", "Body"],
-              "output": ["0", "-5", "Body"]
-            }
+            "name": "Exit points of continuations",
+            "url": "https://txtracer.ton.org/spec/doc/book/continuations/diving-deeper-exit-points-of-continuations/"
           }
         ],
         "gas": [
@@ -10838,10 +10825,16 @@
       "category": "continuation",
       "sub_category": "continuation_cond_loop",
       "description": {
-        "short": "",
-        "long": "Executes the current continuation `cс` `n` times, if integer `n` is non-negative. This is like `REPEAT` but instead of executing a separate continuation `body`, it repeatedly executes the current continuation. If `n >= 2^31` or `n < -2^31`, generates a range check exception.",
+        "short": "Takes a remainder of the current continuation and executes it `n`-times, if integer `n` is non-negative.",
+        "long": "Unlike `REPEAT` which executes a separate continuation `body` as the loop body, this instruction uses the current continuation itself as the loop body.",
         "tags": [],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "5",
+            "condition": "If `n >= 2^31` or `n < -2^31`."
+          }
+        ],
         "gas": [
           {
             "value": 18,
@@ -10872,7 +10865,12 @@
               "name": "n",
               "value_types": ["Int"]
             }
-          ]
+          ],
+          "registers": []
+        },
+        "outputs": {
+          "stack": [],
+          "registers": []
         }
       },
       "control_flow": {
@@ -10898,10 +10896,48 @@
       "category": "continuation",
       "sub_category": "continuation_cond_loop",
       "description": {
-        "short": "",
-        "long": "Executes continuation `c`, then pops an integer `x` from the resulting stack. If `x` is zero, performs another iteration of this loop. The actual implementation of this primitive involves an extraordinary continuation `ec_until` with its arguments set to the body of the loop (continuation `c`) and the original current continuation `cс`. This extraordinary continuation is then saved into the savelist of `c` as `c.c0` and the modified `c` is then executed. The other loop primitives are implemented similarly with the aid of suitable extraordinary continuations.",
+        "short": "Executes continuation `body`, then pops an integer `cond` from the resulting stack. If `cond` is **zero**, performs another iteration of this loop, otherwise ends the loop.",
+        "long": "The actual implementation of this primitive involves an extraordinary continuation `ec_until` with its arguments set to the `body` of the loop and the original current continuation `cc`. This extraordinary continuation is then saved into the savelist of `body` as `body.c0` and the modified `body` is then executed. The other loop primitives are implemented similarly with the aid of suitable extraordinary continuations.",
         "tags": [],
         "operands": [],
+        "examples": [
+          {
+            "instructions": [
+              {
+                "instruction": "PUSHINT_8 100"
+              },
+              {
+                "instruction": "PUSHCONT {\n    DEC\n    DUP"
+              },
+              {
+                "instruction": "    EQINT 10",
+                "comment": "Check if counter is ten,"
+              },
+              {
+                "instruction": "            ",
+                "comment": "if true, exit the loop"
+              },
+              {
+                "instruction": "}"
+              },
+              {
+                "instruction": "UNTIL",
+                "comment": "Starts the loop",
+                "is_main": true
+              }
+            ],
+            "stack": {
+              "input": ["Continuation", "100"],
+              "output": ["10"]
+            }
+          }
+        ],
+        "docs_links": [
+          {
+            "name": "Save lists",
+            "url": "https://txtracer.ton.org/spec/doc/book/continuations/basics-register-c0-cc-savelist-if-instruction/"
+          }
+        ],
         "gas": [
           {
             "value": 18,
@@ -10969,8 +11005,8 @@
       "category": "continuation",
       "sub_category": "continuation_cond_loop",
       "description": {
-        "short": "",
-        "long": "Executes the current continuation `cс`, then pops an integer `x` from the resulting stack. If `x` is zero, performs another iteration of this loop. Unlike `UNTIL` which executes a separate continuation as the loop body, this instruction uses the current continuation itself as the loop body. When the loop exit condition is satisfied (when `x` is non-zero), performs a `RET`.",
+        "short": "Takes a remainder of the current continuation, executes it, then pops an integer `cond` from the resulting stack. If `cond` is **zero**, performs another iteration of this loop, otherwise ends the loop.",
+        "long": "Unlike `UNTIL` which executes a separate continuation as the loop body, this instruction uses the current continuation itself as the loop body. When the loop exit condition is satisfied (when `cond` is **non-zero**), performs a `RET`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -11032,8 +11068,8 @@
       "category": "continuation",
       "sub_category": "continuation_cond_loop",
       "description": {
-        "short": "",
-        "long": "Executes `c'` and pops an integer `x` from the resulting stack. If `x` is zero, exists the loop and transfers control to the original `c`. If `x` is non-zero, executes `c`, and then begins a new iteration.",
+        "short": "Executes continuation `cond`, then pops an integer `cond` from the resulting stack. If `cond` is **non-zero**, executes `body`, and then begins a new iteration, otherwise ends the loop.",
+        "long": "The actual implementation of this primitive involves an extraordinary continuation `ec_while`.",
         "tags": [],
         "operands": [],
         "examples": [
@@ -11048,8 +11084,8 @@
                 "comment": "Condition: check if counter < 3"
               },
               {
-                "instruction": "PUSHCONT {\n  INC\n  DUP\n}",
-                "comment": "Body: increment counter and duplicate it"
+                "instruction": "PUSHCONT {\n  INC\n}",
+                "comment": "Body: increment counter"
               },
               {
                 "instruction": "WHILE",
@@ -11138,8 +11174,8 @@
       "category": "continuation",
       "sub_category": "continuation_cond_loop",
       "description": {
-        "short": "",
-        "long": "Executes continuation `c'` and pops an integer `x` from the resulting stack. If `x` is zero, exits the loop and transfers control to the original continuation. If `x` is non-zero, executes the current continuation `cс` as the loop body, and then begins a new iteration. Unlike `WHILE` which uses a separate continuation as the loop body, this instruction uses the current continuation itself as the loop body.",
+        "short": "Executes continuation `cond`, then pops an integer `cond` from the resulting stack. If `cond` is **non-zero**, takes a remainder of the current continuation and executes it as the loop body, then begins a new iteration, otherwise ends the loop.",
+        "long": "Unlike `WHILE` which executes a separate continuation `body` as the loop body, this instruction uses the current continuation itself as the loop body.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -11172,7 +11208,12 @@
               "name": "cond",
               "value_types": ["Continuation"]
             }
-          ]
+          ],
+          "registers": []
+        },
+        "outputs": {
+          "stack": [],
+          "registers": []
         }
       },
       "control_flow": {
@@ -11207,8 +11248,8 @@
       "category": "continuation",
       "sub_category": "continuation_cond_loop",
       "description": {
-        "short": "",
-        "long": "Executes continuation `c` infinitely many times. Unlike `REPEAT` which executes a continuation a specified number of times, this instruction creates an infinite loop. A `RET` inside the code of `c` only begins a new iteration of the infinite loop, which can be exited only by an exception, or a `RETALT` (or an explicit `JMPX`).",
+        "short": "Executes continuation `body` infinitely many times.",
+        "long": "Unlike `REPEAT` which executes a continuation a specified number of times, this instruction creates an infinite loop. `RET` inside `body` code starts a new iteration of an infinite loop, rather than breaks from the loop. `AGAIN` loop can be exited only by an exception, `RETALT` with a `SETEXITALT` before the loop, or an explicit `JMPX`. Another way is to use `AGAINBRK`, which also sets `c1` to `cc`, and `RETALT` in the body, which will transfer control to the original `cc` and exit the loop.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -11263,8 +11304,8 @@
       "category": "continuation",
       "sub_category": "continuation_cond_loop",
       "description": {
-        "short": "",
-        "long": "Executes the current continuation `cс` infinitely many times. Unlike `AGAIN` which executes a separate continuation in an infinite loop, this instruction uses the current continuation itself as the loop body. A `RET` only begins a new iteration of the infinite loop, which can be exited only by an exception, or a `RETALT` (or an explicit `JMPX`).",
+        "short": "Takes a remainder of the current continuation and executes it infinitely many times.",
+        "long": "Unlike `AGAIN` which executes a separate continuation in an infinite loop, this instruction uses the current continuation itself as the loop body. `RET` inside `body` code starts a new iteration of an infinite loop, rather than breaks from the loop. `AGAINEND` loop can be exited only by an exception, `RETALT` with a `SETEXITALT` before the loop, or an explicit `JMPX`. Another way is to use `AGAINENDBRK`, which also sets `c1` to `cc`, and `RETALT` in the body, which will transfer control to the original `cc` and exit the loop.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -11317,10 +11358,22 @@
       "category": "continuation",
       "sub_category": "continuation_cond_loop",
       "description": {
-        "short": "",
-        "long": "Executes continuation `body` `n` times, if integer `n` is non-negative, just like `REPEAT`. Additionally, it sets `c1` to the original `c` after saving the old value of `c1` into the savelist of the original `c`. This modification allows `RETALT` to be used to break out of the loop body, providing a way to exit the loop before all iterations are completed.",
+        "short": "Stores current continuation in `c1` of `body` and executes continuation `body` `n`-times, if integer `n` is non-negative.",
+        "long": "Just like `REPEAT`, but additionally sets `c1` to the original `c` after saving the old value of `c1` into the savelist of the original `c`. This modification allows `RETALT` to be used to break out of the loop body, providing a way to exit the loop before all iterations are completed.",
         "tags": [],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "5",
+            "condition": "If `n >= 2^31` or `n < -2^31`."
+          }
+        ],
+        "docs_links": [
+          {
+            "name": "Exit points of continuations",
+            "url": "https://txtracer.ton.org/spec/doc/book/continuations/diving-deeper-exit-points-of-continuations/"
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -11355,6 +11408,16 @@
               "type": "simple",
               "name": "body",
               "value_types": ["Continuation"]
+            }
+          ],
+          "registers": []
+        },
+        "outputs": {
+          "stack": [],
+          "registers": [
+            {
+              "type": "constant",
+              "index": 1
             }
           ]
         }
@@ -11407,10 +11470,22 @@
       "category": "continuation",
       "sub_category": "continuation_cond_loop",
       "description": {
-        "short": "",
-        "long": "Executes the current continuation `cс` `n` times, if integer `n` is non-negative, just like `REPEATEND`. Additionally, it sets `c1` to the original `c0` after saving the old value of `c1` into the savelist of the original `c0`. This modification allows `RETALT` to be used to break out of the loop body, providing a way to exit the loop before all iterations are completed.",
+        "short": "Stores current continuation in `c1` and takes a remainder of the current continuation and executes it `n`-times, if integer `n` is non-negative.",
+        "long": "Just like `REPEATEND`, but additionally sets `c1` to the original `c0` after saving the old value of `c1` into the savelist of the original `c0`. This modification allows `RETALT` to be used to break out of the loop body, providing a way to exit the loop before all iterations are completed.",
         "tags": [],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "5",
+            "condition": "If `n >= 2^31` or `n < -2^31`."
+          }
+        ],
+        "docs_links": [
+          {
+            "name": "Exit points of continuations",
+            "url": "https://txtracer.ton.org/spec/doc/book/continuations/diving-deeper-exit-points-of-continuations/"
+          }
+        ],
         "other_implementations": [
           {
             "exact": true,
@@ -11447,6 +11522,16 @@
               "name": "n",
               "value_types": ["Int"]
             }
+          ],
+          "registers": []
+        },
+        "outputs": {
+          "stack": [],
+          "registers": [
+            {
+              "type": "constant",
+              "index": 1
+            }
           ]
         }
       },
@@ -11479,10 +11564,16 @@
       "category": "continuation",
       "sub_category": "continuation_cond_loop",
       "description": {
-        "short": "",
-        "long": "Executes continuation `c`, then pops an integer `x` from the resulting stack. If `x` is zero, performs another iteration of this loop, just like `UNTIL`. Additionally, it sets `c1` to the original continuation after saving the old value of `c1` into the savelist of the original continuation. This modification allows `RETALT` to be used to break out of the loop body, providing a way to exit the loop before the exit condition is met.",
+        "short": "Stores current continuation in `c1` of `body` and executes continuation `body`, then pops an integer `cond` from the resulting stack. If `cond` is **zero**, performs another iteration of this loop, otherwise ends the loop.",
+        "long": "Just like `UNTIL`, but additionally sets `c1` to the original continuation after saving the old value of `c1` into the savelist of the original continuation. This modification allows `RETALT` to be used to break out of the loop body, providing a way to exit the loop before the exit condition is met.",
         "tags": [],
         "operands": [],
+        "docs_links": [
+          {
+            "name": "Exit points of continuations",
+            "url": "https://txtracer.ton.org/spec/doc/book/continuations/diving-deeper-exit-points-of-continuations/"
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -11512,6 +11603,16 @@
               "type": "simple",
               "name": "body",
               "value_types": ["Continuation"]
+            }
+          ],
+          "registers": []
+        },
+        "outputs": {
+          "stack": [],
+          "registers": [
+            {
+              "type": "constant",
+              "index": 1
             }
           ]
         }
@@ -11582,10 +11683,16 @@
       "category": "continuation",
       "sub_category": "continuation_cond_loop",
       "description": {
-        "short": "",
-        "long": "Executes the current continuation `cс`, then pops an integer `x` from the resulting stack. If `x` is zero, performs another iteration of this loop, just like `UNTILEND`. Additionally, it sets `c1` to the original `c0` after saving the old value of `c1` into the savelist of the original `c0`. This modification allows `RETALT` to be used to break out of the loop body, providing a way to exit the loop before the exit condition is met.",
+        "short": "Stores current continuation in `c1` and takes a remainder of the current continuation, executes it, then pops an integer `cond` from the resulting stack. If `cond` is **zero**, performs another iteration of this loop, otherwise ends the loop.",
+        "long": "Just like `UNTILEND`, but additionally sets `c1` to the original `c0` after saving the old value of `c1` into the savelist of the original `c0`. This modification allows `RETALT` to be used to break out of the loop body, providing a way to exit the loop before the exit condition is met.",
         "tags": [],
         "operands": [],
+        "docs_links": [
+          {
+            "name": "Exit points of continuations",
+            "url": "https://txtracer.ton.org/spec/doc/book/continuations/diving-deeper-exit-points-of-continuations/"
+          }
+        ],
         "other_implementations": [
           {
             "exact": true,
@@ -11621,7 +11728,12 @@
         },
         "outputs": {
           "stack": [],
-          "registers": []
+          "registers": [
+            {
+              "type": "constant",
+              "index": 1
+            }
+          ]
         }
       },
       "control_flow": {
@@ -11661,10 +11773,16 @@
       "category": "continuation",
       "sub_category": "continuation_cond_loop",
       "description": {
-        "short": "",
-        "long": "Executes continuation `c'` and pops an integer `x` from the resulting stack. If `x` is zero, exits the loop and transfers control to the original continuation. If `x` is non-zero, executes continuation `c`, and then begins a new iteration, just like `WHILE`. Additionally, it sets `c1` to the original continuation after saving the old value of `c1` into the savelist of the original continuation. This modification allows `RETALT` to be used to break out of the loop body, providing a way to exit the loop before the condition becomes false.",
+        "short": "Stores current continuation in `c1` of `body` and executes continuation `cond`, then pops an integer `cond` from the resulting stack. If `cond` is **non-zero**, executes `body`, and then begins a new iteration, otherwise ends the loop.",
+        "long": "Just like `WHILE`, but additionally sets `c1` to the original continuation after saving the old value of `c1` into the savelist of the original continuation. This modification allows `RETALT` to be used to break out of the loop body, providing a way to exit the loop before the condition becomes false.",
         "tags": [],
         "operands": [],
+        "docs_links": [
+          {
+            "name": "Exit points of continuations",
+            "url": "https://txtracer.ton.org/spec/doc/book/continuations/diving-deeper-exit-points-of-continuations/"
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -11699,6 +11817,16 @@
               "type": "simple",
               "name": "body",
               "value_types": ["Continuation"]
+            }
+          ],
+          "registers": []
+        },
+        "outputs": {
+          "stack": [],
+          "registers": [
+            {
+              "type": "constant",
+              "index": 1
             }
           ]
         }
@@ -11745,10 +11873,16 @@
       "category": "continuation",
       "sub_category": "continuation_cond_loop",
       "description": {
-        "short": "",
-        "long": "Executes continuation `c'` and pops an integer `x` from the resulting stack. If `x` is zero, exits the loop and transfers control to the original continuation. If `x` is non-zero, executes the current continuation `cс` as the loop body, and then begins a new iteration, just like `WHILEEND`. Additionally, it sets `c1` to the original `c0` after saving the old value of `c1` into the savelist of the original `c0`. This modification allows `RETALT` to be used to break out of the loop body, providing a way to exit the loop before the condition becomes false.",
+        "short": "Stores current continuation in `c1` and executes continuation `cond`, then pops an integer `cond` from the resulting stack. If `cond` is **non-zero**, takes a remainder of the current continuation and executes it as the loop body, then begins a new iteration, otherwise ends the loop.",
+        "long": "Just like `WHILEEND`, but additionally sets `c1` to the original `c0` after saving the old value of `c1` into the savelist of the original `c0`. This modification allows `RETALT` to be used to break out of the loop body, providing a way to exit the loop before the condition becomes false.",
         "tags": [],
         "operands": [],
+        "docs_links": [
+          {
+            "name": "Exit points of continuations",
+            "url": "https://txtracer.ton.org/spec/doc/book/continuations/diving-deeper-exit-points-of-continuations/"
+          }
+        ],
         "other_implementations": [
           {
             "exact": true,
@@ -11777,13 +11911,23 @@
         "prefix_str": "E319"
       },
       "signature": {
-        "stack_string": "c:Continuation -> ∅",
+        "stack_string": "cond:Continuation -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "c",
+              "name": "cond",
               "value_types": ["Continuation"]
+            }
+          ],
+          "registers": []
+        },
+        "outputs": {
+          "stack": [],
+          "registers": [
+            {
+              "type": "constant",
+              "index": 1
             }
           ]
         }
@@ -11793,10 +11937,16 @@
       "category": "continuation",
       "sub_category": "continuation_cond_loop",
       "description": {
-        "short": "",
-        "long": "Executes continuation `c` infinitely many times, just like `AGAIN`. Additionally, it sets `c1` to the original continuation after saving the old value of `c1` into the savelist of the original continuation. This modification allows `RETALT` to be used to break out of the infinite loop, providing a way to exit the loop that would otherwise continue indefinitely.",
+        "short": "Store current continuation in `c1` of `body` and executes continuation `body` infinitely many times.",
+        "long": "This instruction sets `c1` to the original continuation after saving the old value of `c1` into the savelist of the original continuation. This modification allows `RETALT` to be used to break out of the infinite loop, providing a way to exit the loop that would otherwise continue indefinitely.",
         "tags": [],
         "operands": [],
+        "docs_links": [
+          {
+            "name": "Exit points of continuations",
+            "url": "https://txtracer.ton.org/spec/doc/book/continuations/diving-deeper-exit-points-of-continuations/"
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -11828,6 +11978,15 @@
               "value_types": ["Continuation"]
             }
           ]
+        },
+        "outputs": {
+          "stack": [],
+          "registers": [
+            {
+              "type": "constant",
+              "index": 1
+            }
+          ]
         }
       }
     },
@@ -11835,10 +11994,16 @@
       "category": "continuation",
       "sub_category": "continuation_cond_loop",
       "description": {
-        "short": "",
-        "long": "Executes the current continuation `cс` infinitely many times, just like `AGAINEND`. Additionally, it sets `c1` to the original `c0` after saving the old value of `c1` into the savelist of the original `c0`. This modification allows `RETALT` to be used to break out of the infinite loop, providing a way to exit the loop that would otherwise continue indefinitely.",
+        "short": "Stores current continuation in `c1` and takes a remainder of the current continuation and executes it infinitely many times.",
+        "long": "Just like `AGAINEND`, but additionally sets `c1` to the original `c0` after saving the old value of `c1` into the savelist of the original `c0`. This modification allows `RETALT` to be used to break out of the infinite loop, providing a way to exit the loop that would otherwise continue indefinitely.",
         "tags": [],
         "operands": [],
+        "docs_links": [
+          {
+            "name": "Exit points of continuations",
+            "url": "https://txtracer.ton.org/spec/doc/book/continuations/diving-deeper-exit-points-of-continuations/"
+          }
+        ],
         "other_implementations": [
           {
             "exact": true,
@@ -11874,7 +12039,12 @@
         },
         "outputs": {
           "stack": [],
-          "registers": []
+          "registers": [
+            {
+              "type": "constant",
+              "index": 1
+            }
+          ]
         }
       }
     },
@@ -13199,8 +13369,8 @@
       "category": "exception",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "Sets `c2` to `handler`, first saving the old value of `c2` both into the savelist of `handler` and into the savelist of the current continuation `cc`, which is stored into `body.c0` and `handler.c0`. Then runs `body` similarly to `EXECUTE`. If `body` does not throw any exceptions, the original value of `c2` is automatically restored on return from `body`. If an exception occurs, the execution is transferred to `handler`, but the original value of `c2` is restored in the process, so that `handler` can re-throw the exception by `THROWANY` if it cannot handle it by itself.",
+        "short": "Executes `body` and if it throws an exception, transfers control to `handler`.",
+        "long": "Sets `c2` to `handler`, first saving the old value of `c2` both into the savelist of `handler` and into the savelist of the current continuation `cc`, which is stored into `body.c0` and `handler.c0`. Then performs `EXECUTE` on `body` continuation. If `body` does not throw any exceptions, the original value of `c2` is automatically restored on return from `body`. If an exception occurs, the execution is transferred to `handler`, but the original value of `c2` is restored in the process, so that `handler` can re-throw the exception by `THROWANY` if it cannot handle it by itself.",
         "tags": ["exception_handling", "control_flow"],
         "operands": [],
         "gas": [
@@ -21034,10 +21204,16 @@
       "category": "cell",
       "sub_category": "cell_serialize",
       "description": {
-        "short": "",
-        "long": "Stores an _Integer_ `x` in the range `0...2^120-1` into _Builder_ `b`, and returns the resulting _Builder_ `b'`. The serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, which is the smallest integer `l>=0`, such that `x<2^(8l)`, followed by an `8l`-bit unsigned big-endian representation of `x`. If `x` does not belong to the supported range, a range check exception is thrown.",
+        "short": "Stores an integer `x` into _Builder_ `b` as an 16-bit unsigned variable-length integer.",
+        "long": "Stores an integer `x` in the range `0...2^120-1` into _Builder_ `b`, and returns the resulting _Builder_ `b'`. The serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, which is the smallest integer `l>=0`, such that `x<2^(8l)`, followed by an `8l`-bit unsigned big-endian representation of `x`.",
         "tags": ["variable-size integer", "builder building"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "5",
+            "condition": "If `x` is less than 0 and bigger than 2^120-1"
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -21060,7 +21236,7 @@
         "prefix_str": "FA02"
       },
       "signature": {
-        "stack_string": "b:Builder x:Int -> b2:Builder",
+        "stack_string": "b:Builder x:Int -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -21071,7 +21247,11 @@
             {
               "type": "simple",
               "name": "x",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1.329227995784916e36
+              }
             }
           ]
         },
@@ -21079,7 +21259,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -21090,10 +21270,16 @@
       "category": "cell",
       "sub_category": "cell_serialize",
       "description": {
-        "short": "",
-        "long": "Stores a _signed_ _Integer_ `x` in the range `-2^119...2^119-1` into _Builder_ `b`, and returns the resulting _Builder_ `b'`. The serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, which is the smallest integer `l>=0`, such that `-2^(8l-1) <= x < 2^(8l-1)`, followed by an `8l`-bit signed big-endian representation of `x`. If `x` does not belong to the supported range, a range check exception is thrown.",
+        "short": "Stores an integer `x` into _Builder_ `b` as an 16-bit signed variable-length integer.",
+        "long": "Stores a _signed_ _Integer_ `x` in the range `-2^119...2^119-1` into _Builder_ `b`, and returns the resulting _Builder_ `b'`. The serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, which is the smallest integer `l>=0`, such that `-2^(8l-1) <= x < 2^(8l-1)`, followed by an `8l`-bit signed big-endian representation of `x`.",
         "tags": ["variable-size integer", "builder building"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "5",
+            "condition": "If `x` is less than -2^119 and bigger than 2^119-1"
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -21116,7 +21302,7 @@
         "prefix_str": "FA03"
       },
       "signature": {
-        "stack_string": "b:Builder x:Int -> b2:Builder",
+        "stack_string": "b:Builder x:Int -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -21135,7 +21321,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -21270,10 +21456,16 @@
       "category": "cell",
       "sub_category": "cell_serialize",
       "description": {
-        "short": "",
-        "long": "Stores an _Integer_ `x` in the range `0...2^248-1` into _Builder_ `b`, and returns the resulting _Builder_ `b'`. The serialization of `x` consists of a 5-bit unsigned big-endian integer `l`, which is the smallest integer `l>=0`, such that `x<2^(8l)`, followed by an `8l`-bit unsigned big-endian representation of `x`. If `x` does not belong to the supported range, a range check exception is thrown.",
+        "short": "Stores an integer `x` into _Builder_ `b` as an 32-bit unsigned variable-length integer.",
+        "long": "Stores an _Integer_ `x` in the range `0...2^248-1` into _Builder_ `b`, and returns the resulting _Builder_ `b'`. The serialization of `x` consists of a 5-bit unsigned big-endian integer `l`, which is the smallest integer `l>=0`, such that `x<2^(8l)`, followed by an `8l`-bit unsigned big-endian representation of `x`.",
         "tags": ["variable-size integer", "builder building"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "5",
+            "condition": "If `x` is less than 0 and bigger than 2^248-1"
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -21296,7 +21488,7 @@
         "prefix_str": "FA06"
       },
       "signature": {
-        "stack_string": "b:Builder x:Int -> b2:Builder",
+        "stack_string": "b:Builder x:Int -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -21315,7 +21507,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -21326,10 +21518,16 @@
       "category": "cell",
       "sub_category": "cell_serialize",
       "description": {
-        "short": "",
-        "long": "Stores a _signed_ _Integer_ `x` in the range `-2^247...2^247-1` into _Builder_ `b`, and returns the resulting _Builder_ `b'`. The serialization of `x` consists of a 5-bit unsigned big-endian integer `l`, which is the smallest integer `l>=0`, such that `-2^(8l-1) <= x < 2^(8l-1)`, followed by an `8l`-bit signed big-endian representation of `x`. If `x` does not belong to the supported range, a range check exception is thrown.",
+        "short": "Stores an integer `x` into _Builder_ `b` as an 32-bit signed variable-length integer.",
+        "long": "Stores a _signed_ _Integer_ `x` in the range `-2^247...2^247-1` into _Builder_ `b`, and returns the resulting _Builder_ `b'`. The serialization of `x` consists of a 5-bit unsigned big-endian integer `l`, which is the smallest integer `l>=0`, such that `-2^(8l-1) <= x < 2^(8l-1)`, followed by an `8l`-bit signed big-endian representation of `x`.",
         "tags": ["variable-size integer", "builder building"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "5",
+            "condition": "If `x` is less than -2^247 and bigger than 2^247-1"
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -21352,7 +21550,7 @@
         "prefix_str": "FA07"
       },
       "signature": {
-        "stack_string": "b:Builder x:Int -> b2:Builder",
+        "stack_string": "b:Builder x:Int -> b':Builder",
         "inputs": {
           "stack": [
             {
@@ -21371,7 +21569,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "b2",
+              "name": "b'",
               "value_types": ["Builder"]
             }
           ]
@@ -21906,8 +22104,8 @@
       "category": "message",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "Sends a raw message contained in _Cell `c`_, which should contain a correctly serialized object `Message X`, with the only exception that the source address is allowed to have dummy value `addr_none` (to be automatically replaced with the current smart-contract address), and `ihr_fee`, `fwd_fee`, `created_lt` and `created_at` fields can have arbitrary values (to be rewritten with correct values during the action phase of the current transaction).\n\nInteger parameter `x` contains the flags.\n\nCurrently `x == 0` is used for ordinary messages.\n\n`x=128` is used for messages that are to carry all the remaining balance of the current smart contract (instead of the value originally indicated in the message).\n\n`x=64` is used for messages that carry all the remaining value of the inbound message in addition to the value initially indicated in the new message (if bit 0 is not set, the gas fees are deducted from this amount).\n\n`x'=x+1` means that the sender wants to pay transfer fees separately.\n\n`x'=x+2` means that any errors arising while processing this message during the action phase should be ignored.\n\nFinally, `x'=x+32` means that the current account must be destroyed if its resulting balance is zero. This flag is usually employed together with `+128`.",
+        "short": "Creates an output action to send a raw message `msg`.",
+        "long": "Cell `msg` should contain a correctly serialized object `Message X`.\n\nSource address can have dummy value `addr_none`, and will be automatically replaced with the current smart-contract address.\n\n`ihr_fee`, `fwd_fee`, `created_lt` and `created_at` fields can also have arbitrary values and will be rewritten with correct values during the action phase of the current transaction.\n\nInteger parameter `mode` contains the flags.\n\n- `mode=0` is used for ordinary messages.\n\n- `mode=128` is used for messages that are to carry all the remaining balance of the current smart contract (instead of the value originally indicated in the message).\n\n- `mode=64` is used for messages that carry all the remaining value of the inbound message in addition to the value initially indicated in the new message (if bit 0 is not set, the gas fees are deducted from this amount).\n\n- `mode'=mode+1` means that the sender wants to pay transfer fees separately.\n\n- `mode'=mode+2` means that any errors arising while processing this message during the action phase should be ignored.\n\n- `mode'=mode+32` means that the current account must be destroyed if its resulting balance is zero. This flag is usually employed together with `+128`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -21932,17 +22130,17 @@
         "prefix_str": "FB00"
       },
       "signature": {
-        "stack_string": "c:Cell x:Int -> ∅",
+        "stack_string": "msg:Cell mode:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "c",
+              "name": "msg",
               "value_types": ["Cell"]
             },
             {
               "type": "simple",
-              "name": "x",
+              "name": "mode",
               "value_types": ["Int"]
             }
           ],
@@ -21968,8 +22166,8 @@
       "category": "message",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "Creates an output action which would reserve exactly `x` nanograms (if `y == 0`), at most `x` nanograms (if `y == 2`), or all but `x` nanograms (if `y == 1` or `y == 3`), from the remaining balance of the account. It is roughly equivalent to creating an outbound message carrying `x` nanograms (or `b-x` nanograms, where `b` is the remaining balance) to oneself, so that the subsequent output actions would not be able to spend more money than the remainder. Bit `+2` in `y` means that the external action does not fail if the specified amount cannot be reserved; instead, all remaining balance is reserved. Bit `+8` in `y` means `x:=-x` before performing any further actions. Bit `+4` in `y` means that `x` is increased by the original balance of the current account (before the compute phase), including all extra currencies, before performing any other checks and actions. Currently `x` must be a non-negative integer, and `y` must be in the range `0...15`.",
+        "short": "Creates an output action which would reserve exactly `amount` nanotons (if `mode=0`), at most `x` nanotons (if `mode=2`), or all but `x` nanotons (if `mode=1` or `mode=3`), from the remaining balance of the account. ",
+        "long": "This behavior is roughly equivalent to creating an outbound message carrying `amount` nanotons (or `b-amount` nanotons, where `b` is the remaining balance) to oneself, so that the subsequent output actions would not be able to spend more money than the remainder.\n\n- Bit `+2` in `mode` means that the external action does not fail if the specified amount cannot be reserved; instead, all remaining balance is reserved.\n\n- Bit `+8` in `mode` means `amount=-amount` before performing any further actions.\n\n- Bit `+4` in `mode` means that `amount` is increased by the original balance of the current account (before the compute phase), including all extra currencies, before performing any other checks and actions.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -21994,18 +22192,26 @@
         "prefix_str": "FB02"
       },
       "signature": {
-        "stack_string": "x:Int y:Int -> ∅",
+        "stack_string": "amount:Int mode:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "x",
-              "value_types": ["Int"]
+              "name": "amount",
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 2147483648
+              }
             },
             {
               "type": "simple",
-              "name": "y",
-              "value_types": ["Int"]
+              "name": "mode",
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 15
+              }
             }
           ],
           "registers": [
@@ -22031,7 +22237,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Similar to `RAWRESERVE`, but also accepts a dictionary `D` (represented by a _Cell_ or _Null_) with extra currencies. In this way currencies other than Grams can be reserved.",
+        "long": "Similar to `RAWRESERVE`, but also accepts a dictionary `D` with extra currencies. In this way currencies other than TON can be reserved.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -22056,12 +22262,12 @@
         "prefix_str": "FB03"
       },
       "signature": {
-        "stack_string": "x:Int D:Cell|Null y:Int -> ∅",
+        "stack_string": "amount:Int D:Cell|Null mode:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "x",
+              "name": "amount",
               "value_types": ["Int"]
             },
             {
@@ -22071,7 +22277,7 @@
             },
             {
               "type": "simple",
-              "name": "y",
+              "name": "mode",
               "value_types": ["Int"]
             }
           ],
@@ -22098,7 +22304,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Creates an output action that would change this smart contract code to that given by _Cell_ `c`. Notice that this change will take effect only after the successful termination of the current run of the smart contract.",
+        "long": "Creates an output action that would change this smart contract code to that given by _Cell_ `code`. This change will take effect only after the successful termination of the current run of the smart contract.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -22123,12 +22329,12 @@
         "prefix_str": "FB04"
       },
       "signature": {
-        "stack_string": "c:Cell -> ∅",
+        "stack_string": "code:Cell -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "c",
+              "name": "code",
               "value_types": ["Cell"]
             }
           ],
@@ -22154,8 +22360,8 @@
       "category": "message",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "Creates an output action that would modify the collection of this smart contract libraries by adding or removing library with code given in _Cell_ `c`. If `x == 0`, the library is actually removed if it was previously present in the collection (if not, this action does nothing). If `x=1`, the library is added as a private library, and if `x=2`, the library is added as a public library (and becomes available to all smart contracts if the current smart contract resides in the masterchain); if the library was present in the collection before, its public/private status is changed according to `x`. Values of `x` other than `0...2` are invalid.",
+        "short": "Creates an output action that would modify the collection of this smart contract libraries by adding or removing library with code given in _Cell_ `code`.",
+        "long": "- If `mode=0`, the library is removed if it was previously present in the collection, if not, this action does nothing.\n\n- If `mode=1`, the library is added as a private library.\n\n- If `mode=2`, the library is added as a public library and becomes available to all smart contracts if the current smart contract resides in the masterchain.\n\nIf the library was present in the collection before, its public/private status is changed according to `mode`. Values of `mode` other than `0...2` are invalid.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -22180,18 +22386,22 @@
         "prefix_str": "FB06"
       },
       "signature": {
-        "stack_string": "c:Cell x:Int -> ∅",
+        "stack_string": "code:Cell mode:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "c",
+              "name": "code",
               "value_types": ["Cell"]
             },
             {
               "type": "simple",
-              "name": "x",
-              "value_types": ["Int"]
+              "name": "mode",
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 2
+              }
             }
           ],
           "registers": [
@@ -22217,7 +22427,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Creates an output action similarly to `SETLIBCODE`, but instead of the library code accepts its hash as an unsigned 256-bit integer `h`. If `x != 0` and the library with hash `h` is absent from the library collection of this smart contract, this output action will fail.",
+        "long": "Creates an output action similarly to `SETLIBCODE`, but instead of the library code accepts its hash as an unsigned 256-bit integer `hash`. If `mode != 0` and the library with `hash` is absent from the library collection of this smart contract, this output action will fail.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -22242,17 +22452,17 @@
         "prefix_str": "FB07"
       },
       "signature": {
-        "stack_string": "h:Int x:Int -> ∅",
+        "stack_string": "hash:Int mode:Int -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "h",
+              "name": "hash",
               "value_types": ["Int"]
             },
             {
               "type": "simple",
-              "name": "x",
+              "name": "mode",
               "value_types": ["Int"]
             }
           ],
@@ -22278,8 +22488,8 @@
       "category": "message",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "Creates an output action and returns a fee for creating a message. Mode has the same effect as in the case of `SENDRAWMSG`. Additionally `+1024` means - do not create an action, only estimate fee. Other modes affect the fee calculation as follows: `+64` substitutes the entire balance of the incoming message as an outcoming value (slightly inaccurate, gas expenses that cannot be estimated before the computation is completed are not taken into account), `+128` substitutes the value of the entire balance of the contract before the start of the computation phase (slightly inaccurate, since gas expenses that cannot be estimated before the completion of the computation phase are not taken into account).",
+        "short": "Creates an output action to send a message `msg` and returns a fee for creating a message.",
+        "long": "Mode has the same effect as in the case of `SENDRAWMSG`.\n\nAdditionally `+1024` means — do not create an action, only estimate fee. Other modes affect the fee calculation as follows:\n\n- `+64` substitutes the entire balance of the incoming message as an outcoming value (slightly inaccurate, gas expenses that cannot be estimated before the computation is completed are not taken into account).\n\n- `+128` substitutes the value of the entire balance of the contract before the start of the computation phase (slightly inaccurate, since gas expenses that cannot be estimated before the completion of the computation phase are not taken into account).",
         "tags": [],
         "operands": [],
         "gas": [
@@ -22305,17 +22515,17 @@
         "prefix_str": "FB08"
       },
       "signature": {
-        "stack_string": "c:Cell x:Int -> fee:Int",
+        "stack_string": "msg:Cell mode:Int -> fee:Int",
         "inputs": {
           "stack": [
             {
               "type": "simple",
-              "name": "c",
+              "name": "msg",
               "value_types": ["Cell"]
             },
             {
               "type": "simple",
-              "name": "x",
+              "name": "mode",
               "value_types": ["Int"]
             }
           ],
@@ -22803,7 +23013,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Computes _Tuple_ `t'` that differs from `t` only at position `t'_{k+1}`, which is set to `x`, where `k` is taken from the stack rather than specified in the instruction.",
+        "long": "Sets the `i`-th component of _Tuple_ `t` to `x` taken from the stack.",
         "tags": [],
         "operands": [],
         "exit_codes": [
@@ -22834,7 +23044,7 @@
         "prefix_str": "6F85"
       },
       "signature": {
-        "stack_string": "t:Tuple x:Any k:Int -> t2:Tuple",
+        "stack_string": "t:Tuple x:Any i:Int -> t2:Tuple",
         "inputs": {
           "stack": [
             {
@@ -22848,7 +23058,7 @@
             },
             {
               "type": "simple",
-              "name": "k",
+              "name": "i",
               "range": {
                 "min": 0,
                 "max": 254
@@ -22873,7 +23083,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Returns the `k`-th element of a _Tuple_ `t`, where `k` is taken from the stack rather than specified in the instruction. In other words, returns `x_{k+1}` if `t=(x_1,...,x_n)`. If `k>=n`, or if `t` is _Null_, returns a _Null_ instead of `x`.",
+        "long": "Returns the `i`-th element of a _Tuple_ `t` with `i` taken from the stack. If `t` is _Null_ or `i` is greater than tuple length, returns a _Null_.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -22898,7 +23108,7 @@
         "prefix_str": "6F86"
       },
       "signature": {
-        "stack_string": "t:Tuple|Null k:Int -> x:Any",
+        "stack_string": "t:Tuple|Null i:Int -> x:Any",
         "inputs": {
           "stack": [
             {
@@ -22908,7 +23118,7 @@
             },
             {
               "type": "simple",
-              "name": "k",
+              "name": "i",
               "range": {
                 "min": 0,
                 "max": 254
@@ -22931,8 +23141,8 @@
       "category": "tuple",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "Sets the `k`-th component of _Tuple_ `t` to `x`, and returns the resulting _Tuple_ `t'`, where `k` is taken from the stack rather than specified in the instruction. If `|t| <= k`, first extends the original _Tuple_ to length `n'=k+1` by setting all new components to _Null_. If the original value of `t` is _Null_, treats it as an empty _Tuple_. If `x` is _Null_ and either `|t| <= k` or `t` is _Null_, then always returns `t'=t` (and does not consume tuple creation gas).",
+        "short": "Sets the `i`-th component of _Tuple_ `t` to `x` take from the stack. If `i` is bigger than tuple length, extends the tuple with Nulls first.",
+        "long": "If `|t| <= k`, first extends the original _Tuple_ to length `n'=k+1` by setting all new components to _Null_. If the original value of `t` is _Null_, treats it as an empty _Tuple_. If `x` is _Null_ and either `|t| <= k` or `t` is _Null_, then always returns `t'=t` and does not consume tuple creation gas.",
         "tags": [],
         "operands": [],
         "exit_codes": [
@@ -22963,7 +23173,7 @@
         "prefix_str": "6F87"
       },
       "signature": {
-        "stack_string": "t:Tuple|Null x:Any k:Int -> t2:Tuple|Null",
+        "stack_string": "t:Tuple|Null x:Any i:Int -> t2:Tuple|Null",
         "inputs": {
           "stack": [
             {
@@ -22977,7 +23187,7 @@
             },
             {
               "type": "simple",
-              "name": "k",
+              "name": "i",
               "range": {
                 "min": 0,
                 "max": 254
@@ -23052,8 +23262,8 @@
       "category": "tuple",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "Returns the length of a _Tuple_ `t` if `t` is a _Tuple_, but returns `-1` if `t` is not a _Tuple_. Unlike `TLEN` which throws an exception when `t` is not a _Tuple_, this instruction provides a way to safely check if a value is a _Tuple_ and get its length in one operation.",
+        "short": "Returns the length of a _Tuple_ `t`. If `t` is not a _Tuple_, returns `-1`.",
+        "long": "Unlike `TLEN` which throws an exception when `t` is not a _Tuple_, this instruction provides a way to safely check if a value is a _Tuple_ and get its length in one operation.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -46628,8 +46838,8 @@
       "category": "exception",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "Similar to `TRY`, but with `[p] [r] CALLXARGS` internally used instead of `EXECUTE`.\nIn this way, all but the top `p` stack elements will be saved into current continuation's stack, and then restored upon return from either `body` or `handler`, with the top `0 <= r <= 15` values of the resulting stack of `body` or `handler` copied as return values.",
+        "short": "Executes `body` with `p` top elements from the stack and if it throws an exception, transfers control to `handler`, otherwise copies the top `r` stack elements of the resulting stack of `body` as return values.",
+        "long": "This instruction is similar to `TRY`, but with `[p] [r] CALLXARGS` internally used instead of `EXECUTE`.\nIn this way, all but the top `p` stack elements will be saved into current continuation's stack, and then restored upon return from either `body` or `handler`, with the top `0 <= r <= 15` values of the resulting stack of `body` or `handler` copied as return values.",
         "tags": ["exception_handling", "control_flow"],
         "operands": ["p", "r"],
         "gas": [
@@ -46671,13 +46881,13 @@
         "prefix_str": "F3"
       },
       "signature": {
-        "stack_string": "x_1...x_r body:Continuation handler:Continuation -> ∅",
+        "stack_string": "x_1...x_p body:Continuation handler:Continuation -> ∅",
         "inputs": {
           "stack": [
             {
               "type": "array",
               "name": "args",
-              "length_var": "r",
+              "length_var": "p",
               "array_entry": [
                 {
                   "type": "simple",
@@ -47014,8 +47224,8 @@
       "category": "continuation",
       "sub_category": "continuation_dict_jump",
       "description": {
-        "short": "",
-        "long": "Prepares the continuation in `c3` for execution along with the integer `num` as an argument. Useful if you want to call continuation with `CALLXARGS` or `CALLCC` instead of `EXECUTE` as `CALLDICT` does. Essentially it's a preparation for method call with `num` ID in the dictionary.",
+        "short": "Prepares the continuation in `c3` for execution along with the integer `num` as an argument. Essentially it's a preparation for method call with `num` ID in the dictionary.",
+        "long": "This instruction is useful if you want to call continuation with `CALLXARGS` or `CALLCC` instead of `EXECUTE` as `CALLDICT` does.",
         "tags": [],
         "related_instructions": ["CALLDICT"],
         "operands": ["num"],
@@ -48224,9 +48434,9 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Computes _Tuple_ `t'` that differs from `t` only at position `t'_{k+1}`, which is set to `x`.",
+        "long": "Sets the `i`-th component of _Tuple_ `t` to `x`.",
         "tags": [],
-        "operands": ["k"],
+        "operands": ["i"],
         "exit_codes": [
           {
             "errno": "7",
@@ -48351,9 +48561,9 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Returns the `k`-th element of a _Tuple_ `t`. In other words, returns `x_{k+1}` if `t=(x_1,...,x_n)`. If `k>=n`, or if `t` is _Null_, returns a _Null_ instead of `x`.",
+        "long": "Returns the `i`-th element of a _Tuple_ `t`. If `t` is _Null_ or `i` is greater than tuple length, returns a _Null_.",
         "tags": [],
-        "operands": ["k"],
+        "operands": ["i"],
         "gas": [
           {
             "value": 26,
@@ -48409,10 +48619,10 @@
       "category": "tuple",
       "sub_category": "",
       "description": {
-        "short": "",
-        "long": "Sets the `k`-th component of _Tuple_ `t` to `x`, and returns the resulting _Tuple_ `t'`.\nIf `|t| <= k`, first extends the original _Tuple_ to length `n'=k+1` by setting all new components to _Null_. If the original value of `t` is _Null_, treats it as an empty _Tuple_. If `x` is _Null_ and either `|t| <= k` or `t` is _Null_, then always returns `t'=t` (and does not consume tuple creation gas).",
+        "short": "Sets the `i`-th component of _Tuple_ `t` to `x`. If `i` is bigger than tuple length, extends the tuple with Nulls first.",
+        "long": "If `|t| <= i`, first extends the original _Tuple_ to length `n'=i+1` by setting all new components to _Null_. If the original value of `t` is _Null_, treats it as an empty _Tuple_. If `i` is _Null_ and either `|t| <= i` or `t` is _Null_, then always returns `t'=t` and does not consume tuple creation gas.",
         "tags": [],
-        "operands": ["k"],
+        "operands": ["i"],
         "exit_codes": [
           {
             "errno": "7",
@@ -59043,7 +59253,7 @@
       "sub_category": "continuation_dict_jump",
       "description": {
         "short": "",
-        "long": "Calls the continuation in `c3`, pushing integer `num` into its stack as an argument. Essentially it's a call to method with `num` ID in the dictionary.",
+        "long": "Calls the continuation in `c3`, pushing integer `num` with extended range into its stack as an argument. Essentially it's a call to method with `num` ID in the dictionary.",
         "tags": [],
         "related_instructions": ["CALLDICT"],
         "operands": ["num"],
