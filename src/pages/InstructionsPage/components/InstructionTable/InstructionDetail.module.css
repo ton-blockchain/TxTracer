@@ -222,6 +222,12 @@
   }
 }
 
+.implementationLink {
+  color: var(--color-link);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+}
+
 @media (max-width: 768px) {
   .implementationsGridContainer {
     grid-template-columns: 1fr;

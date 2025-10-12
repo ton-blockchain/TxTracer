@@ -23,6 +23,14 @@ export interface Instruction {
   readonly effects?: Effect[]
   readonly operands?: string[]
   readonly control_flow?: ControlFlowOfInstruction
+  readonly implementation?: ImplementationInfo
+}
+
+export interface ImplementationInfo {
+  readonly commitHash: string
+  readonly filePath: string
+  readonly lineNumber: number
+  readonly functionName: string
 }
 
 export interface GasConsumptionEntry {

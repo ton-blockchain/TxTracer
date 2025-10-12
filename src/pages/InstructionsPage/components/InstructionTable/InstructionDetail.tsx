@@ -86,6 +86,7 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
               <span className={styles.metadataLabel}>Since Version:</span>
               <span className={styles.metadataValue}>{version}</span>
             </div>
+
             <div className={styles.metadataItem}>
               <span className={styles.metadataLabel}>Category:</span>
               <span className={styles.metadataValue}>{prettySubCategoryName(category)}</span>
@@ -94,6 +95,22 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
               <span className={styles.metadataLabel}>Gas:</span>
               <span className={styles.metadataValue}>{formattedGas}</span>
             </div>
+
+            {instruction.implementation && (
+              <div className={styles.metadataItem}>
+                <span className={styles.metadataLabel}>Implementation:</span>
+                <span className={styles.metadataValue}>
+                  <a
+                    href={`https://github.com/ton-blockchain/ton/blob/${instruction.implementation.commitHash}/${instruction.implementation.filePath}#L${instruction.implementation.lineNumber}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.implementationLink}
+                  >
+                    {instruction.implementation.filePath.split('/').pop()}:{instruction.implementation.lineNumber}
+                  </a>
+                </span>
+              </div>
+            )}
 
             {inputRegisters.length > 0 && (
               <div className={styles.metadataItem}>
