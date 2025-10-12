@@ -2,7 +2,7 @@ import React from "react"
 
 import ReactMarkdown from "react-markdown"
 
-import {Category, type Instruction} from "@features/spec/tvm-specification.types"
+import {Category, type DocsLink, type Instruction} from "@features/spec/tvm-specification.types"
 
 import {prettySubCategoryName} from "@app/pages/InstructionsPage/lib/formatCategory.ts"
 
@@ -58,8 +58,9 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
   }
 
   const inputRegisters = instruction.signature.inputs?.registers ?? []
+  const outputRegisters = instruction.signature.outputs?.registers ?? []
 
-  const links: {url: string; name: string}[] = []
+  const links: DocsLink[] = []
   if (description.docs_links) {
     links.push(...description.docs_links)
   }
@@ -98,16 +99,16 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
               <div className={styles.metadataItem}>
                 <span className={styles.metadataLabel}>Read registers:</span>
                 <span className={styles.metadataValue}>
-                  {inputRegisters?.map(reg => registerPresentation(reg))}
+                  {inputRegisters.map(reg => registerPresentation(reg))}
                 </span>
               </div>
             )}
 
-            {(instruction.signature.outputs?.registers?.length ?? 0) > 0 && (
+            {outputRegisters.length > 0 && (
               <div className={styles.metadataItem}>
                 <span className={styles.metadataLabel}>Write registers:</span>
                 <span className={styles.metadataValue}>
-                  {instruction.signature.outputs?.registers?.map(reg => registerPresentation(reg))}
+                  {outputRegisters.map(reg => registerPresentation(reg))}
                 </span>
               </div>
             )}
