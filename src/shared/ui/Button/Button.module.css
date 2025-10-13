@@ -13,6 +13,8 @@
   align-items: center;
   justify-content: center;
   user-select: none;
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-secondary);
 }
 
 .btn:disabled {

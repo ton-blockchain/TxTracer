@@ -292,6 +292,9 @@ function InstructionsPage() {
   }
 
   const handleRowClick = (instructionName: string) => {
+    // don't allow collapsing the instruction in anchor mode
+    if (anchorInstruction) return
+
     setExpandedRows(prev => ({
       ...prev,
       [instructionName]: !prev[instructionName],
