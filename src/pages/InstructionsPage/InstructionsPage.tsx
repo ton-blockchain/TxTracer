@@ -59,6 +59,7 @@ function appendFiftInstructions(
 function InstructionsPage() {
   const [spec, setSpec] = useState<TvmSpec | null>(null)
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({})
+  const [anchorInstruction, setAnchorInstruction] = useState<string | null>(null)
 
   const stored = loadStoredSettings()
 
@@ -76,8 +77,40 @@ function InstructionsPage() {
     setSpec(tvmSpecData as unknown as TvmSpec)
   }, [])
 
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.slice(1) // Remove the '#'
+      if (hash && hash !== anchorInstruction) {
+        setAnchorInstruction(hash)
+        setExpandedRows(prev => ({
+          ...prev,
+          [hash]: true,
+        }))
+      }
+    }
+
+    handleHashChange()
+    window.addEventListener("hashchange", handleHashChange)
+    return () => window.removeEventListener("hashchange", handleHashChange)
+  }, [anchorInstruction])
+
+  useEffect(() => {
+    if (anchorInstruction) {
+      const element = document.getElementById(anchorInstruction)
+      if (element) {
+        element.scrollIntoView({behavior: "smooth", block: "start"})
+      }
+    }
+  }, [anchorInstruction])
+
   const toggleColumn = (key: InstructionColumnKey) => {
     setSearchColumns(prev => (prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]))
+  }
+
+  const resetAnchor = () => {
+    setAnchorInstruction(null)
+    window.history.replaceState(null, "", window.location.pathname)
+    setExpandedRows({})
   }
 
   const instructions = useMemo(() => {
@@ -162,6 +195,15 @@ function InstructionsPage() {
 
   const filteredInstructions = useMemo(() => {
     const q = query.trim().toLowerCase()
+
+    // If we have an anchor instruction, show only it
+    if (anchorInstruction) {
+      const allInstructions = spec?.instructions ?? {}
+      if (allInstructions[anchorInstruction]) {
+        return {[anchorInstruction]: allInstructions[anchorInstruction]}
+      }
+    }
+
     if (!q) return filteredByCategory
 
     const entries = Object.entries(filteredByCategory)
@@ -183,7 +225,7 @@ function InstructionsPage() {
       if (match) next[name] = instruction
     }
     return next
-  }, [query, filteredByCategory, searchColumns])
+  }, [query, filteredByCategory, searchColumns, anchorInstruction, spec?.instructions])
 
   const sortedInstructions = useMemo(() => {
     const entries = Object.entries(filteredInstructions)
@@ -305,6 +347,14 @@ function InstructionsPage() {
               </div>
             )}
           </div>
+          {anchorInstruction && (
+            <div className={styles.anchorIndicator}>
+              <span>Showing: {anchorInstruction}</span>
+              <Button variant="outline" size="sm" onClick={resetAnchor}>
+                Reset view
+              </Button>
+            </div>
+          )}
           <InstructionTable
             instructions={sortedInstructions}
             expandedRows={expandedRows}

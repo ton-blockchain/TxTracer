@@ -194,11 +194,11 @@
 .anchorIndicator {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-md);
   padding: var(--spacing-xs) var(--spacing-sm);
   background-color: var(--color-background-primary);
   border-radius: var(--border-radius-sm);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xsm);
   color: var(--color-text-secondary);
   margin-bottom: var(--spacing-sm);
 }
