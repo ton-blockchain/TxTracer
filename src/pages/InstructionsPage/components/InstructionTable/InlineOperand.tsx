@@ -1,6 +1,6 @@
 import React from "react"
 
-import {Bits, type Child, type Instruction} from "@features/spec/tvm-specification.types"
+import {ArgsEnum, Bits, type Child, type Instruction} from "@features/spec/tvm-specification.types"
 
 import {Tooltip} from "@shared/ui/Tooltip/Tooltip"
 
@@ -37,7 +37,10 @@ const InlineOperand: React.FC<InlineOperandProps> = ({
 
   const layoutChildren = layout.args.children?.[operandIndex]
   const isControl = isType(layoutChildren, "control")
-  const isStack = isType(layoutChildren, "stack") || layoutChildren?.$ === "s1"
+  const isStack =
+    layout.args.$ === ArgsEnum.XchgArgs ||
+    isType(layoutChildren, "stack") ||
+    layoutChildren?.$ === "s1"
 
   const operandPresentation = isControl ? `c(${name})` : isStack ? `s(${name})` : `[${name}]`
 

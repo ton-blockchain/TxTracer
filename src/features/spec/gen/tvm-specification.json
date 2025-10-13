@@ -17172,7 +17172,7 @@
           },
           {
             "exact": true,
-            "instructions": ["s1", "s1", "XCPU"]
+            "instructions": ["s1 s1 XCPU"]
           }
         ],
         "gas": [
@@ -38382,13 +38382,46 @@
         "prefix_str": "F4BE"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "i:Int D:Cell|Null n:Int -> (i:Int 0)",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "i",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "D",
+              "value_types": ["Cell", "Null"]
+            },
+            {
+              "type": "simple",
+              "name": "n",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "conditional",
+              "name": "is_found",
+              "match": [
+                {
+                  "value": 0,
+                  "stack": [
+                    {
+                      "type": "simple",
+                      "name": "i",
+                      "value_types": ["Int"]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
           "registers": []
         }
       },
@@ -38448,13 +38481,46 @@
         "prefix_str": "F4BF"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "i:Int D:Cell|Null n:Int -> (i:Int 0)",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "i",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "D",
+              "value_types": ["Cell", "Null"]
+            },
+            {
+              "type": "simple",
+              "name": "n",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "conditional",
+              "name": "is_found",
+              "match": [
+                {
+                  "value": 0,
+                  "stack": [
+                    {
+                      "type": "simple",
+                      "name": "i",
+                      "value_types": ["Int"]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
           "registers": []
         }
       },
@@ -53114,13 +53180,13 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Exchanges `i`-th element with top (`s(i) XCHG0`) and pushes two values (`s(j) s(k) PUSH2`).",
+        "long": "Exchanges `i`-th element with top (`s(i) XCHG_0I`) and pushes two values (`s(j) s(k) PUSH2`).",
         "tags": ["stack"],
         "operands": ["i", "j", "k"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["s(i) XCHG0", "s(j) s(k) PUSH2"]
+            "instructions": ["s(i) XCHG_0I", "s(j) s(k) PUSH2"]
           }
         ],
         "gas": [
@@ -53270,13 +53336,13 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Performs two stack element exchanges in sequence (`s1 s(i) XCHG`, `s(j) XCHG0`).",
+        "long": "Performs two stack element exchanges in sequence (`s1 s(i) XCHG`, `s(j) XCHG_0I`).",
         "tags": ["stack"],
         "operands": ["i", "j"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["s1 s(i) XCHG", "s(j) XCHG0"]
+            "instructions": ["s1 s(i) XCHG", "s(j) XCHG_0I"]
           }
         ],
         "gas": [
@@ -53340,13 +53406,13 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Exchanges `i`-th element with top (`s(i) XCHG0`) and pushes `j`-th element (`s(j) PUSH`).",
+        "long": "Exchanges `i`-th element with top (`s(i) XCHG_0I`) and pushes `j`-th element (`s(j) PUSH`).",
         "tags": ["stack"],
         "operands": ["i", "j"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["s(i) XCHG0", "s(j) PUSH"]
+            "instructions": ["s(i) XCHG_0I", "s(j) PUSH"]
           }
         ],
         "gas": [
@@ -53480,13 +53546,13 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Pushes `i`-th element, swaps it, and exchanges with `j`-th element (`s(i) PUSH`, `SWAP`, `s(j) XCHG0`).",
+        "long": "Pushes `i`-th element, swaps it, and exchanges with `j`-th element (`s(i) PUSH`, `SWAP`, `s(j) XCHG_0I`).",
         "tags": ["stack"],
         "operands": ["i", "j"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["s(i) PUSH", "SWAP", "s(j) XCHG0"]
+            "instructions": ["s(i) PUSH", "SWAP", "s(j) XCHG_0I"]
           }
         ],
         "gas": [
@@ -53554,13 +53620,13 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Exchanges second with `i`-th element, then performs PUXC with `j` and `k-1` (`s1 s(i) XCHG`, `s(j) s[k-1] PUXC`).",
+        "long": "Exchanges second with `i`-th element, then performs PUXC with `j` and `k-1` (`s1 s(i) XCHG_1I`, `s(j) s[k-1] PUXC`).",
         "tags": ["stack"],
         "operands": ["i", "j", "k"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["s1 s(i) XCHG", "s(j) s[k-1] PUXC"]
+            "instructions": ["s1 s(i) XCHG_1I", "s(j) s[k-1] PUXC"]
           }
         ],
         "gas": [
@@ -53636,13 +53702,13 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Pushes `i`-th element, exchanges with third, then performs XCHG2 with `j` and `k` (`s(i) PUSH`, `s2 XCHG0`, `s(j) s(k) XCHG2`).",
+        "long": "Pushes `i`-th element, exchanges with third, then performs XCHG2 with `j` and `k` (`s(i) PUSH`, `s2 XCHG_0I`, `s(j) s(k) XCHG2`).",
         "tags": ["stack"],
         "operands": ["i", "j", "k"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["s(i) PUSH", "s2 XCHG0", "s(j) s(k) XCHG2"]
+            "instructions": ["s(i) PUSH", "s2 XCHG_0I", "s(j) s(k) XCHG2"]
           }
         ],
         "gas": [
@@ -59279,7 +59345,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["2", "2", "BLKSWAP"]
+            "instructions": ["2 2 BLKSWAP"]
           },
           {
             "exact": true,
@@ -59973,7 +60039,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "Calculates `result = ceil(x*y / 2^t))`.",
+        "long": "Calculates `result = ceil(x / 2^t)`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -60011,17 +60077,12 @@
         "prefix_str": "A936"
       },
       "signature": {
-        "stack_string": "x:Int y:Int -> result:Int",
+        "stack_string": "x:Int -> result:Int",
         "inputs": {
           "stack": [
             {
               "type": "simple",
               "name": "x",
-              "value_types": ["Int"]
-            },
-            {
-              "type": "simple",
-              "name": "y",
               "value_types": ["Int"]
             }
           ],
@@ -62444,14 +62505,14 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Performs `s2 s(i) XCHG`, `s1 s(j) XCHG`, and finally `s(k) XCHG0`.",
+        "long": "Performs `s2 s(i) XCHG`, `s1 s(j) XCHG`, and finally `s(k) XCHG_0I`.",
         "tags": [],
         "operands": ["i", "j", "k"],
         "related_instructions": ["XCHG3_ALT"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["s2 s(i) XCHG", "s1 s(j) XCHG", "s(k) XCHG0"]
+            "instructions": ["s2 s(i) XCHG", "s1 s(j) XCHG", "s(k) XCHG_0I"]
           }
         ],
         "gas": [
@@ -62523,14 +62584,14 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Performs `s2 s(i) XCHG`, `s1 s(j) XCHG`, and finally `s(k) XCHG0`. This is a long form of `XCHG3`.",
+        "long": "Performs `s2 s(i) XCHG`, `s1 s(j) XCHG`, and finally `s(k) XCHG_0I`. This is a long form of `XCHG3`.",
         "tags": [],
         "operands": ["i", "j", "k"],
         "related_instructions": ["XCHG3"],
         "other_implementations": [
           {
             "exact": false,
-            "instructions": ["s2 s(i) XCHG", "s1 s(j) XCHG", "s(k) XCHG0"]
+            "instructions": ["s2 s(i) XCHG", "s1 s(j) XCHG", "s(k) XCHG_0I"]
           }
         ],
         "gas": [

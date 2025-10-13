@@ -42,6 +42,7 @@ export enum Category {
   Arithmetic = "arithmetic",
   Cell = "cell",
   Continuation = "continuation",
+  Stack = "stack",
 }
 
 export enum SubCategory {
