@@ -1,4 +1,4 @@
-import{r as V,j as p,h as BC,B as QC,i as gC,k as IC}from"./Badge-DnHxabAO.js";import{a as CC,d as lA}from"./index-DHFeV9pk.js";import{M as pA}from"./monaco-editor-core-CF5pjnYW.js";import{F as EC,a as DC,b as wC}from"./index-BrixHIZv.js";const FC=`;; Standard library for funC
+import{r as V,j as p,h as BC,B as QC,i as gC,k as IC}from"./Badge-BJPEhjSU.js";import{a as CC,d as lA}from"./index-DHFeV9pk.js";import{M as pA}from"./monaco-editor-core-CF5pjnYW.js";import{F as EC,a as DC,b as wC}from"./index-Bz5IHLea.js";const FC=`;; Standard library for funC
 ;;
 
 {-
