@@ -2,6 +2,8 @@ import React from "react"
 
 import ReactMarkdown from "react-markdown"
 
+import {FiExternalLink} from "react-icons/fi"
+
 import {Category, type DocsLink, type Instruction} from "@features/spec/tvm-specification.types"
 
 import {prettySubCategoryName} from "@app/pages/InstructionsPage/lib/formatCategory.ts"
@@ -90,7 +92,22 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
           <div className={styles.metadataContainer}>
             <div className={styles.metadataItem}>
               <span className={styles.metadataLabel}>Since Version:</span>
-              <span className={styles.metadataValue}>{version}</span>
+              <span className={styles.metadataValue}>
+                {version >= 4 ? (
+                  <a
+                    href={`https://github.com/ton-blockchain/ton/blob/master/doc/GlobalVersions.md#version-${version}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.versionLink}
+                    title={`View TVM version ${version} documentation`}
+                  >
+                    {version}
+                    <FiExternalLink />
+                  </a>
+                ) : (
+                  version
+                )}
+              </span>
             </div>
 
             <div className={styles.metadataItem}>
@@ -177,8 +194,12 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
               <ReactMarkdown components={markdownComponents}>{description.short}</ReactMarkdown>
             )}
 
-            <h3 className={styles.detailSectionTitle}>Details</h3>
-            <ReactMarkdown components={markdownComponents}>{description.long}</ReactMarkdown>
+            {description.long && (
+              <>
+                <h3 className={styles.detailSectionTitle}>Details</h3>
+                <ReactMarkdown components={markdownComponents}>{description.long}</ReactMarkdown>
+              </>
+            )}
           </div>
         </div>
 

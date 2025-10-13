@@ -227,6 +227,20 @@
   font-size: var(--font-size-sm);
 }
 
+.versionLink {
+  color: var(--color-link);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.versionLink svg {
+  width: 12px;
+  height: 12px;
+}
+
 @media (width <= 768px) {
   .implementationsGridContainer {
     grid-template-columns: 1fr;
