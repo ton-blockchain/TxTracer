@@ -2,7 +2,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-left: var(--spacing-xs);
   padding: var(--spacing-xs);
   border: none;
   background-color: transparent;

@@ -151,7 +151,7 @@
 }
 
 .gasColumn {
-  white-space: nowrap;
+  white-space: normal;
   text-align: right;
 }
 

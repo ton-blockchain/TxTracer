@@ -2,7 +2,10 @@ import React, {Fragment} from "react"
 
 import ReactMarkdown from "react-markdown"
 
-import {calculateGasConsumption, infoOf} from "ton-assembly/dist/generator/instructions"
+import {
+  calculateGasConsumptionWithDescription,
+  infoOf,
+} from "ton-assembly/dist/generator/instructions"
 
 import type {Instruction, FiftInstruction} from "@features/spec/tvm-specification.types"
 
@@ -106,8 +109,7 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
           const opcode = infoOf(instructionName)
           if (!opcode) return null
 
-          const gas =
-            instruction.description.gas?.map(it => it.value) ?? calculateGasConsumption(opcode)
+          const gas = instruction.description.gas ?? calculateGasConsumptionWithDescription(opcode)
           const isExpanded = expandedRows[name]
           const inputs = instruction.signature.inputs?.stack
           const outputs = instruction.signature.outputs?.stack

@@ -36,8 +36,7 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
   const version = layout.version ?? 0
 
   const gasConsumption = instruction.description.gas ?? []
-  const simpleGasConsumption = gasConsumption.map(it => it.value)
-  const formattedGas = formatGasRanges(simpleGasConsumption)
+  const formattedGas = formatGasRanges(gasConsumption)
 
   const displayedOperands = instruction.operands ?? description.operands
 

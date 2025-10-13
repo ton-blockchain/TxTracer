@@ -36,6 +36,7 @@ export interface ImplementationInfo {
 export interface GasConsumptionEntry {
   readonly value: number
   readonly description: string
+  readonly formula?: string
 }
 
 export enum Category {

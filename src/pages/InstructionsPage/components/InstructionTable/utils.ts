@@ -1,9 +1,18 @@
-export const formatGasRanges = (gasCosts: readonly number[]): string => {
+import type {GasConsumptionEntry} from "@features/spec/tvm-specification.types.ts"
+
+export const formatGasRanges = (gasCosts: readonly GasConsumptionEntry[]): string => {
   if (!gasCosts || gasCosts.length === 0) {
     return "N/A"
   }
 
-  const sortedCosts = [...gasCosts].sort((a, b) => a - b)
+  const formula = gasCosts.find(it => it.formula !== undefined)
+  const nonFormulaCosts = gasCosts.filter(it => it.formula === undefined)
+
+  if (nonFormulaCosts.length === 0 && formula?.formula !== undefined) {
+    return formula.formula
+  }
+  const numericValues = nonFormulaCosts.map(it => it.value)
+  const sortedCosts = [...numericValues].sort((a, b) => a - b)
 
   const resultParts: string[] = []
   let startIndex = 0
@@ -18,5 +27,9 @@ export const formatGasRanges = (gasCosts: readonly number[]): string => {
       startIndex = i + 1
     }
   }
-  return resultParts.filter(it => it !== "36").join(" | ")
+  const baseGas = resultParts.filter(it => it !== "36").join(" | ")
+  if (formula) {
+    return `${baseGas} + ${formula.formula}`
+  }
+  return baseGas
 }
