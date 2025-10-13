@@ -196,11 +196,18 @@ function InstructionsPage() {
   const filteredInstructions = useMemo(() => {
     const q = query.trim().toLowerCase()
 
-    // If we have an anchor instruction, show only it
     if (anchorInstruction) {
       const allInstructions = spec?.instructions ?? {}
       if (allInstructions[anchorInstruction]) {
         return {[anchorInstruction]: allInstructions[anchorInstruction]}
+      } else {
+        // Clear anchor if the instruction is not found
+        setTimeout(() => {
+          setAnchorInstruction(null)
+          window.history.replaceState(null, "", window.location.pathname)
+          setExpandedRows({})
+        }, 0)
+        return filteredByCategory
       }
     }
 
@@ -308,50 +315,54 @@ function InstructionsPage() {
 
       <main className={styles.appContainer} role="main" aria-label="TVM Instructions">
         <div className={styles.mainContent}>
-          <div className={styles.toolbar} role="search" aria-label="Toolbar">
-            <SortSelector value={sortMode} onChange={setSortMode} />
+          {!anchorInstruction && (
+            <>
+              <div className={styles.toolbar} role="search" aria-label="Toolbar">
+                <SortSelector value={sortMode} onChange={setSortMode} />
 
-            <div className={styles.searchToolbar}>
-              <SearchColumnsSelector value={searchColumns} onToggle={toggleColumn} />
-              <div className={styles.searchInputContainer}>
-                <SearchInput
-                  value={query}
-                  onChange={setQuery}
-                  onSubmit={() => {}}
-                  placeholder="Search instructions"
-                  compact={true}
-                  buttonLabel="Search"
-                  autoFocus={true}
-                />
+                <div className={styles.searchToolbar}>
+                  <SearchColumnsSelector value={searchColumns} onToggle={toggleColumn} />
+                  <div className={styles.searchInputContainer}>
+                    <SearchInput
+                      value={query}
+                      onChange={setQuery}
+                      onSubmit={() => {}}
+                      placeholder="Search instructions"
+                      compact={true}
+                      buttonLabel="Search"
+                      autoFocus={true}
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div>
-            <CategoryTabs
-              categories={categories}
-              selected={selectedCategory}
-              onSelect={cat => {
-                setSelectedCategory(cat)
-                setSelectedSubCategory("All")
-              }}
-            />
-            {subCategories.length > 0 && (
-              <div className={styles.subCategoryAndDocsContainer}>
+              <div>
                 <CategoryTabs
-                  categories={subCategories}
-                  selected={selectedSubCategory}
-                  onSelect={setSelectedSubCategory}
-                  label="Subcategory:"
+                  categories={categories}
+                  selected={selectedCategory}
+                  onSelect={cat => {
+                    setSelectedCategory(cat)
+                    setSelectedSubCategory("All")
+                  }}
                 />
-                {selectedCategory === "continuation" && <ContinuationsDocsBanner />}
+                {subCategories.length > 0 && (
+                  <div className={styles.subCategoryAndDocsContainer}>
+                    <CategoryTabs
+                      categories={subCategories}
+                      selected={selectedSubCategory}
+                      onSelect={setSelectedSubCategory}
+                      label="Subcategory:"
+                    />
+                    {selectedCategory === "continuation" && <ContinuationsDocsBanner />}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </>
+          )}
           {anchorInstruction && (
             <div className={styles.anchorIndicator}>
               <span>Showing: {anchorInstruction}</span>
               <Button variant="outline" size="sm" onClick={resetAnchor}>
-                Reset view
+                Back to table
               </Button>
             </div>
           )}

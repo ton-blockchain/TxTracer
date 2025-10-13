@@ -201,6 +201,7 @@
   font-size: var(--font-size-xsm);
   color: var(--color-text-secondary);
   margin-bottom: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
 }
 
 .anchorIndicator span {
