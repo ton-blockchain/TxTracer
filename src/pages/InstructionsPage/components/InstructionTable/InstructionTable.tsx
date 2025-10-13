@@ -106,7 +106,8 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
           const opcode = infoOf(instructionName)
           if (!opcode) return null
 
-          const gas = calculateGasConsumption(opcode)
+          const gas =
+            instruction.description.gas?.map(it => it.value) ?? calculateGasConsumption(opcode)
           const isExpanded = expandedRows[name]
           const inputs = instruction.signature.inputs?.stack
           const outputs = instruction.signature.outputs?.stack

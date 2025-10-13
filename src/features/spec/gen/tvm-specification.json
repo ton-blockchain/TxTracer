@@ -20009,8 +20009,8 @@
         "operands": [],
         "gas": [
           {
-            "value": 26,
-            "description": "Base gas consumption"
+            "value": 4026,
+            "description": "For CHKSIGN operation"
           }
         ]
       },
@@ -20028,6 +20028,7 @@
         "prefix": 63760,
         "prefix_str": "F910"
       },
+      "effects": ["Chksign"],
       "signature": {
         "stack_string": "h:Int s:Slice k:Int -> result:Bool",
         "inputs": {
@@ -20076,8 +20077,8 @@
         "operands": [],
         "gas": [
           {
-            "value": 26,
-            "description": "Base gas consumption"
+            "value": 4026,
+            "description": "For CHKSIGN operation"
           }
         ]
       },
@@ -20095,6 +20096,7 @@
         "prefix": 63761,
         "prefix_str": "F911"
       },
+      "effects": ["Chksign"],
       "signature": {
         "stack_string": "d:Slice s:Slice k:Int -> result:Bool",
         "inputs": {
@@ -20143,8 +20145,8 @@
         "operands": [],
         "gas": [
           {
-            "value": 26,
-            "description": "Base gas consumption"
+            "value": 1526,
+            "description": "For ECRECOVER operation"
           }
         ]
       },
@@ -20163,6 +20165,7 @@
         "prefix": 63762,
         "prefix_str": "F912"
       },
+      "effects": ["Ecrecover"],
       "signature": {
         "stack_string": "hash:Int v:Int r:Int s:Int -> (∅ 0)|(h:Int x1:Int x2:Int -1) status:Int",
         "inputs": {
@@ -20252,8 +20255,8 @@
         ],
         "gas": [
           {
-            "value": 26,
-            "description": "Base gas consumption"
+            "value": 1276,
+            "description": "For SECP256K1_XONLY_PUBKEY_TWEAK_ADD operation"
           }
         ]
       },
@@ -20272,6 +20275,7 @@
         "prefix": 63763,
         "prefix_str": "F913"
       },
+      "effects": ["Secp256k1XonlyPubkeyTweakAdd"],
       "signature": {
         "stack_string": "key:Int tweak:Int -> (∅ 0)|(f:Int x:Int y:Int -1) status:Int",
         "inputs": {
@@ -20347,8 +20351,8 @@
         "operands": [],
         "gas": [
           {
-            "value": 26,
-            "description": "Base gas consumption"
+            "value": 3526,
+            "description": "For P256_CHKSIGN operation"
           }
         ]
       },
@@ -20367,6 +20371,7 @@
         "prefix": 63764,
         "prefix_str": "F914"
       },
+      "effects": ["P256Chksign"],
       "signature": {
         "stack_string": "d:Slice sig:Slice k:Slice -> result:Bool",
         "inputs": {
@@ -20415,8 +20420,8 @@
         "operands": [],
         "gas": [
           {
-            "value": 26,
-            "description": "Base gas consumption"
+            "value": 3526,
+            "description": "For P256_CHKSIGN operation"
           }
         ]
       },
@@ -20435,6 +20440,7 @@
         "prefix": 63765,
         "prefix_str": "F915"
       },
+      "effects": ["P256Chksign"],
       "signature": {
         "stack_string": "d:Slice sig:Slice k:Slice -> result:Bool",
         "inputs": {
@@ -20483,8 +20489,8 @@
         "operands": [],
         "gas": [
           {
-            "value": 26,
-            "description": "Base gas consumption"
+            "value": 626,
+            "description": "For RIST255_FROMHASH operation"
           }
         ]
       },
@@ -20503,6 +20509,7 @@
         "prefix": 63776,
         "prefix_str": "F920"
       },
+      "effects": ["Rist255Fromhash"],
       "signature": {
         "stack_string": "h1:Int h2:Int -> x:Int",
         "inputs": {
@@ -20546,8 +20553,8 @@
         "operands": [],
         "gas": [
           {
-            "value": 26,
-            "description": "Base gas consumption"
+            "value": 226,
+            "description": "For RIST255_VALIDATE operation"
           }
         ]
       },
@@ -20566,6 +20573,7 @@
         "prefix": 63777,
         "prefix_str": "F921"
       },
+      "effects": ["Rist255Validate"],
       "signature": {
         "stack_string": "x:Int -> ∅",
         "inputs": {
@@ -20595,8 +20603,8 @@
         "operands": [],
         "gas": [
           {
-            "value": 26,
-            "description": "Base gas consumption"
+            "value": 626,
+            "description": "For RIST255_ADD operation"
           }
         ]
       },
@@ -20615,6 +20623,7 @@
         "prefix": 63778,
         "prefix_str": "F922"
       },
+      "effects": ["Rist255Add"],
       "signature": {
         "stack_string": "x:Int y:Int -> result:Int",
         "inputs": {
@@ -20658,8 +20667,8 @@
         "operands": [],
         "gas": [
           {
-            "value": 26,
-            "description": "Base gas consumption"
+            "value": 626,
+            "description": "For RIST255_ADD operation"
           }
         ]
       },
@@ -20678,6 +20687,7 @@
         "prefix": 63779,
         "prefix_str": "F923"
       },
+      "effects": ["Rist255Add"],
       "signature": {
         "stack_string": "x:Int y:Int -> result:Int",
         "inputs": {
@@ -20721,8 +20731,8 @@
         "operands": [],
         "gas": [
           {
-            "value": 26,
-            "description": "Base gas consumption"
+            "value": 2026,
+            "description": "For RIST255_MUL operation"
           }
         ]
       },
@@ -20741,6 +20751,7 @@
         "prefix": 63780,
         "prefix_str": "F924"
       },
+      "effects": ["Rist255Mul"],
       "signature": {
         "stack_string": "x:Int n:Int -> result:Int",
         "inputs": {
@@ -20784,8 +20795,8 @@
         "operands": [],
         "gas": [
           {
-            "value": 26,
-            "description": "Base gas consumption"
+            "value": 776,
+            "description": "For RIST255_MULBASE operation"
           }
         ]
       },
@@ -20804,6 +20815,7 @@
         "prefix": 63781,
         "prefix_str": "F925"
       },
+      "effects": ["Rist255Mulbase"],
       "signature": {
         "stack_string": "n:Int -> result:Int",
         "inputs": {
@@ -20891,8 +20903,8 @@
         "operands": [],
         "gas": [
           {
-            "value": 34,
-            "description": "Base gas consumption"
+            "value": 234,
+            "description": "For RIST255_VALIDATE operation"
           }
         ]
       },
@@ -20911,6 +20923,7 @@
         "prefix": 12056865,
         "prefix_str": "B7F921"
       },
+      "effects": ["Rist255Validate"],
       "signature": {
         "stack_string": "x:Int -> result:Int",
         "inputs": {
@@ -20949,8 +20962,8 @@
         "operands": [],
         "gas": [
           {
-            "value": 34,
-            "description": "Base gas consumption"
+            "value": 634,
+            "description": "For RIST255_ADD operation"
           }
         ]
       },
@@ -20969,6 +20982,7 @@
         "prefix": 12056866,
         "prefix_str": "B7F922"
       },
+      "effects": ["Rist255Add"],
       "signature": {
         "stack_string": "x:Int y:Int -> (∅ 0)|(result:Int -1) status:Int",
         "inputs": {
@@ -21032,8 +21046,8 @@
         "operands": [],
         "gas": [
           {
-            "value": 34,
-            "description": "Base gas consumption"
+            "value": 634,
+            "description": "For RIST255_ADD operation"
           }
         ]
       },
@@ -21052,6 +21066,7 @@
         "prefix": 12056867,
         "prefix_str": "B7F923"
       },
+      "effects": ["Rist255Add"],
       "signature": {
         "stack_string": "x:Int y:Int -> (∅ 0)|(result:Int -1) status:Int",
         "inputs": {
@@ -21115,8 +21130,8 @@
         "operands": [],
         "gas": [
           {
-            "value": 34,
-            "description": "Base gas consumption"
+            "value": 2034,
+            "description": "For RIST255_MUL operation"
           }
         ]
       },
@@ -21135,6 +21150,7 @@
         "prefix": 12056868,
         "prefix_str": "B7F924"
       },
+      "effects": ["Rist255Mul"],
       "signature": {
         "stack_string": "x:Int n:Int -> (∅ 0)|(result:Int -1) status:Int",
         "inputs": {
@@ -21198,8 +21214,8 @@
         "operands": [],
         "gas": [
           {
-            "value": 34,
-            "description": "Base gas consumption"
+            "value": 784,
+            "description": "For RIST255_MULBASE operation"
           }
         ]
       },
@@ -21218,6 +21234,7 @@
         "prefix": 12056869,
         "prefix_str": "B7F925"
       },
+      "effects": ["Rist255Mulbase"],
       "signature": {
         "stack_string": "n:Int -> (∅ 0)|(result:Int -1) status:Int",
         "inputs": {
