@@ -1,0 +1,50 @@
+.anchorButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: var(--spacing-xs);
+  padding: var(--spacing-xs);
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  opacity: 0;
+  border-radius: var(--border-radius-sm);
+  color: var(--color-text-secondary);
+  transition:
+    opacity 0.3s ease,
+    background-color 0.15s ease;
+}
+
+.anchorButton:hover {
+  opacity: 1;
+  color: var(--color-text-primary);
+}
+
+.anchorButton svg {
+  width: var(--font-size-xsm);
+  height: var(--font-size-xsm);
+  display: block;
+  stroke: currentcolor;
+}
+
+.anchorButton.copied {
+  opacity: 1;
+  background-color: transparent;
+}
+
+.anchorButton.copied svg {
+  stroke: currentcolor;
+  animation: popIn 0.2s ease-out;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

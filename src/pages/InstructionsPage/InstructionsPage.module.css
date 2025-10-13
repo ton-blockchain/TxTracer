@@ -191,6 +191,22 @@
   flex-wrap: wrap;
 }
 
+.anchorIndicator {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: var(--color-background-primary);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.anchorIndicator span {
+  font-weight: var(--font-weight-medium);
+}
+
 @media (width <= 768px) {
   .subCategoryAndDocsContainer {
     flex-direction: column;

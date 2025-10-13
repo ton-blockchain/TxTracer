@@ -55,6 +55,10 @@
   background-color: var(--color-background-secondary);
 }
 
+.divTr.tableRow:hover :global(.anchorButton) {
+  opacity: 0.65;
+}
+
 .divTr.tableRow:last-child:hover .divTd:first-child {
   border-radius: 0 0 0 var(--border-radius-md);
 }
@@ -442,25 +446,4 @@
 
 .markdownParagraph:last-child {
   margin-bottom: 0;
-}
-
-.anchor {
-  opacity: 0;
-  margin-left: var(--spacing-xs);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition:
-    opacity 0.2s ease-in-out,
-    color 0.2s ease-in-out;
-  font-size: var(--font-size-xsm);
-  color: var(--color-text-secondary) !important;
-}
-
-.divTr.tableRow:hover .anchor {
-  opacity: 1;
-}
-
-.anchor:hover {
-  color: var(--color-text-primary) !important;
 }

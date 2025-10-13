@@ -1,22 +1,15 @@
 import React, {Fragment} from "react"
 
 import ReactMarkdown from "react-markdown"
-import {FiLink} from "react-icons/fi"
 
 import {calculateGasConsumption, infoOf} from "ton-assembly/dist/generator/instructions"
 
 import type {Instruction, FiftInstruction} from "@features/spec/tvm-specification.types"
 
-type ExtendedInstruction = Instruction & {
-  readonly isFift?: boolean
-  readonly fiftName?: string
-  readonly actualInstruction?: Instruction
-  readonly fiftInstruction?: FiftInstruction
-}
-
 import {useProcessedMarkdown} from "../../hooks/useProcessedMarkdown"
-
 import {prettySubCategoryName} from "../../lib/formatCategory"
+
+import {AnchorButton} from "./AnchorButton"
 
 import InstructionDetail from "./InstructionDetail"
 import FiftInstructionDetail from "./FiftInstructionDetail"
@@ -25,6 +18,13 @@ import InlineOperand from "./InlineOperand"
 
 import styles from "./InstructionTable.module.css"
 import {formatGasRanges} from "./utils.ts"
+
+type ExtendedInstruction = Instruction & {
+  readonly isFift?: boolean
+  readonly fiftName?: string
+  readonly actualInstruction?: Instruction
+  readonly fiftInstruction?: FiftInstruction
+}
 
 interface DescriptionCellProps {
   readonly instruction: Instruction
@@ -150,14 +150,11 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
               >
                 <div className={`${styles.divTd} ${styles.opcodeColumn}`} role="cell">
                   {instruction.layout.prefix_str}
-                  <a
-                    href={`#${name}`}
-                    className={styles.anchor}
-                    aria-label={`Link to ${name} instruction`}
-                    onClick={e => e.stopPropagation()}
-                  >
-                    <FiLink />
-                  </a>
+                  <AnchorButton
+                    className={"anchorButton"}
+                    value={name}
+                    title={`Copy anchor link to ${name}`}
+                  />
                 </div>
                 <div className={`${styles.divTd} ${styles.nameColumn}`} role="cell">
                   {name}
