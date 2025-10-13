@@ -1,6 +1,6 @@
 {
   "$schema": "./schema.json",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "instructions": {
     "PUSHNAN": {
       "category": "arithmetic",
@@ -4160,7 +4160,7 @@
         "prefix_str": "C705"
       },
       "signature": {
-        "stack_string": "s:Slice s2:Slice -> result:Bool",
+        "stack_string": "s:Slice s':Slice -> result:Bool",
         "inputs": {
           "stack": [
             {
@@ -4170,7 +4170,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -5669,7 +5669,7 @@
         "prefix_str": "CF19"
       },
       "signature": {
-        "stack_string": "b':Builder b:Builder -> (b3:Builder 0)|(b':Builder b:Builder -1) status:Int",
+        "stack_string": "b':Builder b:Builder -> (b'':Builder 0)|(b':Builder b:Builder -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -5695,7 +5695,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "b3",
+                      "name": "b''",
                       "value_types": ["Builder"]
                     }
                   ]
@@ -5855,7 +5855,7 @@
         "prefix_str": "CF1B"
       },
       "signature": {
-        "stack_string": "b':Builder b:Builder -> (b3:Builder 0)|(b':Builder b:Builder -1) status:Int",
+        "stack_string": "b':Builder b:Builder -> (b'':Builder 0)|(b':Builder b:Builder -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -5881,7 +5881,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "b3",
+                      "name": "b''",
                       "value_types": ["Builder"]
                     }
                   ]
@@ -6041,7 +6041,7 @@
         "prefix_str": "CF1D"
       },
       "signature": {
-        "stack_string": "b':Builder b:Builder -> (b3:Builder 0)|(b':Builder b:Builder -1) status:Int",
+        "stack_string": "b':Builder b:Builder -> (b'':Builder 0)|(b':Builder b:Builder -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -6067,7 +6067,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "b3",
+                      "name": "b''",
                       "value_types": ["Builder"]
                     }
                   ]
@@ -6134,7 +6134,7 @@
         "prefix_str": "CF1E"
       },
       "signature": {
-        "stack_string": "b:Builder s:Slice -> (b3:Builder 0)|(b:Builder s:Slice -1) status:Int",
+        "stack_string": "b:Builder s:Slice -> (b'':Builder 0)|(b:Builder s:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -6160,7 +6160,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "b3",
+                      "name": "b''",
                       "value_types": ["Builder"]
                     }
                   ]
@@ -6227,7 +6227,7 @@
         "prefix_str": "CF1F"
       },
       "signature": {
-        "stack_string": "b:Builder b':Builder -> (b3:Builder 0)|(b:Builder b':Builder -1) status:Int",
+        "stack_string": "b:Builder b':Builder -> (b'':Builder 0)|(b:Builder b':Builder -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -6253,7 +6253,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "b3",
+                      "name": "b''",
                       "value_types": ["Builder"]
                     }
                   ]
@@ -7575,7 +7575,7 @@
         "prefix_str": "D720"
       },
       "signature": {
-        "stack_string": "s:Slice length:Int -> s2:Slice",
+        "stack_string": "s:Slice length:Int -> s':Slice",
         "inputs": {
           "stack": [
             {
@@ -7598,7 +7598,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -7713,7 +7713,7 @@
         "prefix_str": "D722"
       },
       "signature": {
-        "stack_string": "s:Slice length:Int -> s2:Slice",
+        "stack_string": "s:Slice length:Int -> s':Slice",
         "inputs": {
           "stack": [
             {
@@ -7736,7 +7736,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -7779,7 +7779,7 @@
         "prefix_str": "D723"
       },
       "signature": {
-        "stack_string": "s:Slice length:Int -> s2:Slice",
+        "stack_string": "s:Slice length:Int -> s':Slice",
         "inputs": {
           "stack": [
             {
@@ -7802,7 +7802,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -7845,7 +7845,7 @@
         "prefix_str": "D724"
       },
       "signature": {
-        "stack_string": "s:Slice offset:Int length:Int -> s2:Slice",
+        "stack_string": "s:Slice offset:Int length:Int -> s':Slice",
         "inputs": {
           "stack": [
             {
@@ -7877,7 +7877,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -8220,7 +8220,7 @@
         "prefix_str": "D734"
       },
       "signature": {
-        "stack_string": "s:Slice skip_len:Int skip_refs:Int length:Int refs:Int -> s2:Slice",
+        "stack_string": "s:Slice skip_len:Int skip_refs:Int length:Int refs:Int -> s':Slice",
         "inputs": {
           "stack": [
             {
@@ -8262,7 +8262,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -9301,7 +9301,7 @@
         "prefix_str": "D760"
       },
       "signature": {
-        "stack_string": "s:Slice -> n:Int s2:Slice",
+        "stack_string": "s:Slice -> n:Int s':Slice",
         "inputs": {
           "stack": [
             {
@@ -9320,7 +9320,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -9363,7 +9363,7 @@
         "prefix_str": "D761"
       },
       "signature": {
-        "stack_string": "s:Slice -> n:Int s2:Slice",
+        "stack_string": "s:Slice -> n:Int s':Slice",
         "inputs": {
           "stack": [
             {
@@ -9382,7 +9382,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -9425,7 +9425,7 @@
         "prefix_str": "D762"
       },
       "signature": {
-        "stack_string": "s:Slice x:Int -> n:Int s2:Slice",
+        "stack_string": "s:Slice x:Int -> n:Int s':Slice",
         "inputs": {
           "stack": [
             {
@@ -9453,7 +9453,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -14824,7 +14824,7 @@
         "prefix_str": "F401"
       },
       "signature": {
-        "stack_string": "s:Slice -> s2:Slice",
+        "stack_string": "s:Slice -> s':Slice",
         "inputs": {
           "stack": [
             {
@@ -14838,7 +14838,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -14949,7 +14949,7 @@
         "prefix_str": "F403"
       },
       "signature": {
-        "stack_string": "s:Slice -> s2:Slice",
+        "stack_string": "s:Slice -> s':Slice",
         "inputs": {
           "stack": [
             {
@@ -14963,7 +14963,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -15006,7 +15006,7 @@
         "prefix_str": "F404"
       },
       "signature": {
-        "stack_string": "s:Slice -> D:Cell|Null s2:Slice",
+        "stack_string": "s:Slice -> D:Cell|Null s':Slice",
         "inputs": {
           "stack": [
             {
@@ -15025,7 +15025,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -15677,7 +15677,7 @@
         "prefix_str": "F4A8"
       },
       "signature": {
-        "stack_string": "s:Slice D:Cell|Null n:Int -> (s:Slice 0)|(s2:Slice x:Slice s3:Slice -1) status:Int",
+        "stack_string": "s:Slice D:Cell|Null n:Int -> (s:Slice 0)|(s':Slice x:Slice s'':Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -15722,7 +15722,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "s2",
+                      "name": "s'",
                       "value_types": ["Slice"]
                     },
                     {
@@ -15732,7 +15732,7 @@
                     },
                     {
                       "type": "simple",
-                      "name": "s3",
+                      "name": "s''",
                       "value_types": ["Slice"]
                     }
                   ]
@@ -15790,7 +15790,7 @@
         "prefix_str": "F4A9"
       },
       "signature": {
-        "stack_string": "s:Slice D:Cell|Null n:Int -> s2:Slice x:Slice s3:Slice",
+        "stack_string": "s:Slice D:Cell|Null n:Int -> s':Slice x:Slice s'':Slice",
         "inputs": {
           "stack": [
             {
@@ -15818,7 +15818,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             },
             {
@@ -15828,7 +15828,7 @@
             },
             {
               "type": "simple",
-              "name": "s3",
+              "name": "s''",
               "value_types": ["Slice"]
             }
           ]
@@ -15952,7 +15952,7 @@
         "prefix_str": "F4AB"
       },
       "signature": {
-        "stack_string": "s:Slice D:Cell|Null n:Int -> s2:Slice s3:Slice",
+        "stack_string": "s:Slice D:Cell|Null n:Int -> s':Slice s'':Slice",
         "inputs": {
           "stack": [
             {
@@ -15980,12 +15980,12 @@
           "stack": [
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             },
             {
               "type": "simple",
-              "name": "s3",
+              "name": "s''",
               "value_types": ["Slice"]
             }
           ]
@@ -23193,7 +23193,7 @@
         "prefix_str": "FA00"
       },
       "signature": {
-        "stack_string": "s:Slice -> x:Int s2:Slice",
+        "stack_string": "s:Slice -> x:Int s':Slice",
         "inputs": {
           "stack": [
             {
@@ -23212,7 +23212,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -23261,7 +23261,7 @@
         "prefix_str": "FA01"
       },
       "signature": {
-        "stack_string": "s:Slice -> x:Int s2:Slice",
+        "stack_string": "s:Slice -> x:Int s':Slice",
         "inputs": {
           "stack": [
             {
@@ -23280,7 +23280,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -23469,7 +23469,7 @@
         "prefix_str": "FA04"
       },
       "signature": {
-        "stack_string": "s:Slice -> x:Int s2:Slice",
+        "stack_string": "s:Slice -> x:Int s':Slice",
         "inputs": {
           "stack": [
             {
@@ -23488,7 +23488,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -23537,7 +23537,7 @@
         "prefix_str": "FA05"
       },
       "signature": {
-        "stack_string": "s:Slice -> x:Int s2:Slice",
+        "stack_string": "s:Slice -> x:Int s':Slice",
         "inputs": {
           "stack": [
             {
@@ -23556,7 +23556,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -24163,7 +24163,7 @@
         "prefix_str": "FA46"
       },
       "signature": {
-        "stack_string": "s:Slice -> x:Int s2:Slice",
+        "stack_string": "s:Slice -> x:Int s':Slice",
         "inputs": {
           "stack": [
             {
@@ -24182,7 +24182,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -36827,7 +36827,7 @@
         "prefix_str": "D750"
       },
       "signature": {
-        "stack_string": "s:Slice -> x:Int s2:Slice",
+        "stack_string": "s:Slice -> x:Int s':Slice",
         "inputs": {
           "stack": [
             {
@@ -36846,7 +36846,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -36889,7 +36889,7 @@
         "prefix_str": "D751"
       },
       "signature": {
-        "stack_string": "s:Slice -> x:Int s2:Slice",
+        "stack_string": "s:Slice -> x:Int s':Slice",
         "inputs": {
           "stack": [
             {
@@ -36908,7 +36908,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -36951,7 +36951,7 @@
         "prefix_str": "D752"
       },
       "signature": {
-        "stack_string": "s:Slice -> x:Int s2:Slice",
+        "stack_string": "s:Slice -> x:Int s':Slice",
         "inputs": {
           "stack": [
             {
@@ -36970,7 +36970,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -37013,7 +37013,7 @@
         "prefix_str": "D753"
       },
       "signature": {
-        "stack_string": "s:Slice -> x:Int s2:Slice",
+        "stack_string": "s:Slice -> x:Int s':Slice",
         "inputs": {
           "stack": [
             {
@@ -37032,7 +37032,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
@@ -37303,7 +37303,7 @@
         "prefix_str": "D758"
       },
       "signature": {
-        "stack_string": "s:Slice -> (s:Slice 0)|(x:Int s2:Slice -1) status:Int",
+        "stack_string": "s:Slice -> (s:Slice 0)|(x:Int s':Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -37339,7 +37339,7 @@
                     },
                     {
                       "type": "simple",
-                      "name": "s2",
+                      "name": "s'",
                       "value_types": ["Slice"]
                     }
                   ]
@@ -37391,7 +37391,7 @@
         "prefix_str": "D759"
       },
       "signature": {
-        "stack_string": "s:Slice -> (s:Slice 0)|(x:Int s2:Slice -1) status:Int",
+        "stack_string": "s:Slice -> (s:Slice 0)|(x:Int s':Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -37427,7 +37427,7 @@
                     },
                     {
                       "type": "simple",
-                      "name": "s2",
+                      "name": "s'",
                       "value_types": ["Slice"]
                     }
                   ]
@@ -37479,7 +37479,7 @@
         "prefix_str": "D75A"
       },
       "signature": {
-        "stack_string": "s:Slice -> (s:Slice 0)|(x:Int s2:Slice -1) status:Int",
+        "stack_string": "s:Slice -> (s:Slice 0)|(x:Int s':Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -37515,7 +37515,7 @@
                     },
                     {
                       "type": "simple",
-                      "name": "s2",
+                      "name": "s'",
                       "value_types": ["Slice"]
                     }
                   ]
@@ -37567,7 +37567,7 @@
         "prefix_str": "D75B"
       },
       "signature": {
-        "stack_string": "s:Slice -> (s:Slice 0)|(x:Int s2:Slice -1) status:Int",
+        "stack_string": "s:Slice -> (s:Slice 0)|(x:Int s':Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -37603,7 +37603,7 @@
                     },
                     {
                       "type": "simple",
-                      "name": "s2",
+                      "name": "s'",
                       "value_types": ["Slice"]
                     }
                   ]
@@ -63616,7 +63616,7 @@
         "prefix_str": "D71C"
       },
       "signature": {
-        "stack_string": "s:Slice -> loaded:Slice s2:Slice",
+        "stack_string": "s:Slice -> loaded:Slice s':Slice",
         "inputs": {
           "stack": [
             {
@@ -63635,7 +63635,7 @@
             },
             {
               "type": "simple",
-              "name": "s2",
+              "name": "s'",
               "value_types": ["Slice"]
             }
           ]
