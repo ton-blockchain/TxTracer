@@ -58,11 +58,15 @@ const renderArrayPreview = (entry: StackEntry & {readonly type: "array"}, baseKe
 
 const getPillDisplayProps = (entry: StackEntry): {props: PillProps; range?: PossibleValueRange} => {
   switch (entry.type) {
-    case "simple":
+    case "simple": {
+      const baseType = entry.value_types?.[0] ?? "Any"
+      const hasNull = entry.value_types?.includes("Null") ?? false
+      const type = hasNull ? `${baseType}?` : baseType
       return {
-        props: {name: entry.name, type: entry.value_types?.[0] ?? "Any"},
+        props: {name: entry.name, type},
         range: entry.range,
       }
+    }
     case "const":
       return {props: {value: entry.value, type: entry.value_type}}
     case "array":
@@ -82,7 +86,7 @@ function getType(item: PillProps) {
 }
 
 const renderStackItemPill = (item: PillProps, key: string | number, range?: PossibleValueRange) => {
-  const itemType = item.type.charAt(0).toUpperCase() + item.type.slice(1).toLowerCase()
+  const itemType = item.type.endsWith("?") ? item.type.slice(0, -1) : item.type
   const displayName = item.name ?? (item.value !== undefined ? String(item.value) : "unnamed")
   const typeClass = `stackItem${itemType}`
   const pillStyle = styles[typeClass] ?? styles.stackItemAny
