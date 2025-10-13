@@ -1,6 +1,7 @@
 import React, {Fragment} from "react"
 
 import ReactMarkdown from "react-markdown"
+import {FiLink} from "react-icons/fi"
 
 import {calculateGasConsumption, infoOf} from "ton-assembly/dist/generator/instructions"
 
@@ -134,6 +135,7 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
                 </div>
               )}
               <div
+                id={name}
                 onClick={() => onRowClick(name)}
                 onKeyDown={e => {
                   if (e.key === "Enter" || e.key === " ") {
@@ -148,6 +150,14 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
               >
                 <div className={`${styles.divTd} ${styles.opcodeColumn}`} role="cell">
                   {instruction.layout.prefix_str}
+                  <a
+                    href={`#${name}`}
+                    className={styles.anchor}
+                    aria-label={`Link to ${name} instruction`}
+                    onClick={e => e.stopPropagation()}
+                  >
+                    <FiLink />
+                  </a>
                 </div>
                 <div className={`${styles.divTd} ${styles.nameColumn}`} role="cell">
                   {name}
