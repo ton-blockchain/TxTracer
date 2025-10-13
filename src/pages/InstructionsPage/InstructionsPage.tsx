@@ -94,15 +94,6 @@ function InstructionsPage() {
     return () => window.removeEventListener("hashchange", handleHashChange)
   }, [anchorInstruction])
 
-  useEffect(() => {
-    if (anchorInstruction) {
-      const element = document.getElementById(anchorInstruction)
-      if (element) {
-        element.scrollIntoView({behavior: "smooth", block: "start"})
-      }
-    }
-  }, [anchorInstruction])
-
   const toggleColumn = (key: InstructionColumnKey) => {
     setSearchColumns(prev => (prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]))
   }
