@@ -7412,6 +7412,12 @@
         "long": "Loads a cell reference `c` from `s` and returns the remainder of `s` as `s''`.",
         "tags": ["slice parsing"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Slice does not contain any references."
+          }
+        ],
         "gas": [
           {
             "value": 18,
@@ -7474,6 +7480,12 @@
         "long": "Loads a cell reference `c` from `s`, converts it to _Slice_ and returns that _Slice_ and remainder of `s` as `s''`.",
         "tags": ["slice parsing"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Slice does not contain any references."
+          }
+        ],
         "other_implementations": [
           {
             "exact": true,
@@ -7547,6 +7559,12 @@
         "long": "Returns the first `length` bits of `s`.",
         "tags": ["slice parsing"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Slice does not contain enough bits."
+          }
+        ],
         "other_implementations": [
           {
             "exact": false,
@@ -7619,6 +7637,12 @@
         "long": "Returns all but the first `length` bits of `s`.",
         "tags": ["slice parsing"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Slice does not contain enough bits."
+          }
+        ],
         "other_implementations": [
           {
             "exact": false,
@@ -7691,6 +7715,12 @@
         "long": "Returns the last `length` bits of `s`.",
         "tags": ["slice parsing"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Slice does not contain enough bits."
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -7757,6 +7787,12 @@
         "long": "Returns all but the last `length` bits of `s`.",
         "tags": ["slice parsing"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Slice does not contain enough bits."
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -7823,6 +7859,12 @@
         "long": "Returns `length` bits of `s` starting from `offset`, thus extracting a bit substring out of the data of `s`.",
         "tags": ["slice parsing"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Slice does not contain enough bits."
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -7898,6 +7940,12 @@
         "long": "Returns the first `length` bits and first `refs` references of `s`.",
         "tags": [],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Slice does not contain enough bits or references."
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -7973,6 +8021,12 @@
         "long": "Returns all but the first `length` bits of `s` and `refs` references of `s`.",
         "tags": [],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Slice does not contain enough bits or references."
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -8048,6 +8102,12 @@
         "long": "Returns the last `length` data bits and last `refs` references of `s`.",
         "tags": [],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Slice does not contain enough bits or references."
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -8123,6 +8183,12 @@
         "long": "Returns all but the last `length` bits of `s` and `refs` references of `s`.",
         "tags": [],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Slice does not contain enough bits or references."
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -8198,6 +8264,12 @@
         "long": "Returns `length` bits and `refs` references from _Slice_ `s`, after skipping the first `skip_len` bits and first `skip_refs` references.",
         "tags": [],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Slice does not contain enough bits or references."
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -8283,6 +8355,12 @@
         "long": "Splits the first `length` data bits and first `refs` references from `s` into `s'`, returning the remainder of `s` as `s''`.",
         "tags": [],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Slice does not contain enough bits or references."
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -8531,6 +8609,16 @@
         "long": "Loads an exotic cell `c` and returns an ordinary cell `c'`. If `c` is already ordinary, does nothing. If `c` cannot be loaded, throws an exception.",
         "tags": [],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Failed to load exotic cell."
+          },
+          {
+            "errno": "9",
+            "condition": "Unexpected special cell type."
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -8553,7 +8641,7 @@
         "prefix_str": "D73A"
       },
       "signature": {
-        "stack_string": "c:Cell -> c2:Cell",
+        "stack_string": "c:Cell -> c':Cell",
         "inputs": {
           "stack": [
             {
@@ -8567,7 +8655,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "c2",
+              "name": "c'",
               "value_types": ["Cell"]
             }
           ]
@@ -8610,7 +8698,7 @@
         "prefix_str": "D73B"
       },
       "signature": {
-        "stack_string": "c:Cell -> (c:Cell 0)|(c2:Cell -1) status:Int",
+        "stack_string": "c:Cell -> (c:Cell 0)|(c':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -8641,7 +8729,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "c2",
+                      "name": "c'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -11428,7 +11516,7 @@
           },
           {
             "type": "variable",
-            "var_name": "c2",
+            "var_name": "c'",
             "save": {
               "c0": {
                 "type": "cc",
@@ -12190,7 +12278,7 @@
         "branches": [
           {
             "type": "variable",
-            "var_name": "c2",
+            "var_name": "c'",
             "save": {
               "c0": {
                 "type": "special",
@@ -12198,7 +12286,7 @@
                 "args": {
                   "cond": {
                     "type": "variable",
-                    "var_name": "c2"
+                    "var_name": "c'"
                   },
                   "body": {
                     "type": "variable",
@@ -12276,7 +12364,7 @@
         "branches": [
           {
             "type": "variable",
-            "var_name": "c2",
+            "var_name": "c'",
             "save": {
               "c0": {
                 "type": "special",
@@ -12284,7 +12372,7 @@
                 "args": {
                   "cond": {
                     "type": "variable",
-                    "var_name": "c2"
+                    "var_name": "c'"
                   },
                   "body": {
                     "type": "cc"
@@ -12933,7 +13021,7 @@
         "branches": [
           {
             "type": "variable",
-            "var_name": "c2",
+            "var_name": "c'",
             "save": {
               "c0": {
                 "type": "special",
@@ -12941,7 +13029,7 @@
                 "args": {
                   "cond": {
                     "type": "variable",
-                    "var_name": "c2"
+                    "var_name": "c'"
                   },
                   "body": {
                     "type": "variable",
@@ -13257,7 +13345,7 @@
         "prefix_str": "ED11"
       },
       "signature": {
-        "stack_string": "x_1...x_r c:Continuation r:Int n:Int -> c2:Continuation",
+        "stack_string": "x_1...x_r c:Continuation r:Int n:Int -> c':Continuation",
         "inputs": {
           "stack": [
             {
@@ -13300,7 +13388,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "c2",
+              "name": "c'",
               "value_types": ["Continuation"]
             }
           ]
@@ -13343,7 +13431,7 @@
         "prefix_str": "ED12"
       },
       "signature": {
-        "stack_string": "c:Continuation n:Int -> c2:Continuation",
+        "stack_string": "c:Continuation n:Int -> c':Continuation",
         "inputs": {
           "stack": [
             {
@@ -13366,7 +13454,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "c2",
+              "name": "c'",
               "value_types": ["Continuation"]
             }
           ]
@@ -13681,7 +13769,7 @@
         "prefix_str": "EDE2"
       },
       "signature": {
-        "stack_string": "x:Any c:Continuation i:Int -> c2:Continuation",
+        "stack_string": "x:Any c:Continuation i:Int -> c':Continuation",
         "inputs": {
           "stack": [
             {
@@ -13708,7 +13796,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "c2",
+              "name": "c'",
               "value_types": ["Continuation"]
             }
           ]
@@ -13822,7 +13910,7 @@
         "prefix_str": "EDF0"
       },
       "signature": {
-        "stack_string": "c:Continuation c':Continuation -> c3:Continuation",
+        "stack_string": "c:Continuation c':Continuation -> c'':Continuation",
         "inputs": {
           "stack": [
             {
@@ -13842,7 +13930,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "c3",
+              "name": "c''",
               "value_types": ["Continuation"]
             }
           ],
@@ -13892,7 +13980,7 @@
         "prefix_str": "EDF1"
       },
       "signature": {
-        "stack_string": "c:Continuation c':Continuation -> c3:Continuation",
+        "stack_string": "c:Continuation c':Continuation -> c'':Continuation",
         "inputs": {
           "stack": [
             {
@@ -13912,7 +14000,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "c3",
+              "name": "c''",
               "value_types": ["Continuation"]
             }
           ],
@@ -13956,7 +14044,7 @@
         "prefix_str": "EDF2"
       },
       "signature": {
-        "stack_string": "c:Continuation c2:Continuation -> c3:Continuation",
+        "stack_string": "c:Continuation c':Continuation -> c'':Continuation",
         "inputs": {
           "stack": [
             {
@@ -13966,7 +14054,7 @@
             },
             {
               "type": "simple",
-              "name": "c2",
+              "name": "c'",
               "value_types": ["Continuation"]
             }
           ]
@@ -13975,7 +14063,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "c3",
+              "name": "c''",
               "value_types": ["Continuation"]
             }
           ]
@@ -14211,7 +14299,7 @@
         "prefix_str": "EDF6"
       },
       "signature": {
-        "stack_string": "c:Continuation -> c2:Continuation",
+        "stack_string": "c:Continuation -> c':Continuation",
         "inputs": {
           "stack": [
             {
@@ -14231,7 +14319,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "c2",
+              "name": "c'",
               "value_types": ["Continuation"]
             }
           ]
@@ -14274,7 +14362,7 @@
         "prefix_str": "EDF7"
       },
       "signature": {
-        "stack_string": "c:Continuation -> c2:Continuation",
+        "stack_string": "c:Continuation -> c':Continuation",
         "inputs": {
           "stack": [
             {
@@ -14294,7 +14382,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "c2",
+              "name": "c'",
               "value_types": ["Continuation"]
             }
           ]
@@ -14684,7 +14772,7 @@
               },
               "c2": {
                 "type": "variable",
-                "var_name": "c2",
+                "var_name": "c'",
                 "save": {
                   "c0": {
                     "type": "cc",
@@ -16533,6 +16621,12 @@
             "instructions": ["s2 s1 XCHG2"]
           }
         ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than 3 elements."
+          }
+        ],
         "examples": [
           {
             "instructions": [
@@ -16645,6 +16739,12 @@
             "instructions": ["s2 s2 XCHG2"]
           }
         ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than 3 elements."
+          }
+        ],
         "examples": [
           {
             "instructions": [
@@ -16747,6 +16847,24 @@
         "long": "Pops integer `i` from the stack, then performs `s(i) PUSH`.",
         "tags": ["stack"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack is empty."
+          },
+          {
+            "errno": "7",
+            "condition": "Top element is not an `Int`."
+          },
+          {
+            "errno": "5",
+            "condition": "Integer is out of range."
+          },
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `i + 1` elements."
+          }
+        ],
         "gas": [
           {
             "value": 18,
@@ -16775,7 +16893,11 @@
             {
               "type": "simple",
               "name": "i",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1073741823
+              }
             }
           ],
           "registers": []
@@ -16873,7 +16995,11 @@
             {
               "type": "simple",
               "name": "x",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1073741823
+              }
             }
           ],
           "registers": []
@@ -16896,7 +17022,7 @@
       "description": {
         "short": "",
         "long": "Takes integer `x` from the top of the stack and moves the top element to position `x` from the top. For example, `ROLLREV 2` is equivalent to `ROTREV` (`1 2 3 -> 3 1 2`).",
-        "tags": [],
+        "tags": ["stack"],
         "operands": [],
         "exit_codes": [
           {
@@ -16971,7 +17097,11 @@
             {
               "type": "simple",
               "name": "x",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1073741823
+              }
             }
           ],
           "registers": []
@@ -16996,6 +17126,28 @@
         "long": "Pops integers `i`,`j` from the stack, then performs `[i] [j] BLKSWAP`.",
         "tags": ["stack"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than 2 elements."
+          },
+          {
+            "errno": "7",
+            "condition": "Top element is not an `Int`."
+          },
+          {
+            "errno": "7",
+            "condition": "Second element is not an `Int`."
+          },
+          {
+            "errno": "5",
+            "condition": "Integer is out of range."
+          },
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `i + j` elements."
+          }
+        ],
         "gas": [
           {
             "value": 18,
@@ -17024,12 +17176,20 @@
             {
               "type": "simple",
               "name": "i",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1073741823
+              }
             },
             {
               "type": "simple",
               "name": "j",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1073741823
+              }
             }
           ],
           "registers": []
@@ -17054,6 +17214,28 @@
         "long": "Pops integers `i`,`j` from the stack, then performs `[i] [j] REVERSE`.",
         "tags": ["stack"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than 2 elements."
+          },
+          {
+            "errno": "7",
+            "condition": "Top element is not an `Int`."
+          },
+          {
+            "errno": "7",
+            "condition": "Second element is not an `Int`."
+          },
+          {
+            "errno": "5",
+            "condition": "Integer is out of range."
+          },
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `i + j` elements."
+          }
+        ],
         "gas": [
           {
             "value": 18,
@@ -17082,12 +17264,20 @@
             {
               "type": "simple",
               "name": "i",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1073741823
+              }
             },
             {
               "type": "simple",
               "name": "j",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1073741823
+              }
             }
           ],
           "registers": []
@@ -17112,6 +17302,24 @@
         "long": "Pops integer `i` from the stack, then performs `[i] BLKDROP`.",
         "tags": ["stack"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than 1 element."
+          },
+          {
+            "errno": "7",
+            "condition": "Top element is not an `Int`."
+          },
+          {
+            "errno": "5",
+            "condition": "Integer is out of range."
+          },
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `i` elements."
+          }
+        ],
         "gas": [
           {
             "value": 18,
@@ -17140,7 +17348,11 @@
             {
               "type": "simple",
               "name": "i",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1073741823
+              }
             }
           ],
           "registers": []
@@ -17249,6 +17461,24 @@
         "long": "Pops integer `i` from the stack, then performs `s(i) XCHG`.",
         "tags": ["stack"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than 1 element."
+          },
+          {
+            "errno": "7",
+            "condition": "Top element is not an `Int`."
+          },
+          {
+            "errno": "5",
+            "condition": "Integer is out of range."
+          },
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `i + 1` elements."
+          }
+        ],
         "gas": [
           {
             "value": 18,
@@ -17277,7 +17507,11 @@
             {
               "type": "simple",
               "name": "i",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1073741823
+              }
             }
           ],
           "registers": []
@@ -17376,6 +17610,18 @@
         "exit_codes": [
           {
             "errno": "2",
+            "condition": "Stack contains less than 1 element."
+          },
+          {
+            "errno": "7",
+            "condition": "Top element is not an `Int`."
+          },
+          {
+            "errno": "5",
+            "condition": "Integer is out of range."
+          },
+          {
+            "errno": "2",
             "condition": "Stack contains less than `i` elements."
           }
         ],
@@ -17412,7 +17658,11 @@
             {
               "type": "simple",
               "name": "i",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1073741823
+              }
             }
           ],
           "registers": []
@@ -17437,6 +17687,24 @@
         "long": "Pops integer `i` from the stack, then removes all but the top `i` elements.",
         "tags": ["stack"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than 1 element."
+          },
+          {
+            "errno": "7",
+            "condition": "Top element is not an `Int`."
+          },
+          {
+            "errno": "5",
+            "condition": "Integer is out of range."
+          },
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `i` elements."
+          }
+        ],
         "gas": [
           {
             "value": 18,
@@ -17465,7 +17733,11 @@
             {
               "type": "simple",
               "name": "i",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1073741823
+              }
             }
           ],
           "registers": []
@@ -17496,6 +17768,24 @@
             "instructions": ["DEPTH", "SWAP", "SUB", "DROPX"]
           }
         ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than 1 element."
+          },
+          {
+            "errno": "7",
+            "condition": "Top element is not an `Int`."
+          },
+          {
+            "errno": "5",
+            "condition": "Integer is out of range."
+          },
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `i` elements."
+          }
+        ],
         "gas": [
           {
             "value": 18,
@@ -17524,7 +17814,11 @@
             {
               "type": "simple",
               "name": "i",
-              "value_types": ["Int"]
+              "value_types": ["Int"],
+              "range": {
+                "min": 0,
+                "max": 1073741823
+              }
             }
           ],
           "registers": []
@@ -23165,6 +23459,12 @@
         "long": "Loads a `Gram` or `VarUInteger 16` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, followed by an `8l`-bit unsigned big-endian representation of `x`.",
         "tags": ["variable-size integer", "slice parsing"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Cannot deserialize a variable-length integer."
+          }
+        ],
         "other_implementations": [
           {
             "exact": false,
@@ -23233,6 +23533,12 @@
         "long": "Loads a `VarInteger 16` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 4-bit unsigned big-endian integer `l`, followed by an `8l`-bit signed big-endian representation of `x`.",
         "tags": ["variable-size integer", "slice parsing"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Cannot deserialize a variable-length integer."
+          }
+        ],
         "other_implementations": [
           {
             "exact": false,
@@ -23441,6 +23747,12 @@
         "long": "Loads a `VarUInteger 32` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 5-bit unsigned big-endian integer `l`, followed by an `8l`-bit unsigned big-endian representation of `x`.",
         "tags": ["variable-size integer", "slice parsing"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Cannot deserialize a variable-length integer."
+          }
+        ],
         "other_implementations": [
           {
             "exact": false,
@@ -23509,6 +23821,12 @@
         "long": "Loads a `VarInteger 32` amount from _Slice_ `s`, and returns the amount as _Integer_ `x` along with the remainder `s'` of `s`. The expected serialization of `x` consists of a 5-bit unsigned big-endian integer `l`, followed by an `8l`-bit signed big-endian representation of `x`.",
         "tags": ["variable-size integer", "slice parsing"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Cannot deserialize a variable-length integer."
+          }
+        ],
         "other_implementations": [
           {
             "exact": false,
@@ -23713,6 +24031,12 @@
         "long": "Loads a valid `MsgAddress` from _Slice_ `s` and pushes the loaded `addr` value onto the stack along with _Slice_ `s'` with the remaining data.",
         "tags": ["address", "slice parsing"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Cannot load a MsgAddress."
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -27267,7 +27591,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = x % y`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -27463,7 +27787,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q = ceil(x / y)` and `r = x - q * y`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -27811,7 +28135,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = round(x / y)`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -27873,7 +28197,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = ceil(x / y)`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -27935,7 +28259,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = x % y`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -27997,7 +28321,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = x % y`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -28059,7 +28383,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = x % y`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -28121,7 +28445,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q = floor(x / y)` and `r = x - q * y`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -28188,7 +28512,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q = round(x / y)` and `r = x - q * y`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -28255,7 +28579,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q = ceil(x / y)` and `r = x - q * y`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -28918,7 +29242,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q = round(x / 2^y)` and `r = x - q * 2^y`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -28943,13 +29267,35 @@
         "prefix_str": "A92D"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -28965,7 +29311,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q = ceil(x / 2^y)` and `r = x - q * 2^y`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -28990,13 +29336,35 @@
         "prefix_str": "A92E"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -29608,7 +29976,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q = round(x / 2^y)` and `r = x - q * 2^y`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -29633,13 +30001,35 @@
         "prefix_str": "B7A92D"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -29655,7 +30045,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q = ceil(x / 2^y)` and `r = x - q * 2^y`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -29680,13 +30070,35 @@
         "prefix_str": "B7A92E"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -30855,7 +31267,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = round(x * y / z)`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -31190,7 +31602,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q = floor(x * y / z)` and `r = x * y - z * q`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -33266,7 +33678,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "Calculates `q=round((x*2^y+w)/z)` and `r=(x*2^y+w)-zq`.",
+        "long": "Calculates `q=ceil((x*2^y+w)/z)` and `r=(x*2^y+w)-zq`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -35845,6 +36257,12 @@
         "long": "Loads a signed `width`-bit integer `x` from _Slice_ `s`, and returns the remainder of `s` as `s'`.",
         "tags": ["slice parsing"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Slice doesn't contain enough bits."
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -35916,6 +36334,12 @@
         "long": "Loads an unsigned `width`-bit integer `x` from (the first `width` bits of) `s`.",
         "tags": ["slice parsing"],
         "operands": [],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Slice doesn't contain enough bits."
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -39705,7 +40129,7 @@
         "prefix_str": "F41B"
       },
       "signature": {
-        "stack_string": "c:Cell k:Slice D:Cell|Null n:Int -> (D':Cell 0)|(D':Cell c2:Cell -1) status:Int",
+        "stack_string": "c:Cell k:Slice D:Cell|Null n:Int -> (D':Cell 0)|(D':Cell c':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -39756,7 +40180,7 @@
                     },
                     {
                       "type": "simple",
-                      "name": "c2",
+                      "name": "c'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -39911,7 +40335,7 @@
         "prefix_str": "F41D"
       },
       "signature": {
-        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D':Cell 0)|(D':Cell c2:Cell -1) status:Int",
+        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D':Cell 0)|(D':Cell c':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -39962,7 +40386,7 @@
                     },
                     {
                       "type": "simple",
-                      "name": "c2",
+                      "name": "c'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -40117,7 +40541,7 @@
         "prefix_str": "F41F"
       },
       "signature": {
-        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D':Cell 0)|(D':Cell c2:Cell -1) status:Int",
+        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D':Cell 0)|(D':Cell c':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -40168,7 +40592,7 @@
                     },
                     {
                       "type": "simple",
-                      "name": "c2",
+                      "name": "c'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -40911,7 +41335,7 @@
         "prefix_str": "F42B"
       },
       "signature": {
-        "stack_string": "c:Cell k:Slice D:Cell|Null n:Int -> (D:Cell|Null 0)|(D':Cell c2:Cell -1) status:Int",
+        "stack_string": "c:Cell k:Slice D:Cell|Null n:Int -> (D:Cell|Null 0)|(D':Cell c':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -40962,7 +41386,7 @@
                     },
                     {
                       "type": "simple",
-                      "name": "c2",
+                      "name": "c'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -41117,7 +41541,7 @@
         "prefix_str": "F42D"
       },
       "signature": {
-        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Cell|Null 0)|(D':Cell c2:Cell -1) status:Int",
+        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Cell|Null 0)|(D':Cell c':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -41168,7 +41592,7 @@
                     },
                     {
                       "type": "simple",
-                      "name": "c2",
+                      "name": "c'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -41323,7 +41747,7 @@
         "prefix_str": "F42F"
       },
       "signature": {
-        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Cell|Null 0)|(D':Cell c2:Cell -1) status:Int",
+        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Cell|Null 0)|(D':Cell c':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -41374,7 +41798,7 @@
                     },
                     {
                       "type": "simple",
-                      "name": "c2",
+                      "name": "c'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -42117,7 +42541,7 @@
         "prefix_str": "F43B"
       },
       "signature": {
-        "stack_string": "c:Cell k:Slice D:Cell|Null n:Int -> (D:Cell c2:Cell 0)|(D':Cell -1) status:Int",
+        "stack_string": "c:Cell k:Slice D:Cell|Null n:Int -> (D:Cell c':Cell 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -42158,7 +42582,7 @@
                     },
                     {
                       "type": "simple",
-                      "name": "c2",
+                      "name": "c'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -42323,7 +42747,7 @@
         "prefix_str": "F43D"
       },
       "signature": {
-        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Cell c2:Cell 0)|(D':Cell -1) status:Int",
+        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Cell c':Cell 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -42364,7 +42788,7 @@
                     },
                     {
                       "type": "simple",
-                      "name": "c2",
+                      "name": "c'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -42529,7 +42953,7 @@
         "prefix_str": "F43F"
       },
       "signature": {
-        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Cell c2:Cell 0)|(D':Cell -1) status:Int",
+        "stack_string": "c:Cell i:Int D:Cell|Null n:Int -> (D:Cell c':Cell 0)|(D':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -42570,7 +42994,7 @@
                     },
                     {
                       "type": "simple",
-                      "name": "c2",
+                      "name": "c'",
                       "value_types": ["Cell"]
                     }
                   ]
@@ -47651,7 +48075,7 @@
         "prefix_str": "F46D"
       },
       "signature": {
-        "stack_string": "c:Cell|Null k:Slice D:Cell|Null n:Int -> D':Cell|Null c2:Cell|Null",
+        "stack_string": "c:Cell|Null k:Slice D:Cell|Null n:Int -> D':Cell|Null c':Cell|Null",
         "inputs": {
           "stack": [
             {
@@ -47685,7 +48109,7 @@
             },
             {
               "type": "simple",
-              "name": "c2",
+              "name": "c'",
               "value_types": ["Cell", "Null"]
             }
           ]
@@ -47734,7 +48158,7 @@
         "prefix_str": "F46E"
       },
       "signature": {
-        "stack_string": "c:Cell|Null i:Int D:Cell|Null n:Int -> D':Cell|Null c2:Cell|Null",
+        "stack_string": "c:Cell|Null i:Int D:Cell|Null n:Int -> D':Cell|Null c':Cell|Null",
         "inputs": {
           "stack": [
             {
@@ -47768,7 +48192,7 @@
             },
             {
               "type": "simple",
-              "name": "c2",
+              "name": "c'",
               "value_types": ["Cell", "Null"]
             }
           ]
@@ -47817,7 +48241,7 @@
         "prefix_str": "F46F"
       },
       "signature": {
-        "stack_string": "c:Cell|Null i:Int D:Cell|Null n:Int -> D':Cell|Null c2:Cell|Null",
+        "stack_string": "c:Cell|Null i:Int D:Cell|Null n:Int -> D':Cell|Null c':Cell|Null",
         "inputs": {
           "stack": [
             {
@@ -47851,7 +48275,7 @@
             },
             {
               "type": "simple",
-              "name": "c2",
+              "name": "c'",
               "value_types": ["Cell", "Null"]
             }
           ]
@@ -51204,7 +51628,7 @@
               },
               "c2": {
                 "type": "variable",
-                "var_name": "c2",
+                "var_name": "c'",
                 "save": {
                   "c0": {
                     "type": "cc",
@@ -52010,8 +52434,14 @@
       "description": {
         "short": "",
         "long": "Removes the top `i` elements from the stack. Equivalent to `DROP` performed `i` times.",
-        "tags": [],
+        "tags": ["stack"],
         "operands": ["i"],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `i` elements."
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -53153,6 +53583,12 @@
             "instructions": ["s(i) s(j) XCHG2", "s(k) PUSH"]
           }
         ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `max(i,j,k) + 2` elements."
+          }
+        ],
         "gas": [
           {
             "value": 34,
@@ -53229,6 +53665,12 @@
           {
             "exact": true,
             "instructions": ["s(i) XCHG_0I", "s(j) s(k) PUSH2"]
+          }
+        ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `max(i,j,k+1) + 1` elements."
           }
         ],
         "gas": [
@@ -53309,6 +53751,12 @@
             "instructions": ["s(i) PUSH", "s[j+1] s[k+1] PUSH2"]
           }
         ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `max(i,j,k) + 1` elements."
+          }
+        ],
         "gas": [
           {
             "value": 34,
@@ -53387,6 +53835,12 @@
             "instructions": ["s1 s(i) XCHG", "s(j) XCHG_0I"]
           }
         ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `max(i,j) + 2` elements."
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -53455,6 +53909,12 @@
           {
             "exact": true,
             "instructions": ["s(i) XCHG_0I", "s(j) PUSH"]
+          }
+        ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `max(i,j) + 1` elements."
           }
         ],
         "gas": [
@@ -53527,6 +53987,12 @@
             "instructions": ["s(i) PUSH", "s[j+1] PUSH"]
           }
         ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `max(i,j+1) + 1` elements."
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -53595,6 +54061,12 @@
           {
             "exact": true,
             "instructions": ["s(i) PUSH", "SWAP", "s(j) XCHG_0I"]
+          }
+        ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `max(i,j) + 1` elements."
           }
         ],
         "gas": [
@@ -53669,6 +54141,12 @@
           {
             "exact": true,
             "instructions": ["s1 s(i) XCHG_1I", "s(j) s[k-1] PUXC"]
+          }
+        ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `max(i,j,k) + 1` elements."
           }
         ],
         "gas": [
@@ -53751,6 +54229,12 @@
           {
             "exact": true,
             "instructions": ["s(i) PUSH", "s2 XCHG_0I", "s(j) s(k) XCHG2"]
+          }
+        ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `max(i,j,k) + 2` elements."
           }
         ],
         "gas": [
@@ -53839,6 +54323,12 @@
             "instructions": ["s(i) s[j-1] PUXC", "s(k) PUSH"]
           }
         ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `max(i,j,k) + 1` elements."
+          }
+        ],
         "gas": [
           {
             "value": 34,
@@ -53925,6 +54415,12 @@
             "instructions": ["s(i) PUSH", "SWAP", "s(j) s[k-1] PUXC"]
           }
         ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `max(i,j,k) + 1` elements."
+          }
+        ],
         "gas": [
           {
             "value": 34,
@@ -54003,12 +54499,18 @@
       "description": {
         "short": "",
         "long": "Permutes two blocks `s[j+i+1] ... s[j+1]` and `s(j) ... s0`.",
-        "tags": [],
+        "tags": ["stack"],
         "operands": ["i", "j"],
         "other_implementations": [
           {
             "exact": false,
             "instructions": ["[i+1] [j+1] REVERSE", "[j+1] 0 REVERSE", "[i+j+2] 0 REVERSE"]
+          }
+        ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `i + j + 2` elements."
           }
         ],
         "gas": [
@@ -54081,8 +54583,14 @@
       "description": {
         "short": "",
         "long": "Reverses the order of `s[j+i+1] ... s(j)`.",
-        "tags": [],
+        "tags": ["stack"],
         "operands": ["i", "j"],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `i + j + 2` elements."
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -54194,7 +54702,7 @@
         "prefix_str": "EC"
       },
       "signature": {
-        "stack_string": "x_1...x_r c:Continuation -> c2:Continuation",
+        "stack_string": "x_1...x_r c:Continuation -> c':Continuation",
         "inputs": {
           "stack": [
             {
@@ -54220,7 +54728,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "c2",
+              "name": "c'",
               "value_types": ["Continuation"]
             }
           ],
@@ -56361,8 +56869,14 @@
       "description": {
         "short": "",
         "long": "Performs `PUSH s(j)` `i` times.",
-        "tags": [],
+        "tags": ["stack"],
         "operands": ["i", "j"],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `j + 1` elements."
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -56425,12 +56939,18 @@
       "description": {
         "short": "",
         "long": "Drops `i` stack elements under the top `j` elements.",
-        "tags": [],
+        "tags": ["stack"],
         "operands": ["i", "j"],
         "other_implementations": [
           {
             "exact": true,
             "instructions": ["[i+j] 0 REVERSE", "[i] BLKDROP", "[j] 0 REVERSE"]
+          }
+        ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `i + j` elements."
           }
         ],
         "gas": [
@@ -57572,7 +58092,7 @@
           },
           {
             "type": "variable",
-            "var_name": "c2",
+            "var_name": "c'",
             "save": {
               "c0": {
                 "type": "cc",
@@ -57690,7 +58210,7 @@
           },
           {
             "type": "variable",
-            "var_name": "c2",
+            "var_name": "c'",
             "save": {
               "c0": {
                 "type": "cc",
@@ -57802,7 +58322,7 @@
           },
           {
             "type": "variable",
-            "var_name": "c2",
+            "var_name": "c'",
             "save": {
               "c0": {
                 "type": "cc",
@@ -58303,6 +58823,16 @@
         "long": "Checks whether `s` begins with constant bitstring `search` of length `8x+3` (with continuation bit assumed), where `0 <= x <= 127`, and removes `search` from `s` on success.",
         "tags": [],
         "operands": ["search"],
+        "exit_codes": [
+          {
+            "errno": "6",
+            "condition": "Not enough data bits for a SDBEGINS instruction."
+          },
+          {
+            "errno": "9",
+            "condition": "Slice does not begin with expected data bits."
+          }
+        ],
         "gas": [
           {
             "value": 31,
@@ -58834,7 +59364,7 @@
         "prefix_str": "ED60"
       },
       "signature": {
-        "stack_string": "x:Any c:Continuation -> c2:Continuation",
+        "stack_string": "x:Any c:Continuation -> c':Continuation",
         "inputs": {
           "stack": [
             {
@@ -58852,7 +59382,7 @@
           "stack": [
             {
               "type": "simple",
-              "name": "c2",
+              "name": "c'",
               "value_types": ["Continuation"]
             }
           ]
@@ -59394,6 +59924,12 @@
             "instructions": ["s3", "s2", "XCHG2"]
           }
         ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than 4 elements."
+          }
+        ],
         "gas": [
           {
             "value": 18,
@@ -59489,6 +60025,12 @@
             "instructions": ["DROP", "DROP"]
           }
         ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than 2 elements."
+          }
+        ],
         "gas": [
           {
             "value": 18,
@@ -59551,6 +60093,12 @@
           {
             "exact": true,
             "instructions": ["s1", "s0", "PUSH2"]
+          }
+        ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than 2 elements."
           }
         ],
         "examples": [
@@ -59658,6 +60206,12 @@
             "instructions": ["s3", "s2", "PUSH2"]
           }
         ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than 4 elements."
+          }
+        ],
         "gas": [
           {
             "value": 18,
@@ -59754,7 +60308,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q=floor((x+w)/2^t)` and `r=(x+w)-q*2^t`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -59793,13 +60347,35 @@
         "prefix_str": "A930"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int w:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "w",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -59815,7 +60391,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q=round((x+w)/2^t)` and `r=(x+w)-q*2^t`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -59854,13 +60430,35 @@
         "prefix_str": "A931"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int w:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "w",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -59876,7 +60474,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q=ceil((x+w)/2^t)` and `r=(x+w)-q*2^t`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -59915,13 +60513,35 @@
         "prefix_str": "A932"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int w:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "w",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -60225,7 +60845,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = x % (2^t)`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -60263,13 +60883,25 @@
         "prefix_str": "A939"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int -> result:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -60285,7 +60917,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = x % (2^t)`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -60323,13 +60955,25 @@
         "prefix_str": "A93A"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int -> result:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -60345,7 +60989,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q=floor(x/2^t)` and `r=x-q*2^t`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -60383,13 +61027,30 @@
         "prefix_str": "A93C"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -60405,7 +61066,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q=round(x/2^t)` and `r=x-q*2^t`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -60443,13 +61104,30 @@
         "prefix_str": "A93D"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -60465,7 +61143,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q=ceil(x/2^t)` and `r=x-q*2^t`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -60503,13 +61181,30 @@
         "prefix_str": "A93E"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -60525,7 +61220,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q=floor((xy+w)/2^t)` and `r=(xy+w)-q*2^t`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -60564,13 +61259,40 @@
         "prefix_str": "A9B0"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int w:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "w",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -60586,7 +61308,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q=round((xy+w)/2^t)` and `r=(xy+w)-q*2^t`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -60625,13 +61347,40 @@
         "prefix_str": "A9B1"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int w:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "w",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -60647,7 +61396,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q=ceil((xy+w)/2^t)` and `r=(xy+w)-q*2^t`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -60686,13 +61435,40 @@
         "prefix_str": "A9B2"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int w:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "w",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -60708,7 +61484,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = (x * y) >> t`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -60746,13 +61522,30 @@
         "prefix_str": "A9B4"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> result:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -60768,7 +61561,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = round(x*y/2^t)`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -60806,13 +61599,30 @@
         "prefix_str": "A9B5"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> result:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -60828,7 +61638,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = ceil(x*y/2^t)`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -60866,13 +61676,30 @@
         "prefix_str": "A9B6"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> result:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -60888,7 +61715,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = x*y mod 2^t`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -60926,13 +61753,30 @@
         "prefix_str": "A9B8"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> result:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -60948,7 +61792,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = x*y mod 2^t`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -60986,13 +61830,30 @@
         "prefix_str": "A9B9"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> result:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -61008,7 +61869,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = x*y mod 2^t`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -61046,13 +61907,30 @@
         "prefix_str": "A9BA"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> result:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -61068,7 +61946,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q=floor(x*y/2^t)` and `r=xy-q*2^t`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -61106,13 +61984,35 @@
         "prefix_str": "A9BC"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -61128,7 +62028,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q=round(x*y/2^t)` and `r=xy-q*2^t`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -61166,13 +62066,35 @@
         "prefix_str": "A9BD"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -61188,7 +62110,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q=ceil(x*y/2^t)` and `r=xy-q*2^t`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -61226,13 +62148,35 @@
         "prefix_str": "A9BE"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -61248,7 +62192,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q=floor((x*2^t+w)/z)` and `r=(x*2^t+w)-zq`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -61287,13 +62231,40 @@
         "prefix_str": "A9D0"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int w:Int z:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "w",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "z",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -61309,7 +62280,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q=round((x*2^t+w)/z)` and `r=(x*2^t+w)-zq`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -61348,13 +62319,40 @@
         "prefix_str": "A9D1"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int w:Int z:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "w",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "z",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -61370,7 +62368,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q=ceil((x*2^t+w)/z)` and `r=(x*2^t+w)-zq`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -61409,13 +62407,40 @@
         "prefix_str": "A9D2"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int w:Int z:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "w",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "z",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -61431,7 +62456,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = floor(2^t*x/y)`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -61469,13 +62494,30 @@
         "prefix_str": "A9D4"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> result:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -61491,7 +62533,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = round(2^t*x/y)`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -61529,13 +62571,30 @@
         "prefix_str": "A9D5"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> result:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -61551,7 +62610,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = ceil(2^t*x/y)`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -61589,13 +62648,30 @@
         "prefix_str": "A9D6"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> result:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -61611,7 +62687,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = 2^t*x mod y`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -61649,13 +62725,30 @@
         "prefix_str": "A9D8"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> result:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -61671,7 +62764,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = 2^t*x mod y`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -61709,13 +62802,30 @@
         "prefix_str": "A9D9"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> result:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -61731,7 +62841,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = 2^t*x mod y`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -61769,13 +62879,30 @@
         "prefix_str": "A9DA"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> result:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -61791,7 +62918,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q=floor(2^t*x/y)` and `r=2^t*x-q*y`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -61829,13 +62956,35 @@
         "prefix_str": "A9DC"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -61851,7 +63000,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q=round(2^t*x/y)` and `r=2^t*x-q*y`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -61889,13 +63038,35 @@
         "prefix_str": "A9DD"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -61911,7 +63082,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `q=ceil(2^t*x/y)` and `r=2^t*x-q*y`.",
         "tags": [],
         "operands": ["t"],
         "gas": [
@@ -61949,13 +63120,35 @@
         "prefix_str": "A9DE"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> q:Int r:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "q",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "r",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -62548,13 +63741,19 @@
       "description": {
         "short": "",
         "long": "Performs `s2 s(i) XCHG`, `s1 s(j) XCHG`, and finally `s(k) XCHG_0I`.",
-        "tags": [],
+        "tags": ["stack"],
         "operands": ["i", "j", "k"],
         "related_instructions": ["XCHG3_ALT"],
         "other_implementations": [
           {
             "exact": true,
             "instructions": ["s2 s(i) XCHG", "s1 s(j) XCHG", "s(k) XCHG_0I"]
+          }
+        ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `max(i,j,k) + 3` elements."
           }
         ],
         "gas": [
@@ -62627,13 +63826,19 @@
       "description": {
         "short": "",
         "long": "Performs `s2 s(i) XCHG`, `s1 s(j) XCHG`, and finally `s(k) XCHG_0I`. This is a long form of `XCHG3`.",
-        "tags": [],
+        "tags": ["stack"],
         "operands": ["i", "j", "k"],
         "related_instructions": ["XCHG3"],
         "other_implementations": [
           {
             "exact": false,
             "instructions": ["s2 s(i) XCHG", "s1 s(j) XCHG", "s(k) XCHG_0I"]
+          }
+        ],
+        "exit_codes": [
+          {
+            "errno": "2",
+            "condition": "Stack contains less than `max(i,j,k) + 3` elements."
           }
         ],
         "gas": [
@@ -63506,6 +64711,12 @@
         "long": "Cuts the next `count` bits of `s` into a separate _Slice_ `loaded`.",
         "tags": ["slice parsing"],
         "operands": ["count"],
+        "exit_codes": [
+          {
+            "errno": "9",
+            "condition": "Slice does not contain enough bits."
+          }
+        ],
         "gas": [
           {
             "value": 26,
@@ -64321,7 +65532,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = floor(x / 2^y)`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -64346,13 +65557,30 @@
         "prefix_str": "A924"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> result:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -64500,7 +65728,7 @@
       "sub_category": "div",
       "description": {
         "short": "",
-        "long": "",
+        "long": "Calculates `result = floor(x / 2^y)`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -64525,13 +65753,30 @@
         "prefix_str": "B7A924"
       },
       "signature": {
-        "stack_string": "∅ -> ∅",
+        "stack_string": "x:Int y:Int -> result:Int",
         "inputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "x",
+              "value_types": ["Int"]
+            },
+            {
+              "type": "simple",
+              "name": "y",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         },
         "outputs": {
-          "stack": [],
+          "stack": [
+            {
+              "type": "simple",
+              "name": "result",
+              "value_types": ["Int"]
+            }
+          ],
           "registers": []
         }
       },
@@ -67959,6 +69204,135 @@
         "file_path": "crypto/vm/tonops.cpp",
         "line_number": 176,
         "function_name": "exec_get_var_in_msg_param"
+      }
+    },
+    "BTOS": {
+      "category": "cell",
+      "sub_category": "cell_deserialize",
+      "description": {
+        "short": "Converts a _Builder_ into a _Slice_.",
+        "long": "This instruction is equivalent to `ENDC`, `CTOS` without extra gas for intermediate Cell creation.",
+        "tags": [],
+        "operands": [],
+        "exit_codes": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["ENDC", "CTOS"]
+          }
+        ],
+        "gas": [
+          {
+            "value": 26,
+            "description": "Base gas consumption"
+          }
+        ]
+      },
+      "layout": {
+        "min": 13586432,
+        "max": 13586688,
+        "checkLen": 16,
+        "skipLen": 16,
+        "args": {
+          "$": "simpleArgs",
+          "children": []
+        },
+        "exec": "exec_builder_to_slice",
+        "version": 12,
+        "kind": "simple",
+        "prefix": 53072,
+        "prefix_str": "CF50"
+      },
+      "signature": {
+        "stack_string": "b:Builder -> s:Slice",
+        "inputs": {
+          "stack": [
+            {
+              "type": "simple",
+              "name": "b",
+              "value_types": ["Builder"]
+            }
+          ]
+        },
+        "outputs": {
+          "stack": [
+            {
+              "type": "simple",
+              "name": "s",
+              "value_types": ["Slice"]
+            }
+          ]
+        }
+      },
+      "implementation": {
+        "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
+        "file_path": "crypto/vm/cellops.cpp",
+        "line_number": 767,
+        "function_name": "exec_builder_to_slice"
+      }
+    },
+    "HASHBU": {
+      "category": "crypto",
+      "sub_category": "crypto_common",
+      "description": {
+        "short": "",
+        "long": "Computes the hash of a _Builder_ `b` and returns it as a 256-bit unsigned integer `hash`. The result is the same as if an ordinary cell containing only data and references from `b` had been created and its hash computed by `HASHCU`.",
+        "tags": [],
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["ENDC", "HASHCU"]
+          }
+        ],
+        "gas": [
+          {
+            "value": 26,
+            "description": "Base gas consumption"
+          }
+        ]
+      },
+      "layout": {
+        "min": 16324096,
+        "max": 16324352,
+        "checkLen": 16,
+        "skipLen": 16,
+        "args": {
+          "$": "simpleArgs",
+          "children": []
+        },
+        "exec": "exec_compute_hash",
+        "version": 12,
+        "kind": "simple",
+        "prefix": 63766,
+        "prefix_str": "F916"
+      },
+      "signature": {
+        "stack_string": "b:Builder -> hash:Int",
+        "inputs": {
+          "stack": [
+            {
+              "type": "simple",
+              "name": "b",
+              "value_types": ["Builder"]
+            }
+          ]
+        },
+        "outputs": {
+          "stack": [
+            {
+              "type": "simple",
+              "name": "hash",
+              "value_types": ["Int"]
+            }
+          ]
+        }
+      },
+      "implementation": {
+        "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
+        "file_path": "crypto/vm/tonops.cpp",
+        "line_number": 612,
+        "function_name": "exec_compute_hash"
       }
     }
   },
