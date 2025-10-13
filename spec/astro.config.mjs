@@ -96,10 +96,10 @@ export default defineConfig({
         //         "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-ZJ3GZHJ0Z5');",
         // },
       ],
-      social: {
-        github: "https://github.com/ton-blockchain/txtracer",
-        telegram: "https://t.me/toncore",
-      },
+      social: [
+        {icon: "github", label: "GitHub", href: "https://github.com/ton-blockchain/txtracer"},
+        {icon: "telegram", label: "Telegram", href: "https://t.me/toncore"},
+      ],
       editLink: {
         baseUrl: "https://github.com/ton-blockchain/txtracer/edit/main/spec/src/content/docs/",
       },

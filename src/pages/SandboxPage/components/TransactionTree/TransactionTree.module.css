@@ -56,8 +56,7 @@
 .treeContainer {
   width: 100%;
   height: auto;
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: auto hidden;
 }
 
 .treeWrapper {
@@ -85,7 +84,7 @@
 }
 
 .edgeStyleWithInit {
-  /*stroke-width: 2px;*/
+  /* stroke-width: 2px; */
 }
 
 .edgeStyleBounced {
@@ -127,7 +126,7 @@
 .tooltip {
   background-color: var(--color-background-primary);
   border-radius: var(--border-radius-md);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 15%);
   padding: var(--spacing-md);
   font-size: var(--font-size-sm);
   min-width: 200px;
@@ -139,7 +138,7 @@
 .tooltipWithoutTriangle {
   background-color: var(--color-background-primary);
   border-radius: var(--border-radius-md);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 40%);
   padding: var(--spacing-md);
   font-size: var(--font-size-sm);
   min-width: 280px;
@@ -161,7 +160,7 @@
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
   border-top: 8px solid var(--color-background-primary);
-  filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 2px 1px rgb(0 0 0 / 10%));
 }
 
 .tooltip::before {

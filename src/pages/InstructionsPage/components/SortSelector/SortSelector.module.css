@@ -61,16 +61,19 @@
   background-color: var(--color-secondary);
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .container {
     width: 100%;
   }
+
   .segmented {
     width: 100%;
   }
+
   .option {
     width: 100%;
   }
+
   .button {
     width: 100%;
     padding: 0.35rem var(--spacing-xss);

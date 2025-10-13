@@ -38,7 +38,7 @@
   padding-top: var(--spacing-xs);
 }
 
-.errorConditionText p {
+.errorConditionText div {
   display: inline;
   margin: 0;
 }
@@ -58,8 +58,7 @@
   border-radius: calc(var(--border-radius-md) / 2);
   font-family: var(--font-family-mono), monospace;
   font-size: var(--font-size-sm);
-  overflow-x: scroll;
-  overflow-y: visible;
+  overflow: scroll visible;
   white-space: pre;
 }
 
@@ -99,7 +98,7 @@
 
 .playgroundLink {
   display: inline-flex;
-  /*position: absolute;*/
+  /* position: absolute; */
   align-items: center;
   gap: var(--spacing-sms);
   color: var(--color-text-secondary) !important;

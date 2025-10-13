@@ -39,7 +39,6 @@
   -webkit-text-fill-color: transparent;
   background: linear-gradient(89deg, #2b82eb, #1cc8ff);
   background-clip: text;
-  -webkit-background-clip: text;
   font-feature-settings:
     "clig" off,
     "liga" off;
@@ -140,7 +139,7 @@
   color: var(--color-text-primary);
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .appContainer {
     flex-direction: column;
   }

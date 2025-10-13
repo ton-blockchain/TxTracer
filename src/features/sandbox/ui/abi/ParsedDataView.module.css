@@ -149,7 +149,7 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .fieldValue {
     margin-left: var(--spacing-sm);
     width: calc(100% - var(--spacing-sm));
@@ -202,14 +202,14 @@
 
 .diffOldValue .stringValue {
   color: var(--color-error-text);
-  background-color: rgba(220, 38, 38, 0.1);
-  border-color: rgba(220, 38, 38, 0.3);
+  background-color: rgb(220 38 38 / 10%);
+  border-color: rgb(220 38 38 / 30%);
 }
 
 .diffNewValue .stringValue {
   color: var(--color-success-text);
-  background-color: rgba(22, 163, 74, 0.1);
-  border-color: rgba(22, 163, 74, 0.3);
+  background-color: rgb(22 163 74 / 10%);
+  border-color: rgb(22 163 74 / 30%);
 }
 
 .diffOldValue .numberValue {

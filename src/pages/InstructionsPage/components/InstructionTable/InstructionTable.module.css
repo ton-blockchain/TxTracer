@@ -139,9 +139,6 @@
   font-family: var(--font-family-mono), monospace;
 }
 
-.nameColumn {
-}
-
 .operandsDisplay {
   margin-left: var(--spacing-xs);
   font-family: var(--font-family-mono), monospace;
@@ -154,17 +151,11 @@
   text-align: right;
 }
 
-.descriptionColumn {
-}
-
 .descriptionColumn code {
   font-size: var(--font-size-sm);
   background-color: var(--color-background-secondary);
   padding: var(--spacing-xss) var(--spacing-xs);
   font-weight: var(--font-weight-semibold);
-}
-
-.stackColumn {
 }
 
 .shownCountBadge {
@@ -251,10 +242,7 @@
   margin-bottom: 0;
 }
 
-.tableRoot {
-}
-
-@media (max-width: 1024px) {
+@media (width <= 1024px) {
   .divTable {
     grid-template-columns:
       72px
@@ -271,7 +259,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .divTable {
     grid-template-columns: 64px 1fr;
   }
@@ -312,9 +300,6 @@
   .groupHeaderCell {
     font-size: var(--font-size-xs);
   }
-}
-
-.stackColumnCell {
 }
 
 .stackVerticalListContainer {
@@ -457,7 +442,4 @@
 
 .markdownParagraph:last-child {
   margin-bottom: 0;
-}
-
-.tableRoot {
 }

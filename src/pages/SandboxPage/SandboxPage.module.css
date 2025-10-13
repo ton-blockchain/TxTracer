@@ -42,7 +42,7 @@
 }
 
 .daemonMessageContent h3 {
-  margin: 0 0 8px 0;
+  margin: 0 0 8px;
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
 }
@@ -249,13 +249,13 @@
   border: 0;
 }
 
-@media (max-width: 1024px) {
+@media (width <= 1024px) {
   .fullPageState {
     margin-top: 0;
   }
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .fullPageState {
     margin-top: 0;
   }

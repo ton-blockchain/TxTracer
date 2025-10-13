@@ -94,6 +94,7 @@
   50% {
     opacity: 1;
   }
+
   51%,
   100% {
     opacity: 0;
@@ -399,7 +400,6 @@
 .titleEmulate {
   background: linear-gradient(135deg, #2b82eb, #1cc8ff);
   background-clip: text;
-  -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: #2b82eb;
   font-weight: var(--font-weight-normal);
@@ -432,7 +432,7 @@
 .inputWrapper:focus-within,
 .inputWrapper.focused {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.2);
+  box-shadow: 0 0 0 3px rgb(var(--color-primary-rgb), 0.2);
 }
 
 .messageInput {
@@ -507,7 +507,7 @@
   color: var(--color-text-primary);
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .centeredInputContainer {
     padding: 0 var(--spacing-md) var(--spacing-lg);
     margin-top: 160px;

@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   padding: var(--spacing-sm) var(--spacing-md);
-  /*background-color: var(--color-background-secondary);*/
+  /* background-color: var(--color-background-secondary); */
 
   gap: var(--spacing-md);
   z-index: 10;
@@ -112,7 +112,7 @@
   border: 0;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .header {
     padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-sm);
     gap: var(--spacing-md);

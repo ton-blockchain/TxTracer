@@ -64,9 +64,7 @@
 
 .mainContent {
   display: grid;
-  grid-template-columns: 1fr 400px;
-  grid-template-rows: 1fr;
-  grid-template-areas: "editor sidebar";
+  grid-template: "editor sidebar" 1fr / 1fr 400px;
   width: calc(100% - var(--spacing-sm) * 2);
   min-height: 0;
   overflow: hidden;
@@ -79,7 +77,6 @@
   -webkit-text-fill-color: transparent;
   background: linear-gradient(89deg, #2b82eb, #1cc8ff);
   background-clip: text;
-  -webkit-background-clip: text;
   font-feature-settings:
     "clig" off,
     "liga" off;
@@ -211,7 +208,7 @@
   border: 0;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .appContainer {
     position: relative;
   }
@@ -223,11 +220,7 @@
 
   .mainContent {
     display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1.5fr;
-    grid-template-areas:
-      "editor"
-      "sidebar";
+    grid-template: "editor" 1fr "sidebar" 1.5fr / 1fr;
     width: calc(100% - var(--spacing-xs) * 2);
     min-height: 0;
     padding: var(--spacing-xs);
@@ -280,9 +273,6 @@
     gap: var(--spacing-xs);
     margin-right: var(--spacing-sm);
     align-items: stretch;
-  }
-
-  .executeButton {
   }
 
   .iconLink {

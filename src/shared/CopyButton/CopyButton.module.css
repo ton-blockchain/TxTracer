@@ -17,14 +17,14 @@
 
 .copyIcon:hover {
   opacity: 1;
-  background-color: rgba(var(--color-primary-rgb), 0.1);
+  background-color: rgb(var(--color-primary-rgb), 0.1);
 }
 
 .copyIcon svg {
   width: var(--font-size-sm);
   height: var(--font-size-sm);
   display: block;
-  stroke: currentColor;
+  stroke: currentcolor;
 }
 
 .copyIcon.copied {
@@ -33,7 +33,7 @@
 }
 
 .copyIcon.copied svg {
-  stroke: currentColor;
+  stroke: currentcolor;
   animation: popIn 0.2s ease-out;
 }
 
@@ -42,6 +42,7 @@
     transform: scale(0.7);
     opacity: 0.5;
   }
+
   100% {
     transform: scale(1);
     opacity: 1;

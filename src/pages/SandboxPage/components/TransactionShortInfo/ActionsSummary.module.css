@@ -4,8 +4,7 @@
 }
 
 .scrollWrapper {
-  overflow-x: auto;
-  overflow-y: visible;
+  overflow: auto visible;
 }
 
 .emptyState {

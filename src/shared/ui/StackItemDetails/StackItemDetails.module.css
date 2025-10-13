@@ -85,7 +85,7 @@
   margin-bottom: 0;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .detailsContainer {
     height: auto;
     max-height: none;

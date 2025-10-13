@@ -41,9 +41,6 @@
   color: var(--table-th-text-color);
 }
 
-.sectionTitle {
-}
-
 .detailLabel {
   display: flex;
   align-items: center;
@@ -101,9 +98,6 @@
 
 .timestampDetailSecondary {
   color: var(--color-text-secondary);
-}
-
-.numberValue {
 }
 
 .booleanTrue {
@@ -188,9 +182,6 @@
   border-bottom: 1px solid var(--table-border-color);
 }
 
-.labeledSectionRow:last-of-type {
-}
-
 .labeledSectionTitle {
   text-align: left;
   font-weight: var(--font-weight-semibold);
@@ -212,7 +203,7 @@
   box-sizing: border-box;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .detailRow,
   .labeledSectionRow {
     flex-direction: column;
