@@ -11586,20 +11586,30 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ton-assembly@npm:0.2.4":
-  version: 0.2.4
-  resolution: "ton-assembly@npm:0.2.4"
+"ton-assembly@npm:0.5.0":
+  version: 0.5.0
+  resolution: "ton-assembly@npm:0.5.0"
   dependencies:
-    "@ton/core": "npm:^0.60.1"
     "@tonstudio/parser-runtime": "npm:^0.0.1"
     cac: "npm:^6.7.14"
+    ton-source-map: "npm:^0.2.2"
   peerDependencies:
-    "@ton/core": ">=0.60.1"
+    "@ton/core": ">=0.61.0"
+  peerDependenciesMeta:
+    "@ton/core":
+      optional: false
   bin:
     tasm: dist/cli/assembler.js
     tdisasm: dist/cli/disassembler.js
     tfift: dist/cli/fift-compiler.js
-  checksum: 10c0/453042e3776ba9cf72dd1186643f5c79ce6c4dc88daadd56ee7eceeb68e0d20c1e70e7e2bab529288398eea2d2ddc41408e59e07d1bffe8699aaed09eab8badd
+  checksum: 10c0/f35e598c835c852eda6d71b6bf8a791b5015fda77f6ca3896902aac4057f11a62663d7f1dda9aa013c5420dabc818a33d028d20c4a058df16d5b2706bfddef21
+  languageName: node
+  linkType: hard
+
+"ton-source-map@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "ton-source-map@npm:0.2.2"
+  checksum: 10c0/c1e0413983f589a1dfcbb53aa35d04f42244e88d75899eb4c04a3733ac37d2a915063dc91a726409b0239e4a039059d860e1069efb9c8faa6580d06c8b88f3a0
   languageName: node
   linkType: hard
 
@@ -11822,7 +11832,7 @@ __metadata:
     stylelint: "npm:^16.24.0"
     stylelint-config-css-modules: "npm:^4.5.1"
     stylelint-config-standard: "npm:^39.0.0"
-    ton-assembly: "npm:0.2.4"
+    ton-assembly: "npm:0.5.0"
     ts-node: "npm:^10.9.1"
     txtracer-core: "npm:^0.3.1"
     typescript: "npm:~5.8.3"

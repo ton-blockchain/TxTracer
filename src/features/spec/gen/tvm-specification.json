@@ -67960,6 +67960,135 @@
         "line_number": 176,
         "function_name": "exec_get_var_in_msg_param"
       }
+    },
+    "BTOS": {
+      "category": "cell",
+      "sub_category": "cell_deserialize",
+      "description": {
+        "short": "Converts a _Builder_ into a _Slice_.",
+        "long": "This instruction is equivalent to `ENDC`, `CTOS` without extra gas for intermediate Cell creation.",
+        "tags": [],
+        "operands": [],
+        "exit_codes": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["ENDC", "CTOS"]
+          }
+        ],
+        "gas": [
+          {
+            "value": 26,
+            "description": "Base gas consumption"
+          }
+        ]
+      },
+      "layout": {
+        "min": 13586432,
+        "max": 13586688,
+        "checkLen": 16,
+        "skipLen": 16,
+        "args": {
+          "$": "simpleArgs",
+          "children": []
+        },
+        "exec": "exec_builder_to_slice",
+        "version": 12,
+        "kind": "simple",
+        "prefix": 53072,
+        "prefix_str": "CF50"
+      },
+      "signature": {
+        "stack_string": "b:Builder -> s:Slice",
+        "inputs": {
+          "stack": [
+            {
+              "type": "simple",
+              "name": "b",
+              "value_types": ["Builder"]
+            }
+          ]
+        },
+        "outputs": {
+          "stack": [
+            {
+              "type": "simple",
+              "name": "s",
+              "value_types": ["Slice"]
+            }
+          ]
+        }
+      },
+      "implementation": {
+        "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
+        "file_path": "crypto/vm/cellops.cpp",
+        "line_number": 767,
+        "function_name": "exec_builder_to_slice"
+      }
+    },
+    "HASHBU": {
+      "category": "crypto",
+      "sub_category": "crypto_common",
+      "description": {
+        "short": "",
+        "long": "Computes the hash of a _Builder_ `b` and returns it as a 256-bit unsigned integer `hash`. The result is the same as if an ordinary cell containing only data and references from `b` had been created and its hash computed by `HASHCU`.",
+        "tags": [],
+        "operands": [],
+        "other_implementations": [
+          {
+            "exact": true,
+            "instructions": ["ENDC", "HASHCU"]
+          }
+        ],
+        "gas": [
+          {
+            "value": 26,
+            "description": "Base gas consumption"
+          }
+        ]
+      },
+      "layout": {
+        "min": 16324096,
+        "max": 16324352,
+        "checkLen": 16,
+        "skipLen": 16,
+        "args": {
+          "$": "simpleArgs",
+          "children": []
+        },
+        "exec": "exec_compute_hash",
+        "version": 12,
+        "kind": "simple",
+        "prefix": 63766,
+        "prefix_str": "F916"
+      },
+      "signature": {
+        "stack_string": "b:Builder -> hash:Int",
+        "inputs": {
+          "stack": [
+            {
+              "type": "simple",
+              "name": "b",
+              "value_types": ["Builder"]
+            }
+          ]
+        },
+        "outputs": {
+          "stack": [
+            {
+              "type": "simple",
+              "name": "hash",
+              "value_types": ["Int"]
+            }
+          ]
+        }
+      },
+      "implementation": {
+        "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
+        "file_path": "crypto/vm/tonops.cpp",
+        "line_number": 612,
+        "function_name": "exec_compute_hash"
+      }
     }
   },
   "fift_instructions": {
