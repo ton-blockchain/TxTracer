@@ -131,6 +131,13 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
               </div>
             )}
 
+            <div className={styles.metadataItem}>
+              <span className={styles.metadataLabel}>TL-B:</span>
+              <span className={styles.metadataValue}>
+                <code className={styles.tlbInlineCode}>{layout.tlb}</code>
+              </span>
+            </div>
+
             {inputRegisters.length > 0 && (
               <div className={styles.metadataItem}>
                 <span className={styles.metadataLabel}>Read registers:</span>

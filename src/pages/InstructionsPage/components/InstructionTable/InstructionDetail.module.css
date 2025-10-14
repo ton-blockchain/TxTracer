@@ -241,6 +241,16 @@
   height: 12px;
 }
 
+.tlbInlineCode {
+  font-family: var(--font-family-mono), monospace;
+  font-size: var(--font-size-xs);
+  background-color: var(--color-background-secondary);
+  padding: var(--spacing-xss) var(--spacing-xs);
+  border-radius: var(--border-radius-sm);
+  color: var(--color-text-primary);
+  word-break: break-word;
+}
+
 @media (width <= 768px) {
   .implementationsGridContainer {
     grid-template-columns: 1fr;

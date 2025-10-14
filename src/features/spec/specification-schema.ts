@@ -94,6 +94,7 @@ export interface Layout {
   readonly kind: "ext" | "ext-range" | "fixed" | "fixed-range" | "simple"
   readonly prefix: number
   readonly prefix_str: string
+  readonly tlb: string
   readonly version?: number
 }
 

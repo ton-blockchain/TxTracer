@@ -31,6 +31,10 @@ export function childType(child: Child) {
     case "refCodeSlice":
     case "inlineCodeSlice":
       return `Inline slice`
+    case "slice":
+      return `Slice with data`
+    case "hash":
+      return `Hash ID`
     case "codeSlice":
       return `Slice with code`
     case "delta":
