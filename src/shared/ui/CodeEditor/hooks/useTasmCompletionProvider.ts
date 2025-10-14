@@ -42,15 +42,17 @@ export const useTasmCompletionProvider = ({
         const inputText = word.word.toUpperCase()
         const suggestions: languages.CompletionItem[] = []
 
-        for (const [name] of Object.entries(data.instructions)) {
+        for (const [name, instruction] of Object.entries(data.instructions)) {
           if (inputText && !name.startsWith(inputText)) {
             continue
           }
 
+          const operands = instruction.description.operands
+
           suggestions.push({
             label: name,
             kind: monaco.languages.CompletionItemKind.Function,
-            insertText: name + " ",
+            insertText: name + (operands.length > 0 ? " " : ""),
             range,
             sortText: `0_${name}`,
             filterText: name,
