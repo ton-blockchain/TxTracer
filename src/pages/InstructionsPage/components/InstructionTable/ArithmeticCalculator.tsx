@@ -19,7 +19,7 @@ const ArithmeticCalculator: React.FC<ArithmeticCalculatorProps> = ({
   const [isCalculating, setIsCalculating] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const stackInputs = instruction.signature.inputs?.stack ?? []
+  const stackInputs = instruction?.signature?.inputs?.stack ?? []
   const operands = instruction.operands || instruction.description.operands || []
 
   const allInputs = [

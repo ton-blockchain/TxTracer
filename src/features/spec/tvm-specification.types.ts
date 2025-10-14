@@ -19,7 +19,7 @@ export interface Instruction {
   readonly sub_category: SubCategory
   readonly description: Description
   readonly layout: Layout
-  readonly signature: InstructionSignature
+  readonly signature?: InstructionSignature
   readonly effects?: Effect[]
   readonly operands?: string[]
   readonly control_flow?: ControlFlowOfInstruction

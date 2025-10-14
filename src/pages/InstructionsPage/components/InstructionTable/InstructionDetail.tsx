@@ -42,7 +42,7 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
 
   const markdownComponents = useProcessedMarkdown(instruction)
 
-  const stackInputs = instruction.signature.inputs?.stack ?? []
+  const stackInputs = instruction?.signature?.inputs?.stack ?? []
   const needShowCalculator =
     instruction.category === Category.Arithmetic &&
     !instructionName.startsWith("PUSHINT_") &&
@@ -58,8 +58,8 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
     return null
   }
 
-  const inputRegisters = instruction.signature.inputs?.registers ?? []
-  const outputRegisters = instruction.signature.outputs?.registers ?? []
+  const inputRegisters = instruction?.signature?.inputs?.registers ?? []
+  const outputRegisters = instruction?.signature?.outputs?.registers ?? []
 
   const links: DocsLink[] = []
   if (description.docs_links) {

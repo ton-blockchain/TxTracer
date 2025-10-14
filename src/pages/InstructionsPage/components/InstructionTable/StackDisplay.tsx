@@ -110,12 +110,16 @@ const renderStackItemPill = (item: PillProps, key: string | number, range?: Poss
 }
 
 interface StackDisplayProps {
-  readonly items: ReadonlyArray<StackEntry> | undefined
+  readonly items: ReadonlyArray<StackEntry> | "not specified" | undefined
 }
 
 const StackDisplay: React.FC<StackDisplayProps> = ({items}: StackDisplayProps) => {
   if (!items) {
     return <span>&nbsp;</span>
+  }
+
+  if (items === "not specified") {
+    return <span className={styles.stackNotSpecified}>not specified</span>
   }
 
   const reversedItems = [...items].reverse()

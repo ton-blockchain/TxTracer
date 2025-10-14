@@ -304,7 +304,7 @@
           },
           {
             "exact": true,
-            "instructions": ["ZERO", "SUBR"]
+            "instructions": ["PUSHINT_4 0", "SUBR"]
           }
         ],
         "gas": [
@@ -570,7 +570,7 @@
       "category": "arithmetic",
       "sub_category": "shift_logic",
       "description": {
-        "short": "Raises 2 to the power of `$x` and pushes the result back onto the stack.",
+        "short": "Raises 2 to the power of `x` and pushes the result back onto the stack.",
         "long": "Pops an integer from the stack, raises 2 to the power of it and pushes the result back onto the stack.",
         "tags": [],
         "operands": [],
@@ -587,7 +587,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["ONE", "SWAP", "LSHIFT"]
+            "instructions": ["PUSHINT_4 1", "SWAP", "LSHIFT_VAR"]
           }
         ],
         "gas": [
@@ -647,7 +647,7 @@
       "category": "arithmetic",
       "sub_category": "shift_logic",
       "description": {
-        "short": "Bitwise AND of two signed integers `$x` and `$y`, sign-extended to infinity and pushes the result back onto the stack.",
+        "short": "Bitwise AND of two signed integers `x` and `y`, sign-extended to infinity and pushes the result back onto the stack.",
         "long": "Pops two signed integers from the stack, performs a bitwise AND operation on them and pushes the result back onto the stack.",
         "tags": [],
         "operands": [],
@@ -719,7 +719,7 @@
       "category": "arithmetic",
       "sub_category": "shift_logic",
       "description": {
-        "short": "Bitwise OR of two signed integers `$x` and `$y`, sign-extended to infinity and pushes the result back onto the stack.",
+        "short": "Bitwise OR of two signed integers `x` and `y`, sign-extended to infinity and pushes the result back onto the stack.",
         "long": "Pops two signed integers from the stack, performs a bitwise OR operation on them and pushes the result back onto the stack.",
         "tags": [],
         "operands": [],
@@ -791,7 +791,7 @@
       "category": "arithmetic",
       "sub_category": "shift_logic",
       "description": {
-        "short": "Bitwise XOR of two signed integers `$x` and `$y`, sign-extended to infinity and pushes the result back onto the stack.",
+        "short": "Bitwise XOR of two signed integers `x` and `y`, sign-extended to infinity and pushes the result back onto the stack.",
         "long": "Pops two signed integers from the stack, performs a bitwise XOR operation on them and pushes the result back onto the stack.",
         "tags": [],
         "operands": [],
@@ -1910,7 +1910,7 @@
       "category": "arithmetic",
       "sub_category": "shift_logic",
       "description": {
-        "short": "Bitwise AND of two signed integers `x` and `$y`, sign-extended to infinity and pushes the result back onto the stack. Returns `NaN` if any operand is `NaN`.",
+        "short": "Bitwise AND of two signed integers `x` and `y`, sign-extended to infinity and pushes the result back onto the stack. Returns `NaN` if any operand is `NaN`.",
         "long": "Pops two signed integers from the stack, performs a bitwise AND operation on them and pushes the result back onto the stack. If any of the operands is `NaN`, returns `NaN` instead of throwing an exception.",
         "tags": [],
         "operands": [],
@@ -4135,7 +4135,7 @@
         "other_implementations": [
           {
             "exact": false,
-            "instructions": ["SDLEXCMP", "ISZERO"]
+            "instructions": ["SDLEXCMP", "EQINT 0"]
           }
         ],
         "gas": [
@@ -7336,7 +7336,7 @@
           {
             "instructions": [
               {
-                "instruction": "PUSHINT_4 123"
+                "instruction": "PUSHINT_16 123"
               },
               {
                 "instruction": "NEWC"
@@ -10044,7 +10044,7 @@
         "other_implementations": [
           {
             "exact": false,
-            "instructions": ["c0 PUSHCTR", "JMPX"]
+            "instructions": ["PUSHCTR c0", "JMPX"]
           }
         ],
         "gas": [
@@ -10110,7 +10110,7 @@
         "other_implementations": [
           {
             "exact": false,
-            "instructions": ["c1 PUSHCTR", "JMPX"]
+            "instructions": ["PUSHCTR c1", "JMPX"]
           }
         ],
         "gas": [
@@ -10699,7 +10699,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["c0 PUSHCTR", "JMPXDATA"]
+            "instructions": ["PUSHCTR c0", "JMPXDATA"]
           }
         ],
         "gas": [
@@ -11266,7 +11266,7 @@
             ],
             "stack": {
               "input": ["Continuation", "-1"],
-              "output": []
+              "output": ["3"]
             }
           }
         ],
@@ -11365,7 +11365,7 @@
             ],
             "stack": {
               "input": ["Continuation", "0"],
-              "output": []
+              "output": ["3"]
             }
           }
         ],
@@ -11549,7 +11549,7 @@
         "other_implementations": [
           {
             "exact": false,
-            "instructions": ["ROT", "ISZERO", "INC", "ROLLX", "NIP"]
+            "instructions": ["ROT", "EQINT 0", "INC", "ROLL", "NIP"]
           }
         ],
         "gas": [
@@ -13885,7 +13885,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["SWAP", "c0 SETCONT"]
+            "instructions": ["SWAP", "SETCONTCTR c0"]
           }
         ],
         "gas": [
@@ -13955,7 +13955,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["SWAP", "c1 SETCONT"]
+            "instructions": ["SWAP", "SETCONTCTR c1"]
           }
         ],
         "gas": [
@@ -14578,7 +14578,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["c0 PUSHCTR", "c1 POPCTR"]
+            "instructions": ["PUSHCTR c0", "POPCTR c1"]
           }
         ],
         "gas": [
@@ -14641,7 +14641,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["c1 SAVE", "SAMEALT"]
+            "instructions": ["SAVECTR c1", "SAMEALT"]
           }
         ],
         "gas": [
@@ -16265,7 +16265,7 @@
           {
             "instructions": [
               {
-                "instruction": "PUSHINT_4 42"
+                "instruction": "PUSHINT_16 42"
               },
               {
                 "instruction": "DUP",
@@ -16614,11 +16614,11 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["1 2 BLKSWAP"]
+            "instructions": ["BLKSWAP 1 2"]
           },
           {
             "exact": true,
-            "instructions": ["s2 s1 XCHG2"]
+            "instructions": ["XCHG2 s2 s1"]
           }
         ],
         "exit_codes": [
@@ -16732,11 +16732,11 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["2 1 BLKSWAP"]
+            "instructions": ["BLKSWAP 2 1"]
           },
           {
             "exact": true,
-            "instructions": ["s2 s2 XCHG2"]
+            "instructions": ["XCHG2 s2 s2"]
           }
         ],
         "exit_codes": [
@@ -17384,7 +17384,7 @@
           },
           {
             "exact": true,
-            "instructions": ["s1 s1 XCPU"]
+            "instructions": ["XCPU s1 s1"]
           }
         ],
         "gas": [
@@ -18771,7 +18771,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["CONFIGROOT", "32 PUSHINT"]
+            "instructions": ["CONFIGROOT", "PUSHINT_8 32"]
           }
         ],
         "gas": [
@@ -19925,7 +19925,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["RANDU256", "256 MULRSHIFT"]
+            "instructions": ["RANDU256", "MULRSHIFT# 256"]
           }
         ],
         "gas": [
@@ -23468,7 +23468,7 @@
         "other_implementations": [
           {
             "exact": false,
-            "instructions": ["4 LDU", "SWAP", "3 LSHIFT#", "LDUX"]
+            "instructions": ["LDU 4", "SWAP", "LSHIFT 3", "LDUX"]
           }
         ],
         "gas": [
@@ -23542,7 +23542,7 @@
         "other_implementations": [
           {
             "exact": false,
-            "instructions": ["4 LDU", "SWAP", "3 LSHIFT#", "LDIX"]
+            "instructions": ["LDU 4", "SWAP", "LSHIFT 3", "LDIX"]
           }
         ],
         "gas": [
@@ -23756,7 +23756,7 @@
         "other_implementations": [
           {
             "exact": false,
-            "instructions": ["4 LDU", "SWAP", "3 LSHIFT#", "LDUX"]
+            "instructions": ["LDU 4", "SWAP", "LSHIFT 3", "LDUX"]
           }
         ],
         "gas": [
@@ -23830,7 +23830,7 @@
         "other_implementations": [
           {
             "exact": false,
-            "instructions": ["5 LDU", "SWAP", "3 LSHIFT#", "LDIX"]
+            "instructions": ["LDU 5", "SWAP", "LSHIFT 3", "LDIX"]
           }
         ],
         "gas": [
@@ -26111,11 +26111,11 @@
           {
             "instructions": [
               {
-                "instruction": "PUSHINT_4 123",
+                "instruction": "PUSHINT_16 123",
                 "comment": "Push an integer (not a tuple)"
               },
               {
-                "instruction": "PUSHINT_4 456"
+                "instruction": "PUSHINT_16 456"
               },
               {
                 "instruction": "TPUSH",
@@ -39296,7 +39296,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Combines `DICTIGET` with `DICTGETREF`: it uses signed `n`-bit _Integer_ `i` as a key and returns a _Cell_ instead of a _Slice_ on success.",
+        "long": "Looks up key represented by a signed (big-endian) `n`-bit _Integer_ `i` in dictionary `D` of type `HashmapE(n,^Y)`. On success, applies `LDREF` `ENDS` to the found value, returning a _Cell_ `c` instead of a _Slice_. If `i` does not fit into `n` bits or the key is absent, returns _Null_.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -40001,7 +40001,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Combines `DICTSET` with `DICTGET`: it sets the value corresponding to key `k` to `x`, but also returns the old value `y` associated with the key in question, if present.",
+        "long": "Sets the value associated with `n`-bit key `k` in dictionary `D` to `x`, and returns the resulting dictionary `D'` along with the old value `y` associated with the key in question, if present. If the key was absent, returns `D'` and `-1`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -40104,7 +40104,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Combines `DICTSETREF` with `DICTGETREF` similarly to `DICTSETGET`.",
+        "long": "Sets the value associated with `n`-bit key `k` in dictionary `D` to a reference to _Cell_ `c`, and returns the resulting dictionary `D'` along with the old value (a reference to a _Cell_ or _Null_). If the key was absent, returns `D'` and _Null_.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -40717,7 +40717,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "A _Replace_ counterpart of `DICTSETREF`.",
+        "long": "Sets the value associated with `n`-bit key `k` in dictionary `D` to a reference to _Cell_ `c`, but only if the key is already present in `D`. Returns the resulting dictionary as `D'` on success, or the original dictionary `D` if the key was absent.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -41207,7 +41207,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "A _Replace_ counterpart of `DICTSETGET`: on success, also returns the old value associated with the key in question.",
+        "long": "Sets the value associated with `n`-bit key `k` in dictionary `D` to `x`, but only if the key is already present in `D`. On success, returns the resulting dictionary `D'` and the old value `y` associated with the key. If the key was absent, returns the original dictionary `D` and `-1`.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -41310,7 +41310,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "A _Replace_ counterpart of `DICTSETGETREF`.",
+        "long": "Sets the value associated with `n`-bit key `k` in dictionary `D` to a reference to _Cell_ `c`, but only if the key is already present in `D`. On success, returns the resulting dictionary `D'` and the old value (a reference to a _Cell_ or _Null_). If the key was absent, returns the original dictionary `D` and _Null_.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -41825,7 +41825,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "An _Add_ counterpart of `DICTSET`: sets the value associated with key `k` in dictionary `D` to `x`, but only if it is not already present in `D`.",
+        "long": "Sets the value associated with `n`-bit key `k` in dictionary `D` to `x`, but only if the key is not already present in `D`. Returns the resulting dictionary `D'` on success, or the original dictionary `D` if the key was already present.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -41923,7 +41923,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "An _Add_ counterpart of `DICTSETREF`.",
+        "long": "Sets the value associated with `n`-bit key `k` in dictionary `D` to a reference to _Cell_ `c`, but only if the key is not already present in `D`. Returns the resulting dictionary `D'` on success, or the original dictionary `D` if the key was already present.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -42413,7 +42413,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "An _Add_ counterpart of `DICTSETGET`: sets the value associated with key `k` in dictionary `D` to `x`, but only if key `k` is not already present in `D`. Otherwise, just returns the old value `y` without changing the dictionary.",
+        "long": "Sets the value associated with `n`-bit key `k` in dictionary `D` to `x`, but only if the key is not already present in `D`. Returns the resulting dictionary `D'` and the new value `x` on success. If the key was already present, returns the original dictionary `D` and the existing value `y` without modification.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -42516,7 +42516,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "An _Add_ counterpart of `DICTSETGETREF`.",
+        "long": "Sets the value associated with `n`-bit key `k` in dictionary `D` to a reference to _Cell_ `c`, but only if the key is not already present in `D`. Returns the resulting dictionary `D'` and the reference to _Cell_ `c` on success. If the key was already present, returns the original dictionary `D` and the existing _Cell_ reference without modification.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -47849,7 +47849,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "A variant of `DICTGETREF` that returns _Null_ instead of the value `c^?` if the key `k` is absent from dictionary `D`.",
+        "long": "Looks up key `k` (represented by a _Slice_) in dictionary `D` of type `HashmapE(n,^Y)`. On success, applies `LDREF` `ENDS` to the found value, returning a _Cell_ `c`. If the key is absent, returns _Null_ instead of throwing an exception.",
         "tags": [],
         "operands": [],
         "gas": [
@@ -48050,7 +48050,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "A variant of both `DICTGETOPTREF` and `DICTSETGETREF` that sets the value corresponding to key `k` in dictionary `D` to `c^?` (if `c^?` is _Null_, then the key is deleted instead), and returns the old value `~c^?` (if the key `k` was absent before, returns _Null_ instead).",
+        "long": "Sets the value associated with `n`-bit key `k` in dictionary `D` to `c^?` (if `c^?` is _Null_, the key is deleted instead), and returns the resulting dictionary `D'` along with the old value `~c^?` (if the key was absent, returns _Null_).",
         "tags": [],
         "operands": [],
         "gas": [
@@ -48755,7 +48755,7 @@
         "other_implementations": [
           {
             "exact": false,
-            "instructions": ["ZERO", "SWAP", "THROWARGANY"]
+            "instructions": ["PUSHINT_4 0", "SWAP", "THROWARGANY"]
           }
         ],
         "gas": [
@@ -48810,7 +48810,7 @@
         "other_implementations": [
           {
             "exact": false,
-            "instructions": ["PUSHCTR 2", "JMPXARGS 2"]
+            "instructions": ["PUSHCTR c2", "JMPXARGS 2"]
           }
         ],
         "gas": [
@@ -51876,7 +51876,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["num PUSHINT", "c3 PUSHCTR", "JMPX"]
+            "instructions": ["PUSHINT_16 [num]", "PUSHCTR c3", "JMPX"]
           }
         ],
         "gas": [
@@ -51957,7 +51957,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["num PUSHINT", "c3 PUSHCTR"]
+            "instructions": ["PUSHINT_16 [num]", "PUSHCTR c3"]
           }
         ],
         "gas": [
@@ -52472,17 +52472,6 @@
         "prefix": 1520,
         "prefix_str": "5F0"
       },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
-      },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
         "file_path": "crypto/vm/stackops.cpp",
@@ -52647,7 +52636,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Returns the `$k`-th element of a _Tuple_ `$t`.",
+        "long": "Returns the `k`-th element of a _Tuple_ `t`.",
         "tags": [],
         "operands": ["k"],
         "exit_codes": [
@@ -52685,7 +52674,7 @@
           {
             "instructions": [
               {
-                "instruction": "PUSHINT_4 123",
+                "instruction": "PUSHINT_16 123",
                 "comment": "Push an integer (not a tuple)"
               },
               {
@@ -52804,7 +52793,7 @@
           {
             "instructions": [
               {
-                "instruction": "PUSHINT_4 123",
+                "instruction": "PUSHINT_16 123",
                 "comment": "Push an integer (not a tuple)"
               },
               {
@@ -53103,7 +53092,7 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Unpacks a _Tuple_ `$t=(x_1,...,x_$tuple_len)` and returns its `$length`, but only if `$length <= $tuple_len <= 15`.",
+        "long": "Unpacks a _Tuple_ `t=(x_1,...,x_$tuple_len)` and returns its `length`, but only if `length <= $tuple_len <= 15`.",
         "tags": [],
         "operands": ["length"],
         "exit_codes": [
@@ -53580,7 +53569,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["s(i) s(j) XCHG2", "s(k) PUSH"]
+            "instructions": ["XCHG2 s(i) s(j)", "PUSH s(k)"]
           }
         ],
         "exit_codes": [
@@ -53635,17 +53624,6 @@
         "prefix": 1345,
         "prefix_str": "541"
       },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
-      },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
         "file_path": "crypto/vm/stackops.cpp",
@@ -53664,7 +53642,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["s(i) XCHG_0I", "s(j) s(k) PUSH2"]
+            "instructions": ["XCHG_0I s(i)", "PUSH2 s(j) s(k)"]
           }
         ],
         "exit_codes": [
@@ -53719,17 +53697,6 @@
         "prefix": 1347,
         "prefix_str": "543"
       },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
-      },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
         "file_path": "crypto/vm/stackops.cpp",
@@ -53742,13 +53709,13 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Pushes three values from different stack positions (`s(i) PUSH`, `s[j+1] s[k+1] PUSH2`).",
+        "long": "Pushes three values from different stack positions (`PUSH s(i)`, `PUSH2 s(j+1) s(k+1)`).",
         "tags": ["stack"],
         "operands": ["i", "j", "k"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["s(i) PUSH", "s[j+1] s[k+1] PUSH2"]
+            "instructions": ["PUSH s(i)", "PUSH2 s(j+1) s(k+1)"]
           }
         ],
         "exit_codes": [
@@ -53803,17 +53770,6 @@
         "prefix": 1351,
         "prefix_str": "547"
       },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
-      },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
         "file_path": "crypto/vm/stackops.cpp",
@@ -53826,13 +53782,13 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Performs two stack element exchanges in sequence (`s1 s(i) XCHG`, `s(j) XCHG_0I`).",
+        "long": "Performs two stack element exchanges in sequence (`XCHG_0I s(i)`, `XCHG_0I s(j)`).",
         "tags": ["stack"],
         "operands": ["i", "j"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["s1 s(i) XCHG", "s(j) XCHG_0I"]
+            "instructions": ["XCHG_0I s(i)", "XCHG_0I s(j)"]
           }
         ],
         "exit_codes": [
@@ -53879,17 +53835,6 @@
         "prefix": 80,
         "prefix_str": "50"
       },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
-      },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
         "file_path": "crypto/vm/stackops.cpp",
@@ -53902,13 +53847,13 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Exchanges `i`-th element with top (`s(i) XCHG_0I`) and pushes `j`-th element (`s(j) PUSH`).",
+        "long": "Exchanges `i`-th element with top (`XCHG_0I s(i)`) and pushes `j`-th element (`PUSH s(j)`).",
         "tags": ["stack"],
         "operands": ["i", "j"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["s(i) XCHG_0I", "s(j) PUSH"]
+            "instructions": ["XCHG_0I s(i)", "PUSH s(j)"]
           }
         ],
         "exit_codes": [
@@ -53955,17 +53900,6 @@
         "prefix": 81,
         "prefix_str": "51"
       },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
-      },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
         "file_path": "crypto/vm/stackops.cpp",
@@ -53978,13 +53912,13 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Pushes two values from `i`-th and `j`-th positions (`s(i) PUSH`, `s[j+1] PUSH`).",
+        "long": "Pushes two values from `i`-th and `j`-th positions (`PUSH s(i)`, `PUSH s(j+1)`).",
         "tags": ["stack"],
         "operands": ["i", "j"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["s(i) PUSH", "s[j+1] PUSH"]
+            "instructions": ["PUSH s(i)", "PUSH s(j+1)"]
           }
         ],
         "exit_codes": [
@@ -54031,17 +53965,6 @@
         "prefix": 83,
         "prefix_str": "53"
       },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
-      },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
         "file_path": "crypto/vm/stackops.cpp",
@@ -54054,13 +53977,13 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Pushes `i`-th element, swaps it, and exchanges with `j`-th element (`s(i) PUSH`, `SWAP`, `s(j) XCHG_0I`).",
+        "long": "Pushes `i`-th element, swaps it, and exchanges with `j`-th element (`PUSH s(i)`, `SWAP`, `XCHG_0I s(j)`).",
         "tags": ["stack"],
         "operands": ["i", "j"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["s(i) PUSH", "SWAP", "s(j) XCHG_0I"]
+            "instructions": ["PUSH s(i)", "SWAP", "XCHG_0I s(j)"]
           }
         ],
         "exit_codes": [
@@ -54111,17 +54034,6 @@
         "prefix": 82,
         "prefix_str": "52"
       },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
-      },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
         "file_path": "crypto/vm/stackops.cpp",
@@ -54134,13 +54046,13 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Exchanges second with `i`-th element, then performs PUXC with `j` and `k-1` (`s1 s(i) XCHG_1I`, `s(j) s[k-1] PUXC`).",
+        "long": "Exchanges second with `i`-th element, then performs PUXC with `j` and `k-1` (`XCHG_1I s(i)`, `PUXC s(j) s(k-1)`).",
         "tags": ["stack"],
         "operands": ["i", "j", "k"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["s1 s(i) XCHG_1I", "s(j) s[k-1] PUXC"]
+            "instructions": ["XCHG_1I s1 s(i)", "PUXC s(j) s(k-1)"]
           }
         ],
         "exit_codes": [
@@ -54199,17 +54111,6 @@
         "prefix": 1346,
         "prefix_str": "542"
       },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
-      },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
         "file_path": "crypto/vm/stackops.cpp",
@@ -54222,13 +54123,13 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Pushes `i`-th element, exchanges with third, then performs XCHG2 with `j` and `k` (`s(i) PUSH`, `s2 XCHG_0I`, `s(j) s(k) XCHG2`).",
+        "long": "Pushes `i`-th element, exchanges with third, then performs XCHG2 with `j` and `k` (`PUSH s(i)`, `XCHG_0I s2`, `XCHG2 s(j) s(k)`).",
         "tags": ["stack"],
         "operands": ["i", "j", "k"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["s(i) PUSH", "s2 XCHG_0I", "s(j) s(k) XCHG2"]
+            "instructions": ["PUSH s(i)", "XCHG_0I s2", "XCHG2 s(j) s(k)"]
           }
         ],
         "exit_codes": [
@@ -54291,17 +54192,6 @@
         "prefix": 1348,
         "prefix_str": "544"
       },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
-      },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
         "file_path": "crypto/vm/stackops.cpp",
@@ -54314,13 +54204,13 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Performs PUXC with `i` and `j-1`, then pushes `k`-th element (`s(i) s[j-1] PUXC`, `s(k) PUSH`).",
+        "long": "Performs PUXC with `i` and `j-1`, then pushes `k`-th element (`PUXC s(i) s(j-1)`, `PUSH s(k)`).",
         "tags": ["stack"],
         "operands": ["i", "j", "k"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["s(i) s[j-1] PUXC", "s(k) PUSH"]
+            "instructions": ["PUXC s(i) s(j-1)", "PUSH s(k)"]
           }
         ],
         "exit_codes": [
@@ -54383,17 +54273,6 @@
         "prefix": 1349,
         "prefix_str": "545"
       },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
-      },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
         "file_path": "crypto/vm/stackops.cpp",
@@ -54406,13 +54285,13 @@
       "sub_category": "",
       "description": {
         "short": "",
-        "long": "Pushes `i`-th element, swaps it, then performs PUXC with `j` and `k-1` (`s(i) PUSH`, `SWAP`, `s(j) s[k-1] PUXC`).",
+        "long": "Pushes `i`-th element, swaps it, then performs PUXC with `j` and `k-1` (`PUSH s(i)`, `SWAP`, `PUXC s(j) s(k-1)`).",
         "tags": ["stack"],
         "operands": ["i", "j", "k"],
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["s(i) PUSH", "SWAP", "s(j) s[k-1] PUXC"]
+            "instructions": ["PUSH s(i)", "SWAP", "PUXC s(j) s(k-1)"]
           }
         ],
         "exit_codes": [
@@ -54475,17 +54354,6 @@
         "prefix": 1350,
         "prefix_str": "546"
       },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
-      },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
         "file_path": "crypto/vm/stackops.cpp",
@@ -54504,7 +54372,7 @@
         "other_implementations": [
           {
             "exact": false,
-            "instructions": ["[i+1] [j+1] REVERSE", "[j+1] 0 REVERSE", "[i+j+2] 0 REVERSE"]
+            "instructions": ["REVERSE [i+1] [j+1]", "REVERSE [j+1] 0", "REVERSE [i+j+2] 0"]
           }
         ],
         "exit_codes": [
@@ -54558,17 +54426,6 @@
         "kind": "fixed",
         "prefix": 85,
         "prefix_str": "55"
-      },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
       },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
@@ -54632,17 +54489,6 @@
         "kind": "fixed",
         "prefix": 94,
         "prefix_str": "5E"
-      },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
       },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
@@ -54753,7 +54599,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["BLESS", "[r] [n] SETCONTARGS"]
+            "instructions": ["BLESS", "SETCONTARGS [r] [n]"]
           }
         ],
         "gas": [
@@ -54866,7 +54712,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["SWAP", "STI"]
+            "instructions": ["SWAP", "STI [width]"]
           }
         ],
         "gas": [
@@ -54972,7 +54818,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["SWAP", "STU"]
+            "instructions": ["SWAP", "STU [width]"]
           }
         ],
         "gas": [
@@ -56422,7 +56268,7 @@
             ],
             "stack": {
               "input": ["Continuation", "8"],
-              "output": []
+              "output": ["5"]
             }
           }
         ],
@@ -56539,7 +56385,7 @@
             ],
             "stack": {
               "input": ["Continuation", "8"],
-              "output": []
+              "output": ["5"]
             }
           }
         ],
@@ -56637,7 +56483,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["[i] INDEX", "[j] INDEX"]
+            "instructions": ["INDEX [i]", "INDEX [j]"]
           }
         ],
         "gas": [
@@ -56726,7 +56572,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["[i] [j] INDEX2", "[k] INDEX"]
+            "instructions": ["INDEX2 [i] [j]", "INDEX [k]"]
           }
         ],
         "gas": [
@@ -56915,17 +56761,6 @@
         "prefix": 24336,
         "prefix_str": "5F10"
       },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
-      },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
         "file_path": "crypto/vm/stackops.cpp",
@@ -56944,7 +56779,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["[i+j] 0 REVERSE", "[i] BLKDROP", "[j] 0 REVERSE"]
+            "instructions": ["REVERSE [i+j] 0", "BLKDROP [i]", "REVERSE [j] 0"]
           }
         ],
         "exit_codes": [
@@ -56990,17 +56825,6 @@
         "kind": "fixed-range",
         "prefix": 27664,
         "prefix_str": "6C10"
-      },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
       },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
@@ -57178,7 +57002,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["c7 PUSHCTR", "FIRST", "[i] INDEX"]
+            "instructions": ["PUSHCTR c7", "INDEX 0", "INDEX [i]"]
           }
         ],
         "gas": [
@@ -57416,7 +57240,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["PUSHREFCONT", "CALLX"]
+            "instructions": ["PUSHREFCONT [ref]", "EXECUTE"]
           }
         ],
         "gas": [
@@ -57497,7 +57321,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["PUSHREFCONT", "JMPX"]
+            "instructions": ["PUSHREFCONT [c]", "JMPX"]
           }
         ],
         "gas": [
@@ -57567,7 +57391,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["PUSHREFCONT", "JMPXDATA"]
+            "instructions": ["PUSHREFCONT [c]", "JMPXDATA"]
           }
         ],
         "gas": [
@@ -57643,7 +57467,7 @@
         "other_implementations": [
           {
             "exact": false,
-            "instructions": ["PUSHREFCONT", "IF"]
+            "instructions": ["PUSHREFCONT [body]", "IF"]
           }
         ],
         "docs_links": [
@@ -57741,7 +57565,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["PUSHREFCONT", "IFNOT"]
+            "instructions": ["PUSHREFCONT [body]", "IFNOT"]
           }
         ],
         "docs_links": [
@@ -57839,7 +57663,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["PUSHREFCONT", "IFJMP"]
+            "instructions": ["PUSHREFCONT [body]", "IFJMP"]
           }
         ],
         "docs_links": [
@@ -57926,7 +57750,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["PUSHREFCONT", "IFNOTJMP"]
+            "instructions": ["PUSHREFCONT [body]", "IFNOTJMP"]
           }
         ],
         "docs_links": [
@@ -58013,7 +57837,7 @@
         "other_implementations": [
           {
             "exact": false,
-            "instructions": ["PUSHREFCONT", "SWAP", "IFELSE"]
+            "instructions": ["PUSHREFCONT [body]", "SWAP", "IFELSE"]
           }
         ],
         "docs_links": [
@@ -58131,7 +57955,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["PUSHREFCONT", "IFELSE"]
+            "instructions": ["PUSHREFCONT [else]", "IFELSE"]
           }
         ],
         "docs_links": [
@@ -58249,7 +58073,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["PUSHREFCONT", "PUSHREFCONT", "IFELSE"]
+            "instructions": ["PUSHREFCONT [body]", "PUSHREFCONT [else]", "IFELSE"]
           }
         ],
         "docs_links": [
@@ -59010,7 +58834,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["PUSHREF", "STREFR"]
+            "instructions": ["PUSHREF [c]", "STREFR"]
           }
         ],
         "gas": [
@@ -59077,7 +58901,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["STREFCONST", "STREFCONST"]
+            "instructions": ["STREFCONST {} // c1", "STREFCONST {} // c2"]
           }
         ],
         "gas": [
@@ -59406,7 +59230,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["c0 PUSHCTR", "c(i) SETCONTCTR", "c0 POPCTR"]
+            "instructions": ["PUSHCTR c0", "SETCONTCTR c(i)", "POPCTR c0"]
           }
         ],
         "gas": [
@@ -59482,7 +59306,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["c1 PUSHCTR", "c(i) SETCONTCTR", "c1 POPCTR"]
+            "instructions": ["PUSHCTR c1", "SETCONTCTR c(i)", "POPCTR c1"]
           }
         ],
         "gas": [
@@ -59558,7 +59382,7 @@
         "other_implementations": [
           {
             "exact": false,
-            "instructions": ["c(i) SAVECTR", "c(i) POPCTR"]
+            "instructions": ["SAVECTR c(i)", "POPCTR c(i)"]
           }
         ],
         "gas": [
@@ -59638,7 +59462,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["c(i) PUSHCTR", "c(i) SETRETCTR"]
+            "instructions": ["PUSHCTR c(i)", "SETRETCTR c(i)"]
           }
         ],
         "gas": [
@@ -59707,7 +59531,7 @@
       "sub_category": "continuation_change",
       "description": {
         "short": "",
-        "long": "Similar to `c(i) SAVE`, but saves the current value of `c(i)` into the savelist of `c1`, not `c0`.",
+        "long": "Similar to `SAVECTR c(i)`, but saves the current value of `c(i)` into the savelist of `c1`, not `c0`.",
         "tags": [],
         "operands": ["i"],
         "gas": [
@@ -59782,7 +59606,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["c(i) SAVE", "c(i) SAVEALT"]
+            "instructions": ["SAVECTR c(i)", "SAVEALTCTR c(i)"]
           }
         ],
         "gas": [
@@ -59888,17 +59712,6 @@
         "prefix": 3508,
         "prefix_str": "DB4"
       },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
-      },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
         "file_path": "crypto/vm/contops.cpp",
@@ -59917,11 +59730,11 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["2 2 BLKSWAP"]
+            "instructions": ["BLKSWAP 2 2"]
           },
           {
             "exact": true,
-            "instructions": ["s3", "s2", "XCHG2"]
+            "instructions": ["XCHG2 s3 s2"]
           }
         ],
         "exit_codes": [
@@ -60092,7 +59905,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["s1", "s0", "PUSH2"]
+            "instructions": ["PUSH2 s1 s0"]
           }
         ],
         "exit_codes": [
@@ -60203,7 +60016,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["s3", "s2", "PUSH2"]
+            "instructions": ["PUSH2 s3 s2"]
           }
         ],
         "exit_codes": [
@@ -63747,7 +63560,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["s2 s(i) XCHG", "s1 s(j) XCHG", "s(k) XCHG_0I"]
+            "instructions": ["XCHG_IJ s2 s(i)", "XCHG_0I s(j)", "XCHG_0I s(k)"]
           }
         ],
         "exit_codes": [
@@ -63802,17 +63615,6 @@
         "prefix": 4,
         "prefix_str": "4"
       },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
-      },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
         "file_path": "crypto/vm/stackops.cpp",
@@ -63832,7 +63634,7 @@
         "other_implementations": [
           {
             "exact": false,
-            "instructions": ["s2 s(i) XCHG", "s1 s(j) XCHG", "s(k) XCHG_0I"]
+            "instructions": ["XCHG_IJ s2 s(i)", "XCHG_0I s(j)", "XCHG_0I s(k)"]
           }
         ],
         "exit_codes": [
@@ -63886,17 +63688,6 @@
         "kind": "fixed",
         "prefix": 1344,
         "prefix_str": "540"
-      },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
       },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
@@ -65799,7 +65590,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["[num] PUSHINT", "c3 PUSHCTR", "EXECUTE"]
+            "instructions": ["PUSHINT_16 [num]", "PUSHCTR c3", "EXECUTE"]
           }
         ],
         "gas": [
@@ -66602,17 +66393,6 @@
         "prefix": 17,
         "prefix_str": "11"
       },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
-      },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
         "file_path": "crypto/vm/stackops.cpp",
@@ -66707,17 +66487,6 @@
         "prefix": 2,
         "prefix_str": "2"
       },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
-      },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
         "file_path": "crypto/vm/stackops.cpp",
@@ -66762,17 +66531,6 @@
         "kind": "fixed",
         "prefix": 16,
         "prefix_str": "10"
-      },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
       },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
@@ -66831,17 +66589,6 @@
         "kind": "fixed-range",
         "prefix": 18,
         "prefix_str": "12"
-      },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
       },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
@@ -67579,17 +67326,6 @@
         "prefix": 50,
         "prefix_str": "32"
       },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
-      },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
         "file_path": "crypto/vm/stackops.cpp",
@@ -67641,17 +67377,6 @@
         "kind": "fixed",
         "prefix": 87,
         "prefix_str": "57"
-      },
-      "signature": {
-        "stack_string": "∅ -> ∅",
-        "inputs": {
-          "stack": [],
-          "registers": []
-        },
-        "outputs": {
-          "stack": [],
-          "registers": []
-        }
       },
       "implementation": {
         "commit_hash": "4ebd7412c52248360464c2df5f434c8aaa3edfe1",
@@ -69148,7 +68873,7 @@
         "other_implementations": [
           {
             "exact": true,
-            "instructions": ["INMSGPARAMS", "x INDEX"]
+            "instructions": ["INMSGPARAMS", "INDEX [x]"]
           }
         ],
         "gas": [
