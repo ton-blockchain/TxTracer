@@ -57,21 +57,6 @@ export const useTasmCompletionProvider = ({
           })
         }
 
-        for (const [mnemonic, _fiftInstruction] of Object.entries(data.fift_instructions)) {
-          if (inputText && !mnemonic.startsWith(inputText)) {
-            continue
-          }
-
-          suggestions.push({
-            label: mnemonic,
-            kind: monaco.languages.CompletionItemKind.Function,
-            insertText: mnemonic,
-            range,
-            sortText: `1_${mnemonic}`,
-            filterText: mnemonic,
-          })
-        }
-
         return {suggestions}
       },
     })
