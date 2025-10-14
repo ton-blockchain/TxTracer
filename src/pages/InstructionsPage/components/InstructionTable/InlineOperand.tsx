@@ -1,6 +1,6 @@
 import React from "react"
 
-import {ArgsEnum, Bits, type Child, type Instruction} from "@features/spec/tvm-specification.types"
+import {type Child, type Instruction} from "@features/spec/specification-schema.ts"
 
 import {Tooltip} from "@shared/ui/Tooltip/Tooltip"
 
@@ -22,7 +22,7 @@ const InlineOperand: React.FC<InlineOperandProps> = ({
   inDetails,
 }) => {
   const {description, layout} = instruction
-  const operands = instruction.operands ?? description.operands
+  const operands = description.operands
   if (!operands || operandIndex < 0 || operandIndex >= operands.length) return null
   const name = operands[operandIndex]
 
@@ -30,7 +30,7 @@ const InlineOperand: React.FC<InlineOperandProps> = ({
     if (!op) return false
     if (op.$ === type) return true
     if (op.$ === "delta") {
-      return type === "stack" && op.arg?.$ === Bits.Stack
+      return type === "stack" && op.arg?.$ === "stack"
     }
     return false
   }
@@ -38,9 +38,7 @@ const InlineOperand: React.FC<InlineOperandProps> = ({
   const layoutChildren = layout.args.children?.[operandIndex]
   const isControl = isType(layoutChildren, "control")
   const isStack =
-    layout.args.$ === ArgsEnum.XchgArgs ||
-    isType(layoutChildren, "stack") ||
-    layoutChildren?.$ === "s1"
+    layout.args.$ === "xchgArgs" || isType(layoutChildren, "stack") || layoutChildren?.$ === "s1"
 
   const operandPresentation = isControl ? `c(${name})` : isStack ? `s(${name})` : `[${name}]`
 

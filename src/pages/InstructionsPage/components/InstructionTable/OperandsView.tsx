@@ -1,11 +1,6 @@
 import React from "react"
 
-import {
-  type Args,
-  ArgsEnum,
-  type Child,
-  type Instruction,
-} from "@features/spec/tvm-specification.types"
+import {type Args, type Child, type Instruction} from "@features/spec/specification-schema.ts"
 
 import {
   childType,
@@ -21,7 +16,7 @@ interface OperandsViewProps {
 
 const OperandsView: React.FC<OperandsViewProps> = ({instruction}: OperandsViewProps) => {
   const {description, layout} = instruction
-  const operands = instruction.operands ?? description.operands
+  const operands = description.operands
   if (!operands || operands.length === 0) return null
   return (
     <div className={styles.operandsSection}>
@@ -50,7 +45,7 @@ const renderChild = (child: Child, key: string | number, operandName?: string) =
 
 const renderArgsTree = (args: Args | undefined, operandNames?: readonly string[]) => {
   if (!args) return null
-  if (args.$ === ArgsEnum.Dictpush) {
+  if (args.$ === "dictpush") {
     const pseudoChildDict: Child = {$: "dictpush"}
     const pseudoChildKeyLength: Child = {
       $: "uint",
@@ -67,7 +62,7 @@ const renderArgsTree = (args: Args | undefined, operandNames?: readonly string[]
     )
   }
 
-  if (args.$ === ArgsEnum.XchgArgs) {
+  if (args.$ === "xchgArgs") {
     const pseudoChildI: Child = {
       $: "uint",
       len: 4,

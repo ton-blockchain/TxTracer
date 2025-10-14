@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react"
 
-import type {Instruction} from "@features/spec/tvm-specification.types"
+import type {Instruction} from "@features/spec/specification-schema.ts"
 import Button from "@shared/ui/Button"
 
 import styles from "./ArithmeticCalculator.module.css"
@@ -20,7 +20,7 @@ const ArithmeticCalculator: React.FC<ArithmeticCalculatorProps> = ({
   const [error, setError] = useState<string | null>(null)
 
   const stackInputs = instruction?.signature?.inputs?.stack ?? []
-  const operands = instruction.operands || instruction.description.operands || []
+  const operands = instruction.description.operands || []
 
   const allInputs = [
     ...stackInputs.map((stackInput, index) => ({

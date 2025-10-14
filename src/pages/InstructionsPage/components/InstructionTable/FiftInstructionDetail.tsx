@@ -1,6 +1,6 @@
 import React from "react"
 
-import type {FiftInstruction, Instruction} from "@features/spec/tvm-specification.types"
+import type {FiftInstruction, Instruction} from "@features/spec/specification-schema.ts"
 
 import InstructionDetail from "./InstructionDetail"
 
@@ -25,9 +25,7 @@ const FiftInstructionDetail: React.FC<FiftInstructionDetailProps> = ({
     for (const arg of fiftInstruction.arguments) {
       if (typeof arg === "string" && arg.startsWith("$args[")) {
         const argIndex = parseInt(arg.match(/\$args\[(\d+)]/)?.[1] ?? "0", 10)
-        const operand =
-          actualInstruction.operands?.[argIndex] ??
-          actualInstruction.description.operands?.[argIndex]
+        const operand = actualInstruction.description.operands?.[argIndex]
         formatted += ` ${operand ?? `{arg${argIndex}}`}`
       } else {
         formatted += ` ${arg}`

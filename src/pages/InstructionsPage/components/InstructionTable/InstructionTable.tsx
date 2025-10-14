@@ -7,7 +7,7 @@ import {
   infoOf,
 } from "ton-assembly/dist/generator/instructions"
 
-import type {Instruction, FiftInstruction} from "@features/spec/tvm-specification.types"
+import type {Instruction, FiftInstruction} from "@features/spec/specification-schema.ts"
 
 import {useProcessedMarkdown} from "../../hooks/useProcessedMarkdown"
 import {prettySubCategoryName} from "../../lib/formatCategory"
@@ -118,7 +118,7 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
             instruction.signature?.outputs?.stack ??
             (instruction.signature === undefined ? "not specified" : undefined)
 
-          let displayedOperands = instruction.operands ?? instruction.description.operands
+          let displayedOperands = instruction.description.operands
           if (instruction.isFift && instruction.fiftInstruction) {
             const fiftArgsCount = instruction.fiftInstruction.arguments?.length || 0
             const originalOperandsCount = displayedOperands?.length || 0

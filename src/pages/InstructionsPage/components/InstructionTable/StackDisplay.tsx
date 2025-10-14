@@ -4,7 +4,7 @@ import type {
   ConstantValue,
   PossibleValueRange,
   StackEntry,
-} from "@features/spec/signatures/stack-signatures-schema.ts"
+} from "@features/spec/stack-signatures-schema.ts"
 
 import {Tooltip} from "@shared/ui/Tooltip"
 

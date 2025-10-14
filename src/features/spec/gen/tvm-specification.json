@@ -1,6 +1,6 @@
 {
   "$schema": "./schema.json",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "instructions": {
     "PUSHNAN": {
       "category": "arithmetic",
@@ -66382,7 +66382,7 @@
               "$": "stack",
               "len": 8,
               "range": {
-                "min": "1",
+                "min": "0",
                 "max": "255"
               }
             }
@@ -66476,7 +66476,7 @@
               "$": "stack",
               "len": 4,
               "range": {
-                "min": "1",
+                "min": "0",
                 "max": "15"
               }
             }

@@ -1,4 +1,4 @@
-import type {GasConsumptionEntry} from "@features/spec/tvm-specification.types.ts"
+import type {GasConsumptionEntry} from "@features/spec/specification-schema.ts"
 
 export const formatGasRanges = (gasCosts: readonly GasConsumptionEntry[]): string => {
   if (!gasCosts || gasCosts.length === 0) {

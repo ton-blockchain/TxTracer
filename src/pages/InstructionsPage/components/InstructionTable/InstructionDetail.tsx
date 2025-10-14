@@ -4,14 +4,10 @@ import ReactMarkdown from "react-markdown"
 
 import {FiExternalLink} from "react-icons/fi"
 
-import {Category, type DocsLink, type Instruction} from "@features/spec/tvm-specification.types"
-
+import {type DocsLink, type Instruction} from "@features/spec/specification-schema.ts"
 import {prettySubCategoryName} from "@app/pages/InstructionsPage/lib/formatCategory.ts"
-
 import {RegisterSquare} from "@app/pages/InstructionsPage/components/InstructionTable/RegisterSquare.tsx"
-
-import type {Register} from "@features/spec/signatures/stack-signatures-schema.ts"
-
+import type {Register} from "@features/spec/stack-signatures-schema.ts"
 import {HighlightedAssembly} from "@app/pages/InstructionsPage/components/InstructionTable/HighlightedAssembly.tsx"
 
 import {useProcessedMarkdown} from "../../hooks/useProcessedMarkdown"
@@ -38,13 +34,13 @@ const InstructionDetail: React.FC<InstructionDetailProps> = ({
   const gasConsumption = instruction.description.gas ?? []
   const formattedGas = formatGasRanges(gasConsumption)
 
-  const displayedOperands = instruction.operands ?? description.operands
+  const displayedOperands = description.operands
 
   const markdownComponents = useProcessedMarkdown(instruction)
 
   const stackInputs = instruction?.signature?.inputs?.stack ?? []
   const needShowCalculator =
-    instruction.category === Category.Arithmetic &&
+    instruction.category === "arithmetic" &&
     !instructionName.startsWith("PUSHINT_") &&
     stackInputs.every(input => input.type === "simple" && input.value_types?.[0] === "Int")
 

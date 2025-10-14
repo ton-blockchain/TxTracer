@@ -12,13 +12,17 @@ import Button from "@shared/ui/Button"
 import tvmSpecData from "@features/spec/gen/tvm-specification.json"
 import {POPULARITY} from "@features/spec/popularity/popularity.ts"
 
-import type {TvmSpec, FiftInstruction, Instruction} from "@features/spec/tvm-specification.types.ts"
-
 import {
   loadStoredSettings,
   SETTINGS_STORAGE_KEY,
   type StoredSettings,
 } from "@app/pages/InstructionsPage/settings.ts"
+
+import type {
+  FiftInstruction,
+  Instruction,
+  Specification,
+} from "@features/spec/specification-schema.ts"
 
 import Footer from "./components/Footer"
 import ContinuationsDocsBanner from "./components/ContinuationsDocsBanner/ContinuationsDocsBanner.tsx"
@@ -35,7 +39,7 @@ type ExtendedInstruction = Instruction & {
 function appendFiftInstructions(
   to: Record<string, ExtendedInstruction>,
   instructions: {[p: string]: Instruction},
-  spec: TvmSpec,
+  spec: Specification,
 ) {
   for (const [fiftName, fiftInstr] of Object.entries(spec.fift_instructions)) {
     const actualInstr = instructions[fiftInstr.actual_name]
@@ -57,7 +61,7 @@ function appendFiftInstructions(
 }
 
 function InstructionsPage() {
-  const [spec, setSpec] = useState<TvmSpec | null>(null)
+  const [spec, setSpec] = useState<Specification | null>(null)
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({})
   const [anchorInstruction, setAnchorInstruction] = useState<string | null>(null)
 
@@ -74,7 +78,7 @@ function InstructionsPage() {
   )
 
   useEffect(() => {
-    setSpec(tvmSpecData as unknown as TvmSpec)
+    setSpec(tvmSpecData as unknown as Specification)
   }, [])
 
   useEffect(() => {
@@ -104,8 +108,8 @@ function InstructionsPage() {
     setExpandedRows({})
   }
 
-  const instructions = useMemo(() => {
-    return spec?.instructions ?? ({} as TvmSpec["instructions"])
+  const instructions: Specification["instructions"] = useMemo(() => {
+    return spec?.instructions ?? ({} as Specification["instructions"])
   }, [spec?.instructions])
 
   const categories = useMemo(() => {
@@ -215,8 +219,8 @@ function InstructionsPage() {
       if (searchColumns.includes("description")) {
         haystacks.push(instruction.description.short ?? "")
         haystacks.push(instruction.description.long ?? "")
-        if (instruction.operands && instruction.operands.length > 0)
-          haystacks.push(instruction.operands.join(" "))
+        if (instruction.description.operands && instruction.description.operands.length > 0)
+          haystacks.push(instruction.description.operands.join(" "))
       }
 
       const match = haystacks.some(h => h && h.toLowerCase().includes(q))
