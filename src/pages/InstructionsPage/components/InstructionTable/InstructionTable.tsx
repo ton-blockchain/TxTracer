@@ -111,8 +111,12 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
 
           const gas = instruction.description.gas ?? calculateGasConsumptionWithDescription(opcode)
           const isExpanded = expandedRows[name]
-          const inputs = instruction.signature?.inputs?.stack ?? (instruction.signature === undefined ? "not specified" : undefined)
-          const outputs = instruction.signature?.outputs?.stack ?? (instruction.signature === undefined ? "not specified" : undefined)
+          const inputs =
+            instruction.signature?.inputs?.stack ??
+            (instruction.signature === undefined ? "not specified" : undefined)
+          const outputs =
+            instruction.signature?.outputs?.stack ??
+            (instruction.signature === undefined ? "not specified" : undefined)
 
           let displayedOperands = instruction.operands ?? instruction.description.operands
           if (instruction.isFift && instruction.fiftInstruction) {
