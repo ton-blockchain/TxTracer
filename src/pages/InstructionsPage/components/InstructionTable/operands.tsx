@@ -1,4 +1,4 @@
-import type {Arg, ArgRange, Args} from "@features/spec/specification-schema.ts"
+import type {Arg, ArgRange} from "@features/spec/specification-schema.ts"
 
 import styles from "./OperandsView.module.css"
 
@@ -11,14 +11,7 @@ export const renderChildRange = (min?: string, max?: string) => {
   return `?-${max}`
 }
 
-export function argType(child?: ExtendedArg) {
-  if (!child) return ""
-  if (child.$ === "uint") return `uint${child.len}`
-  if (child.$ === "stack") return `stack register`
-  return ""
-}
-
-export function childType(child: ExtendedArg) {
+export function childType(child: ExtendedArg): string | undefined {
   switch (child.$) {
     case "uint":
       return `uint${child.len}`
@@ -35,12 +28,12 @@ export function childType(child: ExtendedArg) {
       return `Inline slice`
     case "slice":
       return `Slice with data`
-    case "hash":
-      return `Hash ID`
     case "codeSlice":
       return `Slice with code`
+    case "dict":
+      return `Dictionary`
     case "delta":
-      return `${argType(child.arg)}`
+      return `${childType(child.arg)}`
     case "debugstr":
       return "String slice"
     case "dictpush":
@@ -51,17 +44,11 @@ export function childType(child: ExtendedArg) {
 }
 
 export function getChildByOperandIndex(
-  args: Args | undefined,
+  args: Arg[] | undefined,
   index: number,
 ): ExtendedArg | undefined {
   if (!args) return undefined
-  if (args.$ === "dictpush") {
-    return index === 0 ? {$: "dictpush"} : {$: "uint", len: 10, range: {min: "0", max: "1023"}}
-  }
-  if (args.$ === "xchgArgs") {
-    return {$: "uint", len: 4, range: {min: "0", max: "15"}}
-  }
-  const children = args.children?.[0]?.$ === "s1" ? args.children.slice(1) : args.children
+  const children = args[0]?.$ === "s1" ? args.slice(1) : args
   return children?.[index]
 }
 
@@ -79,7 +66,7 @@ export const getChildRange = (child: ExtendedArg): ArgRange | undefined => {
 }
 
 export function renderArgsTreeCompactForOperand(
-  args: Args | undefined,
+  args: Arg[] | undefined,
   operandName: string,
   operandIndex: number,
 ) {

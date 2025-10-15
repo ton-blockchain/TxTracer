@@ -35,10 +35,9 @@ const InlineOperand: React.FC<InlineOperandProps> = ({
     return false
   }
 
-  const layoutChildren = layout.args.children?.[operandIndex]
+  const layoutChildren = layout.args[operandIndex]
   const isControl = isType(layoutChildren, "control")
-  const isStack =
-    layout.args.$ === "xchgArgs" || isType(layoutChildren, "stack") || layoutChildren?.$ === "s1"
+  const isStack = isType(layoutChildren, "stack") || layoutChildren?.$ === "s1"
 
   const operandPresentation = isControl ? `c(${name})` : isStack ? `s(${name})` : `[${name}]`
 

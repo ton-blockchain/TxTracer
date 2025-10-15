@@ -358,7 +358,7 @@ export interface Layout {
   max: number
   checkLen: number
   skipLen: number
-  args: Args
+  args: Arg[]
   exec: string
   /**
    * Type of instruction layout format
@@ -379,38 +379,21 @@ export interface Layout {
   version?: number
 }
 
-/**
- * Arguments structure for instruction operands
- */
-export interface Args {
-  /**
-   * Type of arguments structure
-   */
-  $: "dictpush" | "simpleArgs" | "xchgArgs"
-  /**
-   * List of child argument structures
-   */
-  children?: Arg[]
-  range?: ArgRange
-}
-
 export type Arg =
   | UintArg
   | IntArg
-  | RefsArg
   | DeltaArg
   | StackArg
   | ControlArg
   | PlduzArg
   | TinyIntArg
   | LargeIntArg
-  | RunvmArg
-  | HashArg
   | MinusOneArg
   | S1Arg
   | SetcpArg
   | SliceArg
   | CodeSliceArg
+  | Dict
   | RefCodeSliceArg
   | InlineCodeSliceArg
   | ExoticCellArg
@@ -446,14 +429,6 @@ export interface IntArg {
    */
   len: number
   range: ArgRange
-}
-
-export interface RefsArg {
-  $: "refs"
-  /**
-   * Number of references
-   */
-  count: number
 }
 
 export interface DeltaArg {
@@ -497,14 +472,6 @@ export interface LargeIntArg {
   range: ArgRange
 }
 
-export interface RunvmArg {
-  $: "runvmArg"
-}
-
-export interface HashArg {
-  $: "hash"
-}
-
 export interface MinusOneArg {
   $: "minusOne"
 }
@@ -544,6 +511,10 @@ export interface CodeSliceArg {
    * Bits argument for code slice
    */
   bits: Arg
+}
+
+export interface Dict {
+  $: "dict"
 }
 
 export interface RefCodeSliceArg {

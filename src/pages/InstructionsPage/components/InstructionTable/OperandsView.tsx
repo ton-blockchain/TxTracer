@@ -1,6 +1,6 @@
 import React from "react"
 
-import {type Args, type Arg, type Instruction} from "@features/spec/specification-schema.ts"
+import {type Arg, type Instruction} from "@features/spec/specification-schema.ts"
 
 import {
   childType,
@@ -27,7 +27,7 @@ const OperandsView: React.FC<OperandsViewProps> = ({instruction}: OperandsViewPr
   )
 }
 
-const renderChild = (child: ExtendedArg, key: string | number, operandName?: string) => {
+const renderChild = (child: ExtendedArg, key: number, operandName?: string) => {
   const type = childType(child)
   const range = getChildRange(child)
 
@@ -44,49 +44,14 @@ const renderChild = (child: ExtendedArg, key: string | number, operandName?: str
   )
 }
 
-const renderArgsTree = (args: Args | undefined, operandNames?: readonly string[]) => {
+const renderArgsTree = (args: Arg[] | undefined, operandNames?: readonly string[]) => {
   if (!args) return null
-  if (args.$ === "dictpush") {
-    const pseudoChildDict: ExtendedArg = {$: "dictpush"}
-    const pseudoChildKeyLength: Arg = {
-      $: "uint",
-      len: 10,
-      range: {min: "0", max: (Math.pow(2, 10) - 1).toString()},
-    }
-    return (
-      <div className={styles.argTree}>
-        <ul className={styles.argChildren}>{renderChild(pseudoChildDict, 0, operandNames?.[0])}</ul>
-        <ul className={styles.argChildren}>
-          {renderChild(pseudoChildKeyLength, 1, operandNames?.[1])}
-        </ul>
-      </div>
-    )
-  }
 
-  if (args.$ === "xchgArgs") {
-    const pseudoChildI: Arg = {
-      $: "uint",
-      len: 4,
-      range: {min: "0", max: (Math.pow(2, 4) - 1).toString()},
-    }
-    const pseudoChildJ: Arg = {
-      $: "uint",
-      len: 4,
-      range: {min: "0", max: (Math.pow(2, 4) - 1).toString()},
-    }
-    return (
-      <div className={styles.argTree}>
-        <ul className={styles.argChildren}>{renderChild(pseudoChildI, 0, operandNames?.[0])}</ul>
-        <ul className={styles.argChildren}>{renderChild(pseudoChildJ, 1, operandNames?.[1])}</ul>
-      </div>
-    )
-  }
-
-  const children = args.children?.[0]?.$ === "s1" ? args.children.slice(1) : args.children
+  const children = args[0]?.$ === "s1" ? args.slice(1) : args
 
   return (
     <div className={styles.argTree}>
-      {children && children.length > 0 && (
+      {children.length > 0 && (
         <ul className={styles.argChildren}>
           {children.map((child, idx) => renderChild(child, idx, operandNames?.[idx]))}
         </ul>
