@@ -1,0 +1,1034 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "definitions": {
+    "FiftArgument": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "description": "Argument for a Fift instruction"
+    },
+    "GasConsumptionEntry": {
+      "type": "object",
+      "description": "Represents gas consumption for an instruction with value and description",
+      "properties": {
+        "value": {
+          "type": "number",
+          "description": "The gas consumption value"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the gas consumption"
+        },
+        "formula": {
+          "type": "string",
+          "description": "Optional formula for dynamic gas calculation"
+        }
+      },
+      "required": ["value", "description"],
+      "additionalProperties": false
+    },
+    "ImplementationInfo": {
+      "type": "object",
+      "description": "Information about the C++ implementation of the instruction in TON repository",
+      "properties": {
+        "commit_hash": {
+          "type": "string",
+          "description": "Git commit hash of the TON repository"
+        },
+        "file_path": {
+          "type": "string",
+          "description": "Path to the C++ file containing the implementation"
+        },
+        "line_number": {
+          "type": "number",
+          "description": "Line number where the function is defined"
+        },
+        "function_name": {
+          "type": "string",
+          "description": "Name of the C++ function implementing this instruction"
+        }
+      },
+      "required": ["commit_hash", "file_path", "line_number", "function_name"],
+      "additionalProperties": false
+    },
+    "DocsLink": {
+      "type": "object",
+      "description": "Represents a link to documentation with name and URL",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Display name for the documentation link"
+        },
+        "url": {
+          "type": "string",
+          "description": "URL to the documentation"
+        }
+      },
+      "required": ["name", "url"],
+      "additionalProperties": false
+    },
+    "FiftInstruction": {
+      "type": "object",
+      "description": "Represents a Fift instruction with its actual TVM instruction name and arguments",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The unique name of the Fift instruction"
+        },
+        "actual_name": {
+          "type": "string",
+          "description": "The actual TVM instruction name"
+        },
+        "arguments": {
+          "type": "array",
+          "description": "List of arguments for the instruction",
+          "items": {
+            "$ref": "#/definitions/FiftArgument"
+          }
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional description of what the instruction does"
+        }
+      },
+      "required": ["name", "actual_name"],
+      "additionalProperties": false
+    },
+    "Instruction": {
+      "type": "object",
+      "description": "Represents a TVM instruction with its properties, layout, effects and signature",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The unique name of the instruction"
+        },
+        "category": {
+          "type": "string",
+          "description": "Main category of the instruction (e.g. stack_basic, cont_loops, dict_get)"
+        },
+        "sub_category": {
+          "type": "string",
+          "description": "Sub-category for more specific grouping of instructions"
+        },
+        "description": {
+          "$ref": "#/definitions/Description"
+        },
+        "layout": {
+          "$ref": "#/definitions/Layout"
+        },
+        "effects": {
+          "type": "array",
+          "description": "List of side effects that this instruction may have",
+          "items": {
+            "type": "string",
+            "description": "Description of a single side effect"
+          }
+        },
+        "signature": {
+          "$ref": "#/definitions/InstructionSignature"
+        },
+        "control_flow": {
+          "$ref": "#/definitions/ControlFlow"
+        },
+        "implementation": {
+          "$ref": "#/definitions/ImplementationInfo"
+        }
+      },
+      "required": ["name", "category", "sub_category", "description", "layout"],
+      "additionalProperties": false
+    },
+    "Description": {
+      "type": "object",
+      "description": "Detailed description of an instruction including documentation, examples and related information",
+      "properties": {
+        "short": {
+          "type": "string",
+          "description": "Brief one-line description of the instruction"
+        },
+        "long": {
+          "type": "string",
+          "description": "Detailed description of the instruction's functionality"
+        },
+        "operands": {
+          "type": "array",
+          "description": "List of operand names",
+          "items": {
+            "type": "string",
+            "description": "Name of a single operand"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "List of tags for categorizing and searching instructions",
+          "items": {
+            "type": "string",
+            "description": "Single tag for the instruction"
+          }
+        },
+        "exit_codes": {
+          "type": "array",
+          "description": "List of possible exit codes and their conditions",
+          "items": {
+            "$ref": "#/definitions/ExitCode"
+          }
+        },
+        "other_implementations": {
+          "type": "array",
+          "description": "List of alternative implementations of this instruction",
+          "items": {
+            "$ref": "#/definitions/OtherImplementation"
+          }
+        },
+        "related_instructions": {
+          "type": "array",
+          "description": "List of instructions that are related or similar to this one",
+          "items": {
+            "type": "string",
+            "description": "Name of a related instruction"
+          }
+        },
+        "examples": {
+          "type": "array",
+          "description": "List of examples showing how to use this instruction",
+          "items": {
+            "$ref": "#/definitions/Example"
+          }
+        },
+        "gas": {
+          "type": "array",
+          "description": "List of gas consumption entries for this instruction",
+          "items": {
+            "$ref": "#/definitions/GasConsumptionEntry"
+          }
+        },
+        "docs_links": {
+          "type": "array",
+          "description": "List of documentation links related to this instruction",
+          "items": {
+            "$ref": "#/definitions/DocsLink"
+          }
+        }
+      },
+      "required": ["short", "long", "operands"],
+      "additionalProperties": false
+    },
+    "ExitCode": {
+      "type": "object",
+      "description": "Represents an instruction exit code and its condition",
+      "properties": {
+        "errno": {
+          "type": "string",
+          "description": "Exit code number"
+        },
+        "condition": {
+          "type": "string",
+          "description": "Condition that triggers this exit code"
+        }
+      },
+      "required": ["errno", "condition"],
+      "additionalProperties": false
+    },
+    "OtherImplementation": {
+      "type": "object",
+      "description": "Alternative implementation of an instruction using other instructions",
+      "properties": {
+        "exact": {
+          "type": "boolean",
+          "description": "Whether this implementation exactly matches the original instruction's behavior"
+        },
+        "instructions": {
+          "type": "array",
+          "description": "List of instructions that implement the same functionality",
+          "items": {
+            "type": "string",
+            "description": "Name of an instruction"
+          }
+        }
+      },
+      "required": ["exact", "instructions"],
+      "additionalProperties": false
+    },
+    "Example": {
+      "type": "object",
+      "description": "Example of instruction usage with stack state and execution result",
+      "properties": {
+        "instructions": {
+          "type": "array",
+          "description": "List of instructions in this example",
+          "items": {
+            "$ref": "#/definitions/ExampleInstruction"
+          }
+        },
+        "stack": {
+          "$ref": "#/definitions/ExampleStack"
+        },
+        "exit_code": {
+          "type": "number",
+          "description": "Exit code of the example execution"
+        }
+      },
+      "required": ["instructions", "stack"],
+      "additionalProperties": false
+    },
+    "ExampleInstruction": {
+      "type": "object",
+      "description": "Single instruction in an example with optional comment and main flag",
+      "properties": {
+        "instruction": {
+          "type": "string",
+          "description": "Instruction text or mnemonic"
+        },
+        "comment": {
+          "type": "string",
+          "description": "Optional comment explaining the instruction"
+        },
+        "is_main": {
+          "type": "boolean",
+          "description": "Whether this is the main instruction being demonstrated"
+        }
+      },
+      "required": ["instruction"],
+      "additionalProperties": false
+    },
+    "ExampleStack": {
+      "type": "object",
+      "description": "Stack state before and after instruction execution",
+      "properties": {
+        "input": {
+          "type": "array",
+          "description": "Stack state before instruction execution",
+          "items": {
+            "type": "string",
+            "description": "Stack value representation"
+          }
+        },
+        "output": {
+          "type": "array",
+          "description": "Stack state after instruction execution",
+          "items": {
+            "type": "string",
+            "description": "Stack value representation"
+          }
+        }
+      },
+      "required": ["input", "output"],
+      "additionalProperties": false
+    },
+    "Layout": {
+      "type": "object",
+      "description": "Information about instruction's bytecode layout and execution",
+      "properties": {
+        "min": {
+          "type": "number",
+          "description": "Minimum value for instruction operand range"
+        },
+        "max": {
+          "type": "number",
+          "description": "Maximum value for instruction operand range"
+        },
+        "checkLen": {
+          "type": "number"
+        },
+        "skipLen": {
+          "type": "number"
+        },
+        "args": {
+          "$ref": "#/definitions/Args"
+        },
+        "exec": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "description": "Type of instruction layout format",
+          "enum": ["ext", "ext-range", "fixed", "fixed-range", "simple"]
+        },
+        "prefix": {
+          "type": "number",
+          "description": "Numeric value of instruction prefix"
+        },
+        "prefix_str": {
+          "type": "string",
+          "description": "String representation of instruction prefix in hex"
+        },
+        "tlb": {
+          "type": "string",
+          "description": "TLB schema of the instruction"
+        },
+        "version": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "min",
+        "max",
+        "checkLen",
+        "skipLen",
+        "args",
+        "exec",
+        "kind",
+        "prefix",
+        "prefix_str",
+        "tlb"
+      ],
+      "additionalProperties": false
+    },
+    "Args": {
+      "type": "object",
+      "description": "Arguments structure for instruction operands",
+      "properties": {
+        "$": {
+          "type": "string",
+          "description": "Type of arguments structure",
+          "enum": ["dictpush", "simpleArgs", "xchgArgs"]
+        },
+        "children": {
+          "type": "array",
+          "description": "List of child argument structures",
+          "items": {
+            "$ref": "#/definitions/Child"
+          }
+        },
+        "range": {
+          "$ref": "#/definitions/ArgRange"
+        }
+      },
+      "required": ["$"],
+      "additionalProperties": false
+    },
+    "Child": {
+      "type": "object",
+      "description": "Child argument structure with its properties",
+      "properties": {
+        "$": {
+          "type": "string",
+          "description": "Type identifier for the child argument"
+        },
+        "len": {
+          "type": "number",
+          "description": "Length of the argument in bits"
+        },
+        "range": {
+          "$ref": "#/definitions/ArgRange"
+        },
+        "delta": {
+          "type": "number"
+        },
+        "arg": {
+          "$ref": "#/definitions/Arg"
+        },
+        "refs": {
+          "$ref": "#/definitions/Refs"
+        },
+        "bits": {
+          "$ref": "#/definitions/Arg"
+        },
+        "pad": {
+          "type": "number"
+        }
+      },
+      "required": ["$"],
+      "additionalProperties": false
+    },
+    "ArgRange": {
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "string"
+        },
+        "max": {
+          "type": "string"
+        }
+      },
+      "required": ["min", "max"],
+      "additionalProperties": false
+    },
+    "Arg": {
+      "type": "object",
+      "properties": {
+        "$": {
+          "type": "string",
+          "enum": ["stack", "uint"]
+        },
+        "len": {
+          "type": "number",
+          "description": "Length of the argument in bits"
+        },
+        "range": {
+          "$ref": "#/definitions/ArgRange"
+        }
+      },
+      "required": ["$", "len", "range"],
+      "additionalProperties": false
+    },
+    "Refs": {
+      "type": "object",
+      "properties": {
+        "$": {
+          "type": "string"
+        },
+        "count": {
+          "type": "number"
+        },
+        "delta": {
+          "type": "number"
+        },
+        "arg": {
+          "$ref": "#/definitions/Arg"
+        },
+        "len": {
+          "type": "number"
+        },
+        "range": {
+          "$ref": "#/definitions/ArgRange"
+        }
+      },
+      "required": ["$"],
+      "additionalProperties": false
+    },
+    "InstructionSignature": {
+      "type": "object",
+      "properties": {
+        "stack_string": {
+          "type": "string"
+        },
+        "inputs": {
+          "$ref": "#/definitions/InstructionInputs"
+        },
+        "outputs": {
+          "$ref": "#/definitions/InstructionOutputs"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Information related to usage of stack and registers by instruction. If omitted, exact signature is not available."
+    },
+    "InstructionInputs": {
+      "type": "object",
+      "properties": {
+        "stack": {
+          "$ref": "#/definitions/StackValues"
+        },
+        "registers": {
+          "$ref": "#/definitions/RegisterValues"
+        }
+      },
+      "required": [],
+      "additionalProperties": false,
+      "description": "Incoming values constraints."
+    },
+    "StackValues": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/StackEntry"
+      },
+      "description": "Stack constraints. Top of stack is the last value."
+    },
+    "StackEntry": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "simple"
+            },
+            "name": {
+              "$ref": "#/definitions/VariableName"
+            },
+            "range": {
+              "$ref": "#/definitions/Range",
+              "description": "Optional range constraint for the value, specifying minimum and maximum allowed values"
+            },
+            "presentation": {
+              "type": "string"
+            },
+            "value_types": {
+              "$ref": "#/definitions/PossibleValueTypes"
+            },
+            "mutations": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Mutation"
+              }
+            }
+          },
+          "required": ["type", "name"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "const"
+            },
+            "value_type": {
+              "$ref": "#/definitions/ConstantType"
+            },
+            "value": {
+              "$ref": "#/definitions/ConstantValue"
+            }
+          },
+          "required": ["type", "value_type", "value"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "conditional"
+            },
+            "name": {
+              "$ref": "#/definitions/VariableName1"
+            },
+            "match": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MatchArm"
+              }
+            },
+            "else": {
+              "$ref": "#/definitions/StackValues"
+            }
+          },
+          "required": ["type", "name", "match"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "array"
+            },
+            "name": {
+              "$ref": "#/definitions/VariableName"
+            },
+            "length_var": {
+              "$ref": "#/definitions/VariableName2"
+            },
+            "array_entry": {
+              "$ref": "#/definitions/ArraySingleEntryDefinition"
+            }
+          },
+          "required": ["type", "name", "length_var", "array_entry"],
+          "additionalProperties": false
+        }
+      ],
+      "description": "Representation of stack entry or group of stack entries"
+    },
+    "VariableName": {
+      "type": "string",
+      "description": "Allowed chars are `a-zA-Z0-9_`, must not begin with digit or underscore and must not end with underscore."
+    },
+    "PossibleValueTypes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["Int", "Bool", "Cell", "Builder", "Slice", "Tuple", "Continuation", "Null", "Any"]
+      }
+    },
+    "Range": {
+      "type": "object",
+      "description": "Represents a numeric range with minimum and maximum values",
+      "properties": {
+        "min": {
+          "type": "number",
+          "description": "Minimum allowed value (inclusive)"
+        },
+        "max": {
+          "type": "number",
+          "description": "Maximum allowed value (inclusive)"
+        }
+      },
+      "required": ["min", "max"],
+      "additionalProperties": false
+    },
+    "Mutation": {
+      "type": "object",
+      "properties": {
+        "length": {
+          "type": "object",
+          "properties": {
+            "amount_arg": {
+              "type": "number"
+            },
+            "stack_amount_arg": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["length"],
+      "additionalProperties": false
+    },
+    "ConstantType": {
+      "type": "string",
+      "enum": ["Int", "Null"]
+    },
+    "ConstantValue": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "VariableName1": {
+      "type": "string",
+      "description": "Allowed chars are `a-zA-Z0-9_`, must not begin with digit or underscore and must not end with underscore."
+    },
+    "MatchArm": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/ArmValue"
+        },
+        "stack": {
+          "$ref": "#/definitions/StackValues"
+        }
+      },
+      "required": ["value", "stack"],
+      "additionalProperties": false
+    },
+    "ArmValue": {
+      "type": "number"
+    },
+    "VariableName2": {
+      "type": "string",
+      "description": "Allowed chars are `a-zA-Z0-9_`, must not begin with digit or underscore and must not end with underscore."
+    },
+    "ArraySingleEntryDefinition": {
+      "$ref": "#/definitions/StackValues",
+      "description": "Array is a structure like `x1 y1 z1 x2 y2 z2 ... x_n y_n z_n n` which contains `n` entries of `x_i y_i z_i`. This property defines the structure of a single entry."
+    },
+    "RegisterValues": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Register"
+      }
+    },
+    "Register": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "constant"
+            },
+            "index": {
+              "type": "number"
+            }
+          },
+          "required": ["type", "index"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "variable"
+            },
+            "var_name": {
+              "$ref": "#/definitions/VariableName"
+            }
+          },
+          "required": ["type", "var_name"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "special"
+            },
+            "name": {
+              "type": "string",
+              "enum": ["gas", "cstate", "r"]
+            }
+          },
+          "required": ["type", "name"],
+          "additionalProperties": false
+        }
+      ],
+      "description": "Represents read/write access to a register"
+    },
+    "InstructionOutputs": {
+      "type": "object",
+      "properties": {
+        "stack": {
+          "$ref": "#/definitions/StackValues"
+        },
+        "registers": {
+          "$ref": "#/definitions/RegisterValues"
+        }
+      },
+      "required": [],
+      "additionalProperties": false,
+      "description": "Outgoing values constraints."
+    },
+    "ControlFlow": {
+      "type": "object",
+      "title": "Control flow of instruction",
+      "description": "Information related to current cc modification by instruction",
+      "additionalProperties": false,
+      "required": ["branches"],
+      "properties": {
+        "branches": {
+          "type": "array",
+          "title": "Possible branches of an instruction",
+          "description": "Array of current continuation possible values after current instruction execution",
+          "items": {
+            "$ref": "#/definitions/Continuation"
+          }
+        }
+      }
+    },
+    "Continuation": {
+      "title": "Continuation",
+      "description": "Description of a continuation with static savelist",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": {
+            "type": {
+              "const": "cc"
+            },
+            "save": {
+              "$ref": "#/definitions/savelist"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "var_name"],
+          "properties": {
+            "type": {
+              "const": "variable"
+            },
+            "var_name": {
+              "$ref": "#/definitions/VariableName",
+              "title": "Continuation variable name"
+            },
+            "save": {
+              "$ref": "#/definitions/savelist"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "index"],
+          "properties": {
+            "type": {
+              "const": "register"
+            },
+            "index": {
+              "type": "integer",
+              "title": "Register number (0-3)"
+            },
+            "save": {
+              "$ref": "#/definitions/savelist"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "name", "args"],
+          "properties": {
+            "type": {
+              "const": "special"
+            },
+            "name": {
+              "const": "until"
+            },
+            "args": {
+              "type": "object",
+              "required": ["body", "after"],
+              "additionalProperties": false,
+              "properties": {
+                "body": {
+                  "$ref": "#/definitions/Continuation"
+                },
+                "after": {
+                  "$ref": "#/definitions/Continuation"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "name", "args"],
+          "properties": {
+            "type": {
+              "const": "special"
+            },
+            "name": {
+              "const": "while"
+            },
+            "args": {
+              "type": "object",
+              "required": ["cond", "body", "after"],
+              "additionalProperties": false,
+              "properties": {
+                "cond": {
+                  "$ref": "#/definitions/Continuation"
+                },
+                "body": {
+                  "$ref": "#/definitions/Continuation"
+                },
+                "after": {
+                  "$ref": "#/definitions/Continuation"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "name", "args"],
+          "properties": {
+            "type": {
+              "const": "special"
+            },
+            "name": {
+              "const": "again"
+            },
+            "args": {
+              "type": "object",
+              "required": ["body"],
+              "additionalProperties": false,
+              "properties": {
+                "body": {
+                  "$ref": "#/definitions/Continuation"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "name", "args"],
+          "properties": {
+            "type": {
+              "const": "special"
+            },
+            "name": {
+              "const": "repeat"
+            },
+            "args": {
+              "type": "object",
+              "required": ["count", "body", "after"],
+              "additionalProperties": false,
+              "properties": {
+                "count": {
+                  "$ref": "#/definitions/VariableName",
+                  "title": "Variable name"
+                },
+                "body": {
+                  "$ref": "#/definitions/Continuation"
+                },
+                "after": {
+                  "$ref": "#/definitions/Continuation"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "name", "args"],
+          "properties": {
+            "type": {
+              "const": "special"
+            },
+            "name": {
+              "const": "pushint"
+            },
+            "args": {
+              "type": "object",
+              "required": ["next", "value"],
+              "additionalProperties": false,
+              "properties": {
+                "value": {
+                  "type": "integer",
+                  "title": "Integer to push to stack"
+                },
+                "next": {
+                  "$ref": "#/definitions/Continuation"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "savelist": {
+      "title": "Continuation savelist",
+      "description": "Values of saved control flow registers c0-c3",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "c0": {
+          "$ref": "#/definitions/Continuation"
+        },
+        "c1": {
+          "$ref": "#/definitions/Continuation"
+        },
+        "c2": {
+          "$ref": "#/definitions/Continuation"
+        },
+        "c3": {
+          "$ref": "#/definitions/Continuation"
+        }
+      }
+    }
+  },
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "instructions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Instruction"
+      }
+    },
+    "fift_instructions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/FiftInstruction"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": ["$schema", "version", "instructions", "fift_instructions"]
+}

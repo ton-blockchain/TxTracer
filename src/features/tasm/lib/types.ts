@@ -18,14 +18,14 @@ export function instructionSpecification(): Specification {
 export function findInstruction(name: string): AsmInstruction | undefined {
   const data = instructionSpecification()
 
-  const instruction = data?.instructions[name]
+  const instruction = data?.instructions.find(i => i.name === name)
   if (instruction) {
     return {name, instruction}
   }
 
-  const fiftInstruction = data?.fift_instructions[name]
+  const fiftInstruction = data?.fift_instructions.find(i => i.name === name)
   if (fiftInstruction) {
-    const instruction = data?.instructions[fiftInstruction.actual_name]
+    const instruction = data?.instructions.find(i => i.name === fiftInstruction.actual_name)
     if (instruction) {
       return {name, instruction, fiftInstruction}
     }

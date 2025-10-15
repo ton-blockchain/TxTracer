@@ -36,16 +36,14 @@ type ExtendedInstruction = Instruction & {
   readonly fiftInstruction?: FiftInstruction
 }
 
-function appendFiftInstructions(
-  to: Record<string, ExtendedInstruction>,
-  instructions: {[p: string]: Instruction},
-  spec: Specification,
-) {
-  for (const [fiftName, fiftInstr] of Object.entries(spec.fift_instructions)) {
-    const actualInstr = instructions[fiftInstr.actual_name]
+function appendFiftInstructions(to: ExtendedInstruction[], spec: Specification) {
+  for (const fiftInstr of spec.fift_instructions) {
+    const fiftName = fiftInstr.name
+    const actualInstr = spec.instructions.find(i => i.name === fiftInstr.actual_name)
     if (actualInstr) {
-      to[fiftName] = {
+      to.push({
         ...actualInstr,
+        name: fiftName,
         isFift: true,
         fiftName,
         actualInstruction: actualInstr,
@@ -55,7 +53,7 @@ function appendFiftInstructions(
           short: fiftInstr.description ? "" : actualInstr.description.short,
           long: fiftInstr.description ? fiftInstr.description + "." : actualInstr.description.long,
         },
-      }
+      })
     }
   }
 }
@@ -132,8 +130,8 @@ function InstructionsPage() {
     if (selectedCategory === "Fift-specific" && spec) {
       // For Fift, subcategories are the categories of the aliased instructions
       const s = new Set<string>()
-      for (const [, fiftInstr] of Object.entries(spec.fift_instructions)) {
-        const actualInstr = instructions[fiftInstr.actual_name]
+      for (const fiftInstr of spec.fift_instructions) {
+        const actualInstr = instructions.find(i => i.name === fiftInstr.actual_name)
         if (actualInstr?.category) {
           s.add(String(actualInstr.category))
         }
@@ -151,35 +149,35 @@ function InstructionsPage() {
   }, [instructions, selectedCategory, spec])
 
   const filteredByCategory = useMemo(() => {
-    let base: Record<string, ExtendedInstruction> = {}
+    let base: ExtendedInstruction[] = []
 
     if (selectedCategory === "All" && spec) {
-      base = {...spec.instructions}
+      base = [...spec.instructions]
       // Show Fift instructions as well
-      appendFiftInstructions(base, spec.instructions, spec)
+      appendFiftInstructions(base, spec)
     } else if (selectedCategory === "Fift-specific" && spec) {
       // Show only Fift instructions
-      appendFiftInstructions(base, spec.instructions, spec)
+      appendFiftInstructions(base, spec)
     } else if (spec) {
-      for (const [name, instr] of Object.entries(spec.instructions)) {
+      for (const instr of spec.instructions) {
         if (String(instr.category) === selectedCategory) {
-          base[name] = instr
+          base.push(instr)
         }
       }
     }
 
     if (selectedSubCategory !== "All") {
-      const tmp: Record<string, ExtendedInstruction> = {}
-      for (const [name, instr] of Object.entries(base)) {
+      const tmp: ExtendedInstruction[] = []
+      for (const instr of base) {
         if (selectedCategory === "Fift-specific") {
           // For Fift instructions, filter by actual instruction category
           const actualCategory = instr.actualInstruction?.category
           if (String(actualCategory) === selectedSubCategory) {
-            tmp[name] = instr
+            tmp.push(instr)
           }
         } else {
           if (String(instr.sub_category) === selectedSubCategory) {
-            tmp[name] = instr
+            tmp.push(instr)
           }
         }
       }
@@ -188,33 +186,33 @@ function InstructionsPage() {
     return base
   }, [selectedCategory, selectedSubCategory, spec])
 
-  const filteredInstructions = useMemo(() => {
+  const filteredInstructions: ExtendedInstruction[] = useMemo(() => {
     const q = query.trim().toLowerCase()
 
     if (anchorInstruction) {
-      const allInstructions = spec?.instructions ?? {}
-      if (allInstructions[anchorInstruction]) {
-        return {[anchorInstruction]: allInstructions[anchorInstruction]}
-      } else {
-        // Clear anchor if the instruction is not found
-        setTimeout(() => {
-          setAnchorInstruction(null)
-          window.history.replaceState(null, "", window.location.pathname)
-          setExpandedRows({})
-        }, 0)
-        return filteredByCategory
+      const allInstructions = spec?.instructions ?? []
+      const found = allInstructions.find(i => i.name === anchorInstruction)
+      if (found) {
+        return [found]
       }
+
+      // Clear anchor if the instruction is not found
+      setTimeout(() => {
+        setAnchorInstruction(null)
+        window.history.replaceState(null, "", window.location.pathname)
+        setExpandedRows({})
+      }, 0)
+      return filteredByCategory
     }
 
     if (!q) return filteredByCategory
 
-    const entries = Object.entries(filteredByCategory)
-    const next: typeof filteredByCategory = {}
+    const next: ExtendedInstruction[] = []
 
-    for (const [name, instruction] of entries) {
+    for (const instruction of filteredByCategory) {
       const haystacks: string[] = []
 
-      if (searchColumns.includes("name")) haystacks.push(name)
+      if (searchColumns.includes("name")) haystacks.push(instruction.name)
       if (searchColumns.includes("opcode")) haystacks.push(instruction.layout.prefix_str)
       if (searchColumns.includes("description")) {
         haystacks.push(instruction.description.short ?? "")
@@ -224,51 +222,55 @@ function InstructionsPage() {
       }
 
       const match = haystacks.some(h => h && h.toLowerCase().includes(q))
-      if (match) next[name] = instruction
+      if (match) {
+        next.push(instruction)
+      }
     }
     return next
   }, [query, filteredByCategory, searchColumns, anchorInstruction, spec?.instructions])
 
-  const sortedInstructions = useMemo(() => {
-    const entries = Object.entries(filteredInstructions)
+  const sortedInstructions: ExtendedInstruction[] = useMemo(() => {
+    const entries = [...filteredInstructions]
     if (sortMode === "popularity") {
       // Popularity sort: higher POPULARITY first, fallback by name
       entries.sort((a, b) => {
-        const pa = POPULARITY[a[0]] ?? 0
-        const pb = POPULARITY[b[0]] ?? 0
+        const pa = POPULARITY[a.name] ?? 0
+        const pb = POPULARITY[b.name] ?? 0
         if (pb !== pa) return pb - pa
-        return a[0].localeCompare(b[0])
+        return a.name.localeCompare(b.name)
       })
     } else if (sortMode === "category") {
       // Category sort: group by category, then by name
       entries.sort((a, b) => {
-        const ca = a[1].category ?? ""
-        const cb = b[1].category ?? ""
+        const ca = a.category ?? ""
+        const cb = b.category ?? ""
         if (ca !== cb) return String(ca).localeCompare(String(cb))
-        return a[0].localeCompare(b[0])
+        return a.name.localeCompare(b.name)
       })
     } else if (sortMode === "novelty") {
       // Novelty sort: by layout.version desc, then by name
       entries.sort((a, b) => {
-        const va = a[1].layout?.version ?? 0
-        const vb = b[1].layout?.version ?? 0
+        const va = a.layout?.version ?? 0
+        const vb = b.layout?.version ?? 0
         if (vb !== va) return vb - va
-        return a[0].localeCompare(b[0])
+        return a.name.localeCompare(b.name)
       })
     } else if (sortMode === "opcode") {
       // Opcode sort: by numeric opcode (prefix), ascending; fallback by name
       entries.sort((a, b) => {
-        const pa = Number.parseInt(a[1].layout.prefix_str, 16)
-        const pb = Number.parseInt(b[1].layout.prefix_str, 16)
+        const pa = Number.parseInt(a.layout.prefix_str, 16)
+        const pb = Number.parseInt(b.layout.prefix_str, 16)
         if (!Number.isNaN(pa) && !Number.isNaN(pb) && pa !== pb) return pa - pb
         // if not hex, compare as string
-        if (a[1].layout.prefix_str !== b[1].layout.prefix_str)
-          return a[1].layout.prefix_str.localeCompare(b[1].layout.prefix_str)
-        return a[0].localeCompare(b[0])
+        if (a.layout.prefix_str !== b.layout.prefix_str)
+          return a.layout.prefix_str.localeCompare(b.layout.prefix_str)
+        return a.name.localeCompare(b.name)
       })
     }
-    const out: typeof filteredInstructions = {}
-    for (const [k, v] of entries) out[k] = v
+    const out: ExtendedInstruction[] = []
+    for (const v of entries) {
+      out.push(v)
+    }
     return out
   }, [filteredInstructions, sortMode])
 

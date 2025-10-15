@@ -1,15 +1,16 @@
-import type {InstructionSignature, Continuation} from "./stack-signatures-schema.ts"
+import type {InstructionSignature, Continuation} from "./stack-signatures-schema"
 
 export interface Specification {
   readonly $schema: string
   readonly version: string
-  readonly instructions: Record<string, Instruction>
-  readonly fift_instructions: Record<string, FiftInstruction>
+  readonly instructions: readonly Instruction[]
+  readonly fift_instructions: readonly FiftInstruction[]
 }
 
 export type FiftArgument = number | string
 
 export interface FiftInstruction {
+  readonly name: string
   readonly actual_name: string
   readonly arguments: readonly FiftArgument[]
   readonly description?: string
@@ -23,6 +24,7 @@ export interface ImplementationInfo {
 }
 
 export interface Instruction {
+  readonly name: string
   readonly category: string
   readonly sub_category: string
   readonly description: Description
