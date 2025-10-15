@@ -1,6 +1,6 @@
 {
   "$schema": "./schema.json",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "instructions": [
     {
       "name": "PUSHNAN",
@@ -68260,11 +68260,25 @@
         "checkLen": 8,
         "skipLen": 16,
         "args": {
-          "$": "xchgArgs",
-          "range": {
-            "min": "1",
-            "max": "16"
-          }
+          "$": "simpleArgs",
+          "children": [
+            {
+              "$": "stack",
+              "len": 4,
+              "range": {
+                "min": "1",
+                "max": "15"
+              }
+            },
+            {
+              "$": "stack",
+              "len": 4,
+              "range": {
+                "min": "0",
+                "max": "15"
+              }
+            }
+          ]
         },
         "exec": "exec_xchg",
         "kind": "fixed",
