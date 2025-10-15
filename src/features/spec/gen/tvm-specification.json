@@ -66617,7 +66617,7 @@
         "kind": "fixed",
         "prefix": 3504,
         "prefix_str": "DB0",
-        "tlb": "#db0 p: (## 4) j: (## 4)"
+        "tlb": "#db0 p: (## 4)"
       },
       "signature": {
         "stack_string": "x_1...x_p c:Continuation -> ∅",

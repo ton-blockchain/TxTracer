@@ -47,7 +47,7 @@ const renderChild = (child: ExtendedArg, key: number, operandName?: string) => {
 const renderArgsTree = (args: Arg[] | undefined, operandNames?: readonly string[]) => {
   if (!args) return null
 
-  const children = args[0]?.$ === "s1" ? args.slice(1) : args
+  const children = args.filter(arg => arg.$ !== "s1" && arg.$ !== "minusOne")
 
   return (
     <div className={styles.argTree}>
