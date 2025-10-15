@@ -567,33 +567,6 @@ export interface DebugstrArg {
 }
 
 /**
- * References specification for the child argument
- */
-export interface Refs {
-  /**
-   * Type discriminator for references
-   */
-  $: string
-  /**
-   * Number of references
-   */
-  count?: number
-  /**
-   * Delta value for references
-   */
-  delta?: number
-  /**
-   * Argument for references specification
-   */
-  arg?: Arg
-  /**
-   * Length specification for references
-   */
-  len?: number
-  range?: ArgRange
-}
-
-/**
  * Information related to usage of stack and registers by instruction. If omitted, exact signature is not available.
  */
 export interface InstructionSignature {
