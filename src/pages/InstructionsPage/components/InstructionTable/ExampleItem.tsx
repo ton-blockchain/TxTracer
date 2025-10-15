@@ -3,8 +3,7 @@ import {FaExclamationTriangle, FaPlay} from "react-icons/fa"
 
 import ReactMarkdown, {type Components} from "react-markdown"
 
-import type {Example, ExitCode} from "@features/spec/specification-schema.ts"
-import type {StackEntry} from "@features/spec/stack-signatures-schema.ts"
+import type {Example, ExitCode, StackEntry} from "@features/spec/specification-schema.ts"
 
 import {HighlightedAssembly} from "./HighlightedAssembly"
 

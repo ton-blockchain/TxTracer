@@ -4,10 +4,13 @@ import ReactMarkdown from "react-markdown"
 
 import {FiExternalLink} from "react-icons/fi"
 
-import {type DocsLink, type Instruction} from "@features/spec/specification-schema.ts"
+import {
+  type DocsLink,
+  type Instruction,
+  type Register,
+} from "@features/spec/specification-schema.ts"
 import {prettySubCategoryName} from "@app/pages/InstructionsPage/lib/formatCategory.ts"
 import {RegisterSquare} from "@app/pages/InstructionsPage/components/InstructionTable/RegisterSquare.tsx"
-import type {Register} from "@features/spec/stack-signatures-schema.ts"
 import {HighlightedAssembly} from "@app/pages/InstructionsPage/components/InstructionTable/HighlightedAssembly.tsx"
 
 import {useProcessedMarkdown} from "../../hooks/useProcessedMarkdown"

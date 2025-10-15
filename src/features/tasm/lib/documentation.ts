@@ -31,7 +31,8 @@ export function generateAsmDoc(instruction: AsmInstruction): string | null {
   ]
 
   if (instruction.fiftInstruction) {
-    const operandsStr = instruction.fiftInstruction.arguments.map(arg => arg.toString()).join(" ")
+    const operandsStr =
+      instruction.fiftInstruction.arguments?.map(arg => arg.toString()).join(" ") ?? ""
     const fiftInfoDescription = ` alias of ${instruction.fiftInstruction.actual_name} ${operandsStr}`
 
     return [

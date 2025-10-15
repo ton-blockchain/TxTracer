@@ -1,142 +1,706 @@
-import type {InstructionSignature, Continuation} from "./stack-signatures-schema"
-
-export interface Specification {
-  readonly $schema: string
-  readonly version: string
-  readonly instructions: readonly Instruction[]
-  readonly fift_instructions: readonly FiftInstruction[]
-}
-
+/* eslint-disable */
+/**
+ * Representation of stack entry or group of stack entries
+ */
+export type StackEntry =
+  | {
+      type: "simple"
+      name: VariableName
+      range?: PossibleValueRange
+      presentation?: string
+      value_types?: PossibleValueTypes
+      mutations?: Mutation[]
+    }
+  | {
+      type: "const"
+      value_type: ConstantType
+      value: ConstantValue
+    }
+  | {
+      type: "conditional"
+      name: VariableName1
+      match: MatchArm[]
+      else?: StackValues
+    }
+  | {
+      type: "array"
+      name: VariableName
+      length_var: VariableName2
+      array_entry: ArraySingleEntryDefinition
+    }
+/**
+ * Allowed chars are `a-zA-Z0-9_`, must not begin with digit or underscore and must not end with underscore.
+ */
+export type VariableName = string
+export type PossibleValueTypes = (
+  | "Int"
+  | "Bool"
+  | "Cell"
+  | "Builder"
+  | "Slice"
+  | "Tuple"
+  | "Continuation"
+  | "Null"
+  | "Any"
+)[]
+export type ConstantType = "Int" | "Null"
+export type ConstantValue = number | string | null
+/**
+ * Allowed chars are `a-zA-Z0-9_`, must not begin with digit or underscore and must not end with underscore.
+ */
+export type VariableName1 = string
+export type ArmValue = number
+/**
+ * Allowed chars are `a-zA-Z0-9_`, must not begin with digit or underscore and must not end with underscore.
+ */
+export type VariableName2 = string
+/**
+ * Array is a structure like `x1 y1 z1 x2 y2 z2 ... x_n y_n z_n n` which contains `n` entries of `x_i y_i z_i`. This property defines the structure of a single entry.
+ */
+export type ArraySingleEntryDefinition = StackEntry[]
+/**
+ * Stack constraints. Top of stack is the last value.
+ */
+export type StackValues = StackEntry[]
+/**
+ * Represents read/write access to a register
+ */
+export type Register =
+  | {
+      type: "constant"
+      index: number
+    }
+  | {
+      type: "variable"
+      var_name: VariableName
+    }
+  | {
+      type: "special"
+      name: "gas" | "cstate" | "r"
+    }
+export type RegisterValues = Register[]
+/**
+ * Description of a continuation with static savelist
+ */
+export type Continuation =
+  | {
+      type: "cc"
+      save?: ContinuationSavelist
+    }
+  | {
+      type: "variable"
+      var_name: ContinuationVariableName
+      save?: ContinuationSavelist
+    }
+  | {
+      type: "register"
+      index: RegisterNumber03
+      save?: ContinuationSavelist
+    }
+  | {
+      type: "special"
+      name: "until"
+      args: {
+        body: Continuation
+        after: Continuation
+      }
+    }
+  | {
+      type: "special"
+      name: "while"
+      args: {
+        cond: Continuation
+        body: Continuation
+        after: Continuation
+      }
+    }
+  | {
+      type: "special"
+      name: "again"
+      args: {
+        body: Continuation
+      }
+    }
+  | {
+      type: "special"
+      name: "repeat"
+      args: {
+        count: VariableName3
+        body: Continuation
+        after: Continuation
+      }
+    }
+  | {
+      type: "special"
+      name: "pushint"
+      args: {
+        value: IntegerToPushToStack
+        next: Continuation
+      }
+    }
+/**
+ * Allowed chars are `a-zA-Z0-9_`, must not begin with digit or underscore and must not end with underscore.
+ */
+export type ContinuationVariableName = string
+export type RegisterNumber03 = number
+/**
+ * Allowed chars are `a-zA-Z0-9_`, must not begin with digit or underscore and must not end with underscore.
+ */
+export type VariableName3 = string
+export type IntegerToPushToStack = number
+/**
+ * Array of current continuation possible values after current instruction execution
+ */
+export type PossibleBranchesOfAnInstruction = Continuation[]
+/**
+ * Argument for a Fift instruction
+ */
 export type FiftArgument = number | string
 
-export interface FiftInstruction {
-  readonly name: string
-  readonly actual_name: string
-  readonly arguments: readonly FiftArgument[]
-  readonly description?: string
+export interface Specification {
+  $schema: string
+  version: string
+  instructions: Instruction[]
+  fift_instructions: FiftInstruction[]
 }
 
-export interface ImplementationInfo {
-  readonly commit_hash: string
-  readonly file_path: string
-  readonly line_number: number
-  readonly function_name: string
-}
-
+/**
+ * Represents a TVM instruction with its properties, layout, effects and signature
+ */
 export interface Instruction {
-  readonly name: string
-  readonly category: string
-  readonly sub_category: string
-  readonly description: Description
-  readonly layout: Layout
-  readonly effects?: readonly string[]
-  readonly signature?: InstructionSignature
-  readonly control_flow?: ControlFlowOfInstruction
-  readonly implementation?: ImplementationInfo
+  /**
+   * The unique name of the instruction
+   */
+  name: string
+  /**
+   * Main category of the instruction (e.g. stack_basic, cont_loops, dict_get)
+   */
+  category: string
+  /**
+   * Sub-category for more specific grouping of instructions
+   */
+  sub_category: string
+  description: Description
+  layout: Layout
+  /**
+   * List of side effects that this instruction may have
+   */
+  effects?: string[]
+  signature?: InstructionSignature
+  control_flow?: ControlFlowOfInstruction
+  implementation?: ImplementationInfo
 }
 
-export interface ExitCode {
-  readonly errno: string
-  readonly condition: string
-}
-
-export interface OtherImplementation {
-  readonly exact: boolean
-  readonly instructions: readonly string[]
-}
-
-export interface ExampleInstruction {
-  readonly instruction: string
-  readonly comment?: string
-  readonly is_main?: boolean
-}
-
-export interface ExampleStack {
-  readonly input: readonly string[]
-  readonly output: readonly string[]
-}
-
-export interface Example {
-  readonly instructions: readonly ExampleInstruction[]
-  readonly stack: ExampleStack
-  readonly exit_code?: number
-}
-
-export interface GasConsumptionEntry {
-  readonly value: number
-  readonly description: string
-  readonly formula?: string
-}
-
-export interface DocsLink {
-  readonly name: string
-  readonly url: string
-}
-
+/**
+ * Detailed description of an instruction including documentation, examples and related information
+ */
 export interface Description {
-  readonly short: string
-  readonly long: string
-  readonly tags: readonly string[]
-  readonly operands: readonly string[]
-  readonly exit_codes?: readonly ExitCode[]
-  readonly other_implementations?: readonly OtherImplementation[]
-  readonly related_instructions?: readonly string[]
-  readonly examples?: readonly Example[]
-  readonly gas?: readonly GasConsumptionEntry[]
-  readonly docs_links?: readonly DocsLink[]
+  /**
+   * Brief one-line description of the instruction
+   */
+  short: string
+  /**
+   * Detailed description of the instruction's functionality
+   */
+  long: string
+  /**
+   * List of operand names
+   */
+  operands: string[]
+  /**
+   * List of tags for categorizing and searching instructions
+   */
+  tags?: string[]
+  /**
+   * List of possible exit codes and their conditions
+   */
+  exit_codes?: ExitCode[]
+  /**
+   * List of alternative implementations of this instruction
+   */
+  other_implementations?: OtherImplementation[]
+  /**
+   * List of instructions that are related or similar to this one
+   */
+  related_instructions?: string[]
+  /**
+   * List of examples showing how to use this instruction
+   */
+  examples?: Example[]
+  /**
+   * List of gas consumption entries for this instruction
+   */
+  gas?: GasConsumptionEntry[]
+  /**
+   * List of documentation links related to this instruction
+   */
+  docs_links?: DocsLink[]
 }
 
+/**
+ * Represents an instruction exit code and its condition
+ */
+export interface ExitCode {
+  /**
+   * Exit code number
+   */
+  errno: string
+  /**
+   * Condition that triggers this exit code
+   */
+  condition: string
+}
+
+/**
+ * Alternative implementation of an instruction using other instructions
+ */
+export interface OtherImplementation {
+  /**
+   * Whether this implementation exactly matches the original instruction's behavior
+   */
+  exact: boolean
+  /**
+   * List of instructions that implement the same functionality
+   */
+  instructions: string[]
+}
+
+/**
+ * Example of instruction usage with stack state and execution result
+ */
+export interface Example {
+  /**
+   * List of instructions in this example
+   */
+  instructions: ExampleInstruction[]
+  stack: ExampleStack
+  /**
+   * Exit code of the example execution
+   */
+  exit_code?: number
+}
+
+/**
+ * Single instruction in an example with optional comment and main flag
+ */
+export interface ExampleInstruction {
+  /**
+   * Instruction text or mnemonic
+   */
+  instruction: string
+  /**
+   * Optional comment explaining the instruction
+   */
+  comment?: string
+  /**
+   * Whether this is the main instruction being demonstrated
+   */
+  is_main?: boolean
+}
+
+/**
+ * Stack state before and after instruction execution
+ */
+export interface ExampleStack {
+  /**
+   * Stack state before instruction execution
+   */
+  input: string[]
+  /**
+   * Stack state after instruction execution
+   */
+  output: string[]
+}
+
+/**
+ * Represents gas consumption for an instruction with value and description
+ */
+export interface GasConsumptionEntry {
+  /**
+   * The gas consumption value
+   */
+  value: number
+  /**
+   * Description of the gas consumption
+   */
+  description: string
+  /**
+   * Optional formula for dynamic gas calculation
+   */
+  formula?: string
+}
+
+/**
+ * Represents a link to documentation with name and URL
+ */
+export interface DocsLink {
+  /**
+   * Display name for the documentation link
+   */
+  name: string
+  /**
+   * URL to the documentation
+   */
+  url: string
+}
+
+/**
+ * Information about instruction's bytecode layout and execution
+ */
 export interface Layout {
-  readonly min: number
-  readonly max: number
-  readonly checkLen: number
-  readonly skipLen: number
-  readonly args: Args
-  readonly exec: string
-  readonly kind: "ext" | "ext-range" | "fixed" | "fixed-range" | "simple"
-  readonly prefix: number
-  readonly prefix_str: string
-  readonly tlb: string
-  readonly version?: number
+  /**
+   * Minimum value for instruction operand range
+   */
+  min: number
+  /**
+   * Maximum value for instruction operand range
+   */
+  max: number
+  checkLen: number
+  skipLen: number
+  args: Args
+  exec: string
+  /**
+   * Type of instruction layout format
+   */
+  kind: "ext" | "ext-range" | "fixed" | "fixed-range" | "simple"
+  /**
+   * Numeric value of instruction prefix
+   */
+  prefix: number
+  /**
+   * String representation of instruction prefix in hex
+   */
+  prefix_str: string
+  /**
+   * TLB schema of the instruction
+   */
+  tlb: string
+  version?: number
 }
 
+/**
+ * Arguments structure for instruction operands
+ */
 export interface Args {
-  readonly $: "dictpush" | "simpleArgs" | "xchgArgs"
-  readonly children?: readonly Child[]
-  readonly range?: ArgRange
+  /**
+   * Type of arguments structure
+   */
+  $: "dictpush" | "simpleArgs" | "xchgArgs"
+  /**
+   * List of child argument structures
+   */
+  children?: Arg[]
+  range?: ArgRange
 }
 
-export interface Child {
-  readonly $: string
-  readonly len?: number
-  readonly range?: ArgRange
-  readonly delta?: number
-  readonly arg?: Arg
-  readonly refs?: Refs
-  readonly bits?: Arg
-  readonly pad?: number
-}
+export type Arg =
+  | UintArg
+  | IntArg
+  | RefsArg
+  | DeltaArg
+  | StackArg
+  | ControlArg
+  | PlduzArg
+  | TinyIntArg
+  | LargeIntArg
+  | RunvmArg
+  | HashArg
+  | MinusOneArg
+  | S1Arg
+  | SetcpArg
+  | SliceArg
+  | CodeSliceArg
+  | RefCodeSliceArg
+  | InlineCodeSliceArg
+  | ExoticCellArg
+  | DebugstrArg
 
-export interface Arg {
-  readonly $: "stack" | "uint"
-  readonly len: number
-  readonly range: ArgRange
-}
-
+/**
+ * Value range constraint for the child argument
+ */
 export interface ArgRange {
-  readonly min: string
-  readonly max: string
+  /**
+   * Minimum value for the argument range
+   */
+  min: string
+  /**
+   * Maximum value for the argument range
+   */
+  max: string
 }
 
+export interface UintArg {
+  $: "uint"
+  /**
+   * Length of the argument in bits
+   */
+  len: number
+  range: ArgRange
+}
+
+export interface IntArg {
+  $: "int"
+  /**
+   * Length of the argument in bits
+   */
+  len: number
+  range: ArgRange
+}
+
+export interface RefsArg {
+  $: "refs"
+  /**
+   * Number of references
+   */
+  count: number
+}
+
+export interface DeltaArg {
+  $: "delta"
+  /**
+   * Delta value
+   */
+  delta: number
+  /**
+   * Nested argument for delta operation
+   */
+  arg: Arg
+}
+
+export interface StackArg {
+  $: "stack"
+  /**
+   * Length of the argument in bits
+   */
+  len: number
+  range: ArgRange
+}
+
+export interface ControlArg {
+  $: "control"
+  range: ArgRange
+}
+
+export interface PlduzArg {
+  $: "plduzArg"
+  range: ArgRange
+}
+
+export interface TinyIntArg {
+  $: "tinyInt"
+  range: ArgRange
+}
+
+export interface LargeIntArg {
+  $: "largeInt"
+  range: ArgRange
+}
+
+export interface RunvmArg {
+  $: "runvmArg"
+}
+
+export interface HashArg {
+  $: "hash"
+}
+
+export interface MinusOneArg {
+  $: "minusOne"
+}
+
+export interface S1Arg {
+  $: "s1"
+}
+
+export interface SetcpArg {
+  $: "setcpArg"
+  range: ArgRange
+}
+
+export interface SliceArg {
+  $: "slice"
+  /**
+   * References argument for slice
+   */
+  refs: Arg
+  /**
+   * Bits argument for slice
+   */
+  bits: Arg
+  /**
+   * Padding value for slice
+   */
+  pad: number
+}
+
+export interface CodeSliceArg {
+  $: "codeSlice"
+  /**
+   * References argument for code slice
+   */
+  refs: Arg
+  /**
+   * Bits argument for code slice
+   */
+  bits: Arg
+}
+
+export interface RefCodeSliceArg {
+  $: "refCodeSlice"
+}
+
+export interface InlineCodeSliceArg {
+  $: "inlineCodeSlice"
+  /**
+   * Bits argument for inline code slice
+   */
+  bits: Arg
+}
+
+export interface ExoticCellArg {
+  $: "exoticCell"
+}
+
+export interface DebugstrArg {
+  $: "debugstr"
+}
+
+/**
+ * References specification for the child argument
+ */
 export interface Refs {
-  readonly $: string
-  readonly count?: number
-  readonly delta?: number
-  readonly arg?: Arg
-  readonly len?: number
-  readonly range?: ArgRange
+  /**
+   * Type discriminator for references
+   */
+  $: string
+  /**
+   * Number of references
+   */
+  count?: number
+  /**
+   * Delta value for references
+   */
+  delta?: number
+  /**
+   * Argument for references specification
+   */
+  arg?: Arg
+  /**
+   * Length specification for references
+   */
+  len?: number
+  range?: ArgRange
 }
 
+/**
+ * Information related to usage of stack and registers by instruction. If omitted, exact signature is not available.
+ */
+export interface InstructionSignature {
+  stack_string?: string
+  inputs?: InstructionInputs
+  outputs?: InstructionOutputs
+}
+
+/**
+ * Incoming values constraints.
+ */
+export interface InstructionInputs {
+  stack?: StackValues
+  registers?: RegisterValues
+}
+
+/**
+ * Optional range constraint for the value, specifying minimum and maximum allowed values
+ */
+export interface PossibleValueRange {
+  /**
+   * Minimum allowed value (inclusive)
+   */
+  min: number
+  /**
+   * Maximum allowed value (inclusive)
+   */
+  max: number
+}
+
+export interface Mutation {
+  length: {
+    amount_arg?: number
+    stack_amount_arg?: number
+  }
+}
+
+export interface MatchArm {
+  value: ArmValue
+  stack: StackValues
+}
+
+/**
+ * Outgoing values constraints.
+ */
+export interface InstructionOutputs {
+  stack?: StackValues
+  registers?: RegisterValues
+}
+
+/**
+ * Information related to current cc modification by instruction
+ */
 export interface ControlFlowOfInstruction {
-  readonly branches: Continuation[]
+  branches: PossibleBranchesOfAnInstruction
+}
+
+/**
+ * Values of saved control flow registers c0-c3
+ */
+export interface ContinuationSavelist {
+  c0?: Continuation
+  c1?: Continuation
+  c2?: Continuation
+  c3?: Continuation
+}
+
+/**
+ * Information about the C++ implementation of the instruction in TON repository
+ */
+export interface ImplementationInfo {
+  /**
+   * Git commit hash of the TON repository
+   */
+  commit_hash: string
+  /**
+   * Path to the C++ file containing the implementation
+   */
+  file_path: string
+  /**
+   * Line number where the function is defined
+   */
+  line_number: number
+  /**
+   * Name of the C++ function implementing this instruction
+   */
+  function_name: string
+}
+
+/**
+ * Represents a Fift instruction with its actual TVM instruction name and arguments
+ */
+export interface FiftInstruction {
+  /**
+   * The unique name of the Fift instruction
+   */
+  name: string
+  /**
+   * The actual TVM instruction name
+   */
+  actual_name: string
+  /**
+   * List of arguments for the instruction
+   */
+  arguments?: FiftArgument[]
+  /**
+   * Optional description of what the instruction does
+   */
+  description?: string
 }

@@ -1,9 +1,10 @@
 import React from "react"
 
-import {type Args, type Child, type Instruction} from "@features/spec/specification-schema.ts"
+import {type Args, type Arg, type Instruction} from "@features/spec/specification-schema.ts"
 
 import {
   childType,
+  type ExtendedArg,
   getChildRange,
   renderChildRange,
 } from "@app/pages/InstructionsPage/components/InstructionTable/operands.tsx"
@@ -26,7 +27,7 @@ const OperandsView: React.FC<OperandsViewProps> = ({instruction}: OperandsViewPr
   )
 }
 
-const renderChild = (child: Child, key: string | number, operandName?: string) => {
+const renderChild = (child: ExtendedArg, key: string | number, operandName?: string) => {
   const type = childType(child)
   const range = getChildRange(child)
 
@@ -46,8 +47,8 @@ const renderChild = (child: Child, key: string | number, operandName?: string) =
 const renderArgsTree = (args: Args | undefined, operandNames?: readonly string[]) => {
   if (!args) return null
   if (args.$ === "dictpush") {
-    const pseudoChildDict: Child = {$: "dictpush"}
-    const pseudoChildKeyLength: Child = {
+    const pseudoChildDict: ExtendedArg = {$: "dictpush"}
+    const pseudoChildKeyLength: Arg = {
       $: "uint",
       len: 10,
       range: {min: "0", max: (Math.pow(2, 10) - 1).toString()},
@@ -63,12 +64,12 @@ const renderArgsTree = (args: Args | undefined, operandNames?: readonly string[]
   }
 
   if (args.$ === "xchgArgs") {
-    const pseudoChildI: Child = {
+    const pseudoChildI: Arg = {
       $: "uint",
       len: 4,
       range: {min: "0", max: (Math.pow(2, 4) - 1).toString()},
     }
-    const pseudoChildJ: Child = {
+    const pseudoChildJ: Arg = {
       $: "uint",
       len: 4,
       range: {min: "0", max: (Math.pow(2, 4) - 1).toString()},
