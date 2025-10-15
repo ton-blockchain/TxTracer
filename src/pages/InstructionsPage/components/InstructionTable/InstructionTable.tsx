@@ -22,12 +22,14 @@ import InlineOperand from "./InlineOperand"
 import styles from "./InstructionTable.module.css"
 import {formatGasRanges} from "./utils.ts"
 
-type ExtendedInstruction = Instruction & {
-  readonly isFift?: boolean
-  readonly fiftName?: string
-  readonly actualInstruction?: Instruction
-  readonly fiftInstruction?: FiftInstruction
-}
+type ExtendedInstruction = Readonly<
+  Instruction & {
+    readonly isFift?: boolean
+    readonly fiftName?: string
+    readonly actualInstruction?: Instruction
+    readonly fiftInstruction?: FiftInstruction
+  }
+>
 
 interface DescriptionCellProps {
   readonly instruction: Instruction

@@ -29,12 +29,14 @@ import ContinuationsDocsBanner from "./components/ContinuationsDocsBanner/Contin
 
 import styles from "./InstructionsPage.module.css"
 
-type ExtendedInstruction = Instruction & {
-  readonly isFift?: boolean
-  readonly fiftName?: string
-  readonly actualInstruction?: Instruction
-  readonly fiftInstruction?: FiftInstruction
-}
+type ExtendedInstruction = Readonly<
+  Instruction & {
+    readonly isFift?: boolean
+    readonly fiftName?: string
+    readonly actualInstruction?: Instruction
+    readonly fiftInstruction?: FiftInstruction
+  }
+>
 
 function appendFiftInstructions(to: ExtendedInstruction[], spec: Specification) {
   for (const fiftInstr of spec.fift_instructions) {
