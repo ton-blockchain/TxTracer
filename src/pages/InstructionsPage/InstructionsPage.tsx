@@ -99,7 +99,14 @@ function InstructionsPage() {
   }, [anchorInstruction])
 
   const toggleColumn = (key: InstructionColumnKey) => {
-    setSearchColumns(prev => (prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]))
+    setSearchColumns(prev => {
+      if (prev.includes(key)) {
+        const res = prev.filter(k => k !== key)
+        return res.length === 0 ? ["name"] : res
+      } else {
+        return [...prev, key]
+      }
+    })
   }
 
   const resetAnchor = () => {
