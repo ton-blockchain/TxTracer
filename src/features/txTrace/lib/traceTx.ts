@@ -49,6 +49,9 @@ async function retraceAny(info: ExtractionResult): Promise<TraceResult> {
   if (info.$ === "SingleHash") {
     return retrace(info.testnet, info.hash)
   }
+  if (info.$ === "UnknownNetwork") {
+    return retrace(info.testnet, info.hash)
+  }
 
   throw new Error("Invalid extraction result")
 }
@@ -65,6 +68,10 @@ async function maybeTestnet(link: string): Promise<{result: TraceResult; network
   } catch (error: unknown) {
     if (error instanceof Error && error.message.includes("Cannot find transaction info")) {
       console.log("Cannot find in mainnet, trying to find in testnet")
+      if (txLinkInfo?.$ === "UnknownNetwork") {
+        txLinkInfo.testnet = true
+      }
+
       const result = await retraceAny(txLinkInfo ?? SingleHash(link, true))
       return {result, network: "testnet"}
     }
