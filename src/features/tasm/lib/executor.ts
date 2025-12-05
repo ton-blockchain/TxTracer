@@ -3,8 +3,10 @@ import type {Address, Contract, ContractProvider, Sender, StateInit, TupleReader
 import {Cell, contractAddress, toNano, TupleBuilder} from "@ton/core"
 import {GetMethodError, type SandboxContract, type TreasuryContract} from "@ton/sandbox"
 import {Blockchain} from "@ton/sandbox"
-import {createMappingInfo, type MappingInfo} from "ton-assembly/dist/trace/mapping"
+import {createMappingInfo} from "ton-assembly/dist/trace/mapping"
 import type {StackElement} from "ton-assembly/dist/trace"
+
+import type {AssemblyMapping} from "ton-source-map"
 
 import {type ExitCode, findExitCode} from "@features/txTrace/lib/traceTx.ts"
 
@@ -112,7 +114,7 @@ export interface AssemblyExecutionResult {
   readonly vmLogs: string
   readonly instructions: i.Instr[]
   readonly code: string
-  readonly mappingInfo: MappingInfo | null
+  readonly mappingInfo: AssemblyMapping | null
   readonly exitCode: ExitCode | undefined
   readonly traceInfo: trace.TraceInfo | undefined
 }

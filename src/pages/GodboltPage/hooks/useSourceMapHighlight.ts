@@ -3,6 +3,8 @@ import type * as monaco from "monaco-editor"
 
 import {trace} from "ton-assembly"
 
+import type {InstructionInfo} from "ton-source-map"
+
 import type {HighlightGroup, HighlightRange} from "@shared/ui/CodeEditor"
 
 export interface UseSourceMapHighlightReturn {
@@ -78,7 +80,7 @@ const COLORS = [
 
 export function useSourceMapHighlight(
   sourceMap: trace.FuncMapping | undefined,
-  debugSectionToInstructions?: Map<number, trace.InstructionInfo[]>,
+  debugSectionToInstructions?: Map<number, InstructionInfo[]>,
   funcEditorRef?: React.RefObject<monaco.editor.IStandaloneCodeEditor | null>,
   asmEditorRef?: React.RefObject<monaco.editor.IStandaloneCodeEditor | null>,
   originalAsmCode?: string,

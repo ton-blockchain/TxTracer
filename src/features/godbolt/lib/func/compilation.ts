@@ -1,6 +1,8 @@
 import {Cell} from "@ton/core"
 import {runtime as i, text, trace} from "ton-assembly"
 
+import type {InstructionInfo} from "ton-source-map"
+
 import {FUNC_STDLIB} from "@features/godbolt/lib/func/stdlib.ts"
 import {funcCompile} from "@features/godbolt/lib/func/func-wasm/func-compile.ts"
 
@@ -10,7 +12,7 @@ export interface FuncCompilationResult {
   readonly code: string
   readonly assembly: string
   readonly sourceMap?: trace.FuncMapping
-  readonly mapping: Map<number, trace.InstructionInfo[]>
+  readonly mapping: Map<number, InstructionInfo[]>
 }
 
 export class FuncCompilationError extends Error {
@@ -51,12 +53,14 @@ export const compileFuncCode = async (code: string): Promise<FuncCompilationResu
     return cell?.instructions ?? []
   })
 
-  const debugSectionToInstructions = new Map<number, trace.InstructionInfo[]>()
+  const debugSectionToInstructions = new Map<number, InstructionInfo[]>()
 
   for (const instr of allInstructions) {
-    const arr = debugSectionToInstructions.get(instr.debugSection) ?? []
-    arr.push(instr)
-    debugSectionToInstructions.set(instr.debugSection, arr)
+    for (const debugSection of instr.debugSections) {
+      const arr = debugSectionToInstructions.get(debugSection) ?? []
+      arr.push(instr)
+      debugSectionToInstructions.set(debugSection, arr)
+    }
   }
 
   return {

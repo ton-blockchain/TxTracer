@@ -1,10 +1,12 @@
 import {useCallback, useEffect, useMemo, useState} from "react"
 import {trace} from "ton-assembly"
 
+import type {InstructionInfo} from "ton-source-map"
+
 import type {UseTraceStepperReturn} from "./useTraceStepper"
 
 export interface CompilationResult {
-  readonly mapping?: Map<number, trace.InstructionInfo[]>
+  readonly mapping?: Map<number, InstructionInfo[]>
   readonly assembly?: string
   readonly funcSourceMap?: trace.FuncMapping
 }

@@ -1,6 +1,7 @@
 import {Cell} from "@ton/core"
 import {runtime as i, text, trace} from "ton-assembly"
 
+import type {InstructionInfo} from "ton-source-map"
 import {runTolkCompiler} from "@ton/tolk-js"
 
 import {TolkCompilationError, type TolkCompilationResult} from "@features/godbolt/lib/tolk/types.ts"
@@ -27,12 +28,14 @@ export const compileTolkCode = async (code: string): Promise<TolkCompilationResu
     return cell?.instructions ?? []
   })
 
-  const debugSectionToInstructions = new Map<number, trace.InstructionInfo[]>()
+  const debugSectionToInstructions = new Map<number, InstructionInfo[]>()
 
   for (const instr of allInstructions) {
-    const arr = debugSectionToInstructions.get(instr.debugSection) ?? []
-    arr.push(instr)
-    debugSectionToInstructions.set(instr.debugSection, arr)
+    for (const debugSection of instr.debugSections) {
+      const arr = debugSectionToInstructions.get(debugSection) ?? []
+      arr.push(instr)
+      debugSectionToInstructions.set(debugSection, arr)
+    }
   }
 
   return {

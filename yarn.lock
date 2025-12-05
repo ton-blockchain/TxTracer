@@ -11806,6 +11806,7 @@ __metadata:
     stylelint-config-css-modules: "npm:^4.5.1"
     stylelint-config-standard: "npm:^39.0.0"
     ton-assembly: "npm:0.6.1"
+    ton-source-map: "npm:^0.2.2"
     ts-node: "npm:^10.9.1"
     txtracer-core: "npm:^0.5.0"
     typescript: "npm:~5.8.3"

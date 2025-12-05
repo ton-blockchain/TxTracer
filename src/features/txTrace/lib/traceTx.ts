@@ -1,16 +1,14 @@
 import {retrace, retraceBaseTx} from "txtracer-core"
 import type {TraceResult} from "txtracer-core/dist/types"
 import {compileCellWithMapping, decompileCell} from "ton-assembly/dist/runtime/instr"
-import {
-  createMappingInfo,
-  type InstructionInfo,
-  type MappingInfo,
-} from "ton-assembly/dist/trace/mapping"
+import {createMappingInfo} from "ton-assembly/dist/trace/mapping"
 import {type Step, type TraceInfo} from "ton-assembly/dist/trace"
 import {createTraceInfoPerTransaction, findInstructionInfo} from "ton-assembly/dist/trace/trace"
 import {parse, print} from "ton-assembly/dist/text"
 import * as l from "ton-assembly/dist/logs"
 import {Cell} from "@ton/core"
+
+import type {AssemblyMapping, InstructionInfo} from "ton-source-map"
 
 import type {NetworkType, RetraceResultAndCode} from "@features/txTrace/ui"
 import type {TransactionInfo} from "@features/sandbox/lib/transaction"
@@ -135,7 +133,7 @@ export function findException(reversedEntries: l.VmLine[]) {
   return mapped.find(it => it !== undefined)
 }
 
-export function findExitCode(vmLogs: string, mappingInfo: MappingInfo) {
+export function findExitCode(vmLogs: string, mappingInfo: AssemblyMapping) {
   const res = l.parse(vmLogs)
   const reversedEntries = [...res].reverse()
   const description = findException(reversedEntries)

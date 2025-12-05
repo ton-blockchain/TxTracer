@@ -47,6 +47,7 @@
     "react-icons": "^5.5.0",
     "react-markdown": "^10.1.0",
     "ton-assembly": "0.6.1",
+    "ton-source-map": "^0.2.2",
     "txtracer-core": "^0.5.0"
   },
   "devDependencies": {
