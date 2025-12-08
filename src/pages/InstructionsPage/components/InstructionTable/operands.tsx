@@ -1,7 +1,8 @@
-import type {Arg, ArgRange, Args, Child} from "@features/spec/tvm-specification.types"
-import {ArgsEnum, Bits} from "@features/spec/tvm-specification.types"
+import type {Arg, ArgRange} from "@features/spec/specification-schema.ts"
 
 import styles from "./OperandsView.module.css"
+
+export type ExtendedArg = Readonly<Arg | {readonly $: "dictpush"}>
 
 export const renderChildRange = (min?: string, max?: string) => {
   if (!min && !max) return null
@@ -10,14 +11,7 @@ export const renderChildRange = (min?: string, max?: string) => {
   return `?-${max}`
 }
 
-export function argType(child?: Arg) {
-  if (!child) return ""
-  if (child.$ === Bits.Uint) return `uint${child.len}`
-  if (child.$ === Bits.Stack) return `stack register`
-  return ""
-}
-
-export function childType(child: Child) {
+export function childType(child: ExtendedArg): string | undefined {
   switch (child.$) {
     case "uint":
       return `uint${child.len}`
@@ -32,10 +26,14 @@ export function childType(child: Child) {
     case "refCodeSlice":
     case "inlineCodeSlice":
       return `Inline slice`
+    case "slice":
+      return `Slice with data`
     case "codeSlice":
       return `Slice with code`
+    case "dict":
+      return `Dictionary`
     case "delta":
-      return `${argType(child.arg)} + ${child.delta}`
+      return `${childType(child.arg)}`
     case "debugstr":
       return "String slice"
     case "dictpush":
@@ -45,24 +43,21 @@ export function childType(child: Child) {
   }
 }
 
-export function getChildByOperandIndex(args: Args | undefined, index: number): Child | undefined {
+export function getChildByOperandIndex(
+  args: Arg[] | undefined,
+  index: number,
+): ExtendedArg | undefined {
   if (!args) return undefined
-  if (args.$ === ArgsEnum.Dictpush) {
-    return index === 0 ? {$: "dictpush"} : {$: "uint", len: 10}
-  }
-  if (args.$ === ArgsEnum.XchgArgs) {
-    return {$: "uint", len: 4, range: {min: "0", max: "15"}}
-  }
-  const children = args.children?.[0]?.$ === "s1" ? args.children.slice(1) : args.children
+  const children = args[0]?.$ === "s1" ? args.slice(1) : args
   return children?.[index]
 }
 
-export const getChildRange = (child: Child): ArgRange | undefined => {
-  if (child.range) {
+export const getChildRange = (child: ExtendedArg): ArgRange | undefined => {
+  if ("range" in child && child.range) {
     return child.range
   }
   if (child.$ === "delta") {
-    return child.arg?.range
+    return getChildRange(child?.arg)
   }
   if (child.$ === "debugstr") {
     return {min: "0", max: "15 bytes"}
@@ -71,14 +66,14 @@ export const getChildRange = (child: Child): ArgRange | undefined => {
 }
 
 export function renderArgsTreeCompactForOperand(
-  args: Args | undefined,
+  args: Arg[] | undefined,
   operandName: string,
   operandIndex: number,
 ) {
   const child = getChildByOperandIndex(args, operandIndex)
   if (!child) return operandName
   const type = childType(child)
-  const range = child.range ?? child.arg?.range
+  const range = getChildRange(child)
   const rangeStr = renderChildRange(range?.min, range?.max)
   return (
     <div className={styles.argNodeInline}>

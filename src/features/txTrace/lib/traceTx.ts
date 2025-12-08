@@ -1,14 +1,14 @@
 import {retrace, retraceBaseTx} from "txtracer-core"
 import type {TraceResult} from "txtracer-core/dist/types"
 import {compileCellWithMapping, decompileCell} from "ton-assembly/dist/runtime/instr"
-import {
-  createMappingInfo,
-} from "ton-assembly/dist/trace/mapping"
+import {createMappingInfo} from "ton-assembly/dist/trace/mapping"
 import {type Step, type TraceInfo} from "ton-assembly/dist/trace"
 import {createTraceInfoPerTransaction, findInstructionInfo} from "ton-assembly/dist/trace/trace"
 import {parse, print} from "ton-assembly/dist/text"
 import * as l from "ton-assembly/dist/logs"
 import {Cell} from "@ton/core"
+
+import type {AssemblyMapping, InstructionInfo} from "ton-source-map"
 
 import type {NetworkType, RetraceResultAndCode} from "@features/txTrace/ui"
 import type {TransactionInfo} from "@features/sandbox/lib/transaction"
@@ -48,6 +48,9 @@ async function retraceAny(info: ExtractionResult): Promise<TraceResult> {
   if (info.$ === "SingleHash") {
     return retrace(info.testnet, info.hash)
   }
+  if (info.$ === "UnknownNetwork") {
+    return retrace(info.testnet, info.hash)
+  }
 
   throw new Error("Invalid extraction result")
 }
@@ -64,6 +67,10 @@ async function maybeTestnet(link: string): Promise<{result: TraceResult; network
   } catch (error: unknown) {
     if (error instanceof Error && error.message.includes("Cannot find transaction info")) {
       console.log("Cannot find in mainnet, trying to find in testnet")
+      if (txLinkInfo?.$ === "UnknownNetwork") {
+        txLinkInfo.testnet = true
+      }
+
       const result = await retraceAny(txLinkInfo ?? SingleHash(link, true))
       return {result, network: "testnet"}
     }

@@ -4,8 +4,6 @@ import type * as monacoTypes from "monaco-editor"
 
 import {useTheme} from "@shared/lib/useTheme"
 
-import {asmData} from "@features/tasm/lib"
-
 import {DARK_THEME, LIGHT_THEME} from "../themes"
 import {funcLanguageDefinition} from "../languages/FuncLanguageDefinition"
 import {tasmLanguageDefinition} from "../languages/TasmLanguageDefinition"
@@ -76,17 +74,6 @@ export const useMonacoSetup = ({language}: UseMonacoSetupOptions): UseMonacoSetu
       console.error("Failed to set theme:", error)
     }
   }, [theme, monaco, isReady])
-
-  // Preload assembly data for TASM
-  useEffect(() => {
-    if (isReady && language === "tasm") {
-      try {
-        asmData()
-      } catch (error) {
-        console.warn("Failed to preload assembly data:", error)
-      }
-    }
-  }, [isReady, language])
 
   return {
     monaco,

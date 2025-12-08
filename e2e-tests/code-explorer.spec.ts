@@ -142,11 +142,11 @@ test.describe("TxTracer Code Explorer", () => {
     const text = await codeExplorerPage.getTooltip().allInnerTexts()
     expect(text).toHaveLength(1)
     expect(text[0]).toContain("SETCP")
-    expect(text[0]).toContain("Stack (top is on the right): (∅ → ∅)")
+    expect(text[0]).toContain("Stack (top is on the right): ∅ → ∅")
     expect(text[0]).toContain("Gas: 26")
-    expect(text[0]).toContain("Opcode: FFnn")
+    expect(text[0]).toContain("Opcode: FF00")
     expect(text[0]).toContain(
-      "Selects TVM codepage 0 <= nn < 240. If the codepage is not supported, throws an invalid opcode exception",
+      "Selects TVM codepage 0 <= num < 240. If the codepage is not supported, throws an invalid opcode exception.",
     )
   })
 

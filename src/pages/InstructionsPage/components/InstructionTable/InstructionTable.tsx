@@ -7,7 +7,7 @@ import {
   infoOf,
 } from "ton-assembly/dist/generator/instructions"
 
-import type {Instruction, FiftInstruction} from "@features/spec/tvm-specification.types"
+import type {Instruction, FiftInstruction} from "@features/spec/specification-schema.ts"
 
 import {useProcessedMarkdown} from "../../hooks/useProcessedMarkdown"
 import {prettySubCategoryName} from "../../lib/formatCategory"
@@ -22,12 +22,14 @@ import InlineOperand from "./InlineOperand"
 import styles from "./InstructionTable.module.css"
 import {formatGasRanges} from "./utils.ts"
 
-type ExtendedInstruction = Instruction & {
-  readonly isFift?: boolean
-  readonly fiftName?: string
-  readonly actualInstruction?: Instruction
-  readonly fiftInstruction?: FiftInstruction
-}
+type ExtendedInstruction = Readonly<
+  Instruction & {
+    readonly isFift?: boolean
+    readonly fiftName?: string
+    readonly actualInstruction?: Instruction
+    readonly fiftInstruction?: FiftInstruction
+  }
+>
 
 interface DescriptionCellProps {
   readonly instruction: Instruction
@@ -43,7 +45,7 @@ const DescriptionCell: React.FC<DescriptionCellProps> = ({instruction}: Descript
 }
 
 interface InstructionTableProps {
-  readonly instructions: Record<string, ExtendedInstruction>
+  readonly instructions: ExtendedInstruction[]
   readonly expandedRows: Record<string, boolean>
   readonly onRowClick: (instructionName: string) => void
   readonly groupByCategory?: boolean
@@ -63,8 +65,7 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
   totalCount,
   onShowMore,
 }: InstructionTableProps) => {
-  const instructionEntries = Object.entries(instructions)
-  const shownCount = Math.min(instructionEntries.length, limit)
+  const shownCount = Math.min(instructions.length, limit)
 
   return (
     <div className={styles.divTable} role="table">
@@ -86,7 +87,7 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
             Stack
             {typeof totalCount === "number" && (
               <span className={styles.shownCountBadge} aria-label="Shown instructions count">
-                Shown {shownCount} out of {instructionEntries.length}
+                Shown {shownCount} out of {instructions.length}
               </span>
             )}
           </div>
@@ -94,14 +95,15 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
       </div>
 
       <div className={styles.divTbody} role="rowgroup">
-        {instructionEntries.length === 0 && emptyState && (
+        {instructions.length === 0 && emptyState && (
           <div className={styles.divTrExpanded} role="row">
             <div className={`${styles.divTd} full ${styles.emptyStateCell}`} role="cell">
               {emptyState}
             </div>
           </div>
         )}
-        {instructionEntries.slice(0, shownCount).map(([name, instruction], idx) => {
+        {instructions.slice(0, shownCount).map((instruction, idx) => {
+          const name = instruction.name
           const instructionName =
             instruction.isFift && instruction.fiftInstruction
               ? instruction.fiftInstruction.actual_name
@@ -111,10 +113,14 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
 
           const gas = instruction.description.gas ?? calculateGasConsumptionWithDescription(opcode)
           const isExpanded = expandedRows[name]
-          const inputs = instruction.signature.inputs?.stack
-          const outputs = instruction.signature.outputs?.stack
+          const inputs =
+            instruction.signature?.inputs?.stack ??
+            (instruction.signature === undefined ? "not specified" : undefined)
+          const outputs =
+            instruction.signature?.outputs?.stack ??
+            (instruction.signature === undefined ? "not specified" : undefined)
 
-          let displayedOperands = instruction.operands ?? instruction.description.operands
+          let displayedOperands = instruction.description.operands
           if (instruction.isFift && instruction.fiftInstruction) {
             const fiftArgsCount = instruction.fiftInstruction.arguments?.length || 0
             const originalOperandsCount = displayedOperands?.length || 0
@@ -124,8 +130,7 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
           }
 
           const currentCategory = String(instruction.category ?? "")
-          const prevCategory =
-            idx > 0 ? String(instructionEntries[idx - 1][1].category ?? "") : null
+          const prevCategory = idx > 0 ? String(instructions[idx - 1].category ?? "") : null
           const shouldShowGroupHeader = groupByCategory && currentCategory !== prevCategory
 
           return (
@@ -216,7 +221,7 @@ const InstructionTable: React.FC<InstructionTableProps> = ({
             </Fragment>
           )
         })}
-        {instructionEntries.length > shownCount && onShowMore && (
+        {instructions.length > shownCount && onShowMore && (
           <div className={styles.divTrExpanded} role="row">
             <div className={`${styles.divTd} ${styles.divTdNoPadding} full`} role="cell">
               <div

@@ -3,7 +3,7 @@
   grid-template-columns:
     80px
     260px
-    110px
+    120px
     minmax(200px, 2.5fr)
     minmax(250px, 1fr);
   width: calc(100% - 2px);

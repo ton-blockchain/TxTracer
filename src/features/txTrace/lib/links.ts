@@ -1,7 +1,8 @@
 import type {BaseTxInfo} from "txtracer-core"
 import {Address} from "@ton/core"
 
-export type ExtractionResult = BaseInfo | SingleHash
+// eslint-disable-next-line functional/type-declaration-immutability
+export type ExtractionResult = BaseInfo | SingleHash | UnknownNetwork
 
 export type BaseInfo = {
   readonly $: "BaseInfo"
@@ -23,6 +24,18 @@ export const SingleHash = (hash: string, testnet: boolean): SingleHash => ({
   $: "SingleHash",
   hash: hash.toLowerCase(),
   testnet,
+})
+
+// eslint-disable-next-line functional/type-declaration-immutability
+export type UnknownNetwork = {
+  readonly $: "UnknownNetwork"
+  readonly hash: string
+  testnet: boolean
+}
+export const UnknownNetwork = (hash: string): UnknownNetwork => ({
+  $: "UnknownNetwork",
+  hash: hash.toLowerCase(),
+  testnet: false,
 })
 
 /**
@@ -97,6 +110,11 @@ export function extractTxInfoFromLink(txLink: string): ExtractionResult | undefi
     const testnet = txLink.includes("testnet.")
     const hash = testnet ? txLink.slice(27) : txLink.slice(19)
     return SingleHash(hash, testnet)
+  }
+
+  if (txLink.startsWith("https://retracer.ton.org/?tx=")) {
+    const hash = txLink.slice(29)
+    return UnknownNetwork(hash)
   }
 
   return undefined

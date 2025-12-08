@@ -2,6 +2,7 @@ import {Cell} from "@ton/core"
 import {runtime as i, text, trace} from "ton-assembly"
 import type {InstructionInfo} from "ton-source-map"
 
+import type {InstructionInfo} from "ton-source-map"
 import {runTolkCompiler} from "@ton/tolk-js"
 
 import {TolkCompilationError, type TolkCompilationResult} from "@features/godbolt/lib/tolk/types.ts"

@@ -3,6 +3,8 @@ import type * as monaco from "monaco-editor"
 
 import {trace} from "ton-assembly"
 
+import type {InstructionInfo} from "ton-source-map"
+
 import type {HighlightGroup, HighlightRange} from "@shared/ui/CodeEditor"
 import type {InstructionInfo} from "ton-source-map"
 

@@ -39,6 +39,14 @@
   margin-bottom: var(--spacing-xs);
 }
 
+.stackNotSpecified {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  opacity: 0.8;
+  margin-top: 0.2rem;
+}
+
 .conditionalBlockVertical {
   display: flex;
   flex-direction: column;

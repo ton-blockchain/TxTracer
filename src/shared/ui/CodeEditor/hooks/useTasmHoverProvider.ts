@@ -70,12 +70,7 @@ export const useTasmHoverProvider = ({
 
           if (tokenType.includes("instruction") && showInstructionDocs) {
             const instructionInfo = findInstruction(word.word)
-            if (instructionInfo === undefined) {
-              hoverContents.push({
-                value:
-                  "The assembly instructions documentation is loading—please hover over the instruction again.",
-              })
-            } else if (instructionInfo) {
+            if (instructionInfo) {
               const asmDoc = generateAsmDoc(instructionInfo)
               if (asmDoc) {
                 hoverContents.push({value: asmDoc})

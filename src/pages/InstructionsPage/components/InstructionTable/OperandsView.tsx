@@ -1,14 +1,10 @@
 import React from "react"
 
-import {
-  type Args,
-  ArgsEnum,
-  type Child,
-  type Instruction,
-} from "@features/spec/tvm-specification.types"
+import {type Arg, type Instruction} from "@features/spec/specification-schema.ts"
 
 import {
   childType,
+  type ExtendedArg,
   getChildRange,
   renderChildRange,
 } from "@app/pages/InstructionsPage/components/InstructionTable/operands.tsx"
@@ -21,7 +17,7 @@ interface OperandsViewProps {
 
 const OperandsView: React.FC<OperandsViewProps> = ({instruction}: OperandsViewProps) => {
   const {description, layout} = instruction
-  const operands = instruction.operands ?? description.operands
+  const operands = description.operands
   if (!operands || operands.length === 0) return null
   return (
     <div className={styles.operandsSection}>
@@ -31,7 +27,7 @@ const OperandsView: React.FC<OperandsViewProps> = ({instruction}: OperandsViewPr
   )
 }
 
-const renderChild = (child: Child, key: string | number, operandName?: string) => {
+const renderChild = (child: ExtendedArg, key: number, operandName?: string) => {
   const type = childType(child)
   const range = getChildRange(child)
 
@@ -48,49 +44,14 @@ const renderChild = (child: Child, key: string | number, operandName?: string) =
   )
 }
 
-const renderArgsTree = (args: Args | undefined, operandNames?: readonly string[]) => {
+const renderArgsTree = (args: Arg[] | undefined, operandNames?: readonly string[]) => {
   if (!args) return null
-  if (args.$ === ArgsEnum.Dictpush) {
-    const pseudoChildDict: Child = {$: "dictpush"}
-    const pseudoChildKeyLength: Child = {
-      $: "uint",
-      len: 10,
-      range: {min: "0", max: (Math.pow(2, 10) - 1).toString()},
-    }
-    return (
-      <div className={styles.argTree}>
-        <ul className={styles.argChildren}>{renderChild(pseudoChildDict, 0, operandNames?.[0])}</ul>
-        <ul className={styles.argChildren}>
-          {renderChild(pseudoChildKeyLength, 1, operandNames?.[1])}
-        </ul>
-      </div>
-    )
-  }
 
-  if (args.$ === ArgsEnum.XchgArgs) {
-    const pseudoChildI: Child = {
-      $: "uint",
-      len: 4,
-      range: {min: "0", max: (Math.pow(2, 4) - 1).toString()},
-    }
-    const pseudoChildJ: Child = {
-      $: "uint",
-      len: 4,
-      range: {min: "0", max: (Math.pow(2, 4) - 1).toString()},
-    }
-    return (
-      <div className={styles.argTree}>
-        <ul className={styles.argChildren}>{renderChild(pseudoChildI, 0, operandNames?.[0])}</ul>
-        <ul className={styles.argChildren}>{renderChild(pseudoChildJ, 1, operandNames?.[1])}</ul>
-      </div>
-    )
-  }
-
-  const children = args.children?.[0]?.$ === "s1" ? args.children.slice(1) : args.children
+  const children = args.filter(arg => arg.$ !== "s1" && arg.$ !== "minusOne")
 
   return (
     <div className={styles.argTree}>
-      {children && children.length > 0 && (
+      {children.length > 0 && (
         <ul className={styles.argChildren}>
           {children.map((child, idx) => renderChild(child, idx, operandNames?.[idx]))}
         </ul>

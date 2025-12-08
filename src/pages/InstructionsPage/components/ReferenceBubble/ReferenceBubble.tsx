@@ -1,6 +1,6 @@
 import React from "react"
 
-import type {Instruction} from "@features/spec/tvm-specification.types"
+import type {Instruction} from "@features/spec/specification-schema.ts"
 
 import styles from "./ReferenceBubble.module.css"
 
