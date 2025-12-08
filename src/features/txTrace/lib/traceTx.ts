@@ -27,7 +27,6 @@ import {
   TxNotFoundError,
   TxTraceError,
 } from "./errors"
-import type {AssemblyMapping, InstructionInfo} from "ton-source-map"
 
 export type ExitCode = {
   readonly num: number

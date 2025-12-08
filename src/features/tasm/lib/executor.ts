@@ -7,8 +7,6 @@ import {createMappingInfo} from "ton-assembly/dist/trace/mapping"
 import type {AssemblyMapping} from "ton-source-map"
 import type {StackElement} from "ton-assembly/dist/trace"
 
-import type {AssemblyMapping} from "ton-source-map"
-
 import {type ExitCode, findExitCode} from "@features/txTrace/lib/traceTx.ts"
 
 function stackElementsToTupleBuilder(stackElements: StackElement[]): TupleBuilder {

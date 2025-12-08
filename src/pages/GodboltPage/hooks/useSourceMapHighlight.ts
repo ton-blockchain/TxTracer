@@ -6,7 +6,6 @@ import {trace} from "ton-assembly"
 import type {InstructionInfo} from "ton-source-map"
 
 import type {HighlightGroup, HighlightRange} from "@shared/ui/CodeEditor"
-import type {InstructionInfo} from "ton-source-map"
 
 export interface UseSourceMapHighlightReturn {
   readonly funcHighlightGroups: readonly HighlightGroup[]

@@ -2,8 +2,6 @@ import {useCallback, useEffect, useMemo, useState} from "react"
 import {trace} from "ton-assembly"
 import type {InstructionInfo} from "ton-source-map"
 
-import type {InstructionInfo} from "ton-source-map"
-
 import type {UseTraceStepperReturn} from "./useTraceStepper"
 
 export interface CompilationResult {

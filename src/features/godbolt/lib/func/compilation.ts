@@ -2,8 +2,6 @@ import {Cell} from "@ton/core"
 import {runtime as i, text, trace} from "ton-assembly"
 import type {InstructionInfo} from "ton-source-map"
 
-import type {InstructionInfo} from "ton-source-map"
-
 import {FUNC_STDLIB} from "@features/godbolt/lib/func/stdlib.ts"
 import {funcCompile} from "@features/godbolt/lib/func/func-wasm/func-compile.ts"
 

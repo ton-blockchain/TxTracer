@@ -71,6 +71,7 @@ export default defineConfig({
       target: "es2020",
     },
   },
+  // @ts-expect-error TS2769
   test: {
     globals: true,
     environment: "jsdom",
