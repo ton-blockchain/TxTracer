@@ -1,0 +1,63 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "tolk",
+  "foldingStartMarker": "\\{\\s*$",
+  "foldingStopMarker": "^\\s*\\}",
+  "patterns": [
+    {
+      "name": "comment.line.double-slash",
+      "match": "//(.*)"
+    },
+    {
+      "name": "comment.block",
+      "begin": "/\\*",
+      "end": "\\*/"
+    },
+    {
+      "name": "string.quoted.double",
+      "begin": "\"",
+      "end": "\""
+    },
+    {
+      "name": "constant.numeric",
+      "match": "(-?([\\d]+|0x[\\da-fA-F]+|0b[01]+))\\b"
+    },
+    {
+      "name": "keyword.control",
+      "match": "\\b(do|if|try|else|while|break|throw|catch|return|assert|repeat|continue|asm|builtin|match|lazy)\\b"
+    },
+    {
+      "name": "keyword.operator",
+      "match": "\\+|-|\\*|/|%|\\?|:|,|;|\\(|\\)|\\[|\\]|{|}|=|<|>|!|&|\\||\\^|==|!=|<=|>=|<<|>>|&&|\\|\\||~/|\\^/|\\+=|-=|\\*=|/=|%=|&=|\\|=|\\^=|->|<=>|~>>|\\^>>|<<=|>>=|=>"
+    },
+    {
+      "name": "keyword.other",
+      "match": "\\b(import|export|true|false|null|redef|mutate|tolk|as|is|!is)\\b"
+    },
+    {
+      "name": "storage.type",
+      "match": "\\b(type|enum|int|cell|void|bool|slice|tuple|builder|continuation|never|coins|int\\d+|uint\\d+)\\b"
+    },
+    {
+      "name": "storage.modifier",
+      "match": "\\b(global|const|var|val|fun|get|struct)\\b"
+    },
+    {
+      "name": "entity.name.type",
+      "match": "@\\w+"
+    },
+    {
+      "name": "entity.name.function",
+      "match": "(`[^`]+`|[a-zA-Z$_][a-zA-Z0-9$_]*)(?=\\()"
+    },
+    {
+      "name": "variable.language",
+      "match": "\bself\b"
+    },
+    {
+      "name": "variable.name",
+      "match": "`[^`]+`|[a-zA-Z$_][a-zA-Z0-9$_]*"
+    }
+  ],
+  "scopeName": "source.tolk"
+}

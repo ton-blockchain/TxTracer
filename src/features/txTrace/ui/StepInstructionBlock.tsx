@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react"
+import React, {useState, useEffect, useRef, memo} from "react"
 
 import styles from "./StepInstructionBlock.module.css"
 
@@ -70,7 +70,7 @@ export const StepInstructionsList: React.FC<StepInstructionsListProps> = ({steps
   )
 }
 
-export const StepInstructionsListMemo = React.memo(StepInstructionsList)
+export const StepInstructionsListMemo = memo(StepInstructionsList)
 StepInstructionsListMemo.displayName = "StepInstructionsListMemo"
 
-export default React.memo(StepInstructionBlock)
+export default memo(StepInstructionBlock)

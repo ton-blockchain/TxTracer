@@ -4,14 +4,13 @@ import type * as monacoTypes from "monaco-editor"
 
 import {useTheme} from "@shared/lib/useTheme"
 
-import {asmData} from "@features/tasm/lib"
-
 import {DARK_THEME, LIGHT_THEME} from "../themes"
 import {funcLanguageDefinition} from "../languages/FuncLanguageDefinition"
 import {tasmLanguageDefinition} from "../languages/TasmLanguageDefinition"
-import {FUNC_LANGUAGE_ID, TASM_LANGUAGE_ID} from "../languages"
+import {tolkLanguageDefinition} from "../languages/TolkLanguageDefinition"
+import {FUNC_LANGUAGE_ID, TASM_LANGUAGE_ID, TOLK_LANGUAGE_ID} from "../languages"
 
-export type SupportedLanguage = "tasm" | "func"
+export type SupportedLanguage = "tasm" | "func" | "tolk"
 
 interface UseMonacoSetupOptions {
   readonly language: SupportedLanguage
@@ -32,6 +31,11 @@ const initializeMonaco = (monaco: typeof monacoTypes, language: SupportedLanguag
   if (language === "func") {
     monaco.languages.register({id: FUNC_LANGUAGE_ID})
     monaco.languages.setMonarchTokensProvider(FUNC_LANGUAGE_ID, funcLanguageDefinition)
+  }
+
+  if (language === "tolk") {
+    monaco.languages.register({id: TOLK_LANGUAGE_ID})
+    monaco.languages.setMonarchTokensProvider(TOLK_LANGUAGE_ID, tolkLanguageDefinition)
   }
 
   monaco.editor.defineTheme("light-theme", LIGHT_THEME)
@@ -70,17 +74,6 @@ export const useMonacoSetup = ({language}: UseMonacoSetupOptions): UseMonacoSetu
       console.error("Failed to set theme:", error)
     }
   }, [theme, monaco, isReady])
-
-  // Preload assembly data for TASM
-  useEffect(() => {
-    if (isReady && language === "tasm") {
-      try {
-        asmData()
-      } catch (error) {
-        console.warn("Failed to preload assembly data:", error)
-      }
-    }
-  }, [isReady, language])
 
   return {
     monaco,

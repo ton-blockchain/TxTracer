@@ -1,0 +1,12 @@
+.footer {
+  padding: 16px;
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  margin-top: 32px;
+}
+
+.footer a {
+  text-decoration: none;
+  color: var(--tracepage-create-by-link-color);
+}

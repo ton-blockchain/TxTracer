@@ -15,6 +15,7 @@ interface SearchInputProps {
   readonly autoFocus?: boolean
   readonly compact?: boolean
   readonly onInputClick?: (event: React.MouseEvent<HTMLInputElement>) => void
+  readonly buttonLabel?: string
 }
 
 const SearchInput: React.FC<SearchInputProps> = ({
@@ -28,6 +29,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
   autoFocus = false,
   compact = false,
   onInputClick,
+  buttonLabel = "Trace",
 }) => {
   const [focused, setFocused] = useState(false)
 
@@ -96,10 +98,10 @@ const SearchInput: React.FC<SearchInputProps> = ({
         className={buttonClass}
         onClick={onSubmit}
         disabled={loading}
-        aria-label={loading ? "Tracing transaction..." : "Trace transaction"}
-        title={loading ? "Tracing..." : "Trace transaction (Enter)"}
+        aria-label={loading ? `${buttonLabel}...` : buttonLabel}
+        title={loading ? `${buttonLabel}...` : `${buttonLabel} (Enter)`}
       >
-        Trace
+        {buttonLabel}
       </Button>
       {!compact && (
         <div id="search-instructions" className="sr-only">

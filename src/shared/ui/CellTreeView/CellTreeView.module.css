@@ -11,6 +11,7 @@
 .cellNodeColor1 {
   background-color: var(--cell-bg-color-1);
 }
+
 .cellNodeColor1:hover {
   background-color: var(--cell-bg-color-1-hover);
 }
@@ -18,6 +19,7 @@
 .cellNodeColor2 {
   background-color: var(--cell-bg-color-2);
 }
+
 .cellNodeColor2:hover {
   background-color: var(--cell-bg-color-2-hover);
 }
@@ -25,6 +27,7 @@
 .cellNodeColor3 {
   background-color: var(--cell-bg-color-3);
 }
+
 .cellNodeColor3:hover {
   background-color: var(--cell-bg-color-3-hover);
 }
@@ -32,6 +35,7 @@
 .cellNodeColor4 {
   background-color: var(--cell-bg-color-4);
 }
+
 .cellNodeColor4:hover {
   background-color: var(--cell-bg-color-4-hover);
 }
@@ -39,6 +43,7 @@
 .cellNodeColor5 {
   background-color: var(--cell-bg-color-5);
 }
+
 .cellNodeColor5:hover {
   background-color: var(--cell-bg-color-5-hover);
 }

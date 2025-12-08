@@ -6,7 +6,7 @@ import {generateRandomAsmCode} from "./utils"
 test.describe("TxTracer Playground", () => {
   test("should open from main page", async ({page}) => {
     await page.goto("/")
-    const playgroundCard = page.getByText("Assembly Playground")
+    const playgroundCard = page.getByText("Playground")
 
     await playgroundCard.click()
     expect(page.url()).toContain("/play/")

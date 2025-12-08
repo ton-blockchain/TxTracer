@@ -1,0 +1,45 @@
+.registerSquare {
+  min-width: 25px;
+  min-height: 20px;
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-mono), monospace;
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  border: 1px solid;
+  transition: all var(--transition-duration-fast) ease;
+  position: relative;
+  padding: 0 var(--spacing-xs);
+}
+
+.registerSquare.c0 {
+  background-color: var(--color-info-bg);
+  border-color: var(--color-info);
+  color: var(--color-info-text);
+}
+
+.registerSquare.c1 {
+  background-color: var(--color-warning-bg);
+  border-color: var(--color-warning);
+  color: var(--color-warning-text);
+}
+
+.registerSquare.c3 {
+  background-color: var(--color-warning-bg);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.registerSquare.c7 {
+  background-color: var(--color-warning-bg);
+  border-color: var(--color-warning);
+  color: var(--color-warning-text);
+}
+
+.registerSquare.ci {
+  background-color: var(--color-success-bg);
+  border-color: var(--color-success);
+  color: var(--color-success-text);
+}

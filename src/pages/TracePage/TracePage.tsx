@@ -1,5 +1,15 @@
-import React, {Suspense, useCallback, useEffect, useState} from "react"
-import {FiClock, FiGithub, FiPlay, FiSearch, FiX, FiZap} from "react-icons/fi"
+import React, {Suspense, useCallback, useEffect, useState, lazy} from "react"
+import {
+  FiBook,
+  FiClock,
+  FiCpu,
+  FiGithub,
+  FiMoreHorizontal,
+  FiPlay,
+  FiSearch,
+  FiX,
+  FiZap,
+} from "react-icons/fi"
 
 import {type StackElement} from "ton-assembly/dist/trace"
 
@@ -22,10 +32,12 @@ import {StackItemViewer} from "@app/pages/TracePage/StackItemViewer.tsx"
 
 import {useGlobalError} from "@shared/lib/useGlobalError.tsx"
 
+import {getRawQueryParam} from "@features/common/lib/query-params.ts"
+
 import styles from "./TracePage.module.css"
 
-const CodeEditor = React.lazy(() => import("@shared/ui/CodeEditor"))
-const PageHeader = React.lazy(() => import("@shared/ui/PageHeader"))
+const CodeEditor = lazy(() => import("@shared/ui/CodeEditor"))
+const PageHeader = lazy(() => import("@shared/ui/PageHeader"))
 
 function TracePage() {
   const [inputText, setInputText] = useState("")
@@ -62,26 +74,6 @@ function TracePage() {
   } = useTraceStepper(result?.trace)
 
   useEffect(() => {
-    const getRawQueryParam = (name: string) => {
-      const search = window.location.search
-      if (!search || search.length <= 1) return null
-      const query = search.slice(1)
-      const pairs = query.split("&")
-      for (const pair of pairs) {
-        if (!pair) continue
-        const eq = pair.indexOf("=")
-        const key = eq >= 0 ? pair.slice(0, eq) : pair
-        if (key !== name) continue
-        const raw = eq >= 0 ? pair.slice(eq + 1) : ""
-        try {
-          return decodeURIComponent(raw)
-        } catch {
-          return raw
-        }
-      }
-      return null
-    }
-
     const tx = getRawQueryParam("tx") ?? ""
     setInputText(tx)
     setHeaderInputText(tx)
@@ -201,16 +193,35 @@ function TracePage() {
     setSelectedStackItem(null)
   }, [])
 
+  const implicitRet = (() => {
+    const steps = result?.trace?.steps
+    if (!steps) return {line: undefined as number | undefined, approx: false}
+    const current = steps[selectedStep]
+    if (!current || current.loc !== undefined)
+      return {line: undefined as number | undefined, approx: false}
+
+    let idx = selectedStep - 1
+    let chainLen = 1
+    while (idx >= 0 && steps[idx]?.loc === undefined) {
+      chainLen++
+      idx--
+    }
+    const anchor = idx >= 0 ? steps[idx] : undefined
+    const line = anchor?.loc?.line !== undefined ? anchor.loc.line + 1 : undefined
+    const approx = chainLen > 1
+    return {line, approx}
+  })()
+
   const exitCode =
     result?.result?.emulatedTx?.computeInfo !== "skipped"
       ? result?.result?.emulatedTx?.computeInfo?.exitCode
       : undefined
   const txStatus =
     result?.result?.emulatedTx?.computeInfo !== "skipped"
-      ? result?.result?.emulatedTx?.computeInfo?.success
+      ? result?.result?.emulatedTx?.computeInfo?.success && (exitCode === 0 || exitCode === 1)
         ? "success"
         : "failed"
-      : "success"
+      : "failed"
 
   const stateUpdateHashOk = result?.result?.stateUpdateHashOk
   const shouldShowStatusContainer = txStatus !== undefined || stateUpdateHashOk === false
@@ -229,7 +240,7 @@ function TracePage() {
 
           <div className={styles.externalLinksContainer}>
             <a
-              href="https://github.com/tact-lang/txtracer"
+              href="https://github.com/ton-blockchain/txtracer"
               target="_blank"
               rel="noopener noreferrer"
               title="GitHub Repository"
@@ -355,12 +366,12 @@ function TracePage() {
                   <div className={`${styles.featureCardIcon} ${styles.playgroundIcon}`}>
                     <FiPlay aria-hidden="true" />
                   </div>
-                  <h3 className={styles.featureCardTitle}>Assembly Playground</h3>
+                  <h3 className={styles.featureCardTitle}>Playground</h3>
                   <p className={styles.featureCardDescription}>
-                    Experiment with TVM assembly code directly in your browser. Write, test, and
-                    debug assembly instructions with real-time execution.
+                    Experiment with TVM assembly and FunC code directly in your browser. Write,
+                    test, and debug assembly instructions with real-time execution.
                   </p>
-                  <span className={styles.featureCardBadge}>Playground</span>
+                  <span className={styles.featureCardBadge}>Play and Learn</span>
                 </a>
 
                 <a href="/code-explorer/" className={styles.featureCard}>
@@ -369,10 +380,22 @@ function TracePage() {
                   </div>
                   <h3 className={styles.featureCardTitle}>Code Explorer</h3>
                   <p className={styles.featureCardDescription}>
-                    Compile FunC code to assembly and explore the generated bytecode. Perfect for
-                    understanding how your smart contracts work under the hood.
+                    Compile FunC or Tolk code to assembly and explore the generated bytecode.
+                    Perfect for understanding how your smart contracts work under the hood.
                   </p>
-                  <span className={styles.featureCardBadge}>Explorer</span>
+                  <span className={styles.featureCardBadge}>Explore</span>
+                </a>
+
+                <a href="/spec/" className={styles.featureCard}>
+                  <div className={`${styles.featureCardIcon} ${styles.specIcon}`}>
+                    <FiBook aria-hidden="true" />
+                  </div>
+                  <h3 className={styles.featureCardTitle}>TVM Specification</h3>
+                  <p className={styles.featureCardDescription}>
+                    Browse the complete TVM instruction reference with detailed descriptions,
+                    opcodes, stack effects, and control flow information for every instruction.
+                  </p>
+                  <span className={styles.featureCardBadge}>Reference</span>
                 </a>
 
                 <a href="/sandbox/" className={styles.featureCard}>
@@ -389,26 +412,50 @@ function TracePage() {
                     Alpha
                   </Badge>
                 </a>
+
+                <a href="/emulate/" className={styles.featureCard}>
+                  <div className={`${styles.featureCardIcon} ${styles.emulateIcon}`}>
+                    <FiCpu aria-hidden="true" />
+                  </div>
+                  <h3 className={styles.featureCardTitle}>Emulate</h3>
+                  <p className={styles.featureCardDescription}>
+                    Emulate raw messages on TON blockchain. Send single messages or batch multiple
+                    messages together to see the full transaction tree and trace execution flow.
+                  </p>
+                  <span className={styles.featureCardBadge}>Emulator</span>
+                </a>
+
+                <div className={`${styles.featureCard} ${styles.placeholderCard}`}>
+                  <div className={`${styles.featureCardIcon} ${styles.placeholderIcon}`}>
+                    <FiMoreHorizontal aria-hidden="true" />
+                  </div>
+                  <h3 className={styles.featureCardTitle}>More Tools</h3>
+                  <p className={styles.featureCardDescription}>
+                    Additional developer tools and features are coming soon. Stay tuned for updates
+                    to enhance your TON blockchain development experience.
+                  </p>
+                  <span className={styles.featureCardBadge}>Coming Soon</span>
+                </div>
               </section>
             )}
           </div>
 
-          <footer className={styles.createBy}>
-            Created by{" "}
-            <a href="https://tonstudio.io" target="_blank" rel="noreferrer">
-              TON Studio
-            </a>
+          <footer>
+            <span className={styles.createBy}>
+              Created by{" "}
+              <a href="https://tonstudio.io" target="_blank" rel="noreferrer">
+                TON Studio
+              </a>
+              {" and "}
+              <a href="https://t.me/toncore" target="_blank" rel="noreferrer">
+                TON Core
+              </a>
+              , powered by{" "}
+              <a href="https://toncenter.com/" target="_blank" rel="noreferrer">
+                TON Center
+              </a>
+            </span>
           </footer>
-        </main>
-      )}
-
-      {loading && !result && (
-        <main className={styles.inputPage}>
-          <InlineLoader
-            message="Tracing transaction"
-            subtext="This may take a few moments"
-            loading={true}
-          />
         </main>
       )}
 
@@ -477,6 +524,10 @@ function TracePage() {
                     <CodeEditor
                       code={result.code}
                       highlightLine={highlightLine}
+                      implicitRetLine={implicitRet.line}
+                      implicitRetLabel={
+                        implicitRet.approx ? "↵ implicit RET (approximate position)" : undefined
+                      }
                       lineExecutionData={lineExecutionData}
                       onLineClick={findStepByLine}
                       shouldCenter={transitionType === "button"}

@@ -5,7 +5,8 @@ import type {StackElement} from "ton-assembly/dist/trace"
 import Button from "@shared/ui/Button"
 import StackViewer from "@shared/ui/StackViewer"
 import StackEditor from "@shared/ui/StackEditor"
-import StepInstructionBlock, {
+import {
+  StepInstructionBlock,
   type InstructionDetail,
 } from "@features/txTrace/ui/StepInstructionBlock"
 

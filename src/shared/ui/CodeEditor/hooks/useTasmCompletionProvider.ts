@@ -2,7 +2,7 @@ import {useEffect, type RefObject} from "react"
 import type * as monacoTypes from "monaco-editor"
 import {editor, languages, Position} from "monaco-editor"
 
-import {asmData} from "@features/tasm/lib"
+import {instructionSpecification} from "@features/tasm/lib"
 
 import {TASM_LANGUAGE_ID} from "../languages"
 
@@ -25,7 +25,7 @@ export const useTasmCompletionProvider = ({
     const provider = monaco.languages.registerCompletionItemProvider(TASM_LANGUAGE_ID, {
       triggerCharacters: [],
       provideCompletionItems(model: editor.ITextModel, position: Position) {
-        const data = asmData()
+        const data = instructionSpecification()
 
         if (!data) {
           return {suggestions: []}
@@ -42,33 +42,20 @@ export const useTasmCompletionProvider = ({
         const inputText = word.word.toUpperCase()
         const suggestions: languages.CompletionItem[] = []
 
-        for (const instruction of data.instructions) {
-          if (inputText && !instruction.mnemonic.startsWith(inputText)) {
+        for (const [name, instruction] of Object.entries(data.instructions)) {
+          if (inputText && !name.startsWith(inputText)) {
             continue
           }
 
-          suggestions.push({
-            label: instruction.mnemonic,
-            kind: monaco.languages.CompletionItemKind.Function,
-            insertText: instruction.mnemonic + " ",
-            range,
-            sortText: `0_${instruction.mnemonic}`,
-            filterText: instruction.mnemonic,
-          })
-        }
-
-        for (const alias of data.aliases) {
-          if (inputText && !alias.mnemonic.startsWith(inputText)) {
-            continue
-          }
+          const operands = instruction.description.operands
 
           suggestions.push({
-            label: alias.mnemonic,
+            label: name,
             kind: monaco.languages.CompletionItemKind.Function,
-            insertText: alias.mnemonic,
+            insertText: name + (operands.length > 0 ? " " : ""),
             range,
-            sortText: `1_${alias.mnemonic}`,
-            filterText: alias.mnemonic,
+            sortText: `0_${name}`,
+            filterText: name,
           })
         }
 

@@ -6,7 +6,7 @@ import {ChevronDownIcon, ChevronUpIcon} from "@shared/ui/Icon"
 
 import type {MessageTestData} from "@features/sandbox/lib/transport/message.ts"
 
-import DownloadTestDataButton from "@app/pages/SandboxPage/components/DownloadTestDataButton.tsx"
+import {DownloadTestDataButton} from "@app/pages/SandboxPage/components/DownloadTestDataButton.tsx"
 
 import styles from "./TestInfo.module.css"
 
@@ -18,13 +18,6 @@ export interface TestInfoProps {
 
 export function TestInfo({testData, testIndex, rawTestData}: TestInfoProps) {
   const [collapsed, setCollapsed] = useState(false)
-
-  // const transactions = testData.transactions.filter(it => {
-  //   return (
-  //     it.transaction.inMessage?.info?.src?.toString() !==
-  //     "EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c"
-  //   )
-  // })
 
   const formatTimestamp = (timestamp?: number): string => {
     if (!timestamp) return ""
@@ -86,13 +79,6 @@ export function TestInfo({testData, testIndex, rawTestData}: TestInfoProps) {
       </div>
 
       {!collapsed && <TransactionTree key={`tree-${testData.testName}`} testData={testData} />}
-
-      {/*<div className={styles.transactionDetails}>*/}
-      {/*  <h4 className={styles.sectionTitle}>Transaction Details:</h4>*/}
-      {/*  {transactions.map((tx, index) => (*/}
-      {/*    <TransactionShortInfo key={index} tx={tx} contracts={contracts} />*/}
-      {/*  ))}*/}
-      {/*</div>*/}
     </div>
   )
 }

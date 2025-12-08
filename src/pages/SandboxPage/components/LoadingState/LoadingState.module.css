@@ -118,7 +118,7 @@
 
 .tip:hover {
   border-color: var(--color-primary);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgb(0 0 0 / 10%);
 }
 
 .tipIcon {
@@ -156,13 +156,13 @@
   white-space: nowrap;
 }
 
-@media (max-width: 1200px) {
+@media (width <= 1200px) {
   .tips {
     grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 1024px) {
+@media (width <= 1024px) {
   .content {
     flex-direction: column;
     gap: 0;
@@ -189,7 +189,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .container {
     padding: 0;
     min-height: auto;

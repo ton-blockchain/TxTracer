@@ -20,6 +20,7 @@ export interface HighlightRange {
 interface UseDecorationsOptions {
   readonly monaco: typeof monacoTypes | null
   readonly highlightLine?: number
+  readonly implicitRetLine?: number
   readonly lineExecutionData?: LinesExecutionData
   readonly highlightGroups?: readonly HighlightGroup[]
   readonly hoveredLines?: readonly number[]
@@ -165,6 +166,7 @@ const createExecutionDecorations = (
 export const useDecorations = ({
   monaco,
   highlightLine,
+  implicitRetLine,
   lineExecutionData,
   highlightGroups = [],
   hoveredLines = [],
@@ -189,6 +191,18 @@ export const useDecorations = ({
         // Highlight the current line
         if (highlightLine !== undefined) {
           allDecorations.push(createHighlightLineDecoration(monaco, highlightLine))
+        }
+
+        // Implicit RET marker: render a subtle inline marker on the line below the previous instruction
+        if (implicitRetLine !== undefined) {
+          const markerLine = Math.min(Math.max(implicitRetLine + 1, 1), totalLines)
+          allDecorations.push({
+            range: new monaco.Range(markerLine, 1, markerLine, 1),
+            options: {
+              isWholeLine: true,
+              className: "implicit-ret-line",
+            },
+          })
         }
 
         // Add source map highlight groups (FunC <-> TASM mappings)
@@ -216,9 +230,14 @@ export const useDecorations = ({
         // noinspection JSDeprecatedSymbols
         decorationsRef.current = editor.deltaDecorations(decorationsRef.current, allDecorations)
 
-        // Center on highlighted line if needed
-        if (highlightLine !== undefined && shouldCenter) {
-          editor.revealLineInCenter(highlightLine)
+        // Center on highlighted line; if absent and implicit RET is present, center on it
+        if (shouldCenter) {
+          if (highlightLine !== undefined) {
+            editor.revealLineInCenter(highlightLine)
+          } else if (implicitRetLine !== undefined) {
+            const markerLine = Math.min(Math.max(implicitRetLine + 1, 1), totalLines)
+            editor.revealLineInCenter(markerLine)
+          }
         }
       } catch (error) {
         console.error("Failed to update decorations:", error)
@@ -234,6 +253,7 @@ export const useDecorations = ({
       shouldCenter,
       isCtrlPressed,
       hoveredLine,
+      implicitRetLine,
     ],
   )
 

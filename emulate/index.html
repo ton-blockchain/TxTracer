@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+
+    <title>Emulate | TxTracer</title>
+    <meta
+      name="description"
+      content="Emulate raw TON blockchain messages and visualize transaction trees."
+    />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://txtracer.ton.org/emulate/" />
+    <meta property="og:title" content="Emulate | TxTracer" />
+    <meta
+      property="og:description"
+      content="Emulate raw TON blockchain messages and visualize transaction trees."
+    />
+    <meta property="og:image" content="https://txtracer.ton.org/assets/emulate.png" />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="640" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://txtracer.ton.org/emulate/" />
+    <meta property="twitter:title" content="Emulate | TxTracer" />
+    <meta
+      property="twitter:description"
+      content="Emulate raw TON blockchain messages and visualize transaction trees."
+    />
+    <meta property="twitter:image" content="https://txtracer.ton.org/assets/emulate.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!--    <script crossorigin="anonymous" src="//unpkg.com/react-scan/dist/auto.global.js"></script>-->
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/polyfills.ts"></script>
+    <script type="module" src="/src/pages/EmulatePage/main.tsx"></script>
+  </body>
+</html>

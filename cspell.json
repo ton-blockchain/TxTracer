@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "language": "en",
+  "dictionaryDefinitions": [
+    {
+      "name": "main-list",
+      "path": "./spec/spell/cspell-list.txt"
+    },
+    {
+      "name": "fift-words",
+      "path": "./spec/spell/cspell-fift-words-adjusted.txt"
+    },
+    {
+      "name": "tvm-instructions",
+      "path": "./spec/spell/cspell-tvm-instructions.txt"
+    }
+  ],
+  "dictionaries": ["main-list", "fift-words", "tvm-instructions"],
+  "ignoreRegExpList": [
+    "\\(#.*?\\)",
+    "^\\[.+?\\]: .+$", // link declarations like [foo]: /ref/stdlib-ownable#bar
+    "\\[#.+?\\]", // [#nativereserve-combining-modes-with-flags]
+    "\\{#.+?\\}", // {#some-other-custom-heading-link}
+    "href=\".+?\"", // href="/cookbook/dexes/stonfi"
+    "\".+?\": \".+?\"", // "from": "kQBrSAP2y7QIUw4_1q0qciHfqdFmOYR9CC1oinn7kyWWRuoV"
+    "Urls"
+  ],
+  "flagWords": [],
+  "ignorePaths": ["*.boc", "*.fif", "node_modules", "dist", "out"]
+}

@@ -147,7 +147,7 @@
   font-size: var(--font-size-sm);
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .detailRow,
   .labeledSectionRow {
     flex-direction: column;
@@ -219,7 +219,7 @@
   justify-content: center;
   font-size: var(--font-size-xsm);
   gap: var(--spacing-xs);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
 }
 
 .traceButton:hover {
@@ -253,7 +253,7 @@
   font-weight: 500;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .transactionDetailsContainer {
     padding: var(--spacing-mds);
   }

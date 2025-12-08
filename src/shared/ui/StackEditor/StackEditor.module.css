@@ -286,7 +286,7 @@
 
 .textImportInput:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.2);
+  box-shadow: 0 0 0 3px rgb(var(--color-primary-rgb), 0.2);
   border-color: var(--color-primary);
 }
 
@@ -353,7 +353,7 @@
 .inlineValueInput:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.2);
+  box-shadow: 0 0 0 2px rgb(var(--color-primary-rgb), 0.2);
 }
 
 .inlineValueInput::placeholder {
@@ -363,10 +363,10 @@
 
 .inputError {
   border: 1px solid var(--color-error) !important;
-  background-color: rgba(255, 0, 0, 0.1) !important;
+  background-color: rgb(255 0 0 / 10%) !important;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .stackElement {
     padding: 2px;
     flex-direction: column;

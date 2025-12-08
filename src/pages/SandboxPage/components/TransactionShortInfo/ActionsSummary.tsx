@@ -115,6 +115,7 @@ const renderActionDetails = (
                     <ContractChip
                       address={contractAddress}
                       contracts={contracts}
+                      trimSoloAddress={false}
                       onContractClick={onContractClick}
                     />
                   </div>
@@ -125,6 +126,7 @@ const renderActionDetails = (
                     <ContractChip
                       address={formatAddress(info.dest)}
                       contracts={contracts}
+                      trimSoloAddress={false}
                       onContractClick={onContractClick}
                     />
                   </div>
@@ -151,6 +153,7 @@ const renderActionDetails = (
                     <ContractChip
                       address={contractAddress}
                       contracts={contracts}
+                      trimSoloAddress={false}
                       onContractClick={onContractClick}
                     />
                   </div>
@@ -162,6 +165,7 @@ const renderActionDetails = (
                       <ContractChip
                         address={formatAddress(info.dest)}
                         contracts={contracts}
+                        trimSoloAddress={false}
                         onContractClick={onContractClick}
                       />
                     ) : (

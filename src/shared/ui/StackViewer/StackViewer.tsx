@@ -1,4 +1,4 @@
-import React, {type JSX, useState} from "react"
+import React, {type JSX, memo, useState} from "react"
 import {type StackElement} from "ton-assembly/dist/trace"
 import {Cell} from "@ton/core"
 import {motion, AnimatePresence} from "framer-motion"
@@ -407,4 +407,4 @@ const StackViewer: React.FC<StackViewerProps> = ({stack, title, onStackItemClick
   )
 }
 
-export default React.memo(StackViewer)
+export default memo(StackViewer)

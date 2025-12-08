@@ -8,6 +8,15 @@ interface DaemonSettingsProps {
   readonly onChange: (next: {host: string; port: string}) => void
 }
 
+const portIsValid = (port: string): boolean => {
+  const portNumber = Number(port)
+  if (isNaN(portNumber)) {
+    return false
+  }
+
+  return portNumber >= 0 && portNumber <= 65535
+}
+
 export function DaemonSettings({host, port, onChange}: DaemonSettingsProps) {
   const [localHost, setLocalHost] = useState(host)
   const [localPort, setLocalPort] = useState(port)
@@ -44,7 +53,7 @@ export function DaemonSettings({host, port, onChange}: DaemonSettingsProps) {
               const raw = e.target.value
               const next = raw.replace(/[^0-9]/g, "")
               setLocalPort(next)
-              if (next.length > 0) {
+              if (next.length > 0 && portIsValid(next)) {
                 onChange({host: localHost, port: next})
               }
             }}

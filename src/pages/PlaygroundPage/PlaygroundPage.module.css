@@ -20,6 +20,32 @@
   display: flex;
   flex-grow: 1;
   justify-content: flex-end;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.languageSwitcherContainer {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-right: auto;
+}
+
+.languageSwitcher {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-right: auto;
+}
+
+.steppingSwitcher {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.steppingLabel {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xsm);
+  margin-right: var(--spacing-xs);
 }
 
 .txStatusContainer {
@@ -33,15 +59,12 @@
   display: flex;
   justify-self: flex-end;
   gap: var(--spacing-md);
-  margin-left: auto;
   margin-right: var(--spacing-lg);
 }
 
 .mainContent {
   display: grid;
-  grid-template-columns: 1fr 400px;
-  grid-template-rows: 1fr;
-  grid-template-areas: "editor sidebar";
+  grid-template: "editor sidebar" 1fr / 1fr 400px;
   width: calc(100% - var(--spacing-sm) * 2);
   min-height: 0;
   overflow: hidden;
@@ -54,7 +77,6 @@
   -webkit-text-fill-color: transparent;
   background: linear-gradient(89deg, #2b82eb, #1cc8ff);
   background-clip: text;
-  -webkit-background-clip: text;
   font-feature-settings:
     "clig" off,
     "liga" off;
@@ -79,6 +101,29 @@
   background-color: var(--color-background-primary);
   display: flex;
   flex-direction: column;
+}
+
+.fullEditorWrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.funcEditorWrapper {
+  display: grid;
+  grid-template-columns: 1fr 40%;
+  grid-template-rows: 1fr;
+  gap: var(--spacing-xs);
+  align-items: stretch;
+  height: 100%;
+}
+
+.asmViewerWrapper {
+  height: 100%;
+  border-left: 1px solid var(--color-divider);
+}
+
+.errorsContainer {
+  margin-top: var(--spacing-xs);
 }
 
 .executeButtonContainer {
@@ -163,7 +208,7 @@
   border: 0;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .appContainer {
     position: relative;
   }
@@ -175,11 +220,7 @@
 
   .mainContent {
     display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1.5fr;
-    grid-template-areas:
-      "editor"
-      "sidebar";
+    grid-template: "editor" 1fr "sidebar" 1.5fr / 1fr;
     width: calc(100% - var(--spacing-xs) * 2);
     min-height: 0;
     padding: var(--spacing-xs);
@@ -232,9 +273,6 @@
     gap: var(--spacing-xs);
     margin-right: var(--spacing-sm);
     align-items: stretch;
-  }
-
-  .executeButton {
   }
 
   .iconLink {

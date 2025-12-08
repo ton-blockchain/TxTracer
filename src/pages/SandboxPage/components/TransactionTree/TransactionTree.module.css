@@ -56,8 +56,7 @@
 .treeContainer {
   width: 100%;
   height: auto;
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: auto hidden;
 }
 
 .treeWrapper {
@@ -85,7 +84,7 @@
 }
 
 .edgeStyleWithInit {
-  /*stroke-width: 2px;*/
+  /* stroke-width: 2px; */
 }
 
 .edgeStyleBounced {
@@ -127,7 +126,7 @@
 .tooltip {
   background-color: var(--color-background-primary);
   border-radius: var(--border-radius-md);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 15%);
   padding: var(--spacing-md);
   font-size: var(--font-size-sm);
   min-width: 200px;
@@ -139,7 +138,7 @@
 .tooltipWithoutTriangle {
   background-color: var(--color-background-primary);
   border-radius: var(--border-radius-md);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 40%);
   padding: var(--spacing-md);
   font-size: var(--font-size-sm);
   min-width: 280px;
@@ -161,7 +160,7 @@
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
   border-top: 8px solid var(--color-background-primary);
-  filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 2px 1px rgb(0 0 0 / 10%));
 }
 
 .tooltip::before {
@@ -265,4 +264,70 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+}
+
+.nodeCircle {
+  cursor: pointer;
+}
+
+.nodeCircleDefault {
+  cursor: default;
+}
+
+.nodeText {
+  pointer-events: none;
+}
+
+.valueFlowContainer {
+  padding: 0 var(--spacing-lg) var(--spacing-lg);
+  background-color: var(--color-background-secondary);
+  border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
+  max-width: 1200px;
+}
+
+.valueFlowTable {
+  display: flex;
+  flex-direction: column;
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-background-primary);
+  border-radius: var(--border-radius-sm);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-background-primary);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  align-items: center;
+}
+
+.contractColumn {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.changeColumn {
+  text-align: right;
+  font-weight: var(--font-weight-medium);
+}
+
+.positiveChange {
+  color: #22c55e; /* green */
+}
+
+.negativeChange {
+  color: var(--color-text-primary); /* black/default */
 }

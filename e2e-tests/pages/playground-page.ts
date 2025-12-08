@@ -70,13 +70,13 @@ export class PlaygroundPage {
 
   getTutorialPopup() {
     return this.page
-      .getByRole("heading", {name: "Welcome to Assembly Playground"})
+      .getByRole("heading", {name: "Welcome to Playground"})
       .locator("..")
       .locator("..")
   }
 
   getTutorialText() {
-    return this.page.getByText("Welcome to Assembly Playground")
+    return this.page.getByText("Welcome to Playground")
   }
 
   async getTutorialTotalSteps() {

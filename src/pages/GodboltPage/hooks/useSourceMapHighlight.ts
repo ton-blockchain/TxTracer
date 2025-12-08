@@ -3,6 +3,8 @@ import type * as monaco from "monaco-editor"
 
 import {trace} from "ton-assembly"
 
+import type {InstructionInfo} from "ton-source-map"
+
 import type {HighlightGroup, HighlightRange} from "@shared/ui/CodeEditor"
 
 export interface UseSourceMapHighlightReturn {
@@ -15,6 +17,7 @@ export interface UseSourceMapHighlightReturn {
   readonly handleAsmLineHover: (line: number | null) => void
   readonly filteredAsmCode: string
   readonly getVariablesForAsmLine: (line: number) => trace.FuncVar[] | undefined
+  readonly mapOriginalAsmToFiltered: (line: number) => number | undefined
 }
 
 function filterDebugMarks(asmCode: string): {
@@ -77,7 +80,7 @@ const COLORS = [
 
 export function useSourceMapHighlight(
   sourceMap: trace.FuncMapping | undefined,
-  debugSectionToInstructions?: Map<number, trace.InstructionInfo[]>,
+  debugSectionToInstructions?: Map<number, InstructionInfo[]>,
   funcEditorRef?: React.RefObject<monaco.editor.IStandaloneCodeEditor | null>,
   asmEditorRef?: React.RefObject<monaco.editor.IStandaloneCodeEditor | null>,
   originalAsmCode?: string,
@@ -101,13 +104,18 @@ export function useSourceMapHighlight(
     }
   }, [originalAsmCode])
 
-  const {funcToAsmMap, asmToFuncMap} = useMemo(() => {
+  const {funcToAsmMap, asmToFuncMap, asmFilteredToDebugId} = useMemo(() => {
     if (!sourceMap || !debugSectionToInstructions) {
-      return {funcToAsmMap: new Map<number, number[]>(), asmToFuncMap: new Map<number, number[]>()}
+      return {
+        funcToAsmMap: new Map<number, number[]>(),
+        asmToFuncMap: new Map<number, number[]>(),
+        asmFilteredToDebugId: new Map<number, number>(),
+      }
     }
 
     const funcToAsm = new Map<number, number[]>()
     const asmToFunc = new Map<number, number[]>()
+    const asmToDebugId = new Map<number, number>()
 
     for (const [debugId, location] of sourceMap.locations.entries()) {
       const funcLine = location.line
@@ -124,6 +132,7 @@ export function useSourceMapHighlight(
           const filteredAsmLine = originalToFiltered.get(originalAsmLine)
           if (filteredAsmLine) {
             asmLineNumbers.push(filteredAsmLine)
+            asmToDebugId.set(filteredAsmLine, debugId)
           }
         }
       }
@@ -144,8 +153,7 @@ export function useSourceMapHighlight(
         asmToFunc.get(asmLine)?.push(funcLine)
       }
     }
-
-    return {funcToAsmMap: funcToAsm, asmToFuncMap: asmToFunc}
+    return {funcToAsmMap: funcToAsm, asmToFuncMap: asmToFunc, asmFilteredToDebugId: asmToDebugId}
   }, [sourceMap, debugSectionToInstructions, originalToFiltered])
 
   const {funcHighlightGroups, asmHighlightGroups} = useMemo(() => {
@@ -222,19 +230,13 @@ export function useSourceMapHighlight(
   }, [hoveredFuncLine, funcToAsmMap])
 
   const funcPreciseHighlightRanges = useMemo((): HighlightRange[] => {
-    if (!hoveredAsmLine || !sourceMap || !asmLineToDebugMark.has(hoveredAsmLine)) {
-      return []
-    }
+    if (!hoveredAsmLine || !sourceMap) return []
 
-    const debugMarkId = asmLineToDebugMark.get(hoveredAsmLine)
-    if (debugMarkId === undefined) {
-      return []
-    }
+    const debugId = asmFilteredToDebugId?.get(hoveredAsmLine)
+    if (debugId === undefined) return []
 
-    const location = sourceMap.locations[debugMarkId]
-    if (!location || location.file !== "main.fc") {
-      return []
-    }
+    const location = sourceMap.locations[debugId]
+    if (!location || location.file !== "main.fc") return []
 
     return [
       {
@@ -245,7 +247,7 @@ export function useSourceMapHighlight(
         className: "precise-highlight",
       },
     ]
-  }, [hoveredAsmLine, sourceMap, asmLineToDebugMark])
+  }, [hoveredAsmLine, sourceMap, asmFilteredToDebugId])
 
   const getVariablesForAsmLine = useCallback(
     (line: number): trace.FuncVar[] | undefined => {
@@ -278,5 +280,6 @@ export function useSourceMapHighlight(
     handleAsmLineHover,
     filteredAsmCode,
     getVariablesForAsmLine,
+    mapOriginalAsmToFiltered: (line: number) => originalToFiltered.get(line),
   }
 }

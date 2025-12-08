@@ -13,6 +13,14 @@ const createCNAME = () => ({
   },
 })
 
+const createRobotsTxt = () => ({
+  name: "create-tobots-txt",
+  writeBundle() {
+    const robotsContent = "User-Agent: *\nAllow: /"
+    writeFileSync(resolve(__dirname, "dist/robots.txt"), `${robotsContent}\n`)
+  },
+})
+
 // https://vite.dev/config/
 export default defineConfig({
   resolve: {
@@ -27,6 +35,7 @@ export default defineConfig({
   plugins: [
     react(),
     createCNAME(),
+    createRobotsTxt(),
     // Bundle analyzer
     // visualizer({
     //   filename: "dist/stats.html",
@@ -43,7 +52,9 @@ export default defineConfig({
         main: resolve(__dirname, "index.html"),
         play: resolve(__dirname, "play/index.html"),
         sandbox: resolve(__dirname, "sandbox/index.html"),
+        emulate: resolve(__dirname, "emulate/index.html"),
         "code-explorer": resolve(__dirname, "code-explorer/index.html"),
+        spec: resolve(__dirname, "spec/index.html"),
       },
       output: {
         manualChunks: {

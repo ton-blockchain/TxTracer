@@ -207,7 +207,7 @@
   font-size: var(--font-size-sm);
 }
 
-@media (max-width: 1024px) {
+@media (width <= 1024px) {
   .content {
     flex-direction: column;
     gap: 0;
@@ -228,7 +228,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .container {
     padding: 0;
     min-height: auto;
@@ -237,7 +237,7 @@
 
   .leftColumn,
   .rightColumn {
-    padding: 5rem 1.5rem 5rem;
+    padding: 5rem 1.5rem;
   }
 
   .step {

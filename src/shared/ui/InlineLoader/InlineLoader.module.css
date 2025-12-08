@@ -75,8 +75,8 @@
   border-radius: var(--border-radius-full);
   background: radial-gradient(
     circle,
-    rgba(var(--color-primary-rgb), 0.2) 0%,
-    rgba(var(--color-primary-rgb), 0) 70%
+    rgb(var(--color-primary-rgb), 0.2) 0%,
+    rgb(var(--color-primary-rgb), 0) 70%
   );
   animation: pulse 1.5s ease-in-out infinite;
   opacity: 0.6;
@@ -86,9 +86,11 @@
   0% {
     opacity: 0;
   }
+
   20% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
   }
@@ -106,6 +108,7 @@
     transform: scale(1);
     opacity: 0.7;
   }
+
   50% {
     transform: scale(1.1);
     opacity: 1;
@@ -116,6 +119,7 @@
   from {
     transform: translateY(-5px);
   }
+
   to {
     transform: translateY(0);
   }

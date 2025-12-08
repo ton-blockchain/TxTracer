@@ -3,7 +3,7 @@
   z-index: 10000;
   background-color: var(--color-background-primary);
   border-radius: var(--border-radius-md);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 40%);
   padding: var(--spacing-md);
   font-size: var(--font-size-sm);
   min-width: 280px;

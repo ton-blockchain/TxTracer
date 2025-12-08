@@ -1,0 +1,123 @@
+.exampleItem {
+  margin-bottom: 0;
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background-color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.exampleItemError {
+  background-color: var(--color-error-bg-light);
+}
+
+.exampleErrorHeader {
+  margin-bottom: var(--spacing-sm);
+  border-radius: calc(var(--border-radius-md) / 2);
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.errorIcon {
+  font-size: var(--font-size-lg);
+  color: #c62828;
+  display: flex;
+  align-items: center;
+}
+
+.errorConditionText {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  width: 100%;
+  padding-top: var(--spacing-xs);
+}
+
+.errorConditionText div {
+  display: inline;
+  margin: 0;
+}
+
+.exampleInstructions {
+  margin-bottom: var(--spacing-sm);
+}
+
+.codeBlockContainer {
+  position: relative;
+}
+
+.codeBlock {
+  background-color: var(--color-background-secondary);
+  padding: var(--spacing-sm);
+  margin: 0 0 var(--spacing-sm) 0;
+  border-radius: calc(var(--border-radius-md) / 2);
+  font-family: var(--font-family-mono), monospace;
+  font-size: var(--font-size-sm);
+  overflow: scroll visible;
+  white-space: pre;
+}
+
+.codeBlock code {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.codeBlock .comment {
+  color: var(--color-text-tertiary);
+  font-style: italic;
+}
+
+.codeBlock .preparatoryComment {
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.exampleStack {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+.exampleStructTitle {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.preparatoryInstruction code {
+  color: var(--color-text-secondary);
+}
+
+.stackDisplayContainer {
+  margin-top: var(--spacing-xs);
+}
+
+.playgroundLink {
+  display: inline-flex;
+  /* position: absolute; */
+  align-items: center;
+  gap: var(--spacing-sms);
+  color: var(--color-text-secondary) !important;
+  text-decoration: none;
+  font-size: var(--font-size-xs);
+  border-radius: var(--border-radius-sm);
+  transition: color var(--transition-duration-fast);
+  margin-top: var(--spacing-mds);
+  margin-bottom: -4px;
+  margin-left: 2px;
+  right: 0;
+  opacity: 0.7;
+}
+
+.playgroundLink:hover {
+  color: var(--color-text-primary) !important;
+  opacity: 0.8;
+}
+
+.playIcon {
+  font-size: var(--font-size-xss);
+}

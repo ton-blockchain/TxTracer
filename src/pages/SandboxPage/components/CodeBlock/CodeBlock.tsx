@@ -5,7 +5,7 @@ import styles from "./CodeBlock.module.css"
 export interface CodeBlockProps {
   readonly title?: string
   readonly content: string | undefined | null
-  readonly variant?: "assembly" | "hex"
+  readonly variant?: "assembly" | "hex" | "small-hex"
   readonly placeholder?: string
   readonly className?: string
 }
@@ -77,7 +77,9 @@ export function CodeBlock({
   const contentClassName =
     variant === "assembly"
       ? `${styles.content} ${styles.contentAssembly}`
-      : `${styles.content} ${styles.contentHex}`
+      : variant === "small-hex"
+        ? `${styles.content} ${styles.contentSmallHex}`
+        : `${styles.content} ${styles.contentHex}`
 
   return (
     <div className={`${styles.container} ${className ?? ""}`}>

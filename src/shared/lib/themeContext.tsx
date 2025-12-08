@@ -26,7 +26,13 @@ export const ThemeProvider: React.FC<{children: React.ReactNode}> = ({children})
   }, [theme])
 
   const toggleTheme = useCallback(() => {
-    setTheme(prevTheme => (prevTheme === "light" ? "dark" : "light"))
+    if (!document.startViewTransition) {
+      setTheme(prevTheme => (prevTheme === "light" ? "dark" : "light"))
+    } else {
+      document.startViewTransition(() => {
+        setTheme(prevTheme => (prevTheme === "light" ? "dark" : "light"))
+      })
+    }
   }, [])
 
   return <ThemeContext.Provider value={{theme, toggleTheme}}>{children}</ThemeContext.Provider>

@@ -28,3 +28,16 @@ dist-ssr
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Yarn
+yarn-error.log
+.yarn/
+
+# Eslint
+.eslintcache
+
+# stylelint
+.stylelintcache
+
+# astro
+.astro/

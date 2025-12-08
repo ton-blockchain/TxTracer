@@ -11,7 +11,7 @@
   padding: var(--spacing-md);
   background-color: var(--color-background-primary);
   border-radius: var(--border-radius-md);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 15%);
   min-width: 200px;
   max-width: 320px;
   font-size: var(--font-size-sm);
@@ -39,7 +39,7 @@
   height: 0;
   border-left: 9px solid transparent;
   border-right: 9px solid transparent;
-  border-top: 9px solid rgba(0, 0, 0, 0.12);
+  border-top: 9px solid rgb(0 0 0 / 12%);
   z-index: 999;
 }
 
@@ -68,12 +68,23 @@
   border-left: none;
 }
 
+.tooltip.right::before {
+  top: 50%;
+  left: -9px;
+  margin-left: 0;
+  margin-top: -9px;
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-left: none;
+}
+
 .tooltipPositioned {
   position: fixed;
   padding: var(--spacing-md);
   background-color: var(--color-background-primary);
   border-radius: var(--border-radius-md);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 15%);
   min-width: 200px;
   max-width: 280px;
   font-size: var(--font-size-sm);
@@ -104,7 +115,7 @@
   height: 0;
   border-left: 9px solid transparent;
   border-right: 9px solid transparent;
-  border-top: 9px solid rgba(0, 0, 0, 0.12);
+  border-top: 9px solid rgb(0 0 0 / 12%);
   z-index: 999;
 }
 
@@ -124,7 +135,7 @@
   top: unset;
   bottom: 100%;
   border-top: unset;
-  border-bottom: 9px solid rgba(0, 0, 0, 0.12);
+  border-bottom: 9px solid rgb(0 0 0 / 12%);
 }
 
 .content {

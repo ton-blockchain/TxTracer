@@ -23,6 +23,11 @@ const DTON = "https://dton.io/tx/F64C6A3CDF3FAD1D786AACF9A6130F18F3F76EEB71294F5
 const DTON_TESTNET =
   "https://testnet.dton.io/tx/041293cf00939d8df12badbdf6ab9e2091c8121941dbb170c543595403b5b97b"
 
+const RETRACER =
+  "https://retracer.ton.org/?tx=7a236ab8bdec69ae46c02a5142dfe0dc45bf03b30607c5f88fdf86daeb8e393b"
+const RETRACER_TESTNET =
+  "https://retracer.ton.org/?tx=041293cf00939d8df12badbdf6ab9e2091c8121941dbb170c543595403b5b97b"
+
 async function clickTraceButton(page: Page) {
   const traceButton = page.getByRole("button", {name: "Trace"})
   await expect(traceButton).toBeVisible()
@@ -51,6 +56,8 @@ test.describe("TxTracer Viewers Links", () => {
     ["toncoin testnet", TONCOIN_TESTNET],
     ["dton", DTON],
     ["dton testnet", DTON_TESTNET],
+    ["retracer", RETRACER],
+    ["retracer testnet", RETRACER_TESTNET],
   ]
 
   tracingCases.forEach(([name, link]) => {
@@ -60,7 +67,6 @@ test.describe("TxTracer Viewers Links", () => {
         return
       }
 
-      await wait() // TODO: Remove that. Cause we have only 1 rps from toncenter without API key
       await page.goto("/")
       await startTracing(page, link)
       await checkPageLoaded(page)
@@ -80,8 +86,4 @@ test.describe("TxTracer Viewers Links", () => {
 async function checkPageLoaded(page: Page) {
   const stepCounter = page.getByTestId("step-counter-info")
   await expect(stepCounter).toBeVisible({timeout: 30000})
-}
-
-async function wait(): Promise<unknown> {
-  return new Promise(resolve => setTimeout(resolve, 5_000))
 }

@@ -3,16 +3,19 @@ import type {Orientation, RawNodeDatum, TreeLinkDatum} from "react-d3-tree"
 import {Tree} from "react-d3-tree"
 import {Address, Cell, type ContractABI} from "@ton/core"
 
+import {parseWithPayloads} from "@truecarry/tlb-abi"
+
 import {formatCurrency} from "@shared/lib/format"
 
 import type {TestData} from "@features/sandbox/lib/test-data.ts"
 import {findOpcodeABI, type TransactionInfo} from "@features/sandbox/lib/transaction.ts"
 import type {ContractData} from "@features/sandbox/lib/contract"
 import {parseSliceWithAbiType, type ParsedObjectByABI} from "@features/sandbox/lib/abi/parser.ts"
-import {TransactionShortInfo} from "@app/pages/SandboxPage/components"
+import {TransactionShortInfo, ContractDetails} from "@app/pages/SandboxPage/components"
+
 import {ParsedDataView} from "@features/sandbox/ui/abi"
 
-import {ContractDetails} from "@app/pages/SandboxPage/components"
+import {ContractChip} from "../ContractChip/ContractChip"
 
 import {useTooltip} from "./useTooltip"
 import {SmartTooltip} from "./SmartTooltip"
@@ -298,26 +301,19 @@ export function TransactionTree({testData}: TransactionTreeProps) {
     setSelectedContract(null)
   }
 
-  const calculateTreeDimensions = (data: {
-    children?: unknown[]
-  }): {height: number; width: number} => {
-    const getDepth = (node: {children?: unknown[]}, currentDepth = 0): number => {
+  const calculateTreeDimensions = (data: RawNodeDatum): {height: number; width: number} => {
+    const getDepth = (node: RawNodeDatum, currentDepth = 0): number => {
       if (!node.children || node.children.length === 0) {
         return currentDepth
       }
-      return Math.max(
-        ...node.children.map(child => getDepth(child as {children?: unknown[]}, currentDepth + 1)),
-      )
+      return Math.max(...node.children.map(child => getDepth(child, currentDepth + 1)))
     }
 
-    const countNodes = (node: {children?: unknown[]}): number => {
+    const countNodes = (node: RawNodeDatum): number => {
       if (!node.children || node.children.length === 0) {
         return 1
       }
-      return node.children.reduce(
-        (sum: number, child) => sum + countNodes(child as {children?: unknown[]}),
-        0,
-      )
+      return node.children.reduce((sum: number, child) => sum + countNodes(child), 0)
     }
 
     const totalNodes = countNodes(data)
@@ -350,6 +346,9 @@ export function TransactionTree({testData}: TransactionTreeProps) {
     } else {
       setSelectedTransaction(transaction)
       setSelectedContract(null)
+      if (window.dispatchEvent) {
+        window.dispatchEvent(new CustomEvent("resetTraceViewer"))
+      }
     }
   }
 
@@ -438,7 +437,7 @@ export function TransactionTree({testData}: TransactionTreeProps) {
     }
   }
 
-  const treeData = useMemo(() => {
+  const treeData: RawNodeDatum = useMemo(() => {
     const displayedRoots = selectedRootLt
       ? rootTransactions.filter(tx => tx.transaction.lt.toString() === selectedRootLt)
       : rootTransactions
@@ -471,10 +470,18 @@ export function TransactionTree({testData}: TransactionTreeProps) {
           ? tx.transaction.inMessage?.info.value?.coins
           : undefined
 
+      const opcodeNameFromInMessageBySchemas = () => {
+        if (!tx.transaction.inMessage) {
+          return undefined
+        }
+        const parsed = parseWithPayloads(tx.transaction.inMessage.body.asSlice())
+        return parsed?.data.kind
+      }
+
       const opcode = tx.opcode
       const opcodeHex = opcode?.toString(16)
       const abiType = findOpcodeABI(tx, contracts)
-      const opcodeName = abiType?.name
+      const opcodeName = abiType?.name ?? opcodeNameFromInMessageBySchemas()
 
       const contractLetter = thisAddress
         ? (contracts.get(thisAddress.toString())?.letter ?? "?")
@@ -482,6 +489,23 @@ export function TransactionTree({testData}: TransactionTreeProps) {
 
       const lt = tx.transaction.lt.toString()
       const isSelected = selectedTransaction?.transaction.lt.toString() === lt
+
+      const hasExternalOut = Array.from(tx.transaction.outMessages.values()).some(outMsg => {
+        return outMsg.info.type === "external-out"
+      })
+
+      const externalOutChildren = hasExternalOut
+        ? [
+            {
+              name: "",
+              attributes: {
+                isExternalOut: true,
+                parentLt: lt,
+              },
+              children: [],
+            },
+          ]
+        : []
 
       return {
         name: `${addressName}`,
@@ -499,7 +523,7 @@ export function TransactionTree({testData}: TransactionTreeProps) {
           contractLetter,
           isSelected,
         },
-        children: tx.children.map(it => convertTransactionToNode(it)),
+        children: [...tx.children.map(it => convertTransactionToNode(it)), ...externalOutChildren],
       }
     }
 
@@ -515,7 +539,9 @@ export function TransactionTree({testData}: TransactionTreeProps) {
 
     return {
       name: "No transactions",
-      attributes: {},
+      attributes: {
+        isRoot: false,
+      },
       children: [],
     }
   }, [rootTransactions, contracts, selectedTransaction, selectedRootLt])
@@ -547,6 +573,63 @@ export function TransactionTree({testData}: TransactionTreeProps) {
           >
             BL
           </text>
+        </g>
+      )
+    }
+
+    if (nodeDatum.attributes?.isExternalOut) {
+      const parentLt = nodeDatum.attributes.parentLt as string
+      const parentTx = transactionMap.get(parentLt)
+
+      const externalOutMsg = [...(parentTx?.transaction.outMessages.values() ?? [])].find(
+        msg => msg.info.type === "external-out",
+      )
+      const externalOutDest = externalOutMsg?.info.dest?.toString() ?? "External"
+      const createdLt =
+        externalOutMsg?.info.type === "external-out" ? externalOutMsg.info.createdLt.toString() : ""
+
+      return (
+        <g>
+          <foreignObject
+            width="4"
+            height="6"
+            x="-20"
+            y="-3"
+            className={styles.foreignObjectContainer}
+          >
+            <svg
+              width="4"
+              height="6"
+              viewBox="0 0 4 5"
+              xmlns="http://www.w3.org/2000/svg"
+              className={styles.iconSvg}
+            >
+              <path
+                d="M0.400044 0.549983C0.648572 0.218612 1.11867 0.151455 1.45004 0.399983L3.45004 1.89998C3.6389 2.04162 3.75004 2.26392 3.75004 2.49998C3.75004 2.73605 3.6389 2.95834 3.45004 3.09998L1.45004 4.59998C1.11867 4.84851 0.648572 4.78135 0.400044 4.44998C0.151516 4.11861 0.218673 3.64851 0.550044 3.39998L1.75004 2.49998L0.550044 1.59998C0.218673 1.35145 0.151516 0.881354 0.400044 0.549983Z"
+                fill="var(--color-text-tertiary)"
+              ></path>
+            </svg>
+          </foreignObject>
+
+          <circle
+            r={15}
+            fill="transparent"
+            stroke="var(--color-border)"
+            strokeWidth={1}
+            className={styles.nodeCircleDefault}
+          />
+
+          <foreignObject width="150" height="100" x="-180" y="-40">
+            <div className={styles.edgeText}>
+              <div className={styles.topText}>
+                <p className={styles.edgeTextTitle}>{externalOutDest}</p>
+                <p className={styles.edgeTextContent}>Lt: {createdLt}</p>
+              </div>
+              <div className={styles.bottonText}>
+                <p className={styles.edgeTextContent}>Type: external-out</p>
+              </div>
+            </div>
+          </foreignObject>
         </g>
       )
     }
@@ -689,7 +772,6 @@ export function TransactionTree({testData}: TransactionTreeProps) {
       <div className={styles.treeContainer} style={{height: `${treeDimensions.height}px`}}>
         <div className={styles.treeWrapper} style={{width: `${treeDimensions.width}px`}}>
           <Tree
-            // @ts-expect-error todo
             data={treeData}
             orientation="horizontal"
             pathFunc={e => {
@@ -722,7 +804,6 @@ export function TransactionTree({testData}: TransactionTreeProps) {
             collapsible={false}
             zoomable={false}
             draggable={false}
-            pannable={false}
             scaleExtent={{min: 1, max: 1}}
           />
           {tooltip && triggerRectRef.current && (
@@ -746,6 +827,41 @@ export function TransactionTree({testData}: TransactionTreeProps) {
             contracts={contracts}
             onContractClick={handleContractClick}
           />
+        </div>
+      )}
+
+      {testData.valueFlow && testData.valueFlow.size > 0 && (
+        <div className={styles.valueFlowContainer}>
+          <h3 className={styles.detailsTitle}>Value Flow</h3>
+          <div className={styles.valueFlowTable}>
+            <div className={styles.tableHeader}>
+              <div className={styles.contractColumn}>Account</div>
+              <div className={styles.changeColumn}>Balance Change</div>
+            </div>
+            {[...testData.valueFlow.entries()].map(([address, flow]) => {
+              const change = flow.after - flow.before
+              const isPositive = change > 0n
+              const isNegative = change < 0n
+
+              return (
+                <div key={address} className={styles.tableRow}>
+                  <div className={styles.contractColumn}>
+                    <ContractChip
+                      address={address}
+                      contracts={contracts}
+                      onContractClick={handleContractClick}
+                    />
+                  </div>
+                  <div
+                    className={`${styles.changeColumn} ${isPositive ? styles.positiveChange : styles.negativeChange}`}
+                  >
+                    {isPositive ? "+" : isNegative ? "-" : ""}
+                    {formatCurrency(change)}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
         </div>
       )}
 

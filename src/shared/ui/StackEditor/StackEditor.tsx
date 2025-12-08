@@ -1,4 +1,4 @@
-import React, {useState, useCallback, type JSX, useEffect} from "react"
+import React, {useState, useCallback, type JSX, useEffect, memo} from "react"
 import {FiPlus, FiTrash2, FiArrowUp, FiArrowDown, FiFileText, FiCheck, FiX} from "react-icons/fi"
 import {type StackElement} from "ton-assembly/dist/trace"
 import {logs} from "ton-assembly"
@@ -771,4 +771,4 @@ const StackEditor: React.FC<StackEditorProps> = ({stack, onStackChange}) => {
   )
 }
 
-export default React.memo(StackEditor)
+export default memo(StackEditor)

@@ -52,8 +52,6 @@ test.describe("TxTracer Stepping Logic", () => {
   }: {
     page: Page
   }) => {
-    await wait()
-
     await page.goto("/")
     await startTracing(page)
 
@@ -180,8 +178,6 @@ test.describe("TxTracer Code Editor Interaction", () => {
   }: {
     page: Page
   }) => {
-    await wait()
-
     await page.goto(`/`)
 
     await startTracing(page)
@@ -207,8 +203,6 @@ test.describe("TxTracer Code Editor Interaction", () => {
 
 test.describe("TxTracer Transaction Details Interaction", () => {
   test("should expand and collapse transaction details section", async ({page}: {page: Page}) => {
-    await wait()
-
     await page.goto("/")
     await startTracing(page)
 
@@ -231,7 +225,3 @@ test.describe("TxTracer Transaction Details Interaction", () => {
     await expect(detailsContent).not.toBeVisible({timeout: 2000})
   })
 })
-
-async function wait(): Promise<unknown> {
-  return new Promise(resolve => setTimeout(resolve, 5_000))
-}

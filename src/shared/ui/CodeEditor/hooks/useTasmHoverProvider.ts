@@ -7,6 +7,8 @@ import {formatVariablesForHover, type FuncVar} from "@features/godbolt/lib/func/
 
 import type {LinesExecutionData} from "@features/txTrace/hooks"
 
+import {CONTROL_REGISTERS} from "@features/common/lib/control-registers/control-registers.ts"
+
 import {TASM_LANGUAGE_ID} from "../languages"
 
 interface UseTasmHoverProviderOptions {
@@ -46,6 +48,13 @@ export const useTasmHoverProvider = ({
         }
 
         if (word) {
+          const crInfo = CONTROL_REGISTERS[word.word]
+          if (crInfo) {
+            hoverContents.push({
+              value: `**Control register ${word.word} (${crInfo.type})**\n\n${crInfo.description}`,
+            })
+          }
+
           const lineContent = model.getLineContent(lineNumber)
           const tokens = monaco.editor.tokenize(lineContent, TASM_LANGUAGE_ID)[0]
           let tokenType = ""
@@ -61,12 +70,7 @@ export const useTasmHoverProvider = ({
 
           if (tokenType.includes("instruction") && showInstructionDocs) {
             const instructionInfo = findInstruction(word.word)
-            if (instructionInfo === undefined) {
-              hoverContents.push({
-                value:
-                  "The assembly instructions documentation is loading—please hover over the instruction again.",
-              })
-            } else if (instructionInfo) {
+            if (instructionInfo) {
               const asmDoc = generateAsmDoc(instructionInfo)
               if (asmDoc) {
                 hoverContents.push({value: asmDoc})
