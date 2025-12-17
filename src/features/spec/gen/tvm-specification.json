@@ -6041,7 +6041,7 @@
         "tlb": "#cf1e"
       },
       "signature": {
-        "stack_string": "b:Builder s:Slice -> (b'':Builder 0)|(b:Builder s:Slice -1) status:Int",
+        "stack_string": "b:Builder s:Slice -> (b':Builder 0)|(b:Builder s:Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -6067,7 +6067,7 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "b''",
+                      "name": "b'",
                       "value_types": ["Builder"]
                     }
                   ]
@@ -8570,7 +8570,7 @@
         "tlb": "#d73b"
       },
       "signature": {
-        "stack_string": "c:Cell -> (c:Cell 0)|(c':Cell -1) status:Int",
+        "stack_string": "c:Cell -> (∅ 0)|(c':Cell -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -8588,13 +8588,7 @@
               "match": [
                 {
                   "value": 0,
-                  "stack": [
-                    {
-                      "type": "simple",
-                      "name": "c",
-                      "value_types": ["Cell"]
-                    }
-                  ]
+                  "stack": []
                 },
                 {
                   "value": -1,
@@ -8828,7 +8822,7 @@
         "tlb": "#d745"
       },
       "signature": {
-        "stack_string": "s:Slice length:Int -> result:Int",
+        "stack_string": "s:Slice length:Int -> result:Bool",
         "inputs": {
           "stack": [
             {
@@ -8848,7 +8842,7 @@
             {
               "type": "simple",
               "name": "result",
-              "value_types": ["Int"]
+              "value_types": ["Bool"]
             }
           ]
         }
@@ -8889,7 +8883,7 @@
         "tlb": "#d746"
       },
       "signature": {
-        "stack_string": "s:Slice r:Int -> result:Int",
+        "stack_string": "s:Slice r:Int -> result:Bool",
         "inputs": {
           "stack": [
             {
@@ -8909,7 +8903,7 @@
             {
               "type": "simple",
               "name": "result",
-              "value_types": ["Int"]
+              "value_types": ["Bool"]
             }
           ]
         }
@@ -8950,7 +8944,7 @@
         "tlb": "#d747"
       },
       "signature": {
-        "stack_string": "s:Slice length:Int r:Int -> result:Int",
+        "stack_string": "s:Slice length:Int r:Int -> result:Bool",
         "inputs": {
           "stack": [
             {
@@ -8975,7 +8969,7 @@
             {
               "type": "simple",
               "name": "result",
-              "value_types": ["Int"]
+              "value_types": ["Bool"]
             }
           ]
         }
@@ -23790,7 +23784,7 @@
         "tlb": "#fa41"
       },
       "signature": {
-        "stack_string": "s:Slice -> (s:Slice 0)|(s':Slice addr:Slice -1) status:Int",
+        "stack_string": "s:Slice -> (s:Slice 0)|(addr:Slice s':Slice -1) status:Int",
         "inputs": {
           "stack": [
             {
@@ -23821,12 +23815,12 @@
                   "stack": [
                     {
                       "type": "simple",
-                      "name": "s'",
+                      "name": "addr",
                       "value_types": ["Slice"]
                     },
                     {
                       "type": "simple",
-                      "name": "addr",
+                      "name": "s'",
                       "value_types": ["Slice"]
                     }
                   ]
