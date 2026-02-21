@@ -5,7 +5,7 @@
     "outDir": "dist",
     "module": "ESNext",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "types": ["@testing-library/jest-dom", "vitest/globals", "vite/client"],
+    "types": ["vitest/globals", "vite/client"],
     "declaration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

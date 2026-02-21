@@ -57,7 +57,6 @@
     "@astrojs/starlight": "^0.36.0",
     "@eslint/js": "^9.25.0",
     "@playwright/test": "^1.57.0",
-    "@testing-library/jest-dom": "^6.6.3",
     "@types/d3": "^7.4.3",
     "@types/node": "^22.15.17",
     "@types/react": "^19.1.2",
