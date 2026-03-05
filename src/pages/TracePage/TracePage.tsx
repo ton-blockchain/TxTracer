@@ -2,8 +2,10 @@ import React, {Suspense, useCallback, useEffect, useState, lazy} from "react"
 import {
   FiBook,
   FiClock,
+  FiCode,
   FiCpu,
   FiGithub,
+  FiList,
   FiMoreHorizontal,
   FiPlay,
   FiSearch,
@@ -11,6 +13,7 @@ import {
   FiZap,
 } from "react-icons/fi"
 
+import {parse as parseVmLogs} from "ton-assembly/dist/logs"
 import {type StackElement} from "ton-assembly/dist/trace"
 
 import type {RetraceResultAndCode} from "@features/txTrace/ui"
@@ -29,6 +32,7 @@ import {TooltipHint} from "@shared/ui/TooltipHint"
 import Badge from "@shared/ui/Badge"
 
 import {StackItemViewer} from "@app/pages/TracePage/StackItemViewer.tsx"
+import TraceStepsChainView from "@app/pages/TracePage/TraceStepsChainView.tsx"
 
 import {useGlobalError} from "@shared/lib/useGlobalError.tsx"
 
@@ -38,6 +42,63 @@ import styles from "./TracePage.module.css"
 
 const CodeEditor = lazy(() => import("@shared/ui/CodeEditor"))
 const PageHeader = lazy(() => import("@shared/ui/PageHeader"))
+
+type TraceViewMode = "assembler" | "stepsChain"
+
+const TRACE_VIEW_OPTIONS: ReadonlyArray<{
+  readonly value: TraceViewMode
+  readonly label: string
+  readonly icon: typeof FiCode
+}> = [
+  {value: "assembler", label: "Assembler", icon: FiCode},
+  {value: "stepsChain", label: "Steps chain", icon: FiList},
+]
+
+const TRACE_VIEW_MODE_STORAGE_KEY = "txtracer-trace-view-mode"
+
+function isTraceViewMode(value: string | null): value is TraceViewMode {
+  return value === "assembler" || value === "stepsChain"
+}
+
+function getStoredTraceViewMode(): TraceViewMode {
+  const stored = localStorage.getItem(TRACE_VIEW_MODE_STORAGE_KEY)
+  return isTraceViewMode(stored) ? stored : "assembler"
+}
+
+function setStoredTraceViewMode(mode: TraceViewMode): void {
+  localStorage.setItem(TRACE_VIEW_MODE_STORAGE_KEY, mode)
+}
+
+function extractFirstTransactionInstructions(vmLogs: string): readonly string[] {
+  let parsedLines: ReturnType<typeof parseVmLogs>
+  try {
+    parsedLines = parseVmLogs(vmLogs)
+  } catch {
+    return []
+  }
+  const transactions: string[][] = []
+  let currentTransactionInstructions: string[] = []
+
+  for (const line of parsedLines) {
+    if (line.$ === "VmExecute") {
+      currentTransactionInstructions.push(line.instr.trim())
+      continue
+    }
+
+    if (line.$ === "VmUnknown" && line.text.includes("console.log")) {
+      if (currentTransactionInstructions.length > 0) {
+        transactions.push(currentTransactionInstructions)
+        currentTransactionInstructions = []
+      }
+    }
+  }
+
+  if (currentTransactionInstructions.length > 0) {
+    transactions.push(currentTransactionInstructions)
+  }
+
+  return transactions[0] ?? []
+}
 
 function TracePage() {
   const [inputText, setInputText] = useState("")
@@ -55,6 +116,7 @@ function TracePage() {
     element: StackElement
     title: string
   } | null>(null)
+  const [traceViewMode, setTraceViewMode] = useState<TraceViewMode>(() => getStoredTraceViewMode())
 
   const lineExecutionData = useLineExecutionData(result?.trace)
   const {
@@ -62,6 +124,7 @@ function TracePage() {
     highlightLine,
     currentStep,
     currentStack,
+    goToStep,
     handlePrev,
     handleNext,
     goToFirstStep,
@@ -81,10 +144,15 @@ function TracePage() {
 
   useEffect(() => {
     if (result?.trace) {
+      const vmInstructions = result.result.emulatedTx.vmLogs
+        ? extractFirstTransactionInstructions(result.result.emulatedTx.vmLogs)
+        : []
+
       setInstructionDetails(
-        result.trace.steps.map(step => ({
+        result.trace.steps.map((step, index) => ({
           name: step.instructionName,
           gasCost: normalizeGas(step),
+          instructionText: vmInstructions[index],
         })),
       )
     } else {
@@ -191,6 +259,11 @@ function TracePage() {
 
   const handleBackToCode = useCallback(() => {
     setSelectedStackItem(null)
+  }, [])
+
+  const handleTraceViewModeChange = useCallback((mode: TraceViewMode) => {
+    setTraceViewMode(mode)
+    setStoredTraceViewMode(mode)
   }, [])
 
   const implicitRet = (() => {
@@ -466,7 +539,35 @@ function TracePage() {
             {result && !loading && "Transaction trace loaded successfully"}
           </div>
 
-          <PageHeader pageTitle={""} network={result?.network ?? "mainnet"}>
+          <PageHeader
+            pageTitle={""}
+            network={result?.network ?? "mainnet"}
+            beforeLinks={
+              <div className={styles.viewModeControl}>
+                <div className={styles.traceViewToggle} role="group" aria-label="Trace view mode">
+                  {TRACE_VIEW_OPTIONS.map(option => {
+                    const isActive = traceViewMode === option.value
+                    const Icon = option.icon
+
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        className={`${styles.traceViewToggleButton} ${isActive ? styles.traceViewToggleButtonActive : ""}`}
+                        onClick={() => {
+                          handleTraceViewModeChange(option.value)
+                        }}
+                        aria-pressed={isActive}
+                      >
+                        <Icon className={styles.traceViewToggleIcon} aria-hidden="true" />
+                        <span>{option.label}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            }
+          >
             <div className={styles.headerContent}>
               <div
                 className={styles.searchInputContainer}
@@ -516,24 +617,33 @@ function TracePage() {
                 <h2 id="code-viewer-heading" className="sr-only">
                   Transaction Code Viewer
                 </h2>
-
                 <div
                   className={`${styles.codeEditorWrapper} ${selectedStackItem ? styles.codeEditorHidden : ""}`}
                 >
-                  <Suspense fallback={<InlineLoader message="Loading Editor..." loading={true} />}>
-                    <CodeEditor
-                      code={result.code}
-                      highlightLine={highlightLine}
-                      implicitRetLine={implicitRet.line}
-                      implicitRetLabel={
-                        implicitRet.approx ? "↵ implicit RET (approximate position)" : undefined
-                      }
-                      lineExecutionData={lineExecutionData}
-                      onLineClick={findStepByLine}
-                      shouldCenter={transitionType === "button"}
-                      exitCode={result.exitCode}
+                  {traceViewMode === "assembler" ? (
+                    <Suspense
+                      fallback={<InlineLoader message="Loading Editor..." loading={true} />}
+                    >
+                      <CodeEditor
+                        code={result.code}
+                        highlightLine={highlightLine}
+                        implicitRetLine={implicitRet.line}
+                        implicitRetLabel={
+                          implicitRet.approx ? "↵ implicit RET (approximate position)" : undefined
+                        }
+                        lineExecutionData={lineExecutionData}
+                        onLineClick={findStepByLine}
+                        shouldCenter={transitionType === "button"}
+                        exitCode={result.exitCode}
+                      />
+                    </Suspense>
+                  ) : (
+                    <TraceStepsChainView
+                      steps={instructionDetails}
+                      selectedStep={selectedStep}
+                      onStepClick={goToStep}
                     />
-                  </Suspense>
+                  )}
                 </div>
 
                 {selectedStackItem && (

@@ -6,6 +6,7 @@ export interface UseTraceStepperReturn {
   readonly highlightLine: number | undefined
   readonly currentStep: ReturnType<typeof getCurrentStep>
   readonly currentStack: readonly StackElement[]
+  readonly goToStep: (stepIndex: number) => void
   readonly handlePrev: () => void
   readonly handleNext: () => void
   readonly goToFirstStep: () => void
@@ -53,6 +54,17 @@ export function useTraceStepper(trace: TraceInfo | undefined): UseTraceStepperRe
     setTransitionType("button")
     setSelectedStep(prev => prev + 1)
   }, [totalSteps, canGoNext])
+
+  const goToStep = useCallback(
+    (stepIndex: number) => {
+      if (totalSteps === 0) return
+      const boundedIndex = Math.max(0, Math.min(stepIndex, totalSteps - 1))
+      if (boundedIndex === selectedStep) return
+      setTransitionType("click")
+      setSelectedStep(boundedIndex)
+    },
+    [totalSteps, selectedStep],
+  )
 
   const goToFirstStep = useCallback(() => {
     if (totalSteps === 0 || !canGoPrev) return
@@ -118,6 +130,7 @@ export function useTraceStepper(trace: TraceInfo | undefined): UseTraceStepperRe
     highlightLine,
     currentStep,
     currentStack,
+    goToStep,
     handlePrev,
     handleNext,
     goToFirstStep,

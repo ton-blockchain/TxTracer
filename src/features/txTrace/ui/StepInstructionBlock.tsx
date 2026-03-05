@@ -5,6 +5,7 @@ import styles from "./StepInstructionBlock.module.css"
 export interface InstructionDetail {
   readonly name: string
   readonly gasCost: number
+  readonly instructionText?: string
 }
 
 interface StepInstructionBlockProps {

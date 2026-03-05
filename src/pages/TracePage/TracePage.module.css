@@ -32,19 +32,28 @@
 /* header */
 .headerContent {
   display: flex;
+  align-items: center;
   flex-grow: 1;
+  gap: var(--spacing-sm);
+  min-width: 0;
 }
 
 .searchInputContainer {
   flex-grow: 1;
   max-width: 600px;
+  min-width: 220px;
+}
+
+.viewModeControl {
+  display: flex;
+  align-items: center;
+  min-width: 0;
 }
 
 .txStatusContainer {
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
-  margin-left: var(--spacing-sm);
 }
 
 .mainContent {
@@ -501,6 +510,18 @@ footer {
     gap: var(--spacing-xs);
   }
 
+  .headerContent {
+    justify-content: flex-end;
+  }
+
+  .traceViewToggle {
+    display: flex;
+  }
+
+  .traceViewToggleButton {
+    padding: 4px var(--spacing-xs);
+  }
+
   .centeredInputContainer {
     padding: 0 var(--spacing-md) var(--spacing-lg);
     margin-top: 160px;
@@ -691,6 +712,47 @@ footer {
   overflow: hidden;
   background: var(--color-background-primary);
   border-radius: var(--border-radius-lg);
+}
+
+.traceViewToggle {
+  display: inline-flex;
+  width: fit-content;
+  background-color: var(--color-background-secondary);
+  border-radius: var(--border-radius-full);
+  padding: 4px;
+  gap: 4px;
+}
+
+.traceViewToggleButton {
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  border-radius: var(--border-radius-full);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition:
+    background-color var(--transition-duration-fast) ease,
+    color var(--transition-duration-fast) ease,
+    transform var(--transition-duration-fast) ease;
+}
+
+.traceViewToggleButton:hover {
+  color: var(--color-text-primary);
+}
+
+.traceViewToggleButtonActive {
+  background-color: var(--color-background-primary);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.traceViewToggleIcon {
+  font-size: 14px;
 }
 
 .stackItemOverlay {
