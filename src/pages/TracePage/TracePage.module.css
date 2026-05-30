@@ -348,11 +348,6 @@
   color: white;
 }
 
-.sandboxIcon {
-  background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
-  color: white;
-}
-
 .emulateIcon {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
@@ -414,14 +409,6 @@
   border-radius: var(--border-radius-full);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-}
-
-.featureCardColorBadge {
-  position: absolute;
-  font-size: var(--font-size-xs);
-  top: var(--spacing-sm);
-  right: var(--spacing-sm);
-  z-index: 1;
 }
 
 footer {
