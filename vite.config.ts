@@ -2,7 +2,7 @@
 import {resolve} from "path"
 import {writeFileSync} from "fs"
 
-import {defineConfig} from "vite"
+import {defineConfig} from "vitest/config"
 import react from "@vitejs/plugin-react"
 
 const createCNAME = () => ({

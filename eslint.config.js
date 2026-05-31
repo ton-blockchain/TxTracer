@@ -18,7 +18,6 @@ export default tseslint.config(
       "src/polyfills.ts",
       "src/env.d.ts",
       "spec/src/env.d.ts",
-      "spec/src/content/config.ts",
       "spec/.astro/**/*",
       "src/features/godbolt/lib/func/func-wasm/func-compile.ts",
       "src/features/godbolt/lib/func/func-wasm/funcfiftlib.d.ts",
