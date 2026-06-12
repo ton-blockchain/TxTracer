@@ -2,6 +2,7 @@ import {resolve} from "path"
 import {writeFileSync} from "fs"
 
 import {defineConfig} from "vite"
+import {configDefaults} from "vitest/config"
 import react from "@vitejs/plugin-react"
 
 const createCNAME = () => ({
@@ -22,6 +23,10 @@ const createRobotsTxt = () => ({
 
 // https://vite.dev/config/
 export default defineConfig({
+  test: {
+    globals: true,
+    exclude: [...configDefaults.exclude, "e2e-tests/**"],
+  },
   resolve: {
     alias: {
       "@shared": resolve(__dirname, "src/shared"),
