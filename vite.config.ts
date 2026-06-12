@@ -1,4 +1,4 @@
-/// <reference types="vitest" />
+/// <reference types="vitest/config" />
 import {resolve} from "path"
 import {writeFileSync} from "fs"
 
