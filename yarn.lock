@@ -2835,30 +2835,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ton/sandbox@npm:^0.41.0":
-  version: 0.41.0
-  resolution: "@ton/sandbox@npm:0.41.0"
-  dependencies:
-    "@vscode/debugadapter": "npm:^1.68.0"
-    chalk: "npm:^4.1.2"
-    fflate: "npm:^0.8.2"
-    table: "npm:^6.9.0"
-    ton-assembly: "npm:0.6.1"
-  peerDependencies:
-    "@ton-community/func-js": ">=0.10.0"
-    "@ton/core": ">=0.61.0"
-    "@ton/crypto": ">=3.3.0"
-    "@ton/test-utils": ">=0.7.0"
-    jest: ^29.5.0 || ^30.0.5
-  peerDependenciesMeta:
-    "@ton/test-utils":
-      optional: true
-    jest:
-      optional: true
-  checksum: 10c0/15471f4dfa35d17182f9577941a85ea4c2e88ed0bf2ece8bacd1f7302bd42195d82eaf205fb5940e334a7930c302546a2c3fbedf0065318de6531191a9820238
-  languageName: node
-  linkType: hard
-
 "@ton/sandbox@npm:^0.43.0":
   version: 0.43.0
   resolution: "@ton/sandbox@npm:0.43.0"
@@ -3970,22 +3946,6 @@ __metadata:
     path-browserify: "npm:^1.0.1"
     vscode-uri: "npm:^3.0.8"
   checksum: 10c0/075c890b9ec1cb17f17e38aaed035f8ee7d507439e87270d8e3c394356fc9387fd0bda9ec1069b36ea4c378d9375a08f5bc64c063a83427010ddd86d472124fc
-  languageName: node
-  linkType: hard
-
-"@vscode/debugadapter@npm:^1.68.0":
-  version: 1.68.0
-  resolution: "@vscode/debugadapter@npm:1.68.0"
-  dependencies:
-    "@vscode/debugprotocol": "npm:1.68.0"
-  checksum: 10c0/68aaaf283eaabff42c89055221f9602c1e2560027b474a8b109c89129e5d37145b98c0d496b37f1058dc6fdbcdc02e28e2191bf82bfb10832199106ca9d5dfaf
-  languageName: node
-  linkType: hard
-
-"@vscode/debugprotocol@npm:1.68.0":
-  version: 1.68.0
-  resolution: "@vscode/debugprotocol@npm:1.68.0"
-  checksum: 10c0/e4b21bad518f7db66f7bd5c07b8303af36dbee920c9250d0f5d3910fb181ee1f7e83c536004b3258041d54d18c86fc361de3c2225958a458dbf5ece99c317870
   languageName: node
   linkType: hard
 
@@ -12321,16 +12281,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"txtracer-core@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "txtracer-core@npm:0.5.0"
+"txtracer-core@npm:^0.8.0":
+  version: 0.8.0
+  resolution: "txtracer-core@npm:0.8.0"
   dependencies:
     "@ton-community/func-js": "npm:^0.10.0"
     "@ton/core": "npm:^0.61.0"
-    "@ton/sandbox": "npm:^0.41.0"
+    "@ton/sandbox": "npm:^0.43.0"
     "@ton/ton": "npm:^15.3.1"
     axios: "npm:^1.6.7"
-  checksum: 10c0/fca832c727cd4455c650b966782cd9543a609d86381a2b2ca4b1ea0856b00160c0396e7614ddf60ef630ee517708bfb00a3709ae0ab1173b7a08ce58991629c5
+  checksum: 10c0/d65f331dd7406101c5c9bc82e2b7ce6580f4f4466a64d9c8f577c698f2dbd72863c60411987cb7c84619007cc3976f248a88f91c8db6f639e16f8a42c2b2722d
   languageName: node
   linkType: hard
 
@@ -12399,7 +12359,7 @@ __metadata:
     ton-assembly: "npm:0.6.1"
     ton-source-map: "npm:^0.2.2"
     ts-node: "npm:^10.9.1"
-    txtracer-core: "npm:^0.5.0"
+    txtracer-core: "npm:^0.8.0"
     typescript: "npm:~5.8.3"
     typescript-eslint: "npm:^8.30.1"
     vite: "npm:^6.4.2"
