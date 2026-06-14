@@ -6,6 +6,8 @@
     "tests-examples/**/*.ts",
     "tests-examples/**/*.tsx",
     "e2e-tests/**/*.ts",
+    "spec/src/env.d.ts",
+    "spec/src/content.config.ts",
     "*.config.ts",
     "*.config.js",
     ".*.js",

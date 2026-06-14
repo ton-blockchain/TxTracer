@@ -7,7 +7,7 @@ import fs from "node:fs"
 
 import remarkHeadingId from "remark-custom-heading-id"
 
-import {rehypeHeadingIds} from "@astrojs/markdown-remark"
+import {rehypeHeadingIds, unified} from "@astrojs/markdown-remark"
 import rehypeAutolinkHeadings from "rehype-autolink-headings"
 import starlightLinksValidator from "starlight-links-validator"
 
@@ -38,33 +38,26 @@ export default defineConfig({
         allow: [".."],
       },
     },
-    build: {
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            "tolk-runtime": ["@ton/tolk-js", "@ton/sandbox"],
-          },
-        },
-      },
-    },
   },
   markdown: {
-    remarkPlugins: [remarkHeadingId],
-    rehypePlugins: [
-      rehypeHeadingIds,
-      [
-        rehypeAutolinkHeadings,
-        {
-          behavior: "append",
-          properties: {
-            class: "autolink-header",
-            ariaHidden: "true",
-            ariaLabel: "Link to this header",
-            tabIndex: -1,
+    processor: unified({
+      remarkPlugins: [remarkHeadingId],
+      rehypePlugins: [
+        rehypeHeadingIds,
+        [
+          rehypeAutolinkHeadings,
+          {
+            behavior: "append",
+            properties: {
+              class: "autolink-header",
+              ariaHidden: "true",
+              ariaLabel: "Link to this header",
+              tabIndex: -1,
+            },
           },
-        },
+        ],
       ],
-    ],
+    }),
   },
   integrations: [
     starlight({

@@ -26,7 +26,6 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({
 }) => {
   const isPlayground = pageTitle === "playground"
   const isExplorer = pageTitle === "explorer"
-  const isSandbox = pageTitle === "sandbox"
   const isSpec = pageTitle === "spec"
   const isEmulate = pageTitle === "emulate"
 
@@ -48,12 +47,6 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({
             Code Explorer
             {titleBadgeText && <Badge color={titleBadgeColor}>{titleBadgeText}</Badge>}
           </span>
-        )}
-        {isSandbox && (
-          <a className={styles.pageTitle} href="/sandbox/">
-            Sandbox
-            {titleBadgeText && <Badge color={titleBadgeColor}>{titleBadgeText}</Badge>}
-          </a>
         )}
         {isSpec && (
           <a className={styles.pageTitle} href="/spec/">

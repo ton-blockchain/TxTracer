@@ -1,8 +1,8 @@
-/// <reference types="vitest" />
 import {resolve} from "path"
 import {writeFileSync} from "fs"
 
 import {defineConfig} from "vite"
+import {configDefaults} from "vitest/config"
 import react from "@vitejs/plugin-react"
 
 const createCNAME = () => ({
@@ -23,6 +23,10 @@ const createRobotsTxt = () => ({
 
 // https://vite.dev/config/
 export default defineConfig({
+  test: {
+    globals: true,
+    exclude: [...configDefaults.exclude, "e2e-tests/**"],
+  },
   resolve: {
     alias: {
       "@shared": resolve(__dirname, "src/shared"),
@@ -51,7 +55,6 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, "index.html"),
         play: resolve(__dirname, "play/index.html"),
-        sandbox: resolve(__dirname, "sandbox/index.html"),
         emulate: resolve(__dirname, "emulate/index.html"),
         "code-explorer": resolve(__dirname, "code-explorer/index.html"),
         spec: resolve(__dirname, "spec/index.html"),
@@ -70,16 +73,5 @@ export default defineConfig({
     esbuildOptions: {
       target: "es2020",
     },
-  },
-  test: {
-    globals: true,
-    environment: "jsdom",
-    setupFiles: ["src/setupTests.ts"],
-    include: ["src/**/*.spec.ts", "src/**/*.test.ts"],
-    exclude: ["e2e-tests/**"],
-    // coverage: {
-    //   reporter: ["text", "json", "html"],
-    //   provider: "v8", // or "istanbul"
-    // },
   },
 })

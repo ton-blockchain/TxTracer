@@ -1,19 +1,17 @@
-import {useMemo} from "react"
+import {useCallback, useMemo, useState} from "react"
 import {Address, Cell, loadShardAccount, loadStateInit, loadTransaction} from "@ton/core"
 
 import type {ContractRawData} from "@features/sandbox/lib/transport/contract.ts"
 
 import type {MessageTestData} from "@features/sandbox/lib/transport/message.ts"
 
-import {useWebsocket} from "./transport/useWebsocket"
-import {processRawTransactions, type RawTransactionInfo} from "./transport/transaction"
+import {
+  processRawTransactions,
+  type RawTransactionInfo,
+  type RawTransactions,
+} from "./transport/transaction"
 import type {ContractData} from "./contract"
 import type {TestData} from "./test-data"
-
-interface UseSandboxDataOptions {
-  readonly url?: string
-  readonly onError?: (error: string) => void
-}
 
 interface UseSandboxDataReturn {
   readonly tests: TestData[]
@@ -24,6 +22,14 @@ interface UseSandboxDataReturn {
   readonly rawDataByTest: Map<string, MessageTestData>
   readonly loadFromFile: (data: MessageTestData[]) => void
   readonly clearFileData: () => void
+}
+
+interface RawTestData {
+  readonly testName: string
+  readonly transactions: RawTransactions
+  readonly timestamp: number
+  readonly changes: MessageTestData["changes"]
+  readonly valueFlow: MessageTestData["valueFlow"]
 }
 
 function getStateInit(contract: ContractRawData) {
@@ -69,21 +75,88 @@ function findContractName(
   return "Unknown Contract"
 }
 
-export function useSandboxData(options: UseSandboxDataOptions = {}): UseSandboxDataReturn {
-  const rawData = useWebsocket(options)
+function parseMaybeTransactions(data: string): RawTransactions | undefined {
+  try {
+    return JSON.parse(data) as RawTransactions
+  } catch {
+    return undefined
+  }
+}
+
+function buildRawTests(rawData: readonly MessageTestData[]): RawTestData[] {
+  const tests = new Map<string, RawTestData>()
+
+  for (const message of rawData) {
+    const rawTransactions = parseMaybeTransactions(message.transactions)
+    if (!rawTransactions) {
+      console.error("Cannot parse transactions:", message)
+      continue
+    }
+
+    const testName = message.testName ?? "unknown"
+    const existing = tests.get(testName)
+
+    if (existing) {
+      tests.set(testName, {
+        ...existing,
+        transactions: {
+          transactions: [...existing.transactions.transactions, ...rawTransactions.transactions],
+        },
+        changes: [...existing.changes, ...message.changes],
+      })
+      continue
+    }
+
+    tests.set(testName, {
+      testName,
+      transactions: rawTransactions,
+      timestamp: Date.now(),
+      changes: message.changes,
+      valueFlow: message.valueFlow,
+    })
+  }
+
+  return [...tests.values()]
+}
+
+function buildContractsByTest(
+  rawData: readonly MessageTestData[],
+): Map<string, readonly ContractRawData[]> {
+  const contractsByTest = new Map<string, readonly ContractRawData[]>()
+
+  for (const message of rawData) {
+    contractsByTest.set(message.testName ?? "unknown", message.contracts)
+  }
+
+  return contractsByTest
+}
+
+export function useSandboxData(): UseSandboxDataReturn {
+  const [rawData, setRawData] = useState<MessageTestData[]>([])
+
+  const loadFromFile = useCallback((data: MessageTestData[]) => {
+    setRawData(data)
+  }, [])
+
+  const clearFileData = useCallback(() => {
+    setRawData([])
+  }, [])
 
   const rawDataByTest = useMemo(() => {
     const map = new Map<string, MessageTestData>()
-    for (const testData of rawData.rawData) {
+    for (const testData of rawData) {
       if (testData.testName) {
         map.set(testData.testName, testData)
       }
     }
     return map
-  }, [rawData.rawData])
+  }, [rawData])
+
+  const rawTests = useMemo(() => buildRawTests(rawData), [rawData])
+  const contractsByTest = useMemo(() => buildContractsByTest(rawData), [rawData])
 
   const tests = useMemo((): TestData[] => {
-    return rawData.tests.map(rawTest => {
+    return rawTests.map(rawTest => {
       const parsedTransactions = rawTest.transactions.transactions.map(
         (it): RawTransactionInfo => ({
           ...it,
@@ -95,7 +168,7 @@ export function useSandboxData(options: UseSandboxDataOptions = {}): UseSandboxD
       const transactions = processRawTransactions(parsedTransactions)
 
       const testName = rawTest.testName ?? "unknown"
-      const testContracts = rawData.contractsByTest.get(testName) ?? []
+      const testContracts = contractsByTest.get(testName) ?? []
 
       const convertedContracts = testContracts.map((it, index): ContractData => {
         const address = Address.parse(it.address)
@@ -124,16 +197,16 @@ export function useSandboxData(options: UseSandboxDataOptions = {}): UseSandboxD
         valueFlow: rawTest.valueFlow,
       }
     })
-  }, [rawData.tests, rawData.contractsByTest])
+  }, [rawTests, contractsByTest])
 
   return {
     tests,
-    error: rawData.error,
-    isConnected: rawData.isConnected,
-    isSharedData: rawData.rawData.length > 0,
-    rawData: rawData.rawData,
+    error: "",
+    isConnected: false,
+    isSharedData: rawData.length > 0,
+    rawData,
     rawDataByTest,
-    clearFileData: rawData.clearFileData,
-    loadFromFile: rawData.loadFromFile,
+    clearFileData,
+    loadFromFile,
   }
 }
