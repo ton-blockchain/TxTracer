@@ -11,6 +11,7 @@ interface PageHeaderProps {
   readonly pageTitle: string
   readonly network?: NetworkType
   readonly children?: React.ReactNode
+  readonly beforeLinks?: React.ReactNode
   readonly titleBadgeText?: string
   readonly titleBadgeColor?: "green" | "red" | "blue" | "gray"
   readonly documentationLink?: string
@@ -20,6 +21,7 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({
   pageTitle,
   network,
   children,
+  beforeLinks,
   titleBadgeText,
   titleBadgeColor = "gray",
   documentationLink = "https://docs.ton.org/",
@@ -64,6 +66,7 @@ const PageHeaderFc: React.FC<PageHeaderProps> = ({
       </div>
 
       {children}
+      {beforeLinks}
 
       <nav className={styles.headerLinks} aria-label="External links">
         <a
