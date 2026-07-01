@@ -1,5 +1,5 @@
 import {Cell} from "@ton/core"
-import {runtime as i, text, trace} from "ton-assembly"
+import {runtime as i, text, trace} from "@ton/tasm"
 import type {InstructionInfo} from "ton-source-map"
 
 import {FUNC_STDLIB} from "@features/godbolt/lib/func/stdlib.ts"

@@ -1,7 +1,7 @@
 import React, {useCallback, useMemo, useState} from "react"
 import type * as monaco from "monaco-editor"
 
-import {trace} from "ton-assembly"
+import {trace} from "@ton/tasm"
 
 import type {InstructionInfo} from "ton-source-map"
 

@@ -1,7 +1,7 @@
 import React, {memo} from "react"
 
-import {type TraceInfo} from "ton-assembly/dist/trace"
-import type {TraceResult} from "txtracer-core/dist/types"
+import {type TraceInfo} from "@ton/tasm/dist/trace"
+import type {TraceResult} from "@ton/retracer-core/dist/types"
 
 import type {ExitCode} from "@features/txTrace/lib/traceTx.ts"
 import {VMLogsView} from "@features/txTrace/ui/index.ts"

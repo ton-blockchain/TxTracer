@@ -1,4 +1,4 @@
-export type {TraceResult} from "txtracer-core"
+export type {TraceResult} from "@ton/retracer-core"
 export type {
   OutAction,
   OutActionSendMsg,

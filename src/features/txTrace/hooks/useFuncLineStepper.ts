@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useMemo, useState} from "react"
-import {trace} from "ton-assembly"
+import {trace} from "@ton/tasm"
 import type {InstructionInfo} from "ton-source-map"
 
 import type {UseTraceStepperReturn} from "./useTraceStepper"

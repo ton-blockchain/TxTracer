@@ -2597,26 +2597,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ton-community/func-js-bin@npm:0.4.6-wasmfix.debugger.0":
-  version: 0.4.6-wasmfix.debugger.0
-  resolution: "@ton-community/func-js-bin@npm:0.4.6-wasmfix.debugger.0"
-  checksum: 10c0/2f4d8edc865e4dc746eafe29647e4f29c36ecf851cb58f03c520a86a89c246ddd21113d5a2d14fcc5619f78c4be76e06db56f64bf72c976da7089bad2d32372b
-  languageName: node
-  linkType: hard
-
-"@ton-community/func-js@npm:^0.10.0":
-  version: 0.10.0
-  resolution: "@ton-community/func-js@npm:0.10.0"
-  dependencies:
-    "@ton-community/func-js-bin": "npm:0.4.6-wasmfix.debugger.0"
-    arg: "npm:^5.0.2"
-    fflate: "npm:^0.8.2"
-  bin:
-    func-js: dist/cli.js
-  checksum: 10c0/762a208ef45f326f98bb1ee89eb79ca87f2e81f4c596b08135e916df24a1a63194f53a43a8935315147f23865154a6135798173a1d127735490e4f30d41d81e5
-  languageName: node
-  linkType: hard
-
 "@ton-community/func-js@npm:^0.9.1":
   version: 0.9.1
   resolution: "@ton-community/func-js@npm:0.9.1"
@@ -2640,6 +2620,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ton/core@npm:^0.63.1":
+  version: 0.63.1
+  resolution: "@ton/core@npm:0.63.1"
+  peerDependencies:
+    "@ton/crypto": ">=3.2.0"
+  checksum: 10c0/6839440c900efec8411b82a4861c0977de8bfbc96fb8b83f20aac6cddfa58aff48a410dd71951dd647618c7749b79bc82ab45ada21d1da1b916c8bb52562c6e3
+  languageName: node
+  linkType: hard
+
 "@ton/crypto-primitives@npm:2.1.0":
   version: 2.1.0
   resolution: "@ton/crypto-primitives@npm:2.1.0"
@@ -2660,13 +2649,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ton/sandbox@npm:^0.43.0":
-  version: 0.43.0
-  resolution: "@ton/sandbox@npm:0.43.0"
+"@ton/retracer-core@npm:^0.11.0":
+  version: 0.11.0
+  resolution: "@ton/retracer-core@npm:0.11.0"
   dependencies:
+    "@ton/core": "npm:^0.63.1"
+    "@ton/sandbox": "npm:^0.44.0"
+    "@ton/tasm": "npm:^0.6.1"
+  checksum: 10c0/d87a2abb0d3fc63618662bd297e245878131e3748b2209c6f31f1bba8bb95bca3d66306fa90580d5e9f70112f17cbe948123eda9697d40a8c404a93a1bb6f0e0
+  languageName: node
+  linkType: hard
+
+"@ton/sandbox@npm:^0.44.0":
+  version: 0.44.0
+  resolution: "@ton/sandbox@npm:0.44.0"
+  dependencies:
+    "@ton/tasm": "npm:0.6.1"
     chalk: "npm:^4.1.2"
     table: "npm:^6.9.0"
-    ton-assembly: "npm:0.6.1"
   peerDependencies:
     "@ton-community/func-js": ">=0.10.0"
     "@ton/core": ">=0.61.0"
@@ -2678,7 +2678,47 @@ __metadata:
       optional: true
     jest:
       optional: true
-  checksum: 10c0/42939be64c17f8d8ad0623fb19c403c95f40c5d16e2153f58e439eafb7101bbdb3484631035a2bed26cbb9490584a5d7d3395acb8ce218606bec9611797ae6fc
+  checksum: 10c0/3dea1482b49f75425fcd2925dcf4a5657228828e84b0f0e33598a6e5a9571fbb0a1bd91abaff63eabd462925404762a3d953450b92b583a150ded2607c1b2e3f
+  languageName: node
+  linkType: hard
+
+"@ton/tasm@npm:0.6.1":
+  version: 0.6.1
+  resolution: "@ton/tasm@npm:0.6.1"
+  dependencies:
+    "@tonstudio/parser-runtime": "npm:^0.0.1"
+    cac: "npm:^6.7.14"
+    ton-source-map: "npm:^0.2.2"
+  peerDependencies:
+    "@ton/core": ">=0.61.0"
+  peerDependenciesMeta:
+    "@ton/core":
+      optional: false
+  bin:
+    tasm: dist/cli/assembler.js
+    tdisasm: dist/cli/disassembler.js
+    tfift: dist/cli/fift-compiler.js
+  checksum: 10c0/12f5846048935325dfa3532d6297d08daf755f9938de9ab1a7da2348b6839d65e1a40cee1d2512d6e8b567f9f1640d81a63eb327aeccc9c726447f6c93b0cb79
+  languageName: node
+  linkType: hard
+
+"@ton/tasm@npm:0.6.2, @ton/tasm@npm:^0.6.1":
+  version: 0.6.2
+  resolution: "@ton/tasm@npm:0.6.2"
+  dependencies:
+    "@tonstudio/parser-runtime": "npm:^0.0.1"
+    cac: "npm:^6.7.14"
+    ton-source-map: "npm:^0.2.2"
+  peerDependencies:
+    "@ton/core": ">=0.61.0"
+  peerDependenciesMeta:
+    "@ton/core":
+      optional: false
+  bin:
+    tasm: dist/cli/assembler.js
+    tdisasm: dist/cli/disassembler.js
+    tfift: dist/cli/fift-compiler.js
+  checksum: 10c0/0dd184c3864e0b505fcdcfd65b75324dc766936bf4a00a33fdf470986fbc2366b29ad6522155f7e9bde6e821c35e64ccf5e257737a83eba5b24c493b8d12095a
   languageName: node
   linkType: hard
 
@@ -2708,22 +2748,6 @@ __metadata:
   bin:
     tolk-js: dist/cli.js
   checksum: 10c0/1516217b35bb4edcb79d5eb996c52dcd26dc1a3d49173713e044f6b9469737a073cefca0e3969c2bd8cd80fcd039afaec07875e7fe09e1475d365c8e3134f0f7
-  languageName: node
-  linkType: hard
-
-"@ton/ton@npm:^15.3.1":
-  version: 15.3.1
-  resolution: "@ton/ton@npm:15.3.1"
-  dependencies:
-    axios: "npm:^1.6.7"
-    dataloader: "npm:^2.0.0"
-    symbol.inspect: "npm:1.0.1"
-    teslabot: "npm:^1.3.0"
-    zod: "npm:^3.21.4"
-  peerDependencies:
-    "@ton/core": ">=0.60.0"
-    "@ton/crypto": ">=3.2.0"
-  checksum: 10c0/11da9523cb65efb0d5a8a7132eeb96adf7065ff9e64c7ec4b9772fa3809c6ff9e02b7750465de03bf00daa53cf93b6214fcc5e2122cf72d3116afb4f83fe46d0
   languageName: node
   linkType: hard
 
@@ -3828,15 +3852,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"agent-base@npm:6":
-  version: 6.0.2
-  resolution: "agent-base@npm:6.0.2"
-  dependencies:
-    debug: "npm:4"
-  checksum: 10c0/dc4f757e40b5f3e3d674bc9beb4f1048f4ee83af189bae39be99f57bf1f48dde166a8b0a5342a84b5944ee8e6ed1e5a9d801858f4ad44764e84957122fe46261
-  languageName: node
-  linkType: hard
-
 "agent-base@npm:^7.1.0, agent-base@npm:^7.1.2":
   version: 7.1.3
   resolution: "agent-base@npm:7.1.3"
@@ -4204,13 +4219,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"asynckit@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "asynckit@npm:0.4.0"
-  checksum: 10c0/d73e2ddf20c4eb9337e1b3df1a0f6159481050a5de457c55b14ea2e5cb6d90bb69e004c9af54737a5ee0917fcf2c9e25de67777bbe58261847846066ba75bc9d
-  languageName: node
-  linkType: hard
-
 "available-typed-arrays@npm:^1.0.7":
   version: 1.0.7
   resolution: "available-typed-arrays@npm:1.0.7"
@@ -4224,18 +4232,6 @@ __metadata:
   version: 4.10.3
   resolution: "axe-core@npm:4.10.3"
   checksum: 10c0/1b1c24f435b2ffe89d76eca0001cbfff42dbf012ad9bd37398b70b11f0d614281a38a28bc3069e8972e3c90ec929a8937994bd24b0ebcbaab87b8d1e241ab0c7
-  languageName: node
-  linkType: hard
-
-"axios@npm:^1.6.7":
-  version: 1.16.1
-  resolution: "axios@npm:1.16.1"
-  dependencies:
-    follow-redirects: "npm:^1.16.0"
-    form-data: "npm:^4.0.5"
-    https-proxy-agent: "npm:^5.0.1"
-    proxy-from-env: "npm:^2.1.0"
-  checksum: 10c0/2f77e37e6552bbff8a772d058fb09500198e9188c6b20dc799d82dbe12a8cb506f6eed4e4e62a9ba612a35cbab496faa26d68f9bff14a53af6d15c3e136391a7
   languageName: node
   linkType: hard
 
@@ -4630,15 +4626,6 @@ __metadata:
   version: 2.9.3
   resolution: "colord@npm:2.9.3"
   checksum: 10c0/9699e956894d8996b28c686afe8988720785f476f59335c80ce852ded76ab3ebe252703aec53d9bef54f6219aea6b960fb3d9a8300058a1d0c0d4026460cd110
-  languageName: node
-  linkType: hard
-
-"combined-stream@npm:^1.0.8":
-  version: 1.0.8
-  resolution: "combined-stream@npm:1.0.8"
-  dependencies:
-    delayed-stream: "npm:~1.0.0"
-  checksum: 10c0/0dbb829577e1b1e839fa82b40c07ffaf7de8a09b935cadd355a73652ae70a88b4320db322f6634a4ad93424292fa80973ac6480986247f1734a1137debf271d5
   languageName: node
   linkType: hard
 
@@ -5168,13 +5155,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dataloader@npm:^2.0.0":
-  version: 2.2.3
-  resolution: "dataloader@npm:2.2.3"
-  checksum: 10c0/9b9a056fbc863ca86da87d59e053e871e263b4966aa4d55e40d61a65e96815fae5530ca220629064ca5f8e3000c0c4ec93292e170c38ff393fb34256b4d7c1aa
-  languageName: node
-  linkType: hard
-
 "debug@npm:4, debug@npm:^4.0.0, debug@npm:^4.1.0, debug@npm:^4.3.1, debug@npm:^4.3.2, debug@npm:^4.3.4, debug@npm:^4.4.0, debug@npm:^4.4.1, debug@npm:^4.4.3":
   version: 4.4.3
   resolution: "debug@npm:4.4.3"
@@ -5250,13 +5230,6 @@ __metadata:
   version: 6.1.7
   resolution: "defu@npm:6.1.7"
   checksum: 10c0/e6635388103c8be3c574ac31302f6930e5e6eeedba32cb1b30cf993c7d9fb571aec2485446dfa23bfa63e55e66156fe109027a9695db82a50f931e91e8d4bedb
-  languageName: node
-  linkType: hard
-
-"delayed-stream@npm:~1.0.0":
-  version: 1.0.0
-  resolution: "delayed-stream@npm:1.0.0"
-  checksum: 10c0/d758899da03392e6712f042bec80aa293bbe9e9ff1b2634baae6a360113e708b91326594c8a486d475c69d6259afb7efacdc3537bfcda1c6c648e390ce601b19
   languageName: node
   linkType: hard
 
@@ -6438,16 +6411,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.16.0":
-  version: 1.16.0
-  resolution: "follow-redirects@npm:1.16.0"
-  peerDependenciesMeta:
-    debug:
-      optional: true
-  checksum: 10c0/a1e2900163e6f1b4d1ed5c221b607f41decbab65534c63fe7e287e40a5d552a6496e7d9d7d976fa4ba77b4c51c11e5e9f683f10b43011ea11e442ff128d0e181
-  languageName: node
-  linkType: hard
-
 "fontace@npm:~0.4.1":
   version: 0.4.1
   resolution: "fontace@npm:0.4.1"
@@ -6482,19 +6445,6 @@ __metadata:
     cross-spawn: "npm:^7.0.6"
     signal-exit: "npm:^4.0.1"
   checksum: 10c0/8986e4af2430896e65bc2788d6679067294d6aee9545daefc84923a0a4b399ad9c7a3ea7bd8c0b2b80fdf4a92de4c69df3f628233ff3224260e9c1541a9e9ed3
-  languageName: node
-  linkType: hard
-
-"form-data@npm:^4.0.5":
-  version: 4.0.5
-  resolution: "form-data@npm:4.0.5"
-  dependencies:
-    asynckit: "npm:^0.4.0"
-    combined-stream: "npm:^1.0.8"
-    es-set-tostringtag: "npm:^2.1.0"
-    hasown: "npm:^2.0.2"
-    mime-types: "npm:^2.1.12"
-  checksum: 10c0/dd6b767ee0bbd6d84039db12a0fa5a2028160ffbfaba1800695713b46ae974a5f6e08b3356c3195137f8530dcd9dfcb5d5ae1eeff53d0db1e5aad863b619ce3b
   languageName: node
   linkType: hard
 
@@ -7307,16 +7257,6 @@ __metadata:
     agent-base: "npm:^7.1.0"
     debug: "npm:^4.3.4"
   checksum: 10c0/4207b06a4580fb85dd6dff521f0abf6db517489e70863dca1a0291daa7f2d3d2d6015a57bd702af068ea5cf9f1f6ff72314f5f5b4228d299c0904135d2aef921
-  languageName: node
-  linkType: hard
-
-"https-proxy-agent@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "https-proxy-agent@npm:5.0.1"
-  dependencies:
-    agent-base: "npm:6"
-    debug: "npm:4"
-  checksum: 10c0/6dd639f03434003577c62b27cafdb864784ef19b2de430d8ae2a1d45e31c4fd60719e5637b44db1a88a046934307da7089e03d6089ec3ddacc1189d8de8897d1
   languageName: node
   linkType: hard
 
@@ -9180,22 +9120,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mime-db@npm:1.52.0":
-  version: 1.52.0
-  resolution: "mime-db@npm:1.52.0"
-  checksum: 10c0/0557a01deebf45ac5f5777fe7740b2a5c309c6d62d40ceab4e23da9f821899ce7a900b7ac8157d4548ddbb7beffe9abc621250e6d182b0397ec7f10c7b91a5aa
-  languageName: node
-  linkType: hard
-
-"mime-types@npm:^2.1.12":
-  version: 2.1.35
-  resolution: "mime-types@npm:2.1.35"
-  dependencies:
-    mime-db: "npm:1.52.0"
-  checksum: 10c0/82fb07ec56d8ff1fc999a84f2f217aa46cb6ed1033fefaabd5785b9a974ed225c90dc72fff460259e66b95b73648596dbcc50d51ed69cdf464af2d237d3149b2
-  languageName: node
-  linkType: hard
-
 "minimatch@npm:^3.1.2":
   version: 3.1.5
   resolution: "minimatch@npm:3.1.5"
@@ -10073,13 +9997,6 @@ __metadata:
   version: 7.1.0
   resolution: "property-information@npm:7.1.0"
   checksum: 10c0/e0fe22cff26103260ad0e82959229106563fa115a54c4d6c183f49d88054e489cc9f23452d3ad584179dc13a8b7b37411a5df873746b5e4086c865874bfa968e
-  languageName: node
-  linkType: hard
-
-"proxy-from-env@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "proxy-from-env@npm:2.1.0"
-  checksum: 10c0/ed01729fd4d094eab619cd7e17ce3698b3413b31eb102c4904f9875e677cd207392795d5b4adee9cec359dfd31c44d5ad7595a3a3ad51c40250e141512281c58
   languageName: node
   linkType: hard
 
@@ -11787,13 +11704,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"teslabot@npm:^1.3.0":
-  version: 1.5.0
-  resolution: "teslabot@npm:1.5.0"
-  checksum: 10c0/8972005bfc14b9b4110f2b832679cd007012d9c08c2b634fe3ae9265d2816bd65cd0111c0336affdcb58b7279786202a9e7b12b4d8ae4dc3679c7fd795f285dd
-  languageName: node
-  linkType: hard
-
 "tiny-inflate@npm:^1.0.3":
   version: 1.0.3
   resolution: "tiny-inflate@npm:1.0.3"
@@ -11863,26 +11773,6 @@ __metadata:
   dependencies:
     is-number: "npm:^7.0.0"
   checksum: 10c0/487988b0a19c654ff3e1961b87f471702e708fa8a8dd02a298ef16da7206692e8552a0250e8b3e8759270f62e9d8314616f6da274734d3b558b1fc7b7724e892
-  languageName: node
-  linkType: hard
-
-"ton-assembly@npm:0.6.1":
-  version: 0.6.1
-  resolution: "ton-assembly@npm:0.6.1"
-  dependencies:
-    "@tonstudio/parser-runtime": "npm:^0.0.1"
-    cac: "npm:^6.7.14"
-    ton-source-map: "npm:^0.2.2"
-  peerDependencies:
-    "@ton/core": ">=0.61.0"
-  peerDependenciesMeta:
-    "@ton/core":
-      optional: false
-  bin:
-    tasm: dist/cli/assembler.js
-    tdisasm: dist/cli/disassembler.js
-    tfift: dist/cli/fift-compiler.js
-  checksum: 10c0/0248810f2b3e7a31d3617996d0f0b0ea973e0b288af0985fdc8e1c9784638dbc4d9876dd82f381ed838753f2d8c0c5273fcae93d422c4f9da6c09f88f0f37b38
   languageName: node
   linkType: hard
 
@@ -12020,19 +11910,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"txtracer-core@npm:^0.8.0":
-  version: 0.8.0
-  resolution: "txtracer-core@npm:0.8.0"
-  dependencies:
-    "@ton-community/func-js": "npm:^0.10.0"
-    "@ton/core": "npm:^0.61.0"
-    "@ton/sandbox": "npm:^0.43.0"
-    "@ton/ton": "npm:^15.3.1"
-    axios: "npm:^1.6.7"
-  checksum: 10c0/d65f331dd7406101c5c9bc82e2b7ce6580f4f4466a64d9c8f577c698f2dbd72863c60411987cb7c84619007cc3976f248a88f91c8db6f639e16f8a42c2b2722d
-  languageName: node
-  linkType: hard
-
 "txtracer@workspace:.":
   version: 0.0.0-use.local
   resolution: "txtracer@workspace:."
@@ -12047,7 +11924,9 @@ __metadata:
     "@ton-community/func-js": "npm:^0.9.1"
     "@ton/core": "npm:^0.61.0"
     "@ton/crypto": "npm:^3.3.0"
-    "@ton/sandbox": "npm:^0.43.0"
+    "@ton/retracer-core": "npm:^0.11.0"
+    "@ton/sandbox": "npm:^0.44.0"
+    "@ton/tasm": "npm:0.6.2"
     "@ton/test-utils": "npm:^0.7.0"
     "@ton/tolk-js": "npm:^1.1.0"
     "@truecarry/tlb-abi": "npm:^0.2.0"
@@ -12095,10 +11974,8 @@ __metadata:
     stylelint: "npm:^16.24.0"
     stylelint-config-css-modules: "npm:^4.5.1"
     stylelint-config-standard: "npm:^39.0.0"
-    ton-assembly: "npm:0.6.1"
     ton-source-map: "npm:^0.2.2"
     ts-node: "npm:^10.9.1"
-    txtracer-core: "npm:^0.8.0"
     typescript: "npm:~5.8.3"
     typescript-eslint: "npm:^8.30.1"
     vite: "npm:^6.4.2"
@@ -13474,13 +13351,6 @@ __metadata:
   version: 1.2.2
   resolution: "yocto-queue@npm:1.2.2"
   checksum: 10c0/36d4793e9cf7060f9da543baf67c55e354f4862c8d3d34de1a1b1d7c382d44171315cc54abf84d8900b8113d742b830108a1434f4898fb244f9b7e8426d4b8f5
-  languageName: node
-  linkType: hard
-
-"zod@npm:^3.21.4":
-  version: 3.25.76
-  resolution: "zod@npm:3.25.76"
-  checksum: 10c0/5718ec35e3c40b600316c5b4c5e4976f7fee68151bc8f8d90ec18a469be9571f072e1bbaace10f1e85cf8892ea12d90821b200e980ab46916a6166a4260a983c
   languageName: node
   linkType: hard
 
