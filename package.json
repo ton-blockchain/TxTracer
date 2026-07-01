@@ -35,6 +35,7 @@
     "@ton/tasm": "0.6.2",
     "@ton/test-utils": "^0.7.0",
     "@ton/tolk-js": "^1.1.0",
+    "@ton/ton": "^16.3.0",
     "@truecarry/tlb-abi": "^0.2.0",
     "allotment": "^1.20.4",
     "buffer": "^6.0.3",
