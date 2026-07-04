@@ -30,9 +30,12 @@
     "@ton-community/func-js": "^0.9.1",
     "@ton/core": "^0.61.0",
     "@ton/crypto": "^3.3.0",
-    "@ton/sandbox": "^0.43.0",
+    "@ton/retracer-core": "^0.8.0",
+    "@ton/sandbox": "^0.44.0",
+    "@ton/tasm": "0.6.2",
     "@ton/test-utils": "^0.7.0",
     "@ton/tolk-js": "^1.1.0",
+    "@ton/ton": "^15.3.1",
     "@truecarry/tlb-abi": "^0.2.0",
     "allotment": "^1.20.4",
     "buffer": "^6.0.3",
@@ -45,9 +48,7 @@
     "react-helmet-async": "^2.0.5",
     "react-icons": "^5.5.0",
     "react-markdown": "^10.1.0",
-    "ton-assembly": "0.6.1",
-    "ton-source-map": "^0.2.2",
-    "txtracer-core": "^0.8.0"
+    "ton-source-map": "^0.2.2"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",

@@ -1,4 +1,4 @@
-import {runtime as i} from "ton-assembly"
+import {runtime as i} from "@ton/tasm"
 import type {InstructionInfo} from "ton-source-map"
 
 export interface TolkCompilationResult {

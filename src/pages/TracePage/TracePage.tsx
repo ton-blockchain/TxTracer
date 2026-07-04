@@ -12,8 +12,8 @@ import {
   FiX,
 } from "react-icons/fi"
 
-import {parse as parseVmLogs} from "ton-assembly/dist/logs"
-import {type StackElement} from "ton-assembly/dist/trace"
+import {parse as parseVmLogs} from "@ton/tasm/dist/logs"
+import {type StackElement} from "@ton/tasm/dist/trace"
 
 import type {RetraceResultAndCode} from "@features/txTrace/ui"
 import {RetraceResultView} from "@features/txTrace/ui"

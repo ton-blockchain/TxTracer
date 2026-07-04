@@ -2,10 +2,7 @@ import React, {Fragment} from "react"
 
 import ReactMarkdown from "react-markdown"
 
-import {
-  calculateGasConsumptionWithDescription,
-  infoOf,
-} from "ton-assembly/dist/generator/instructions"
+import {calculateGasConsumptionWithDescription, infoOf} from "@ton/tasm/dist/generator/instructions"
 
 import type {Instruction, FiftInstruction} from "@features/spec/specification-schema.ts"
 

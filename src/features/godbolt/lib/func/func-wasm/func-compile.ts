@@ -1,4 +1,4 @@
-import {trace} from "ton-assembly"
+import {trace} from "@ton/tasm"
 import {FuncFiftLibWasm} from "./funcfiftlib.wasm.ts"
 import CompilerModule from "./funcfiftlib"
 

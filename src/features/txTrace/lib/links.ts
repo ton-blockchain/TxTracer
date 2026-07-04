@@ -1,4 +1,4 @@
-import type {BaseTxInfo} from "txtracer-core"
+import type {BaseTxInfo} from "@ton/retracer-core"
 import {Address} from "@ton/core"
 
 // eslint-disable-next-line functional/type-declaration-immutability

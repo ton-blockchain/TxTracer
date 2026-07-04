@@ -1,6 +1,6 @@
 import React, {type JSX, useMemo} from "react"
 
-import type {TraceResult} from "txtracer-core/dist/types"
+import type {TraceResult} from "@ton/retracer-core/dist/types"
 
 import {type ParsedInternal, parseWithPayloads} from "@truecarry/tlb-abi"
 

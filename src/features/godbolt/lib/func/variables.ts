@@ -1,6 +1,6 @@
-import {trace} from "ton-assembly"
+import {trace} from "@ton/tasm"
 
-export type {FuncVar} from "ton-assembly/dist/trace/func-mapping"
+export type {FuncVar} from "@ton/tasm/dist/trace/func-mapping"
 
 const getFuncTypeString = (type: trace.FuncType): string => {
   switch (type) {

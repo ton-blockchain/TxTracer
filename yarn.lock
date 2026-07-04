@@ -2660,6 +2660,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ton/retracer-core@npm:^0.8.0":
+  version: 0.8.1
+  resolution: "@ton/retracer-core@npm:0.8.1"
+  dependencies:
+    "@ton-community/func-js": "npm:^0.10.0"
+    "@ton/core": "npm:^0.61.0"
+    "@ton/sandbox": "npm:^0.43.0"
+    "@ton/ton": "npm:^15.3.1"
+    axios: "npm:^1.6.7"
+  checksum: 10c0/61fc9fe0e68e0b81e53af1a3ad995a62430fc5c2b071bd1b7176da0a31d4aec8c3d0fc8ada15ff8035383d45b2324c7dbef88d10981e47e3ebcff15eade7209e
+  languageName: node
+  linkType: hard
+
 "@ton/sandbox@npm:^0.43.0":
   version: 0.43.0
   resolution: "@ton/sandbox@npm:0.43.0"
@@ -2679,6 +2692,68 @@ __metadata:
     jest:
       optional: true
   checksum: 10c0/42939be64c17f8d8ad0623fb19c403c95f40c5d16e2153f58e439eafb7101bbdb3484631035a2bed26cbb9490584a5d7d3395acb8ce218606bec9611797ae6fc
+  languageName: node
+  linkType: hard
+
+"@ton/sandbox@npm:^0.44.0":
+  version: 0.44.0
+  resolution: "@ton/sandbox@npm:0.44.0"
+  dependencies:
+    "@ton/tasm": "npm:0.6.1"
+    chalk: "npm:^4.1.2"
+    table: "npm:^6.9.0"
+  peerDependencies:
+    "@ton-community/func-js": ">=0.10.0"
+    "@ton/core": ">=0.61.0"
+    "@ton/crypto": ">=3.3.0"
+    "@ton/test-utils": ">=0.7.0"
+    jest: ^29.5.0 || ^30.0.5
+  peerDependenciesMeta:
+    "@ton/test-utils":
+      optional: true
+    jest:
+      optional: true
+  checksum: 10c0/3dea1482b49f75425fcd2925dcf4a5657228828e84b0f0e33598a6e5a9571fbb0a1bd91abaff63eabd462925404762a3d953450b92b583a150ded2607c1b2e3f
+  languageName: node
+  linkType: hard
+
+"@ton/tasm@npm:0.6.1":
+  version: 0.6.1
+  resolution: "@ton/tasm@npm:0.6.1"
+  dependencies:
+    "@tonstudio/parser-runtime": "npm:^0.0.1"
+    cac: "npm:^6.7.14"
+    ton-source-map: "npm:^0.2.2"
+  peerDependencies:
+    "@ton/core": ">=0.61.0"
+  peerDependenciesMeta:
+    "@ton/core":
+      optional: false
+  bin:
+    tasm: dist/cli/assembler.js
+    tdisasm: dist/cli/disassembler.js
+    tfift: dist/cli/fift-compiler.js
+  checksum: 10c0/12f5846048935325dfa3532d6297d08daf755f9938de9ab1a7da2348b6839d65e1a40cee1d2512d6e8b567f9f1640d81a63eb327aeccc9c726447f6c93b0cb79
+  languageName: node
+  linkType: hard
+
+"@ton/tasm@npm:0.6.2":
+  version: 0.6.2
+  resolution: "@ton/tasm@npm:0.6.2"
+  dependencies:
+    "@tonstudio/parser-runtime": "npm:^0.0.1"
+    cac: "npm:^6.7.14"
+    ton-source-map: "npm:^0.2.2"
+  peerDependencies:
+    "@ton/core": ">=0.61.0"
+  peerDependenciesMeta:
+    "@ton/core":
+      optional: false
+  bin:
+    tasm: dist/cli/assembler.js
+    tdisasm: dist/cli/disassembler.js
+    tfift: dist/cli/fift-compiler.js
+  checksum: 10c0/0dd184c3864e0b505fcdcfd65b75324dc766936bf4a00a33fdf470986fbc2366b29ad6522155f7e9bde6e821c35e64ccf5e257737a83eba5b24c493b8d12095a
   languageName: node
   linkType: hard
 
@@ -2712,8 +2787,8 @@ __metadata:
   linkType: hard
 
 "@ton/ton@npm:^15.3.1":
-  version: 15.3.1
-  resolution: "@ton/ton@npm:15.3.1"
+  version: 15.4.0
+  resolution: "@ton/ton@npm:15.4.0"
   dependencies:
     axios: "npm:^1.6.7"
     dataloader: "npm:^2.0.0"
@@ -2721,9 +2796,9 @@ __metadata:
     teslabot: "npm:^1.3.0"
     zod: "npm:^3.21.4"
   peerDependencies:
-    "@ton/core": ">=0.60.0"
+    "@ton/core": ">=0.62.0 <1.0.0"
     "@ton/crypto": ">=3.2.0"
-  checksum: 10c0/11da9523cb65efb0d5a8a7132eeb96adf7065ff9e64c7ec4b9772fa3809c6ff9e02b7750465de03bf00daa53cf93b6214fcc5e2122cf72d3116afb4f83fe46d0
+  checksum: 10c0/68cefe9537895b3c50d9b532db6f37eebfdea3795c8ad0ba830224680c2e4aa62c20ece03331d909922b615fc92774c4f727fe63cf6083125110b6a7802c5644
   languageName: node
   linkType: hard
 
@@ -4228,14 +4303,14 @@ __metadata:
   linkType: hard
 
 "axios@npm:^1.6.7":
-  version: 1.16.1
-  resolution: "axios@npm:1.16.1"
+  version: 1.18.1
+  resolution: "axios@npm:1.18.1"
   dependencies:
     follow-redirects: "npm:^1.16.0"
     form-data: "npm:^4.0.5"
     https-proxy-agent: "npm:^5.0.1"
     proxy-from-env: "npm:^2.1.0"
-  checksum: 10c0/2f77e37e6552bbff8a772d058fb09500198e9188c6b20dc799d82dbe12a8cb506f6eed4e4e62a9ba612a35cbab496faa26d68f9bff14a53af6d15c3e136391a7
+  checksum: 10c0/9d9378a3af0d0ad730a52ad9d15ec7201f3926ad6e7e8bbffc5ae21ca2835ad11d1d9598698f5dd9718917486039f55ea1d7dc23d8e44fa827a55cc3262c02fc
   languageName: node
   linkType: hard
 
@@ -6486,15 +6561,15 @@ __metadata:
   linkType: hard
 
 "form-data@npm:^4.0.5":
-  version: 4.0.5
-  resolution: "form-data@npm:4.0.5"
+  version: 4.0.6
+  resolution: "form-data@npm:4.0.6"
   dependencies:
     asynckit: "npm:^0.4.0"
     combined-stream: "npm:^1.0.8"
     es-set-tostringtag: "npm:^2.1.0"
-    hasown: "npm:^2.0.2"
-    mime-types: "npm:^2.1.12"
-  checksum: 10c0/dd6b767ee0bbd6d84039db12a0fa5a2028160ffbfaba1800695713b46ae974a5f6e08b3356c3195137f8530dcd9dfcb5d5ae1eeff53d0db1e5aad863b619ce3b
+    hasown: "npm:^2.0.4"
+    mime-types: "npm:^2.1.35"
+  checksum: 10c0/43947a77bf0ff45c6ceed789778982d47a3f3e720a74b71721174ebf3310a5f1a8be1d6b38a3ee3688e8a18a2c4273073ec0844cd37efda3eaf46d41c9c318ff
   languageName: node
   linkType: hard
 
@@ -6917,12 +6992,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hasown@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "hasown@npm:2.0.2"
+"hasown@npm:^2.0.2, hasown@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "hasown@npm:2.0.4"
   dependencies:
     function-bind: "npm:^1.1.2"
-  checksum: 10c0/3769d434703b8ac66b209a4cca0737519925bbdb61dd887f93a16372b14694c63ff4e797686d87c90f08168e81082248b9b028bad60d4da9e0d1148766f56eb9
+  checksum: 10c0/2d8de939e270b70618f8cebb69746620db10617dbb495bc66ddad326955ea24d3ca4af133aff3eb7c1853e0218f867bc2b050ec26fe02e3aea58f880ffc5e506
   languageName: node
   linkType: hard
 
@@ -9187,7 +9262,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mime-types@npm:^2.1.12":
+"mime-types@npm:^2.1.35":
   version: 2.1.35
   resolution: "mime-types@npm:2.1.35"
   dependencies:
@@ -12020,19 +12095,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"txtracer-core@npm:^0.8.0":
-  version: 0.8.0
-  resolution: "txtracer-core@npm:0.8.0"
-  dependencies:
-    "@ton-community/func-js": "npm:^0.10.0"
-    "@ton/core": "npm:^0.61.0"
-    "@ton/sandbox": "npm:^0.43.0"
-    "@ton/ton": "npm:^15.3.1"
-    axios: "npm:^1.6.7"
-  checksum: 10c0/d65f331dd7406101c5c9bc82e2b7ce6580f4f4466a64d9c8f577c698f2dbd72863c60411987cb7c84619007cc3976f248a88f91c8db6f639e16f8a42c2b2722d
-  languageName: node
-  linkType: hard
-
 "txtracer@workspace:.":
   version: 0.0.0-use.local
   resolution: "txtracer@workspace:."
@@ -12047,9 +12109,12 @@ __metadata:
     "@ton-community/func-js": "npm:^0.9.1"
     "@ton/core": "npm:^0.61.0"
     "@ton/crypto": "npm:^3.3.0"
-    "@ton/sandbox": "npm:^0.43.0"
+    "@ton/retracer-core": "npm:^0.8.0"
+    "@ton/sandbox": "npm:^0.44.0"
+    "@ton/tasm": "npm:0.6.2"
     "@ton/test-utils": "npm:^0.7.0"
     "@ton/tolk-js": "npm:^1.1.0"
+    "@ton/ton": "npm:^15.3.1"
     "@truecarry/tlb-abi": "npm:^0.2.0"
     "@types/d3": "npm:^7.4.3"
     "@types/node": "npm:^22.15.17"
@@ -12095,10 +12160,8 @@ __metadata:
     stylelint: "npm:^16.24.0"
     stylelint-config-css-modules: "npm:^4.5.1"
     stylelint-config-standard: "npm:^39.0.0"
-    ton-assembly: "npm:0.6.1"
     ton-source-map: "npm:^0.2.2"
     ts-node: "npm:^10.9.1"
-    txtracer-core: "npm:^0.8.0"
     typescript: "npm:~5.8.3"
     typescript-eslint: "npm:^8.30.1"
     vite: "npm:^6.4.2"

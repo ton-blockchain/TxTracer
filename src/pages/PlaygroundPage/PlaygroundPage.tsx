@@ -1,7 +1,7 @@
 import {Suspense, useCallback, useEffect, useMemo, useRef, useState, lazy} from "react"
-import type {StackElement} from "ton-assembly/dist/trace"
+import type {StackElement} from "@ton/tasm/dist/trace"
 import type * as monaco from "monaco-editor"
-import {logs} from "ton-assembly"
+import {logs} from "@ton/tasm"
 
 import InlineLoader from "@shared/ui/InlineLoader"
 import TraceSidePanel from "@shared/ui/TraceSidePanel"
