@@ -28,16 +28,20 @@ const RETRACER =
 const RETRACER_TESTNET =
   "https://retracer.ton.org/?tx=041293cf00939d8df12badbdf6ab9e2091c8121941dbb170c543595403b5b97b"
 
+async function clickTraceButton(page: Page) {
+  const traceButton = page.getByRole("button", {name: "Trace"})
+  await expect(traceButton).toBeVisible()
+  await expect(traceButton).toBeEnabled()
+  await traceButton.click()
+}
+
 async function startTracing(page: Page, link: string) {
   const searchInput = page.getByPlaceholder("Search by transaction hash or explorer link")
   await expect(searchInput).toBeVisible()
   await searchInput.fill(link)
   await expect(searchInput).toHaveValue(link)
 
-  const traceButton = page.getByRole("button", {name: "Trace"})
-  await expect(traceButton).toBeVisible()
-  await expect(traceButton).toBeEnabled()
-  await traceButton.click()
+  await clickTraceButton(page)
 }
 
 test.describe("TxTracer Viewers Links", () => {
@@ -65,6 +69,15 @@ test.describe("TxTracer Viewers Links", () => {
 
       await page.goto("/")
       await startTracing(page, link)
+      await checkPageLoaded(page)
+    })
+  })
+
+  tracingCases.forEach(([name, link]) => {
+    test(`should successfully trace with '${name}' from url`, async ({page}) => {
+      await wait() // TODO: Remove that. Cause we have only 1 rps from toncenter without API key
+      await page.goto(`/?tx=${link}`)
+      await clickTraceButton(page)
       await checkPageLoaded(page)
     })
   })
